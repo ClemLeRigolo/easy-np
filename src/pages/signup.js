@@ -38,7 +38,7 @@ class SignUp extends React.Component {
       this.setState(function(state) {
         if (state.password !== state.retype) {
           return {
-            error: en.ERRORS.PASSWORD_MISMATCH,
+            error: fr.ERRORS.PASSWORD_MISMATCH,
           };
         }
       });
