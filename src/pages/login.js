@@ -76,8 +76,10 @@ class Login extends React.Component {
     const errorMsg = this.state.error;
 
     return (
+      <div className="container">
       <form onSubmit={this.handleSubmit}>
-        <div className="container">
+        <div className="content">
+          <div className="login">
           <h2>{fr.GREETINGS.LOGIN}</h2>
 
           <input
@@ -96,14 +98,16 @@ class Login extends React.Component {
             required
           />
           {errorMsg && <p className="error">{errorMsg}</p>}
-          <button id="login-button" type="submit">
+          <button id="login-button" class="log-button" type="submit">
             Login
           </button>
 
           <p>{fr.FORM_FIELDS.LOGIN_ALT_TEXT}</p>
           <Link to="/signup">Créer un compte</Link>
-        </div>
+          </div>
+          </div>
       </form>
+          </div>
     );
   }
 }

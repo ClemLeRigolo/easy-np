@@ -3,17 +3,39 @@
 }
 
 h1 {
-  color: #008437;
+  color: white;
 }
 /* Add padding to containers */
-.container {
+.content {
   padding: 16px;
   width: 80%;
   margin: auto;
 }
 
+.container {
+  padding: 0px;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
+
+.login {
+  border: #008437 2px solid;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
 @media only screen and (min-width: 768px) {
-  .container {
+  .content {
     width: 33%;
   }
+}
+
+header {
+  background-color: #008437;
+  color: white;
+  padding: 10px;
+  text-align: center;
+  margin-bottom: 20px;
 }

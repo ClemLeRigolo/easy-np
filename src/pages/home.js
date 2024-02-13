@@ -5,6 +5,8 @@ import { authStates, withAuth } from "../components/auth";
 import { signOut } from "../utils/firebase";
 import Loader from "../components/loader";
 
+import "../styles/login.css";
+
 function handleSignOut() {
   signOut()
     .then(() => {
@@ -17,20 +19,27 @@ function handleSignOut() {
 
 class Home extends React.Component {
   render() {
-    if (this.props.authState === authStates.INITIAL_VALUE) {
+    const { authState, user, headerContent } = this.props;
+
+    if (authState === authStates.INITIAL_VALUE) {
       return <Loader />;
     }
 
-    if (this.props.authState === authStates.LOGGED_OUT) {
+    if (authState === authStates.LOGGED_OUT) {
       return <Redirect to="/login"></Redirect>;
     }
 
     return (
       <div className="container">
-        <h2>Bienvenue {this.props.user.email}!</h2>
-        <img src={require("../images/maintenance.png")} alt="Maintenance" />
-        <div className="inner">
+        <header>
+          <h1>Easy-NP</h1>
+          <div className="logout">
           <button onClick={handleSignOut}> Se déconnecter </button>
+        </div>
+        </header>
+        <div className="content">
+        <h2>Bienvenue {user.email}!</h2>
+        <img src={require("../images/maintenance.png")} alt="Maintenance" />
         </div>
       </div>
     );

@@ -10,7 +10,7 @@ input[type="password"] {
 }
 
 /* Set a style for all buttons */
-button {
+.log-button {
   background-color: #008437;
   color: white;
   padding: 14px 20px;

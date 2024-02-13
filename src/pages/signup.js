@@ -91,8 +91,10 @@ class SignUp extends React.Component {
     const errorMsg = this.state.error;
 
     return (
+      <div className="container">
       <form onSubmit={this.handleSubmit}>
-        <div className="container">
+        <div className="content">
+          <div className="login">
           <h2>{fr.GREETINGS.SIGNUP}</h2>
 
           <input
@@ -124,8 +126,10 @@ class SignUp extends React.Component {
 
           <p>{fr.MISC.HAVE_ACCOUNT}</p>
           <Link to="/login">Login</Link>
-        </div>
+          </div>
+          </div>
       </form>
+      </div>
     );
   }
 }
