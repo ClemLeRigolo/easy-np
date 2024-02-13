@@ -3,6 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
 import en from "../utils/i18n";
+import fr from "../utils/i18n";
 import { createNewUser } from "../utils/firebase";
 import Loader from "../components/loader";
 import { validateEmailPassword } from "../utils/helpers";
@@ -92,11 +93,11 @@ class SignUp extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         <div className="container">
-          <h2>{en.GREETINGS.SIGNUP}</h2>
+          <h2>{fr.GREETINGS.SIGNUP}</h2>
 
           <input
             type="text"
-            placeholder={en.FORM_FIELDS.EMAIL}
+            placeholder={fr.FORM_FIELDS.EMAIL}
             name="email"
             onChange={this.handleInputChange}
             required
@@ -104,7 +105,7 @@ class SignUp extends React.Component {
 
           <input
             type="password"
-            placeholder={en.FORM_FIELDS.PASSWORD}
+            placeholder={fr.FORM_FIELDS.PASSWORD}
             name="password"
             onChange={this.handleInputChange}
             required
@@ -112,16 +113,16 @@ class SignUp extends React.Component {
 
           <input
             type="password"
-            placeholder={en.FORM_FIELDS.RETYPE_PASSWORD}
+            placeholder={fr.FORM_FIELDS.RETYPE_PASSWORD}
             name="retype"
             onChange={this.handleInputChange}
             required
           />
 
-          {errorMsg && <p className="error">Error: {errorMsg}</p>}
+          {errorMsg && <p className="error">{fr.ERRORS.ERROR}: {errorMsg}</p>}
           <button type="submit">Signup</button>
 
-          <p>Already a member?</p>
+          <p>{fr.MISC.HAVE_ACCOUNT}</p>
           <Link to="/login">Login</Link>
         </div>
       </form>

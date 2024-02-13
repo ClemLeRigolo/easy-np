@@ -6,7 +6,7 @@ const fr = {
 
   FORM_FIELDS: {
     NAME: "Nom",
-    EMAIL: "E-mail",
+    EMAIL: "E-mail @grenoble-inp.org ou @grenoble-inp.fr",
     PASSWORD: "Mot de passe",
     RETYPE_PASSWORD: "Confirmer le mot de passe",
     SIGNUP: "S'inscrire",
@@ -16,11 +16,17 @@ const fr = {
   },
 
   ERRORS: {
+    ERROR: "Erreur",
     EMPTY_EMAIL: "Email requis",
     INVALID_EMAIL: "Email invalide",
     EMPTY_PASSWORD: "Mot de passe requis",
     PASSWORD_MISMATCH: "Les mots de passe ne correspondent pas",
     AUTH: "Email/Mot de passe invalide",
+  },
+
+  MISC: {
+    EMAIL_DOMAIN: "Le domaine de l'e-mail est grenoble-inp.org ou grenoble-inp.fr",
+    HAVE_ACCOUNT: "Déjà un compte ?",
   },
 };
 
@@ -42,6 +48,7 @@ const en = {
   },
 
   ERRORS: {
+    ERROR: "Error",
     EMPTY_EMAIL: "Email is required",
     INVALID_EMAIL: "Invalid email",
     EMPTY_PASSWORD: "Password is required",
