@@ -28,6 +28,7 @@ class Home extends React.Component {
     return (
       <div className="container">
         <h2>Bienvenue {this.props.user.email}!</h2>
+        <img src={require("../images/maintenance.png")} alt="Maintenance" />
         <div className="inner">
           <button onClick={handleSignOut}> Se déconnecter </button>
         </div>
