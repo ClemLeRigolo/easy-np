@@ -9,9 +9,17 @@ input[type="password"] {
   box-sizing: border-box;
 }
 
+.name {
+  width: 49% !important;
+}
+
+.name + .name {
+  margin-left: 2% !important;
+}
+
 /* Set a style for all buttons */
 .log-button {
-  background-color: #008437;
+  background-color: var(--selected-color);
   color: white;
   padding: 14px 20px;
   margin: 8px 0;
@@ -28,4 +36,27 @@ button:hover {
 .error {
   color: red;
   font-size: 0.75em;
+}
+
+.image-button {
+  display: none;
+}
+.image-button-label {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.image-button-label img {
+  width: 4.5vw;
+  height: 4.5vw;
+  border: 0px solid #ccc;
+  border-radius: 45px;
+  margin: 0.2vw;
+  box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.5);
+  filter: grayscale(100%); /* Applique le filtre gris à toutes les images */
+}
+
+.image-button:checked + img {
+  border-color: #ff0000;
+  filter: none; /* Applique le filtre gris à toutes les images */
 }

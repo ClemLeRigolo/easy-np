@@ -5,7 +5,8 @@ const fr = {
   },
 
   FORM_FIELDS: {
-    NAME: "Nom",
+    SURNAME: "Nom",
+    NAME: "Prénom",
     EMAIL: "E-mail @grenoble-inp.org ou @grenoble-inp.fr",
     PASSWORD: "Mot de passe",
     RETYPE_PASSWORD: "Confirmer le mot de passe",

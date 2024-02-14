@@ -1,12 +1,9 @@
-import React from "react";
+import React from 'react';
 import { Link, Redirect } from "react-router-dom";
-
 import { authStates, withAuth } from "../components/auth";
-import en from "../utils/i18n";
-import fr from "../utils/i18n";
 import { createNewUser } from "../utils/firebase";
-import Loader from "../components/loader";
 import { validateEmailPassword } from "../utils/helpers";
+import Loader from "../components/loader";
 
 import "../styles/login.css";
 
@@ -14,13 +11,19 @@ class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      surname: "",
+      name: "",
       email: "",
       password: "",
       retype: "",
       error: "",
+      selectedImage: "ensimag", // Par défaut, sélectionnez la première image
+      selectedColor: "#008437", // Par défaut, sélectionnez la première couleur
     };
+    document.documentElement.style.setProperty('--selected-color', this.state.selectedColor)
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleImageChange = this.handleImageChange.bind(this);
   }
 
   handleInputChange(event) {
@@ -33,12 +36,12 @@ class SignUp extends React.Component {
       error: "",
     });
 
-    //Verify that password fields match
+    // Vérifiez que les champs de mot de passe correspondent
     if (target.type === "password") {
       this.setState(function(state) {
         if (state.password !== state.retype) {
           return {
-            error: fr.ERRORS.PASSWORD_MISMATCH,
+            error: "Les mots de passe ne correspondent pas",
           };
         }
       });
@@ -52,7 +55,7 @@ class SignUp extends React.Component {
       return;
     }
 
-    //Validate email & password
+    // Valider l'email et le mot de passe
     const errorMsg = validateEmailPassword(
       this.state.email,
       this.state.password
@@ -65,7 +68,7 @@ class SignUp extends React.Component {
       return;
     }
 
-    createNewUser(this.state.email, this.state.password)
+    createNewUser(this.state.email, this.state.password, this.state.surname, this.state.name, this.state.selectedImage)
       .then(() => {
         console.log("Signed Up!");
       })
@@ -73,10 +76,44 @@ class SignUp extends React.Component {
         console.log("Error signing up", e);
         if (e.code === "auth/email-already-in-use") {
           this.setState({
-            error: "Email already in use",
+            error: "Adresse e-mail déjà utilisée",
           });
         }
       });
+  }
+
+  handleImageChange(event) {
+    const selectedImage = event.target.value;
+    let selectedColor = "";
+
+    switch (selectedImage) {
+      case "ensimag":
+        selectedColor = "#008437";
+        break;
+      case "phelma":
+        selectedColor = "#bc1d1d";
+        break;
+      case "ense3":
+        selectedColor = "#2c519f";
+        break;
+      case "gi":
+        selectedColor = "#249fda";
+        break;
+      case "pagora":
+        selectedColor = "#eb6608";
+        break;
+      case "esisar":
+        selectedColor = "#862c86";
+        break;
+      default:
+        selectedColor = ""; // Couleur par défaut en cas de correspondance non trouvée
+    }
+    this.setState({
+      selectedImage: selectedImage,
+      selectedColor: selectedColor,
+    });
+
+    document.documentElement.style.setProperty('--selected-color', selectedColor);
   }
 
   render() {
@@ -85,50 +122,138 @@ class SignUp extends React.Component {
     }
 
     if (this.props.authState === authStates.LOGGED_IN) {
-      return <Redirect to="/"></Redirect>;
+      return <Redirect to="/" />;
     }
 
+    const selectedImage = this.state.selectedImage;
     const errorMsg = this.state.error;
 
     return (
       <div className="container">
-      <form onSubmit={this.handleSubmit}>
-        <div className="content">
-          <div className="login">
-          <h2>{fr.GREETINGS.SIGNUP}</h2>
+        <form onSubmit={this.handleSubmit}>
+          <div className="content">
+            <div className="login">
+              <h2>Inscription</h2>
 
-          <input
-            type="text"
-            placeholder={fr.FORM_FIELDS.EMAIL}
-            name="email"
-            onChange={this.handleInputChange}
-            required
-          />
+              <input
+                type="text"
+                placeholder="Nom"
+                name="surname"
+                onChange={this.handleInputChange}
+                required
+                className='name'
+              />
 
-          <input
-            type="password"
-            placeholder={fr.FORM_FIELDS.PASSWORD}
-            name="password"
-            onChange={this.handleInputChange}
-            required
-          />
+              <input
+                type="text"
+                placeholder="Prénom"
+                name="name"
+                onChange={this.handleInputChange}
+                required
+                className='name'
+              />
 
-          <input
-            type="password"
-            placeholder={fr.FORM_FIELDS.RETYPE_PASSWORD}
-            name="retype"
-            onChange={this.handleInputChange}
-            required
-          />
+              <input
+                type="text"
+                placeholder="Email"
+                name="email"
+                onChange={this.handleInputChange}
+                required
+              />
 
-          {errorMsg && <p className="error">{fr.ERRORS.ERROR}: {errorMsg}</p>}
-          <button type="submit">Signup</button>
+              <input
+                type="password"
+                placeholder="Mot de passe"
+                name="password"
+                onChange={this.handleInputChange}
+                required
+              />
 
-          <p>{fr.MISC.HAVE_ACCOUNT}</p>
-          <Link to="/login">Login</Link>
+              <input
+                type="password"
+                placeholder="Confirmer le mot de passe"
+                name="retype"
+                onChange={this.handleInputChange}
+                required
+              />
+
+              <div>
+              <label className={`image-button-label ${selectedImage === "ensimag" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="image"
+                    value="ensimag"
+                    checked={selectedImage === "ensimag"}
+                    onChange={this.handleImageChange}
+                    className="image-button"
+                  />
+                  <img src={require("../images/écoles/ensimag.png")} alt="Image 1" />
+                </label>
+                <label className={`image-button-label ${selectedImage === "phelma" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="image"
+                    value="phelma"
+                    checked={selectedImage === "phelma"}
+                    onChange={this.handleImageChange}
+                    className="image-button"
+                  />
+                  <img src={require("../images/écoles/phelma.png")} alt="Image 2" />
+                </label>
+                <label className={`image-button-label ${selectedImage === "ense3" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="image"
+                    value="ense3"
+                    checked={selectedImage === "ense3"}
+                    onChange={this.handleImageChange}
+                    className="image-button"
+                  />
+                  <img src={require("../images/écoles/ense3.jpeg")} alt="Image 3" />
+                </label>
+                <label className={`image-button-label ${selectedImage === "gi" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="image"
+                    value="gi"
+                    checked={selectedImage === "gi"}
+                    onChange={this.handleImageChange}
+                    className="image-button"
+                  />
+                  <img src={require("../images/écoles/gi.jpeg")} alt="Image 4" />
+                </label>
+                <label className={`image-button-label ${selectedImage === "pagora" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="image"
+                    value="pagora"
+                    checked={selectedImage === "pagora"}
+                    onChange={this.handleImageChange}
+                    className="image-button"
+                  />
+                  <img src={require("../images/écoles/pagora.png")} alt="Image 5" />
+                </label>
+                <label className={`image-button-label ${selectedImage === "esisar" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="image"
+                    value="esisar"
+                    checked={selectedImage === "esisar"}
+                    onChange={this.handleImageChange}
+                    className="image-button"
+                  />
+                  <img src={require("../images/écoles/esisar.jpeg")} alt="Image 6" />
+                </label>
+              </div>
+
+              {errorMsg && <p className="error">Erreur: {errorMsg}</p>}
+              <button type="submit" className="log-button">S'inscrire</button>
+
+              <p>Vous avez déjà un compte ?</p>
+              <Link to="/login">Se connecter</Link>
+            </div>
           </div>
-          </div>
-      </form>
+        </form>
       </div>
     );
   }

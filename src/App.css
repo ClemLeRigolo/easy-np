@@ -20,7 +20,7 @@ h1 {
 }
 
 .login {
-  border: #008437 2px solid;
+  border: var(--selected-color) 2px solid;
   border-radius: 10px;
   padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -33,7 +33,7 @@ h1 {
 }
 
 header {
-  background-color: #008437;
+  background-color: var(--selected-color);
   color: white;
   padding: 10px;
   text-align: center;
