@@ -13,6 +13,9 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: undefined,
+      surname: "",
+      name: "",
       email: "",
       password: "",
       retype: "",
@@ -56,6 +59,49 @@ class Login extends React.Component {
     signIn(this.state.email, this.state.password)
       .then(() => {
         console.log("Signed In");
+        getUserData(this.state.email)
+        .then((userData) => {
+          // Récupérer le nom et le prénom de l'utilisateur
+          const { firstName, lastName, school } = userData;
+
+          console.log(firstName + lastName + school);
+          console.log(userData);
+
+          let selectedColor = "";
+
+          switch (school) {
+            case "ensimag":
+              selectedColor = "#008437";
+              break;
+            case "phelma":
+              selectedColor = "#bc1d1d";
+              break;
+            case "ense3":
+              selectedColor = "#2c519f";
+              break;
+            case "gi":
+              selectedColor = "#249fda";
+              break;
+            case "pagora":
+              selectedColor = "#eb6608";
+              break;
+            case "esisar":
+              selectedColor = "#862c86";
+              break;
+            default:
+              selectedColor = ""; // Couleur par défaut en cas de correspondance non trouvée
+          }
+
+          document.documentElement.style.setProperty('--selected-color', selectedColor);
+
+          this.setState({
+            firstName,
+            lastName,
+          });
+        })
+        .catch((error) => {
+          console.log("Erreur lors de la récupération des informations de l'utilisateur", error);
+        });
       })
       .catch(e => {
         console.log("Error signing in", e);
