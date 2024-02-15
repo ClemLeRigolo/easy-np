@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, signOut } from "../utils/firebase";
+import { getUserData, signOut, deleteUser } from "../utils/firebase";
 import Loader from "../components/loader";
 
 import "../styles/login.css";
@@ -14,6 +14,16 @@ function handleSignOut() {
     })
     .catch(e => {
       console.log("Error signing out", e);
+    });
+}
+
+function handleDelete() {
+  deleteUser()
+    .then(() => {
+      console.log("User deleted");
+    })
+    .catch(e => {
+      console.log("Error deleting user", e);
     });
 }
 
@@ -62,6 +72,7 @@ class Home extends React.Component {
           <h1>Easy-NP</h1>
           <div className="logout">
           <button onClick={handleSignOut}> Se déconnecter </button>
+          <button onClick={handleDelete}> Supprimer le compte </button>
         </div>
         </header>
         <div className="content">
