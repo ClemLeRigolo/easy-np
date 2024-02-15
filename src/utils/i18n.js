@@ -5,6 +5,7 @@ const fr = {
     RESET: "Réinitialiser le mot de passe",
     RESET_MAIL_SENT: "Un e-mail de réinitialisation a été envoyé",
     BACK_TO_LOGIN: "Retour à la page de connexion",
+    VERIFY: "Vérifier l'e-mail",
   },
 
   FORM_FIELDS: {
@@ -19,6 +20,7 @@ const fr = {
     SIGNUP_ALT_TEXT: "Déjà un compte ?",
     LOGIN_ALT_TEXT: "Nouvel Utilisateur ?",
     FORGOT_PASSWORD: "Mot de passe oublié ?",
+    BACK_TO_LOGIN: "Retour à la page de connexion",
   },
 
   ERRORS: {
@@ -34,12 +36,15 @@ const fr = {
     EMAIL_DOMAIN: "Le domaine de l'e-mail est grenoble-inp.org ou grenoble-inp.fr",
     HAVE_ACCOUNT: "Déjà un compte ?",
   },
+
+  VERIFY_EMAIL_TEXT: "Un e-mail de vérification a été envoyé. Veuillez vérifier votre boîte de réception.",
 };
 
 const en = {
   GREETINGS: {
     SIGNUP: "Sign Up",
     LOGIN: "Login",
+    VERIFY: "Verify Email",
   },
 
   FORM_FIELDS: {
