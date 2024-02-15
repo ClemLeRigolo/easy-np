@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
-import { createNewUser } from "../utils/firebase";
+import { createNewUser, sendVerificationEmail } from "../utils/firebase";
 import { validateEmailPassword } from "../utils/helpers";
 import Loader from "../components/loader";
 
@@ -71,6 +71,7 @@ class SignUp extends React.Component {
     createNewUser(this.state.email, this.state.password, this.state.surname, this.state.name, this.state.selectedImage)
       .then(() => {
         console.log("Signed Up!");
+        //sendVerificationEmail();
       })
       .catch(e => {
         console.log("Error signing up", e);
