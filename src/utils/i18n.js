@@ -1,4 +1,4 @@
-const fr = {
+export const fr = {
   GREETINGS: {
     SIGNUP: "S'inscrire",
     LOGIN: "Se connecter",
@@ -40,7 +40,7 @@ const fr = {
   VERIFY_EMAIL_TEXT: "Un e-mail de vérification a été envoyé. Veuillez vérifier votre boîte de réception.",
 };
 
-const en = {
+export const en = {
   GREETINGS: {
     SIGNUP: "Sign Up",
     LOGIN: "Login",

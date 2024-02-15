@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
-import { createNewUser, sendVerificationEmail } from "../utils/firebase";
+import { createNewUser } from "../utils/firebase";
 import { validateEmailPassword } from "../utils/helpers";
 import Loader from "../components/loader";
 
