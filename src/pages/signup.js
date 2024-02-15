@@ -19,6 +19,12 @@ class SignUp extends React.Component {
       error: "",
       selectedImage: "ensimag", // Par défaut, sélectionnez la première image
       selectedColor: "#008437", // Par défaut, sélectionnez la première couleur
+      passwordRules: {
+        length: false,
+        uppercase: false,
+        lowercase: false,
+        specialChar: false
+      }
     };
     document.documentElement.style.setProperty('--selected-color', this.state.selectedColor)
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -45,6 +51,17 @@ class SignUp extends React.Component {
           };
         }
       });
+    }
+
+    // Valider les règles de mot de passe
+    if (target.name === "password") {
+      const passwordRules = {
+        length: value.length >= 8,
+        uppercase: /[A-Z]/.test(value),
+        lowercase: /[a-z]/.test(value),
+        specialChar: /[!@#$%^&*()]/.test(value)
+      };
+      this.setState({ passwordRules });
     }
   }
 
@@ -128,6 +145,7 @@ class SignUp extends React.Component {
 
     const selectedImage = this.state.selectedImage;
     const errorMsg = this.state.error;
+    const { length, uppercase, lowercase, specialChar } = this.state.passwordRules;
 
     return (
       <div className="container">
@@ -177,6 +195,58 @@ class SignUp extends React.Component {
                 onChange={this.handleInputChange}
                 required
               />
+
+              <div className="password-rules">
+                {length ? (
+                  <span className="valid">
+                    <img src={require("../images/validate.png")} alt="Valid" className="icon" />
+                  </span>
+                ) : (
+                  <span className="invalid">
+                    <img src={require("../images/error.png")} alt="Invalid" className="icon" />
+                  </span>
+                )}
+                <p className='password-rule'>Longueur minimale de 8 caractères</p>
+              </div>
+
+              <div className="password-rules">
+                {uppercase ? (
+                  <span className="valid">
+                    <img src={require("../images/validate.png")} alt="Valid" className="icon" />
+                  </span>
+                ) : (
+                  <span className="invalid">
+                    <img src={require("../images/error.png")} alt="Invalid" className="icon" />
+                  </span>
+                )}
+                <p className='password-rule'>Au moins une lettre majuscule</p>
+              </div>
+
+              <div className="password-rules">
+                {lowercase ? (
+                  <span className="valid">
+                    <img src={require("../images/validate.png")} alt="Valid" className="icon" />
+                  </span>
+                ) : (
+                  <span className="invalid">
+                    <img src={require("../images/error.png")} alt="Invalid" className="icon" />
+                  </span>
+                )}
+                <p className='password-rule'>Au moins une lettre minuscule</p>
+              </div>
+
+              <div className="password-rules">
+                {specialChar ? (
+                  <span className="valid">
+                    <img src={require("../images/validate.png")} alt="Valid" className="icon" />
+                  </span>
+                ) : (
+                  <span className="invalid">
+                    <img src={require("../images/error.png")} alt="Invalid" className="icon" />
+                  </span>
+                )}
+                <p className='password-rule'>Au moins un caractère spécial (!@#$%^&amp;*())</p>
+              </div>
 
               <div>
               <label className={`image-button-label ${selectedImage === "ensimag" ? "active" : ""}`}>
