@@ -145,8 +145,9 @@ class Login extends React.Component {
           />
           {errorMsg && <p className="error">{errorMsg}</p>}
           <button id="login-button" class="log-button" type="submit">
-            Login
+            {fr.FORM_FIELDS.LOGIN}
           </button>
+          <Link to="/reset">{fr.FORM_FIELDS.FORGOT_PASSWORD}</Link>
 
           <p>{fr.FORM_FIELDS.LOGIN_ALT_TEXT}</p>
           <Link to="/signup">Créer un compte</Link>

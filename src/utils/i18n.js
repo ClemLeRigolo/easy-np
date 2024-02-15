@@ -2,6 +2,9 @@ const fr = {
   GREETINGS: {
     SIGNUP: "S'inscrire",
     LOGIN: "Se connecter",
+    RESET: "Réinitialiser le mot de passe",
+    RESET_MAIL_SENT: "Un e-mail de réinitialisation a été envoyé",
+    BACK_TO_LOGIN: "Retour à la page de connexion",
   },
 
   FORM_FIELDS: {
@@ -12,8 +15,10 @@ const fr = {
     RETYPE_PASSWORD: "Confirmer le mot de passe",
     SIGNUP: "S'inscrire",
     LOGIN: "Se connecter",
+    RESET: "Réinitialiser le mot de passe",
     SIGNUP_ALT_TEXT: "Déjà un compte ?",
     LOGIN_ALT_TEXT: "Nouvel Utilisateur ?",
+    FORGOT_PASSWORD: "Mot de passe oublié ?",
   },
 
   ERRORS: {
