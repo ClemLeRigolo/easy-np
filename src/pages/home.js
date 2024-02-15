@@ -40,6 +40,9 @@ class Home extends React.Component {
     }
 
     if (authState === authStates.LOGGED_IN && !this.state.firstName) {
+      if(user.emailVerified === false){
+        return <Redirect to="/verify"></Redirect>;
+      }
       console.log("dedans");
         getUserData(user.email).then(data => {
           this.setState({
