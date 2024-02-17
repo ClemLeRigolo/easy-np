@@ -60,33 +60,3 @@ button:hover {
   border-color: #ff0000;
   filter: none; /* Applique le filtre gris à toutes les images */
 }
-
-.password-rules {
-  display: flex;
-  align-items: center;
-}
-
-.valid {
-  color: green;
-  margin-right: 5px;
-}
-
-.invalid {
-  color: red;
-  margin-right: 5px;
-}
-
-.valid img,
-.invalid img {
-  width: 12px;
-  height: 12px;
-  margin-right: 5px;
-}
-
-.password-rule {
-  padding: 0px;
-  margin: 0px;
-  margin-right: 10px;
-  font-size: 0.9em;
-  color: dimgray;
-}
