@@ -2,7 +2,7 @@ import React from "react";
 
 import "../styles/passwordCheck.css";
 
-export default function PasswordCheck(length, uppercase, lowercase, specialChar) {
+export default function PasswordCheck({length, uppercase, lowercase, specialChar}) {
   return <div className="passwordChecker">
                 <div className="password-rules">
                 {length ? (
