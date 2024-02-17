@@ -7,6 +7,7 @@ import Loader from "../components/loader";
 import PasswordCheck from "../components/passwordCheck";
 
 import "../styles/login.css";
+import SchoolChoose from '../components/schoolChoose';
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -148,6 +149,8 @@ class SignUp extends React.Component {
     const errorMsg = this.state.error;
     const { length, uppercase, lowercase, specialChar } = this.state.passwordRules;
 
+    console.log(typeof this.handleImageChange);
+
     return (
       <div className="container">
         <form onSubmit={this.handleSubmit}>
@@ -200,72 +203,7 @@ class SignUp extends React.Component {
               <PasswordCheck length={length} uppercase={uppercase} lowercase={lowercase} specialChar={specialChar} />
 
               <div>
-              <label className={`image-button-label ${selectedImage === "ensimag" ? "active" : ""}`}>
-                  <input
-                    type="radio"
-                    name="image"
-                    value="ensimag"
-                    checked={selectedImage === "ensimag"}
-                    onChange={this.handleImageChange}
-                    className="image-button"
-                  />
-                  <img src={require("../images/écoles/ensimag.png")} alt="Image 1" />
-                </label>
-                <label className={`image-button-label ${selectedImage === "phelma" ? "active" : ""}`}>
-                  <input
-                    type="radio"
-                    name="image"
-                    value="phelma"
-                    checked={selectedImage === "phelma"}
-                    onChange={this.handleImageChange}
-                    className="image-button"
-                  />
-                  <img src={require("../images/écoles/phelma.png")} alt="Image 2" />
-                </label>
-                <label className={`image-button-label ${selectedImage === "ense3" ? "active" : ""}`}>
-                  <input
-                    type="radio"
-                    name="image"
-                    value="ense3"
-                    checked={selectedImage === "ense3"}
-                    onChange={this.handleImageChange}
-                    className="image-button"
-                  />
-                  <img src={require("../images/écoles/ense3.jpeg")} alt="Image 3" />
-                </label>
-                <label className={`image-button-label ${selectedImage === "gi" ? "active" : ""}`}>
-                  <input
-                    type="radio"
-                    name="image"
-                    value="gi"
-                    checked={selectedImage === "gi"}
-                    onChange={this.handleImageChange}
-                    className="image-button"
-                  />
-                  <img src={require("../images/écoles/gi.jpeg")} alt="Image 4" />
-                </label>
-                <label className={`image-button-label ${selectedImage === "pagora" ? "active" : ""}`}>
-                  <input
-                    type="radio"
-                    name="image"
-                    value="pagora"
-                    checked={selectedImage === "pagora"}
-                    onChange={this.handleImageChange}
-                    className="image-button"
-                  />
-                  <img src={require("../images/écoles/pagora.png")} alt="Image 5" />
-                </label>
-                <label className={`image-button-label ${selectedImage === "esisar" ? "active" : ""}`}>
-                  <input
-                    type="radio"
-                    name="image"
-                    value="esisar"
-                    checked={selectedImage === "esisar"}
-                    onChange={this.handleImageChange}
-                    className="image-button"
-                  />
-                  <img src={require("../images/écoles/esisar.jpeg")} alt="Image 6" />
-                </label>
+              <SchoolChoose selectedImage={this.state.selectedImage} handleImageChange={this.handleImageChange} />
               </div>
 
               {errorMsg && <p className="error">Erreur: {errorMsg}</p>}
