@@ -145,11 +145,8 @@ class SignUp extends React.Component {
       return <Redirect to="/" />;
     }
 
-    const selectedImage = this.state.selectedImage;
     const errorMsg = this.state.error;
     const { length, uppercase, lowercase, specialChar } = this.state.passwordRules;
-
-    console.log(typeof this.handleImageChange);
 
     return (
       <div className="container">

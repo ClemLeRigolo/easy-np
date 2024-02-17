@@ -47,11 +47,6 @@ export function validatePassword(password) {
     return 'Le mot de passe doit contenir au moins une lettre majuscule';
   }
 
-  //teste la présence d'un chiffre
-  if (!/[0-9]/.test(password)) {
-    return 'Le mot de passe doit contenir au moins un chiffre';
-  }
-
   //teste la présence d'un caractère spécial
   if (!/[^A-Za-z0-9]/.test(password)) {
     return 'Le mot de passe doit contenir au moins un caractère spécial';

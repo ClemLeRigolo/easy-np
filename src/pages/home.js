@@ -36,8 +36,7 @@ class Home extends React.Component {
     };
   }
   render() {
-    const { authState, user, headerContent } = this.props;
-    const { firstName, lastName } = this.state;
+    const { authState, user } = this.props;
 
     console.log("user", user);
 

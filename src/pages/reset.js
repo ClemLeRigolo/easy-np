@@ -1,10 +1,10 @@
 import React from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
 import fr from "../utils/i18n";
 import Loader from "../components/loader";
-import { getUserData, signIn, resetPassword } from "../utils/firebase";
+import { resetPassword } from "../utils/firebase";
 import { validateEmail } from "../utils/helpers";
 
 import "../styles/login.css";
