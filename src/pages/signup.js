@@ -201,10 +201,8 @@ class SignUp extends React.Component {
               />
 
               <PasswordCheck length={length} uppercase={uppercase} lowercase={lowercase} specialChar={specialChar} />
-
-              <div>
+              
               <SchoolChoose selectedImage={this.state.selectedImage} handleImageChange={this.handleImageChange} />
-              </div>
 
               {errorMsg && <p className="error">Erreur: {errorMsg}</p>}
               <button type="submit" className="log-button">S'inscrire</button>
