@@ -5,6 +5,7 @@ import { createNewUser } from "../utils/firebase";
 import { validateEmailPassword } from "../utils/helpers";
 import Loader from "../components/loader";
 import PasswordCheck from "../components/passwordCheck";
+import {handleImageChange} from "../components/schoolChoose";
 
 import "../styles/login.css";
 import SchoolChoose from '../components/schoolChoose';
@@ -32,7 +33,7 @@ class SignUp extends React.Component {
     document.documentElement.style.setProperty('--selected-color', this.state.selectedColor)
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleImageChange = this.handleImageChange.bind(this);
+    this.handleImageChange = handleImageChange.bind(this);
     this.handleShowPasswords = this.handleShowPasswords.bind(this);
   }
 
@@ -102,40 +103,6 @@ class SignUp extends React.Component {
           });
         }
       });
-  }
-
-  handleImageChange(event) {
-    const selectedImage = event.target.value;
-    let selectedColor = "";
-
-    switch (selectedImage) {
-      case "ensimag":
-        selectedColor = "#008437";
-        break;
-      case "phelma":
-        selectedColor = "#bc1d1d";
-        break;
-      case "ense3":
-        selectedColor = "#2c519f";
-        break;
-      case "gi":
-        selectedColor = "#249fda";
-        break;
-      case "pagora":
-        selectedColor = "#eb6608";
-        break;
-      case "esisar":
-        selectedColor = "#862c86";
-        break;
-      default:
-        selectedColor = ""; // Couleur par défaut en cas de correspondance non trouvée
-    }
-    this.setState({
-      selectedImage: selectedImage,
-      selectedColor: selectedColor,
-    });
-
-    document.documentElement.style.setProperty('--selected-color', selectedColor);
   }
 
   handleShowPasswords(event) {

@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import { getUserData, signOut, deleteUser } from "../utils/firebase";
 import Loader from "../components/loader";
+import { changeColor } from "../components/schoolChoose";
 
 import "../styles/login.css";
 
@@ -33,6 +34,7 @@ class Home extends React.Component {
     this.state = {
       firstName: "",
       lastName: "",
+      school: "",
     };
   }
   render() {
@@ -57,10 +59,12 @@ class Home extends React.Component {
           this.setState({
             firstName: data.name,
             lastName: data.surname,
+            school: data.school,
           });
+          console.log(data.name, data.surname, data.school);
+          changeColor(data.school);
         }
         );
-        console.log(this.state.firstName, this.state.lastName);
     }
 
     console.log("user", user);
