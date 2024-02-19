@@ -21,6 +21,7 @@ class SignUp extends React.Component {
       error: "",
       selectedImage: "ensimag", // Par défaut, sélectionnez la première image
       selectedColor: "#008437", // Par défaut, sélectionnez la première couleur
+      showPasswords: false,
       passwordRules: {
         length: false,
         uppercase: false,
@@ -32,6 +33,7 @@ class SignUp extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleImageChange = this.handleImageChange.bind(this);
+    this.handleShowPasswords = this.handleShowPasswords.bind(this);
   }
 
   handleInputChange(event) {
@@ -45,7 +47,7 @@ class SignUp extends React.Component {
     });
 
     // Vérifiez que les champs de mot de passe correspondent
-    if (target.type === "password") {
+    if (target.name === "retype" || target.name === "password") {
       this.setState(function(state) {
         if (state.password !== state.retype) {
           return {
@@ -136,6 +138,14 @@ class SignUp extends React.Component {
     document.documentElement.style.setProperty('--selected-color', selectedColor);
   }
 
+  handleShowPasswords(event) {
+    console.log(this.state);
+    this.setState({
+      showPasswords: event.target.checked
+    });
+    console.log(this.state);
+  }
+
   render() {
     if (this.props.authState === authStates.INITIAL_VALUE) {
       return <Loader />;
@@ -147,6 +157,7 @@ class SignUp extends React.Component {
 
     const errorMsg = this.state.error;
     const { length, uppercase, lowercase, specialChar } = this.state.passwordRules;
+    const typeShowPassword = (this.state.showPasswords) ? "text" : "password";
 
     return (
       <div className="container">
@@ -182,7 +193,7 @@ class SignUp extends React.Component {
               />
 
               <input
-                type="password"
+                type={typeShowPassword}
                 placeholder="Mot de passe"
                 name="password"
                 onChange={this.handleInputChange}
@@ -190,12 +201,15 @@ class SignUp extends React.Component {
               />
 
               <input
-                type="password"
+                type={typeShowPassword}
                 placeholder="Confirmer le mot de passe"
                 name="retype"
                 onChange={this.handleInputChange}
                 required
               />
+
+              <label  htmlFor="togglePassword">Show password</label>
+              <input id="togglePassword" type="checkbox" onClick={this.handleShowPasswords}/>
 
               <PasswordCheck length={length} uppercase={uppercase} lowercase={lowercase} specialChar={specialChar} />
               
