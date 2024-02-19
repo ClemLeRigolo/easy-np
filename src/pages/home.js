@@ -4,6 +4,7 @@ import { Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import { getUserData, signOut, deleteUser } from "../utils/firebase";
 import Loader from "../components/loader";
+import HeaderBar from "../components/headerBar";
 
 import "../styles/login.css";
 
@@ -67,6 +68,12 @@ class Home extends React.Component {
 
     return (
       <div className="container">
+        <HeaderBar 
+          search={""}
+          setSearch={""}
+          showMenu={false}
+          setShowMenu={false}
+        />
         <header>
           <h1>Easy-NP</h1>
           <div className="logout">
