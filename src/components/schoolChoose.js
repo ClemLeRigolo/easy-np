@@ -2,6 +2,45 @@ import React from "react";
 
 import "../styles/schoolChoose.css";
 
+export function handleImageChange(event) {
+  const selectedImage = event.target.value;
+  let selectedColor = "";
+
+  changeColor(selectedImage);
+  this.setState({
+    selectedImage: selectedImage,
+    selectedColor: selectedColor,
+  });
+}
+
+export function changeColor(selectedImage) {
+  let selectedColor = "";
+
+  switch (selectedImage) {
+    case "ensimag":
+      selectedColor = "#008437";
+      break;
+    case "phelma":
+      selectedColor = "#bc1d1d";
+      break;
+    case "ense3":
+      selectedColor = "#2c519f";
+      break;
+    case "gi":
+      selectedColor = "#249fda";
+      break;
+    case "pagora":
+      selectedColor = "#eb6608";
+      break;
+    case "esisar":
+      selectedColor = "#862c86";
+      break;
+    default:
+      selectedColor = ""; // Couleur par défaut en cas de correspondance non trouvée
+  }
+  document.documentElement.style.setProperty('--selected-color', selectedColor);
+}
+
 export default function SchoolChoose({selectedImage, handleImageChange}) {
   return <div className="schoolChoose">
                 <label className={`image-button-label ${selectedImage === "ensimag" ? "active" : ""}`}>

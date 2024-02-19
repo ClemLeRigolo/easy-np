@@ -21,6 +21,7 @@ export const fr = {
     LOGIN_ALT_TEXT: "Nouvel Utilisateur ?",
     FORGOT_PASSWORD: "Mot de passe oublié ?",
     BACK_TO_LOGIN: "Retour à la page de connexion",
+    RESEND: "Renvoyer le mail de vérification",
   },
 
   ERRORS: {
