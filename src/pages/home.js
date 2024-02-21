@@ -6,6 +6,7 @@ import { getUserData, signOut, deleteUser, newPost, getPosts } from "../utils/fi
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
+import PostInput from "../components/postInput";
 
 import "../styles/home.css";
 
@@ -129,24 +130,9 @@ class Home extends React.Component {
           showMenu={false}
           setShowMenu={false}
         />
-        <header>
-          <h1>Easy-NP</h1>
-          <div className="logout">
-          <button onClick={handleSignOut}> Se déconnecter </button>
-          <button onClick={handleDelete}> Supprimer le compte </button>
-        </div>
-        </header>
-        <div className="content">
+        <div className="">
         <h2>Bienvenue {this.state.firstName} {this.state.lastName} !</h2>
-        <textarea
-          className="post-input"
-          placeholder="Exprimez-vous..."
-          value={this.state.postContent}
-          onChange={this.handlePostContentChange}
-        />
-        <button className="post-submit-btn" onClick={this.handlePostSubmit}>
-          Publier
-        </button>
+        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
         {this.state.posts && this.state.posts.map((post, index) => (
           <div className="post" key={index}>
             <div className="post-header">

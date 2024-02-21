@@ -29,6 +29,7 @@
 
 .post-body {
     margin-top: 8px;
+    overflow-wrap: break-word;
 }
 
 .post-footer {

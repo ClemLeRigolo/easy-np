@@ -1,0 +1,23 @@
+
+.post-input {
+    width: 70%;
+    height: 100px;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 20px;
+    resize: none;
+}
+  
+.post-submit-btn {
+    background-color: var(--selected-color);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+}
+  
+.post-submit-btn:hover {
+    opacity: 0.8;
+}
