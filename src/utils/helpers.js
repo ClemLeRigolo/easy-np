@@ -1,12 +1,12 @@
 import en from "./i18n";
 
-export function validateEmail(email) {
+export function validateEmail(email,login) {
   if (!email) {
     return en.ERRORS.EMPTY_EMAIL;
   }
   //Check email regex
   const emailRegex = /^\w+([.-]?\w+)*@(grenoble-inp\.org|grenoble-inp\.fr)$/;
-  if (!emailRegex.test(email)) {
+  if (!emailRegex.test(email) && !login) {
     return en.ERRORS.INVALID_EMAIL;
   }
   validateEmailDomain(email);
@@ -27,9 +27,13 @@ export function validateEmailDomain(email) {
   }
 }
 
-export function validatePassword(password) {
+export function validatePassword(password,login) {
   if (!password) {
     return en.ERRORS.EMPTY_PASSWORD;
+  }
+
+  if (login) {
+    return;
   }
 
   //teste la longueur du mot de passe
@@ -53,12 +57,12 @@ export function validatePassword(password) {
   }
 }
 
-export function validateEmailPassword(email, password) {
-  const msg = validateEmail(email);
+export function validateEmailPassword(email, password, login) {
+  const msg = validateEmail(email,login);
 
   if (msg) {
     return msg;
   }
 
-  return validatePassword(password);
+  return validatePassword(password,login);
 }

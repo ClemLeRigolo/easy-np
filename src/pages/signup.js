@@ -80,7 +80,8 @@ class SignUp extends React.Component {
     // Valider l'email et le mot de passe
     const errorMsg = validateEmailPassword(
       this.state.email,
-      this.state.password
+      this.state.password,
+      false
     );
 
     if (errorMsg) {
@@ -135,8 +136,8 @@ class SignUp extends React.Component {
 
               <input
                 type="text"
-                placeholder="Nom"
-                name="surname"
+                placeholder="Prénom"
+                name="name"
                 onChange={this.handleInputChange}
                 required
                 className='name'
@@ -144,8 +145,8 @@ class SignUp extends React.Component {
 
               <input
                 type="text"
-                placeholder="Prénom"
-                name="name"
+                placeholder="Nom"
+                name="surnamename"
                 onChange={this.handleInputChange}
                 required
                 className='name'

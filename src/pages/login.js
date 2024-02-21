@@ -46,7 +46,8 @@ class Login extends React.Component {
     //Validate email & password
     const errorMsg = validateEmailPassword(
       this.state.email,
-      this.state.password
+      this.state.password,
+      true
     );
 
     if (errorMsg) {

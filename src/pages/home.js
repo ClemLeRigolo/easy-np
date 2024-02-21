@@ -2,12 +2,12 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, signOut, deleteUser } from "../utils/firebase";
+import { getUserData, signOut, deleteUser, newPost, getPosts } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
 
-import "../styles/login.css";
+import "../styles/home.css";
 
 function handleSignOut() {
   signOut()
@@ -36,12 +36,65 @@ class Home extends React.Component {
       firstName: "",
       lastName: "",
       school: "",
+      likeCount: 0,
+      commentCount: 0,
+      postContent: "",
+      posts: [],
     };
   }
+
+  handlePostSubmit = () => {
+    const { postContent } = this.state;
+
+    console.log("postContent", this.state.postContent);
+  
+    // Enregistrez le post dans la base de données Firebase
+    newPost(postContent)
+      .then(() => {
+        this.setState({ postContent: "" }); // Réinitialisez le champ de texte du post
+      })
+      .catch((error) => {
+        console.error("Erreur lors de l'enregistrement du post :", error);
+      });
+      this.componentDidMount();
+  };
+
+  handlePostContentChange = event => {
+    this.setState({ postContent: event.target.value });
+  };
+
+  handleLikeClick = () => {
+    this.setState(prevState => ({
+      likeCount: prevState.likeCount + 1
+    }));
+  };
+
+  handleCommentClick = () => {
+    this.setState(prevState => ({
+      commentCount: prevState.commentCount + 1
+    }));
+  };
+
+  componentDidMount() {
+    // Récupérez les posts depuis la base de données Firebase
+    getPosts()
+      .then((querySnapshot) => {
+        const posts = [];
+        Object.values(querySnapshot).forEach((doc) => {
+          console.log("Doc:", doc);
+          posts.push(doc);
+        });
+        //inverse la liste pour avoir les derniers posts en premier
+        posts.reverse();
+        this.setState({ posts });
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des posts :", error);
+      });
+  }
+
   render() {
     const { authState, user } = this.props;
-
-    console.log("user", user);
 
     if (authState === authStates.INITIAL_VALUE) {
       return <Loader />;
@@ -68,8 +121,6 @@ class Home extends React.Component {
         );
     }
 
-    console.log("user", user);
-
     return (
       <div className="container">
         <HeaderBar 
@@ -87,6 +138,49 @@ class Home extends React.Component {
         </header>
         <div className="content">
         <h2>Bienvenue {this.state.firstName} {this.state.lastName} !</h2>
+        <textarea
+          className="post-input"
+          placeholder="Exprimez-vous..."
+          value={this.state.postContent}
+          onChange={this.handlePostContentChange}
+        />
+        <button className="post-submit-btn" onClick={this.handlePostSubmit}>
+          Publier
+        </button>
+        {this.state.posts && this.state.posts.map((post, index) => (
+          <div className="post" key={index}>
+            <div className="post-header">
+              <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
+              <div className="post-username">John Doe</div>
+              <img src={require("../images/écoles/ensimag.png")} alt="School" className="post-school" />
+            </div>
+            <div className="post-body">
+              {post.content}
+            </div>
+            <div className="post-footer">
+              <button className="post-like-btn" onClick={this.handleLikeClick}>
+                Like ({this.state.likeCount})
+              </button>
+              <button className="post-comment-btn" onClick={this.handleCommentClick}>
+                Comment ({this.state.commentCount})
+              </button>
+            </div>
+          </div>
+        ))}
+        <div className="post">
+          <div className="post-header">
+            <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
+            <div className="post-username">John Doe</div>
+            <img src={require("../images/écoles/ensimag.png")} alt="School" className="post-school" />
+          </div>
+          <div className="post-body">
+            Honnêtement, l'ensimag est la meilleure école et de loin. Phelma c'est de la merde. Ense3 c'est pas mal mais c'est pas l'ensimag. GI ils sont bêtes. Pagora c'est des bébés. Esiquoi ? Tout le monde s'en fout.
+          </div>
+          <div className="post-footer">
+            <button className="post-like-btn" onClick={this.handleLikeClick}>Like ({this.state.likeCount})</button>
+            <button className="post-comment-btn" onClick={this.handleCommentClick}>Comment ({this.state.commentCount})</button>
+          </div>
+        </div>
         <img src={require("../images/maintenance.png")} alt="Maintenance" />
         </div>
       </div>
