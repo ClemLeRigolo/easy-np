@@ -3,7 +3,7 @@ import React from "react";
 import "../styles/postInput.css";
 
 export default function PostInput({handlePostContentChange, handlePostSubmit, postContent}) {
-  return <div className="passwordChecker">
+  return <div className="postInput">
     <textarea
     className="post-input"
     placeholder="Exprimez-vous..."

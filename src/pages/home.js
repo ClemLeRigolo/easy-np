@@ -7,6 +7,7 @@ import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
 import PostInput from "../components/postInput";
+import Post from "../components/post";
 
 import "../styles/home.css";
 
@@ -140,38 +141,8 @@ class Home extends React.Component {
         <h2>Bienvenue {this.state.firstName} {this.state.lastName} !</h2>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
         {this.state.posts && this.state.posts.map((post, index) => (
-          <div className="post" key={index}>
-            <div className="post-header">
-              <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
-              <div className="post-username">{post.username}</div>
-              <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />            </div>
-            <div className="post-body">
-              {post.content}
-            </div>
-            <div className="post-footer">
-              <button className="post-like-btn" onClick={this.handleLikeClick}>
-                Like ({this.state.likeCount})
-              </button>
-              <button className="post-comment-btn" onClick={this.handleCommentClick}>
-                Comment ({this.state.commentCount})
-              </button>
-            </div>
-          </div>
+          <Post key={index} post={post} handleLikeClick={this.handleLikeClick} handleCommentClick={this.handleCommentClick} likeCount={this.state.likeCount} commentCount={this.state.commentCount} />
         ))}
-        <div className="post">
-          <div className="post-header">
-            <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
-            <div className="post-username">John Doe</div>
-            <img src={require("../images/écoles/ensimag.png")} alt="School" className="post-school" />
-          </div>
-          <div className="post-body">
-            Honnêtement, l'ensimag est la meilleure école et de loin. Phelma c'est de la merde. Ense3 c'est pas mal mais c'est pas l'ensimag. GI ils sont bêtes. Pagora c'est des bébés. Esiquoi ? Tout le monde s'en fout.
-          </div>
-          <div className="post-footer">
-            <button className="post-like-btn" onClick={this.handleLikeClick}>Like ({this.state.likeCount})</button>
-            <button className="post-comment-btn" onClick={this.handleCommentClick}>Comment ({this.state.commentCount})</button>
-          </div>
-        </div>
         <img src={require("../images/maintenance.png")} alt="Maintenance" />
         </div>
       </div>
