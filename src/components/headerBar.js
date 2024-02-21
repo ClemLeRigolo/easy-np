@@ -10,7 +10,7 @@ import {IoNotificationsOutline} from "react-icons/io5"
 import {TbMessage} from "react-icons/tb"
 import { FaDoorOpen } from "react-icons/fa";
 
-import Profile from "../images/écoles/ensimag.png"
+import Profile from "../images/avatar.png"
 import { signOut } from '../utils/firebase';
 
 const HeaderBar = ({search,setSearch,setShowMenu,profileImg}) => {

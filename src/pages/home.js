@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, signOut, deleteUser, newPost, getPosts } from "../utils/firebase";
+import { getUserData, signOut, deleteUser, newPost, getPosts, getUserDataById } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
@@ -83,7 +83,13 @@ class Home extends React.Component {
         const posts = [];
         Object.values(querySnapshot).forEach((doc) => {
           console.log("Doc:", doc);
-          posts.push(doc);
+          console.log(doc.user)
+          getUserDataById(doc.user).then(data => {
+            console.log(data);
+            doc.username = data.name + " " + data.surname;
+            doc.school = data.school;
+            posts.push(doc);
+          });
         });
         //inverse la liste pour avoir les derniers posts en premier
         posts.reverse();
@@ -137,9 +143,8 @@ class Home extends React.Component {
           <div className="post" key={index}>
             <div className="post-header">
               <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
-              <div className="post-username">John Doe</div>
-              <img src={require("../images/écoles/ensimag.png")} alt="School" className="post-school" />
-            </div>
+              <div className="post-username">{post.username}</div>
+              <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />            </div>
             <div className="post-body">
               {post.content}
             </div>
