@@ -181,7 +181,6 @@ class Home extends React.Component {
           setShowMenu={false}
         />
         <div className="post-list">
-        <h2>Bienvenue {this.state.firstName} {this.state.lastName} !</h2>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
         {this.state.posts && this.state.posts.map((post, index) => (
           <Post 
@@ -193,7 +192,6 @@ class Home extends React.Component {
             commentCount={post.commentCount} 
           />
         ))}
-        <img src={require("../images/maintenance.png")} alt="Maintenance" />
         </div>
       </div>
     );
