@@ -128,6 +128,11 @@ class Home extends React.Component {
         // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
         Promise.all(promises).then(() => {
           // Inverser la liste pour avoir les derniers posts en premier
+          console.log("posts", posts);
+          console.log("querySnapshot.size", querySnapshot);
+          // Trie les posts selon leur ordre d'arrivée
+          posts.sort((a, b) => a.timestamp - b.timestamp);
+          console.log("posts", posts);
           this.setState({ posts });
           this.render();
         });
