@@ -56,3 +56,12 @@
     /* Styles du bouton lorsque le post est liké */
     color: var(--selected-color); /* Couleur du cœur rempli */
 }
+
+.comment-btn {
+    background-color: var(--selected-color);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+}
