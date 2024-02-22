@@ -53,15 +53,20 @@ class Home extends React.Component {
     // Enregistrez le post dans la base de données Firebase
     newPost(postContent)
       .then(() => {
-        this.setState({ postContent: "" }); // Réinitialisez le champ de texte du post
+        this.setState({ postContent: "" });
+        this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+        this.updatePosts();
       })
       .catch((error) => {
         console.error("Erreur lors de l'enregistrement du post :", error);
       });
-      this.componentDidMount();
   };
 
   handlePostContentChange = event => {
+    if (event === undefined) {
+      this.setState({ postContent: "" });
+      return;
+    }
     this.setState({ postContent: event.target.value });
   };
 
@@ -101,8 +106,7 @@ class Home extends React.Component {
     });
   };
 
-  componentDidMount() {
-    // Récupérez les posts depuis la base de données Firebase
+  updatePosts = () => {
     getPosts()
       .then((querySnapshot) => {
         const posts = [];
@@ -120,10 +124,16 @@ class Home extends React.Component {
         //inverse la liste pour avoir les derniers posts en premier
         posts.reverse();
         this.setState({ posts });
+        this.render();
       })
       .catch((error) => {
         console.error("Erreur lors de la récupération des posts :", error);
       });
+  }
+
+  componentDidMount() {
+    // Récupérez les posts depuis la base de données Firebase
+    this.updatePosts();
   }
 
   render() {
@@ -153,6 +163,8 @@ class Home extends React.Component {
         }
         );
     }
+
+    console.log("posts", this.state.posts);
 
     return (
       <div className="container">
