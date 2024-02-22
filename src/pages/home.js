@@ -110,21 +110,27 @@ class Home extends React.Component {
     getPosts()
       .then((querySnapshot) => {
         const posts = [];
+        const promises = []; // Tableau pour stocker les promesses des requêtes getUserDataById
+  
         Object.values(querySnapshot).forEach((doc) => {
           console.log("Doc:", doc);
           console.log(Object.values(doc)[0]);
           doc = Object.values(doc)[0];
-          getUserDataById(doc.user).then(data => {
+          const promise = getUserDataById(doc.user).then((data) => {
             console.log(data);
             doc.username = data.name + " " + data.surname;
             doc.school = data.school;
             posts.push(doc);
           });
+          promises.push(promise);
         });
-        //inverse la liste pour avoir les derniers posts en premier
-        posts.reverse();
-        this.setState({ posts });
-        this.render();
+  
+        // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
+        Promise.all(promises).then(() => {
+          // Inverser la liste pour avoir les derniers posts en premier
+          this.setState({ posts });
+          this.render();
+        });
       })
       .catch((error) => {
         console.error("Erreur lors de la récupération des posts :", error);
