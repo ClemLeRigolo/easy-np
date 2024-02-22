@@ -73,10 +73,10 @@ class Home extends React.Component {
     console.log("post", post);
 
     likePost(post.id)
-      .then(() => {
+      .then((value) => {
         console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
-        post.likeCount += 1;
+        post.likeCount += value;
       
         // Mettez à jour l'état avec le post modifié
         this.setState({
