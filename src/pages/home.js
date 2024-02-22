@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, signOut, deleteUser, newPost, getPosts, getUserDataById } from "../utils/firebase";
+import { getUserData, signOut, deleteUser, newPost, getPosts, getUserDataById, likePost } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
@@ -65,16 +65,40 @@ class Home extends React.Component {
     this.setState({ postContent: event.target.value });
   };
 
-  handleLikeClick = () => {
-    this.setState(prevState => ({
-      likeCount: prevState.likeCount + 1
-    }));
+  handleLikeClick = (postIndex) => {
+    const { posts } = this.state;
+    const post = posts[postIndex];
+
+    console.log("posts", posts);
+    console.log("post", post);
+
+    likePost(post.id)
+      .then(() => {
+        console.log("Liked post");
+        // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
+        post.likeCount += 1;
+      
+        // Mettez à jour l'état avec le post modifié
+        this.setState({
+          posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
+        });
+      })
+      .catch((error) => {
+        console.error("Erreur lors du like du post :", error);
+      });
   };
 
-  handleCommentClick = () => {
-    this.setState(prevState => ({
-      commentCount: prevState.commentCount + 1
-    }));
+  handleCommentClick = (postIndex) => {
+    const { posts } = this.state;
+    const post = posts[postIndex];
+
+    // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le commentCount
+    post.commentCount += 1;
+  
+    // Mettez à jour l'état avec le post modifié
+    this.setState({
+      posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
+    });
   };
 
   componentDidMount() {
@@ -84,7 +108,8 @@ class Home extends React.Component {
         const posts = [];
         Object.values(querySnapshot).forEach((doc) => {
           console.log("Doc:", doc);
-          console.log(doc.user)
+          console.log(Object.values(doc)[0]);
+          doc = Object.values(doc)[0];
           getUserDataById(doc.user).then(data => {
             console.log(data);
             doc.username = data.name + " " + data.surname;
@@ -137,11 +162,18 @@ class Home extends React.Component {
           showMenu={false}
           setShowMenu={false}
         />
-        <div className="">
+        <div className="post-list">
         <h2>Bienvenue {this.state.firstName} {this.state.lastName} !</h2>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
         {this.state.posts && this.state.posts.map((post, index) => (
-          <Post key={index} post={post} handleLikeClick={this.handleLikeClick} handleCommentClick={this.handleCommentClick} likeCount={this.state.likeCount} commentCount={this.state.commentCount} />
+          <Post 
+            key={index} 
+            post={post} 
+            handleLikeClick={() => this.handleLikeClick(index)}
+            handleCommentClick={() => this.handleCommentClick(index)} 
+            likeCount={post.likeCount} 
+            commentCount={post.commentCount} 
+          />
         ))}
         <img src={require("../images/maintenance.png")} alt="Maintenance" />
         </div>
