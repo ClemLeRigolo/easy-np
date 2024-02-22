@@ -7,6 +7,7 @@ class Post extends React.Component {
     // Logique de gestion du clic sur le bouton Like
     const { post, handleLikeClick } = this.props;
     handleLikeClick(post.index);
+    this.render();
   };
 
   handleCommentClick = () => {
