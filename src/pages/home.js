@@ -173,6 +173,7 @@ class Home extends React.Component {
           changeColor(data.school);
         }
         );
+      return <Loader />;
     }
 
     console.log("posts", this.state.posts);
