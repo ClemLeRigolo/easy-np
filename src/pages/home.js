@@ -132,6 +132,7 @@ class Home extends React.Component {
           console.log("querySnapshot.size", querySnapshot);
           // Trie les posts selon leur ordre d'arrivée
           posts.sort((a, b) => a.timestamp - b.timestamp);
+          posts.reverse();
           console.log("posts", posts);
           this.setState({ posts });
           this.render();
