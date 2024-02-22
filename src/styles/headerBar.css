@@ -214,7 +214,7 @@ nav{
     }
     .social-icons{
         width: 100vw;
-        background-color:orangered;
+        background-color: var(--selected-color);
         position: fixed;
         bottom: 0px;
         color: #fff;

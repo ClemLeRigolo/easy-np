@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/post.css";
 import { getCurrentUser } from "../utils/firebase";
+import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 
 class Post extends React.Component {
   handleLikeClick = () => {
@@ -35,10 +36,10 @@ class Post extends React.Component {
         <div className="post-body">{post.content}</div>
         <div className="post-footer">
           <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>
-            Like ({likeCount})
+          {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {likeCount}
           </button>
           <button className="post-comment-btn" onClick={this.handleCommentClick}>
-            Comment ({commentCount})
+          <AiOutlineComment /> {commentCount}
           </button>
         </div>
       </div>
