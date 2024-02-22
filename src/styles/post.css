@@ -38,6 +38,7 @@
     background-color: #f0f0f0;
     margin-right: 8px;
     cursor: pointer;
+    color: black;
 }
 
 .post-like-btn:hover,
@@ -49,4 +50,9 @@
     width: 20px;
     height: 20px;
     margin-left: 8px;
+}
+
+.post-like-btn.liked {
+    /* Styles du bouton lorsque le post est liké */
+    color: var(--selected-color); /* Couleur du cœur rempli */
 }
