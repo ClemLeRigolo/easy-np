@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/post.css";
-import { getCurrentUser, addComment } from "../utils/firebase";
+import { getCurrentUser, addComment, getComments, getUserDataById } from "../utils/firebase";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 
 class Post extends React.Component {
@@ -9,6 +9,7 @@ class Post extends React.Component {
     this.state = {
       showCommentInput: false,
       commentInputValue: "",
+      comments: [],
     };
   }
 
@@ -48,10 +49,37 @@ class Post extends React.Component {
     });
   };
 
+  componentDidMount() {
+    const { post } = this.props;
+    const promises = [];
+  
+    // Récupérer les commentaires à partir de la source de données (par exemple, Firebase)
+    getComments(post.id)
+      .then((comments) => {
+        //On boucle sur les commentaires pour rajouter le nom d'utilisateur
+        comments.forEach(comment => {
+          if (comment) {
+            console.log(comment.user);
+            const promise = getUserDataById(comment.user).then((user) => {
+              comment.author = user.name + " " + user.surname;
+          });
+          promises.push(promise);
+          }
+        });
+        Promise.all(promises).then(() => {
+          this.setState({ comments });
+        });
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des commentaires :", error);
+      });
+  }
+
   render() {
     const { post, likeCount, commentCount } = this.props;
-    const { showCommentInput, commentInputValue } = this.state;
+    const { showCommentInput, commentInputValue, comments } = this.state;
     var isLiked = false;
+    console.log(comments)
 
     if (post.likes != undefined && post.likes.hasOwnProperty(getCurrentUser().uid)) {
       isLiked = true;
@@ -84,6 +112,13 @@ class Post extends React.Component {
             <button className="comment-btn" onClick={this.handleCommentSubmit}>Publier</button>
           </div>
         )}
+        {comments.map((comment) => (
+          <div key={comment.id} className="comment">
+            <div className="comment-author">{comment.author}</div>
+            <div className="comment-content">{comment.content}</div>
+            <div className="comment-timestamp">{comment.timestamp}</div>
+          </div>
+      ))}
       </div>
     );
   }
