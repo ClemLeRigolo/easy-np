@@ -116,7 +116,7 @@ class Post extends React.Component {
           <div key={comment.id} className="comment">
             <div className="comment-author">{comment.author}</div>
             <div className="comment-content">{comment.content}</div>
-            <div className="comment-timestamp">{comment.timestamp}</div>
+            <div className="comment-timestamp">{new Date(comment.timestamp).toLocaleTimeString()}</div>
           </div>
       ))}
       </div>

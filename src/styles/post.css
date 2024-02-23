@@ -24,6 +24,7 @@
 .post-body {
     margin-top: 8px;
     overflow-wrap: break-word;
+    text-align: left;
 }
 
 .post-footer {
@@ -71,6 +72,7 @@
     padding: 5px;
     background-color: #f1f1f1;
     border-radius: 5px;
+    text-align: left;
   }
   
   .comment-content {
