@@ -1,0 +1,83 @@
+.comment {
+    margin-top: 10px;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    text-align: left;
+  }
+  
+  .comment-content {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  
+  .comment-author {
+    font-weight: bold;
+    margin-bottom: 3px;
+  }
+  
+  .comment-timestamp {
+    font-size: 12px;
+    color: #888;
+  }
+
+  .comment-actions {
+    display: flex;
+    margin-top: 10px;
+  }
+  
+  .comment-actions button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-right: 10px;
+  }
+  
+  .comment-icon {
+    font-size: 18px;
+    vertical-align: middle;
+  }
+  
+  .comment-like .comment-icon .liked {
+    color: var(--selected-color);
+  }
+
+  .comment-actions {
+    display: flex;
+    align-items: center;
+  }
+  
+  .comment-reply {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    padding: 5px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .comment-reply:hover {
+    text-decoration: underline;
+  }
+
+  .comment-reply-input {
+    width: 100%;
+    resize: vertical;
+    padding: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .comment-publish-reply {
+    background-color: var(--selected-color) !important;
+    color: white;
+    padding: 14px 20px !important;
+    margin: 8px 0 !important;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .comment-publish-reply:hover {
+    opacity: 0.8;
+  }

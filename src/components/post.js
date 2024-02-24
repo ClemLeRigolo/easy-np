@@ -2,6 +2,8 @@ import React from "react";
 import "../styles/post.css";
 import { getCurrentUser, addComment, getComments, getUserDataById } from "../utils/firebase";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import Comment from "./comment";
 
 class Post extends React.Component {
   constructor(props) {
@@ -10,6 +12,7 @@ class Post extends React.Component {
       showCommentInput: false,
       commentInputValue: "",
       comments: [],
+      expandedComments: false, // État pour gérer l'affichage des commentaires
     };
   }
 
@@ -49,6 +52,13 @@ class Post extends React.Component {
     });
   };
 
+  toggleCommentVisibility = () => {
+    // Basculer l'affichage des commentaires
+    this.setState((prevState) => ({
+      expandedComments: !prevState.expandedComments,
+    }));
+  };
+
   componentDidMount() {
     const { post } = this.props;
     const promises = [];
@@ -77,7 +87,7 @@ class Post extends React.Component {
 
   render() {
     const { post, likeCount, commentCount } = this.props;
-    const { showCommentInput, commentInputValue, comments } = this.state;
+    const { showCommentInput, commentInputValue, comments, expandedComments } = this.state;
     var isLiked = false;
     console.log(comments)
 
@@ -112,13 +122,17 @@ class Post extends React.Component {
             <button className="comment-btn" onClick={this.handleCommentSubmit}>Publier</button>
           </div>
         )}
-        {comments.map((comment) => (
-          <div key={comment.id} className="comment">
-            <div className="comment-author">{comment.author}</div>
-            <div className="comment-content">{comment.content}</div>
-            <div className="comment-timestamp">{new Date(comment.timestamp).toLocaleTimeString()}</div>
+        {comments.length > 0 && (
+          <div className={`comments ${expandedComments ? "expanded" : ""}`}>
+            <div className="comments-toggle" onClick={this.toggleCommentVisibility}>
+              {expandedComments ? "Réduire les commentaires" : "Voir les commentaires"}
+              {expandedComments ? <FaAngleUp className="icon" /> : <FaAngleDown className="icon" />}
+            </div>
+            {expandedComments && comments.map((comment) => (
+              <Comment key={comment.id} comment={comment} />
+            ))}
           </div>
-      ))}
+        )}
       </div>
     );
   }
