@@ -8,7 +8,7 @@ import {AiOutlineHome} from "react-icons/ai"
 import {LiaUserFriendsSolid} from "react-icons/lia"
 import {IoNotificationsOutline} from "react-icons/io5"
 import {TbMessage} from "react-icons/tb"
-import { FaDoorOpen } from "react-icons/fa";
+import {BiLogOut} from "react-icons/bi"
 
 import Profile from "../images/avatar.png"
 import { signOut } from '../utils/firebase';
@@ -51,7 +51,7 @@ const HeaderBar = ({search,setSearch,setShowMenu,profileImg}) => {
         onClick={()=>setShowMenu(true)}/>
 
         <Link to="/login" id='signout' style={{marginTop:"8px"}}>
-          <FaDoorOpen 
+          <BiLogOut 
           className='nav-icons'
           onClick={()=>signOut()}/>
         </Link>
