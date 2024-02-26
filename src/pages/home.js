@@ -181,7 +181,7 @@ class Home extends React.Component {
     console.log("posts", this.state.posts);
 
     return (
-      <div className="container">
+      <div className="interface">
         <HeaderBar 
           search={""}
           setSearch={""}
