@@ -1,5 +1,16 @@
+# Removing all node_modules 
+# They can be installed with npm i
 node_modules/
-.env
+
+# Removing the build folder
+# It can be created with npm run build 
 build/
+
+
 .firebase/
+
+# Removing package-lock
 package-lock.json
+
+# Removing exemples from cypress module
+cypress/e2e/2*/
