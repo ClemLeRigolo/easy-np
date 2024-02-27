@@ -12,5 +12,9 @@ build/
 # Removing package-lock
 package-lock.json
 
-# Removing exemples from cypress module
+# Removing examples from cypress module
 cypress/e2e/2*/
+
+# Removing debug files from firebase
+database-debug.log
+ui-debug.log
