@@ -1,0 +1,12 @@
+site_name: Easy-NP documentation
+repo_url: https://gitlab.ensimag.fr/bergeonh/easy-np
+repo_name: Easy-NP
+site_author: Hippolyte Bergeon, Clement , Alexis Sanson
+
+theme:
+  name: material
+  locale: fr
+  # custom_dir:
+  
+
+docs_dir: ./docs
