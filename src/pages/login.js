@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import fr from "../utils/i18n";
 import Loader from "../components/loader";
-import { getUserData, signIn } from "../utils/firebase";
+import { getValueFromDataBase, getUserData, signIn } from "../utils/firebase";
 import { validateEmailPassword } from "../utils/helpers";
 
 import "../styles/login.css";
@@ -153,9 +153,9 @@ class Login extends React.Component {
           <p>{fr.FORM_FIELDS.LOGIN_ALT_TEXT}</p>
           <Link to="/signup">Créer un compte</Link>
           </div>
-          </div>
+        </div>
       </form>
-          </div>
+      </div>
     );
   }
 }
