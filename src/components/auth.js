@@ -1,6 +1,6 @@
 import React from "react";
 
-import { initialize, attachAuthListener } from "../utils/firebase";
+import { attachAuthListener } from "../utils/firebase";
 
 export const authStates = {
   INITIAL_VALUE: "unknown",
@@ -17,7 +17,6 @@ export function withAuth(WrappedComponent) {
         authState: authStates.INITIAL_VALUE,
       };
 
-      initialize();
       this.unsubscribe = attachAuthListener(
         function(user) {
           if (user) {

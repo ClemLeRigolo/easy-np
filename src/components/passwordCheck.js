@@ -1,59 +1,31 @@
 import React from "react";
+import validImg from "../images/validate.png";
+import errorImg from "../images/error.png";
+
 
 import "../styles/passwordCheck.css";
 
-export default function PasswordCheck({length, uppercase, lowercase, specialChar}) {
+export function PasswordCheckUnit({valid, children}) {
+  const srcImg = (valid) 
+    ? validImg
+    : errorImg
+  const altImg = (valid)
+    ? "Valid"
+    : "Invalid";
+
+  return (<div className="password-rules">
+    <span className="valid">
+      <img src={srcImg} alt={altImg} className="icon" />
+    </span>
+    <p className="password-rule">{children}</p>
+  </div>);
+}
+
+export default function PasswordCheck({props}) {
   return <div className="passwordChecker">
-                <div className="password-rules">
-                {length ? (
-                  <span className="valid">
-                    <img src={require("../images/validate.png")} alt="Valid" className="icon" />
-                  </span>
-                ) : (
-                  <span className="invalid">
-                    <img src={require("../images/error.png")} alt="Invalid" className="icon" />
-                  </span>
-                )}
-                <p className='password-rule'>Longueur minimale de 8 caractères</p>
-              </div>
-
-              <div className="password-rules">
-                {uppercase ? (
-                  <span className="valid">
-                    <img src={require("../images/validate.png")} alt="Valid" className="icon" />
-                  </span>
-                ) : (
-                  <span className="invalid">
-                    <img src={require("../images/error.png")} alt="Invalid" className="icon" />
-                  </span>
-                )}
-                <p className='password-rule'>Au moins une lettre majuscule</p>
-              </div>
-
-              <div className="password-rules">
-                {lowercase ? (
-                  <span className="valid">
-                    <img src={require("../images/validate.png")} alt="Valid" className="icon" />
-                  </span>
-                ) : (
-                  <span className="invalid">
-                    <img src={require("../images/error.png")} alt="Invalid" className="icon" />
-                  </span>
-                )}
-                <p className='password-rule'>Au moins une lettre minuscule</p>
-              </div>
-
-              <div className="password-rules">
-                {specialChar ? (
-                  <span className="valid">
-                    <img src={require("../images/validate.png")} alt="Valid" className="icon" />
-                  </span>
-                ) : (
-                  <span className="invalid">
-                    <img src={require("../images/error.png")} alt="Invalid" className="icon" />
-                  </span>
-                )}
-                <p className='password-rule'>Au moins un caractère spécial (!@#$%^&amp;*())</p>
-              </div>
+    <PasswordCheckUnit valid={props.length}>Longueur minimale de 8 caractères</PasswordCheckUnit>
+    <PasswordCheckUnit valid={props.uppercase}>Au moins une lettre majuscule</PasswordCheckUnit>
+    <PasswordCheckUnit valid={props.lowercase}>Au moins une lettre minuscule</PasswordCheckUnit>
+    <PasswordCheckUnit valid={props.specialChar}>Au moins un caractère spécial (!@#$%^&amp;*())</PasswordCheckUnit>
   </div>;
 }

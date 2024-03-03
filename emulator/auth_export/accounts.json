@@ -1,0 +1,27 @@
+{
+  "kind":"identitytoolkit#DownloadAccountResponse",
+  "users":[
+    {
+      "localId":"3VZSDDJhk14soc5BjrmobfAb6x5E",
+      "lastLoginAt":"1708971252441",
+      "emailVerified":true,
+      "email":"verified.user@grenoble-inp.org",
+      "salt":"fakeSaltab5ZS7dd9mmpNWtZF1zK",
+      "passwordHash":"fakeHash:salt=fakeSaltab5ZS7dd9mmpNWtZF1zK:password=Password!",
+      "passwordUpdatedAt":1708971273726,
+      "validSince":"1708971273",
+      "createdAt":"1708971252441",
+      "providerUserInfo":[
+        {"providerId":"password",
+          "email":"verified.user@grenoble-inp.org",
+          "federatedId":"verified.user@grenoble-inp.org",
+          "rawId":"verified.user@grenoble-inp.org",
+          "displayName":"",
+          "photoUrl":""}],
+      "lastRefreshAt":"2024-02-26T18:14:33.726Z",
+      "displayName":"",
+      "photoUrl":"",
+      "customAttributes":""
+    },
+  ]
+}

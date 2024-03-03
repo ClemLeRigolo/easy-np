@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, signOut, deleteUser, newPost, getPosts, getUserDataById, likePost } from "../utils/firebase";
+import { getUserData, signOut, deleteUser, newPost, newGroup, getPosts, getUserDataById, likePost } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
