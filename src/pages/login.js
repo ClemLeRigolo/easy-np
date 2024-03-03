@@ -8,6 +8,7 @@ import { getValueFromDataBase, getUserData, signIn } from "../utils/firebase";
 import { validateEmailPassword } from "../utils/helpers";
 
 import "../styles/login.css";
+import Password from "../components/password";
 
 class Login extends React.Component {
   constructor(props) {
@@ -137,12 +138,10 @@ class Login extends React.Component {
             required
           />
 
-          <input
-            type="password"
+          <Password
+            onPasswordTextChanged={(password) => this.setState({password : password})}
             placeholder={fr.FORM_FIELDS.PASSWORD}
-            name="password"
-            onChange={this.handleInputChange}
-            required
+            required={true}
           />
           {errorMsg && <p className="error">{errorMsg}</p>}
           <button id="login-button" className="log-button" type="submit">

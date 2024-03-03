@@ -9,6 +9,7 @@ import {handleImageChange} from "../components/schoolChoose";
 
 import "../styles/login.css";
 import SchoolChoose from '../components/schoolChoose';
+import Password from '../components/password';
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -22,19 +23,18 @@ class SignUp extends React.Component {
       error: "",
       selectedImage: "ensimag", // Par défaut, sélectionnez la première image
       selectedColor: "#008437", // Par défaut, sélectionnez la première couleur
-      showPasswords: false,
       passwordRules: {
         length: false,
         uppercase: false,
         lowercase: false,
-        specialChar: false
-      }
+        specialChar: false,
+      },
+      samePasswords: false,
     };
     document.documentElement.style.setProperty('--selected-color', this.state.selectedColor)
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleImageChange = handleImageChange.bind(this);
-    this.handleShowPasswords = this.handleShowPasswords.bind(this);
   }
 
   handleInputChange(event) {
@@ -46,27 +46,44 @@ class SignUp extends React.Component {
       [name]: value,
       error: "",
     });
+  }
 
-    // Vérifiez que les champs de mot de passe correspondent
-    if (target.name === "retype" || target.name === "password") {
-      this.setState(function(state) {
-        if (state.password !== state.retype) {
-          return {
-            error: "Les mots de passe ne correspondent pas",
-          };
-        }
+  handlePassword(password) {
+    if (password) {
+      const passwordRules = {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        specialChar: /[!@#$%^&*()]/.test(password)
+      };
+      this.setState({
+        password: password,
+        passwordRules: passwordRules
+      });
+      this.samePasswords(password, this.state.retype);
+    }
+  }
+
+
+  handleRetype(retype) {
+    if (retype) {
+      this.setState({retype});
+      this.samePasswords(this.state.password, retype);
+    }
+  }
+
+  samePasswords(password, retype) {
+    if (password !== retype) {
+      this.setState({samePasswords : false});
+      this.setState({
+        error : "Les mots de passe ne correspondent pas"
       });
     }
-
-    // Valider les règles de mot de passe
-    if (target.name === "password") {
-      const passwordRules = {
-        length: value.length >= 8,
-        uppercase: /[A-Z]/.test(value),
-        lowercase: /[a-z]/.test(value),
-        specialChar: /[!@#$%^&*()]/.test(value)
-      };
-      this.setState({ passwordRules });
+    else {
+      this.setState({samePasswords : true});
+      this.setState({
+        error : ""
+      });
     }
   }
 
@@ -106,13 +123,6 @@ class SignUp extends React.Component {
       });
   }
 
-  handleShowPasswords(event) {
-    console.log(this.state);
-    this.setState({
-      showPasswords: event.target.checked
-    });
-    console.log(this.state);
-  }
 
   render() {
     if (this.props.authState === authStates.INITIAL_VALUE) {
@@ -124,8 +134,6 @@ class SignUp extends React.Component {
     }
 
     const errorMsg = this.state.error;
-    const { length, uppercase, lowercase, specialChar } = this.state.passwordRules;
-    const typeShowPassword = (this.state.showPasswords) ? "text" : "password";
 
     return (
       <div className="container">
@@ -160,27 +168,10 @@ class SignUp extends React.Component {
                 required
               />
 
-              <input
-                type={typeShowPassword}
-                placeholder="Mot de passe"
-                name="password"
-                onChange={this.handleInputChange}
-                required
-              />
+              <Password onPasswordTextChanged={(password) => this.handlePassword(password)} placeholder="Mot de passe" required={true}/>
+              <Password onPasswordTextChanged={(retype) => this.handleRetype(retype)} placeholder="Confirmer le mot de passe" required={true}/>
 
-              <input
-                type={typeShowPassword}
-                placeholder="Confirmer le mot de passe"
-                name="retype"
-                onChange={this.handleInputChange}
-                required
-              />
-
-              <label  htmlFor="togglePassword">Show password</label>
-              <input id="togglePassword" type="checkbox" onClick={this.handleShowPasswords}/>
-
-              <PasswordCheck length={length} uppercase={uppercase} lowercase={lowercase} specialChar={specialChar} />
-              
+              <PasswordCheck props={this.state.passwordRules}/>
               <SchoolChoose selectedImage={this.state.selectedImage} handleImageChange={this.handleImageChange} />
 
               {errorMsg && <p className="error">Erreur: {errorMsg}</p>}
