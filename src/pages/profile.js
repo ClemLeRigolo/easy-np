@@ -22,8 +22,8 @@ const Profile = () => {
 
   const [modelDetails,setModelDetails] = useState(
     {
-      ModelName:"Chibron",
-      ModelUserName:"@ChibronMielleux",
+      ModelName:"PlaceHolder",
+      ModelUserName:"@PlaceHolder",
     }
   )
 
