@@ -19,5 +19,5 @@ cypress/e2e/2*/
 database-debug.log
 ui-debug.log
 
-# Removing python files
+# Removing python virtual env
 venv/
