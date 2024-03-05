@@ -168,8 +168,8 @@ class SignUp extends React.Component {
                 required
               />
 
-              <Password onPasswordTextChanged={(password) => this.handlePassword(password)} placeholder="Mot de passe" required={true}/>
-              <Password onPasswordTextChanged={(retype) => this.handleRetype(retype)} placeholder="Confirmer le mot de passe" required={true}/>
+              <Password onPasswordTextChanged={(password) => this.handlePassword(password)} placeholder="Mot de passe" required={true} name="password"/>
+              <Password onPasswordTextChanged={(retype) => this.handleRetype(retype)} placeholder="Confirmer le mot de passe" required={true} name="retype"/>
 
               <PasswordCheck props={this.state.passwordRules}/>
               <SchoolChoose selectedImage={this.state.selectedImage} handleImageChange={this.handleImageChange} />
