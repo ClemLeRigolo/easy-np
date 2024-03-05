@@ -28,7 +28,8 @@ nav{
 .n-logo h1{
     font-size: 30px;
     cursor: pointer;
-    font-family: 'Roboto', sans-serif
+    font-family: 'Roboto', sans-serif;
+    color: #2a2e49;
 }
 .n-logo span{
     color:snow;

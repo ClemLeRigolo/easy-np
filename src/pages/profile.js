@@ -51,6 +51,21 @@ class Profile extends React.Component {
 
     const { authState, user } = this.props;
 
+    if (authState === authStates.INITIAL_VALUE) {
+      return <Loader />;
+    }
+
+    if (authState === authStates.LOGGED_OUT) {
+      return <Redirect to="/login"></Redirect>;
+    }
+
+    if (authState === authStates.LOGGED_IN && !this.state.firstName) {
+      if(user.emailVerified === false){
+        return <Redirect to="/verify"></Redirect>;
+      }
+      return <Loader />;
+    }
+
     console.log(user);
     //console.log(userData);
 
