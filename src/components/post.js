@@ -95,6 +95,8 @@ class Post extends React.Component {
       isLiked = true;
     }
 
+    console.log(post);
+
     return (
       <div className="post">
         <div className="post-header">
