@@ -1,12 +1,1 @@
-{
-  "users":
-  {
-    "3VZSDDJhk14soc5BjrmobfAb6x5E": {
-      "email":"verified.user@grenoble-inp.org",
-      "name":"Prenom",
-      "password":"Password!",
-      "school":"ensimag",
-      "surname":"" 
-    },
-  }
-}
+{"users":{"x8C9xV0QthDNZrYJZpjbxOltSYTW":{"email":"user.username@grenoble-inp.org","name":"User","password":"Password!","school":"ensimag","surname":""}}}
