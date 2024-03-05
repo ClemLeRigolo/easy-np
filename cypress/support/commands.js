@@ -23,7 +23,6 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-import firebase from "firebase/app"
 
 Cypress.Commands.add('login', (email, password) => {
   cy.get("input[name='email']").type(email);
@@ -37,4 +36,5 @@ Cypress.Commands.add("signup", (firstName, name, email, password1, password2) =>
   cy.get("form").find("input[name='password']").type(password1);
   cy.get("form").find("input[name='retype']").type(password2);
 });
+
 

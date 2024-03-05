@@ -6,13 +6,13 @@ context('Home', () => {
   });
 
   it("Connection to an account", () => {
-    cy.login("verified.user@grenoble-inp.org", "Password!");
+    cy.login("user.username@grenoble-inp.org", "Password!");
     cy.get("form").submit();
     cy.get("nav").find("#signout").click();
   });
 
   it("Wrong password", () => {
-    cy.login("verified.user@grenoble-inp.org", "WrongPassword");
+    cy.login("user.username@grenoble-inp.org", "WrongPassword");
     cy.get("form").submit();
     cy.contains("Incorrect email/password");
   });
