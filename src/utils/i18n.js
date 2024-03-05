@@ -38,7 +38,7 @@ export const fr = {
     HAVE_ACCOUNT: "Déjà un compte ?",
   },
 
-  VERIFY_EMAIL_TEXT: "Un e-mail de vérification a été envoyé. Veuillez vérifier votre boîte de réception.",
+  VERIFY_EMAIL_TEXT: "Un e-mail de vérification a été envoyé. Veuillez vérifier votre boîte de réception. Vous serez automatiquement redirigé une fois votre e-mail vérifié.",
 };
 
 export const en = {

@@ -1,7 +1,8 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { signOut, resendMail } from "../utils/firebase";
-import { authStates } from "../components/auth";
+import { authStates, withAuth } from "../components/auth";
+import Loader from "../components/loader";
 
 import fr from "../utils/i18n";
 import "../styles/login.css";
@@ -37,13 +38,29 @@ class Verify extends React.Component {
   }
 
   render() {
+
+    const { authState, user } = this.props;
+
+    if (authState === authStates.INITIAL_VALUE) {
+      return <Loader />;
+    }
+
+    console.log("props", this.props);
+
     if (this.state.return) {
       console.log("return");
       return <Redirect to="/login"></Redirect>;
     }
 
+    //If email verified
+    if (this.props.user.emailVerified) {
+      return <Redirect to="/home"></Redirect>;
+    }
+
     return (
+
       <div className="container">
+        <meta httpEquiv="refresh" content="5" />
         <div className="content">
           <div className="login">
             <h2>{fr.GREETINGS.VERIFY}</h2>
@@ -70,4 +87,4 @@ class Verify extends React.Component {
   }
 }
 
-export default Verify;
+export default withAuth(Verify);
