@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/post.css";
-import { getCurrentUser, addComment, getComments, getUserDataById } from "../utils/firebase";
+import { getCurrentUser, addComment, getComments, getUserDataById, getPostById } from "../utils/firebase";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
@@ -12,7 +12,6 @@ class Post extends React.Component {
     this.state = {
       showCommentInput: false,
       commentInputValue: "",
-      comments: [],
       expandedComments: false, // État pour gérer l'affichage des commentaires
     };
   }
@@ -34,24 +33,43 @@ class Post extends React.Component {
   };
 
   handleCommentSubmit = () => {
-    // Logique de soumission du commentaire
-    const { post } = this.props;
-    const { commentInputValue } = this.state;
+  // Logique de soumission du commentaire
+  const { post } = this.props;
+  const { commentInputValue } = this.state;
 
-    addComment(post.id, commentInputValue)
-        .then(() => {
-            console.log("Commentaire ajouté avec succès");
+  addComment(post.id, commentInputValue)
+    .then(() => {
+      console.log("Commentaire ajouté avec succès");
+      // Réinitialiser la zone de texte des commentaires
+      this.setState({
+        showCommentInput: false,
+        commentInputValue: "",
+      });
+
+      // Actualiser les commentaires après l'ajout du nouveau commentaire
+      getComments(post.id)
+        .then((comments) => {
+          const promises = comments.map((comment) => {
+            // On boucle sur les commentaires pour rajouter le nom d'utilisateur
+            if (comment) {
+              return getUserDataById(comment.user).then((user) => {
+                comment.author = user.name + " " + user.surname;
+                return comment;
+              });
+            }
+          });
+          Promise.all(promises).then((updatedComments) => {
+            this.setState({ comments: updatedComments });
+          });
         })
         .catch((error) => {
-            console.error("Erreur lors de l'ajout du commentaire :", error);
+          console.error("Erreur lors de la récupération des commentaires :", error);
         });
-
-    // Réinitialiser la zone de texte des commentaires
-    this.setState({
-      showCommentInput: false,
-      commentInputValue: "",
+    })
+    .catch((error) => {
+      console.error("Erreur lors de l'ajout du commentaire :", error);
     });
-  };
+};
 
   toggleCommentVisibility = () => {
     // Basculer l'affichage des commentaires
@@ -88,9 +106,9 @@ class Post extends React.Component {
 
   render() {
     const { post, likeCount, commentCount } = this.props;
-    const { showCommentInput, commentInputValue, comments, expandedComments } = this.state;
+    const { showCommentInput, commentInputValue, expandedComments } = this.state;
     var isLiked = false;
-    console.log(comments)
+    const comments = post.comments || [];
 
     if (post.likes != undefined && post.likes.hasOwnProperty(getCurrentUser().uid)) {
       isLiked = true;

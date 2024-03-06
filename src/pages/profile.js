@@ -19,7 +19,7 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null,
+      uid: null,
       userData: null,
       following: 3,
       search: "",
@@ -136,7 +136,7 @@ class Profile extends React.Component {
     }
 
 
-    if (authState === authStates.LOGGED_IN && !this.state.userData) {
+    if ((authState === authStates.LOGGED_IN && !this.state.userData) || (this.props.match.params.uid !== this.state.uid)) {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
@@ -175,6 +175,7 @@ class Profile extends React.Component {
         }
         );*/
         const { uid } = this.props.match.params;
+        this.state.uid = uid;
         getUserDataById(uid)
         .then((userData) => {
           console.log("userData", userData);
