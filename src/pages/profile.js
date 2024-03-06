@@ -7,11 +7,12 @@ import HeaderBar from '../components/headerBar'
 import "../styles/profile.css"
 import ProfileImg from "../images/avatar.png"
 import { authStates, withAuth } from "../components/auth";
-import { getCurrentUser, getUserData, getPostByUser, getUserUID, likePost } from "../utils/firebase";
+import { getCurrentUser, getUserData, getPostByUser, getUserUID, likePost, getUserDataById } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
+import { withRouter } from 'react-router-dom';
 
 class Profile extends React.Component {
 
@@ -139,7 +140,7 @@ class Profile extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      console.log("dedans");
+      /*console.log("dedans");
         getUserData(user.email).then(data => {
           this.setState({
             userData: data,
@@ -172,8 +173,39 @@ class Profile extends React.Component {
               });
           });
         }
-        );
-      getPostByUser("9JVMFUabtscGSicHHGswvVsM5AU2");
+        );*/
+        const { uid } = this.props.match.params;
+        getUserDataById(uid)
+        .then((userData) => {
+          console.log("userData", userData);
+          this.setState({
+            userData: userData,
+          });
+          this.setProfileData(userData);
+          getPostByUser(uid).then(
+            (querySnapshot) => {
+              const posts = [];
+        
+              Object.values(querySnapshot).forEach((doc) => {
+                console.log("Doc:", doc);
+                console.log(Object.values(doc)[0]);
+                console.log(userData);
+                doc.username = userData.name + " " + userData.surname;
+                doc.school = userData.school;
+                posts.push(doc);
+              });
+
+              // Inverser la liste pour avoir les derniers posts en premier
+              console.log("posts", posts);
+              console.log("querySnapshot.size", querySnapshot);
+              // Trie les posts selon leur ordre d'arrivée
+              posts.sort((a, b) => a.timestamp - b.timestamp);
+              posts.reverse();
+              console.log("posts", posts);
+              this.setState({ posts });
+              this.render();
+            });
+        });
       return <Loader />;
     }
 
@@ -233,4 +265,4 @@ class Profile extends React.Component {
       }
 }
 
-export default withAuth(Profile);
+export default withRouter(withAuth(Profile));

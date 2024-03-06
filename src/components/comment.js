@@ -3,6 +3,7 @@ import { FaReply } from "react-icons/fa";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 import "../styles/comment.css";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 class Comment extends React.Component {
   constructor(props) {
@@ -35,7 +36,9 @@ class Comment extends React.Component {
 
     return (
       <div className="comment">
+        <Link to={`/profile/${comment.user}`} className="comment-author">
         <div className="comment-author">{comment.author}</div>
+        </Link>
         <div className="comment-content">{comment.content}</div>
         <div className="comment-timestamp">{new Date(comment.timestamp).toLocaleTimeString()}</div>
         <div className="comment-actions">

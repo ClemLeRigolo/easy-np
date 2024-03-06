@@ -9,11 +9,12 @@ import {LiaUserFriendsSolid} from "react-icons/lia"
 import {IoNotificationsOutline} from "react-icons/io5"
 import {TbMessage} from "react-icons/tb"
 import {BiLogOut} from "react-icons/bi"
+import { getCurrentUser } from '../utils/firebase';
 
 import Profile from "../images/avatar.png"
 import { signOut } from '../utils/firebase';
 
-const HeaderBar = ({search,setSearch,setShowMenu,profileImg}) => {
+const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
 
 
   
@@ -59,7 +60,7 @@ const HeaderBar = ({search,setSearch,setShowMenu,profileImg}) => {
 
 
        <div className="n-profile" >
-          <Link to="/profile"> 
+          <Link to={`/profile/${uid}`}> 
             <img src={profileImg ? (profileImg) : Profile} className='n-img' alt='profile' style={{marginBottom:"-7px"} }/>
           </Link>
       </div>

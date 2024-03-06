@@ -4,6 +4,7 @@ import { getCurrentUser, addComment, getComments, getUserDataById } from "../uti
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
+import { Link } from "react-router-dom";
 
 class Post extends React.Component {
   constructor(props) {
@@ -100,8 +101,12 @@ class Post extends React.Component {
     return (
       <div className="post">
         <div className="post-header">
-          <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
-          <div className="post-username">{post.username}</div>
+          <Link to={`/profile/${post.user}`}>           
+            <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
+            <div className="post-username">
+              {post.username}
+            </div>
+          </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
         </div>
         <div className="post-body">{post.content}</div>

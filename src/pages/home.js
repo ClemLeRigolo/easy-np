@@ -187,6 +187,7 @@ class Home extends React.Component {
           setSearch={""}
           showMenu={false}
           setShowMenu={false}
+          uid={user.uid}
         />
         <div className="post-list">
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
