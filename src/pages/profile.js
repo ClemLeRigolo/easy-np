@@ -217,6 +217,7 @@ class Profile extends React.Component {
           showMenu={this.state.showMenu}
           setShowMenu={this.setShowMenu}
           profileImg={this.state.profileImg}
+          uid={user.uid}
           />
         <div className="home">
           {/* <Left 
