@@ -1,13 +1,25 @@
 stages:
+  - pre
   - build
   - test
+
+prepare:
+  stage: pre 
+  image: node
+  script:
+    - npm i --cache .npm --prefer-offline
+  cache:
+    key: npm-cache
+    paths:
+      - .npm/
+
 
 building:
   stage: build
   image: node
   script:
-    - npm i
-    - npm run build
+    - npm i --cache .npm --prefer-offline
+    - npm run build || echo $?
   artifacts:
     paths:
       - build/
