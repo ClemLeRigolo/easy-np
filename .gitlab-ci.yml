@@ -9,7 +9,7 @@ building:
     - npm i
     - npm run build
   artifacts:
-    - path:
+    - paths:
       - build/
 
 testing:
@@ -20,8 +20,8 @@ testing:
     - npx firebase emulators:start --token $FIREBASE_TOKEN > firebase_report.txt &
     - echo firebase emulators launch
   artifacts:
-    - path:
+    - paths:
       - firebase_report.txt
   dependencies:
-    building
+    - building
 
