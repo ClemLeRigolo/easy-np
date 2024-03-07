@@ -26,13 +26,13 @@
     outline: none;
 }
 .modelForm .inputBox1 input:focus{
-    border: 1px solid orangered;
+    border: 1px solid var(--selected-color);
 }
 .modelBtn{
     font-size: 16px;
     padding: 10px 20px;
     text-transform: capitalize;
-    background: linear-gradient(107deg, rgb(255, 67, 5) 11.1%, rgb(245, 135, 0) 95.3%);
+    background: linear-gradient(107deg, var(--selected-color) 11.1%, rgb(255, 255, 255) 95.3%);
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -54,7 +54,7 @@
         font-size: 14px;
         padding: 5px 10px;
         text-transform: capitalize;
-        background-color: orangered;
+        background-color: var(--selected-color);
         color: #fff;
         border: none;
         border-radius: 5px;
@@ -164,7 +164,7 @@
     }
     .info-follow button:hover{
         border: none;
-        background: linear-gradient(107deg, rgb(255, 67, 5) 11.1%, rgb(245, 135, 0) 95.3%);
+        background: linear-gradient(107deg, var(--selected-color) 11.1%, rgb(255, 255, 255) 95.3%);
         color: #fff;
       
     }
@@ -179,7 +179,7 @@
         gap: 8px;
         align-items: center;
         font-size: 13px;
-        background: linear-gradient(107deg, rgb(255, 67, 5) 11.1%, rgb(245, 135, 0) 95.3%);
+        background: linear-gradient(107deg, var(--selected-color) 11.1%, rgb(255, 255, 255) 95.3%);
         color: #fff;
         padding: 5px 10px;
         border-radius: 10px;
@@ -297,7 +297,7 @@
             gap: 8px;
             align-items: center;
             font-size: 11px;
-            background: linear-gradient(107deg, rgb(255, 67, 5) 11.1%, rgb(245, 135, 0) 95.3%);
+            background: linear-gradient(107deg, var(--selected-color) 11.1%, rgb(255, 255, 255) 95.3%);
             color: #fff;
             padding: 5px 10px;
             border-radius: 10px;
@@ -530,7 +530,7 @@
 }
 .info-follow button:hover{
     border: none;
-    background: linear-gradient(107deg, rgb(255, 67, 5) 11.1%, rgb(245, 135, 0) 95.3%);
+    background: linear-gradient(107deg, var(--selected-color) 11.1%, #2a2e49 95.3%);
     color: #fff;
   
 }
@@ -545,7 +545,7 @@
     gap: 8px;
     align-items: center;
     font-size: 13px;
-    background: linear-gradient(107deg, rgb(255, 67, 5) 11.1%, rgb(245, 135, 0) 95.3%);
+    background: linear-gradient(107deg, var(--selected-color) 11.1%, rgb(245, 135, 0) 95.3%);
     color: #fff;
     padding: 5px 10px;
     border-radius: 10px;

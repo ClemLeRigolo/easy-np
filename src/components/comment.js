@@ -3,13 +3,17 @@ import { FaReply } from "react-icons/fa";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 import "../styles/comment.css";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { getUserDataById } from "../utils/firebase";
+import Loader from "./loader";
 
 class Comment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isReplying: false,
-      replyContent: ""
+      replyContent: "",
+      author: "bug",
     };
   }
 
@@ -33,9 +37,22 @@ class Comment extends React.Component {
     const { comment } = this.props;
     const { isReplying, replyContent } = this.state;
 
+    console.log("comment", comment);
+
+    if (this.state.author === "bug") {
+      getUserDataById(comment.user).then((userData) => {
+        console.log("userData", userData);
+        this.setState({ author: userData.name + " " + userData.surname });
+      }
+      );
+      return <Loader />;
+    }
+
     return (
       <div className="comment">
-        <div className="comment-author">{comment.author}</div>
+        <Link to={`/profile/${comment.user}`} className="comment-author">
+        <div className="comment-author">{this.state.author}</div>
+        </Link>
         <div className="comment-content">{comment.content}</div>
         <div className="comment-timestamp">{new Date(comment.timestamp).toLocaleTimeString()}</div>
         <div className="comment-actions">

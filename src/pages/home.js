@@ -49,9 +49,8 @@ class Home extends React.Component {
     const { postContent } = this.state;
 
     console.log("postContent", this.state.postContent);
-  
     // Enregistrez le post dans la base de données Firebase
-    newPost(postContent)
+    newPost(postContent,1709162579034)
       .then(() => {
         this.setState({ postContent: "" });
         this.handlePostContentChange(); // Réinitialisez le champ de texte du post
@@ -136,7 +135,6 @@ class Home extends React.Component {
           posts.reverse();
           console.log("posts", posts);
           this.setState({ posts });
-          this.render();
         });
       })
       .catch((error) => {
@@ -152,7 +150,7 @@ class Home extends React.Component {
   render() {
     const { authState, user } = this.props;
 
-    if (authState === authStates.INITIAL_VALUE) {
+    if (authState === authStates.INITIAL_VALUE || this.state.loading) {
       return <Loader />;
     }
 
@@ -187,6 +185,7 @@ class Home extends React.Component {
           setSearch={""}
           showMenu={false}
           setShowMenu={false}
+          uid={user.uid}
         />
         <div className="post-list">
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>

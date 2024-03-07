@@ -154,7 +154,7 @@ class SignUp extends React.Component {
               <input
                 type="text"
                 placeholder="Nom"
-                name="surnamename"
+                name="surname"
                 onChange={this.handleInputChange}
                 required
                 className='name'

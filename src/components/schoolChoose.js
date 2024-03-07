@@ -74,7 +74,7 @@ export default function SchoolChoose({selectedImage, handleImageChange}) {
                     onChange={handleImageChange}
                     className="image-button"
                   />
-                  <img src={require("../images/écoles/ense3.jpeg")} alt="Ense3" />
+                  <img src={require("../images/écoles/ense3.png")} alt="Ense3" />
                 </label>
                 <label className={`image-button-label ${selectedImage === "gi" ? "active" : ""}`}>
                   <input
@@ -85,7 +85,7 @@ export default function SchoolChoose({selectedImage, handleImageChange}) {
                     onChange={handleImageChange}
                     className="image-button"
                   />
-                  <img src={require("../images/écoles/gi.jpeg")} alt="GI" />
+                  <img src={require("../images/écoles/gi.png")} alt="GI" />
                 </label>
                 <label className={`image-button-label ${selectedImage === "pagora" ? "active" : ""}`}>
                   <input
@@ -107,7 +107,7 @@ export default function SchoolChoose({selectedImage, handleImageChange}) {
                     onChange={handleImageChange}
                     className="image-button"
                   />
-                  <img src={require("../images/écoles/esisar.jpeg")} alt="Esisar" />
+                  <img src={require("../images/écoles/esisar.png")} alt="Esisar" />
                 </label>
   </div>;
 }
