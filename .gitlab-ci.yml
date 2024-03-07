@@ -1,6 +1,6 @@
 stage:
-  build
-  test
+  - build
+  - test
 
 building:
   stage: build
