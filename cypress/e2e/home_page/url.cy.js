@@ -1,12 +1,14 @@
 context('Testing urls', () => {
   describe("User connected", () => {
-    beforeEach(() => {
+    before(() => {
       cy.visit("/");
       cy.login("user.username@grenoble-inp.org", "Password!");
       cy.get("form").submit();
+      cy.contains("Easy");
     });
 
-    afterEach(() => {
+    after(() => {
+      cy.visit("/");
       cy.get("nav").find("#signout").click();
     });
 
@@ -43,8 +45,13 @@ context('Testing urls', () => {
   });
 
   describe("User disconnected", () => {
-    beforeEach(() => {
+    before("user disconnected", () => {
       cy.visit("/");
+    });
+
+    it("main url", () => {
+      cy.visit("/");
+      cy.url().should("eq", `${Cypress.config().baseUrl}/login`);
     });
 
     it("going back to login", () => {
@@ -54,7 +61,7 @@ context('Testing urls', () => {
 
     it("going back to verify", () => {
       cy.visit("/verify");
-      cy.url().should("eq", `${Cypress.config().baseUrl}/`);
+      cy.url().should("eq", `${Cypress.config().baseUrl}/verify`);
     });
 
     it("going back to signup", () => {
@@ -65,17 +72,17 @@ context('Testing urls', () => {
 
     it("going back to reset", () => {
       cy.visit("/reset");
-      cy.url().should("eq", `${Cypress.config().baseUrl}/`);
+      cy.url().should("eq", `${Cypress.config().baseUrl}/reset`);
     });
  
     it("going to profile", () => {
       cy.visit("/profile");
-      cy.url().should("eq", `${Cypress.config().baseUrl}/`);
+      cy.url().should("eq", `${Cypress.config().baseUrl}/login`);
     });
 
     it("going to unknown link", () => {
       cy.visit("/unknown-link");
-      cy.url().should("eq", `${Cypress.config().baseUrl}/`);
+      cy.url().should("eq", `${Cypress.config().baseUrl}/login`);
     });
   });
 });
