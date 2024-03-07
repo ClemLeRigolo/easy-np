@@ -1,0 +1,27 @@
+stage:
+  build
+  test
+
+building:
+  stage: build
+  image: node
+  script:
+    - npm i
+    - npm run build
+  artifacts:
+    - path:
+      - build/
+
+testing:
+  stage: test
+  image: node
+  script:
+    - npm i # installing all the things needed
+    - npx firebase emulators:start --token $FIREBASE_TOKEN > firebase_report.txt &
+    - echo firebase emulators launch
+  artifacts:
+    - path:
+      - firebase_report.txt
+  dependencies:
+    building
+
