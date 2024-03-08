@@ -111,13 +111,12 @@ class Home extends React.Component {
       .then((querySnapshot) => {
         const posts = [];
         const promises = []; // Tableau pour stocker les promesses des requêtes getUserDataById
+
+        console.log("querySnapshot", querySnapshot);
   
         Object.values(querySnapshot).forEach((doc) => {
-          console.log("Doc:", doc);
-          console.log(Object.values(doc)[0]);
           doc = Object.values(doc)[0];
           const promise = getUserDataById(doc.user).then((data) => {
-            console.log(data);
             doc.username = data.name + " " + data.surname;
             doc.school = data.school;
             posts.push(doc);
@@ -190,6 +189,7 @@ class Home extends React.Component {
         <div className="post-list">
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
         {this.state.posts && this.state.posts.map((post, index) => (
+          console.log("post", post),
           <Post 
             key={index} 
             post={post} 

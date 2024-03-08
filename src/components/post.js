@@ -13,6 +13,7 @@ class Post extends React.Component {
       showCommentInput: false,
       commentInputValue: "",
       expandedComments: false, // État pour gérer l'affichage des commentaires
+      post: this.props.post,
     };
   }
 
@@ -33,43 +34,53 @@ class Post extends React.Component {
   };
 
   handleCommentSubmit = () => {
-  // Logique de soumission du commentaire
-  const { post } = this.props;
-  const { commentInputValue } = this.state;
-
-  addComment(post.id, commentInputValue)
-    .then(() => {
-      console.log("Commentaire ajouté avec succès");
-      // Réinitialiser la zone de texte des commentaires
-      this.setState({
-        showCommentInput: false,
-        commentInputValue: "",
-      });
-
-      // Actualiser les commentaires après l'ajout du nouveau commentaire
-      getComments(post.id)
-        .then((comments) => {
-          const promises = comments.map((comment) => {
-            // On boucle sur les commentaires pour rajouter le nom d'utilisateur
-            if (comment) {
-              return getUserDataById(comment.user).then((user) => {
-                comment.author = user.name + " " + user.surname;
-                return comment;
-              });
-            }
-          });
-          Promise.all(promises).then((updatedComments) => {
-            this.setState({ comments: updatedComments });
-          });
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la récupération des commentaires :", error);
+    // Logique de soumission du commentaire
+    const { post } = this.props;
+    const { commentInputValue } = this.state;
+  
+    addComment(post.id, commentInputValue)
+      .then(() => {
+        console.log("Commentaire ajouté avec succès");
+        // Réinitialiser la zone de texte des commentaires
+        this.setState({
+          showCommentInput: false,
+          commentInputValue: "",
         });
-    })
-    .catch((error) => {
-      console.error("Erreur lors de l'ajout du commentaire :", error);
-    });
-};
+  
+        // Attendre un court délai avant de récupérer les commentaires
+        const delay = 50; // Délai en millisecondes
+        return new Promise((resolve) => setTimeout(resolve, delay));
+      })
+      .then(() => {
+        // Actualiser les commentaires après un court délai
+        return getComments(post.id);
+      })
+      .then((comments) => {
+        const promises = comments.map((comment) => {
+          // On boucle sur les commentaires pour rajouter le nom d'utilisateur
+          if (comment) {
+            return getUserDataById(comment.user).then((user) => {
+              comment.author = user.name + " " + user.surname;
+              return comment;
+            });
+          }
+        });
+        return Promise.all(promises);
+      })
+      .then((updatedComments) => {
+        console.log("updatedComments", updatedComments);
+        this.setState((prevState) => ({
+          post: {
+            ...prevState.post,
+            comments: updatedComments,
+            commentCount: updatedComments.length,
+          },
+        }));
+      })
+      .catch((error) => {
+        console.error("Erreur lors de l'ajout ou de la récupération des commentaires :", error);
+      });
+  };
 
   toggleCommentVisibility = () => {
     // Basculer l'affichage des commentaires
@@ -80,41 +91,58 @@ class Post extends React.Component {
 
   componentDidMount() {
     const { post } = this.props;
-    const promises = [];
   
     // Récupérer les commentaires à partir de la source de données (par exemple, Firebase)
     getComments(post.id)
       .then((comments) => {
-        //On boucle sur les commentaires pour rajouter le nom d'utilisateur
-        comments.forEach(comment => {
+        const promises = comments.map((comment) => {
+          // On boucle sur les commentaires pour rajouter le nom d'utilisateur
           if (comment) {
             console.log(comment.user);
-            const promise = getUserDataById(comment.user).then((user) => {
+            return getUserDataById(comment.user).then((user) => {
               comment.author = user.name + " " + user.surname;
-          });
-          promises.push(promise);
+              return comment;
+            });
           }
         });
-        Promise.all(promises).then(() => {
-          this.setState({ comments });
-        });
+        return Promise.all(promises);
+      })
+      .then((updatedComments) => {
+        console.log("updatedComments", updatedComments);
+        this.setState((prevState) => ({
+          post: {
+            ...prevState.post,
+            comments: updatedComments,
+            commentCount: updatedComments.length,
+          },
+        }));
       })
       .catch((error) => {
         console.error("Erreur lors de la récupération des commentaires :", error);
       });
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.post !== this.props.post) {
+      this.setState({ post: this.props.post });
+    }
+  }
+
   render() {
-    const { post, likeCount, commentCount } = this.props;
+    const { likeCount } = this.props;
     const { showCommentInput, commentInputValue, expandedComments } = this.state;
     var isLiked = false;
+    const post = this.state.post;
     const comments = post.comments || [];
+
+    const autrePost = this.props.post;
 
     if (post.likes != undefined && post.likes.hasOwnProperty(getCurrentUser().uid)) {
       isLiked = true;
     }
 
     console.log(post);
+    console.log(autrePost);
 
     return (
       <div className="post">
@@ -133,7 +161,7 @@ class Post extends React.Component {
             {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {likeCount}
           </button>
           <button className="post-comment-btn" onClick={this.handleCommentClick}>
-            <AiOutlineComment /> {commentCount}
+            <AiOutlineComment /> {post.commentCount}
           </button>
         </div>
         {showCommentInput && (
