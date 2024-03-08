@@ -23,6 +23,8 @@
 
 .post-username {
     font-weight: bold;
+    text-decoration: none;
+    color: black;
 }
 
 .post-body {
@@ -78,9 +80,4 @@
   
   .comments-toggle:hover {
     text-decoration: underline; /* Souligner le texte au survol */
-  }
-
-  a {
-    text-decoration: none;
-    color: black;
   }

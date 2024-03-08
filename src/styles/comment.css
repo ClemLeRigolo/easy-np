@@ -14,6 +14,8 @@
   .comment-author {
     font-weight: bold;
     margin-bottom: 3px;
+    text-decoration: none;
+    color: black;
   }
   
   .comment-timestamp {
