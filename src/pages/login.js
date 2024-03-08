@@ -142,6 +142,7 @@ class Login extends React.Component {
             onPasswordTextChanged={(password) => this.setState({password : password})}
             placeholder={fr.FORM_FIELDS.PASSWORD}
             required={true}
+            name="password"
           />
           {errorMsg && <p className="error">{errorMsg}</p>}
           <button id="login-button" className="log-button" type="submit">
