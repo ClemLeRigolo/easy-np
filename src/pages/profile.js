@@ -1,5 +1,4 @@
 import React from "react";
-import { useState } from 'react'
 // import Left from '../../Components/LeftSide/Left'
 import ProfileMiddle from '../components/profileMiddle'
 // import Right from '../../Components/RightSide/Right'
@@ -7,7 +6,7 @@ import HeaderBar from '../components/headerBar'
 import "../styles/profile.css"
 import ProfileImg from "../images/avatar.png"
 import { authStates, withAuth } from "../components/auth";
-import { getCurrentUser, getUserData, getPostByUser, getUserUID, likePost, getUserDataById } from "../utils/firebase";
+import { getPostByUser, likePost, getUserDataById } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -48,31 +47,31 @@ class Profile extends React.Component {
   }
 
   setSearch = (value) => {
-    this.state.search = value;
+    this.setState({ search: value });
   }
 
   setShowMenu = (value) => {
-    this.state.showMenu = value;
+    this.setState({ showMenu: value });
   }
 
   setImages = (value) => {
-    this.state.images = value;
+    this.setState({ images: value });
   }
 
   setName = (value) => {
-    this.state.name = value;
+    this.setState({ name: value });
   }
 
   setUserName = (value) => {
-    this.state.userName = value;
+    this.setState({ userName: value });
   }
 
   setProfileImg = (value) => {
-    this.state.profileImg = value;
+    this.setState({ profileImg: value });
   }
 
   setModelDetails = (value) => {
-    this.state.modelDetails = value;
+    this.setState({ modelDetails: value });
   }
 
   handleLikeClick = (postIndex) => {
@@ -252,7 +251,6 @@ class Profile extends React.Component {
           /> */}
         </div>
         {this.state.posts && this.state.posts.map((post, index) => (
-          console.log(post),
           <Post 
             key={index} 
             post={post} 

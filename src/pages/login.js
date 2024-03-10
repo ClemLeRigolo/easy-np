@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import fr from "../utils/i18n";
 import Loader from "../components/loader";
-import { getValueFromDataBase, getUserData, signIn } from "../utils/firebase";
+import { getUserData, signIn } from "../utils/firebase";
 import { validateEmailPassword } from "../utils/helpers";
 
 import "../styles/login.css";

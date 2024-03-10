@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, signOut, deleteUser, newPost, newGroup, getPosts, getUserDataById, likePost } from "../utils/firebase";
+import { getUserData, newPost, getPosts, getUserDataById, likePost } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
@@ -10,26 +10,6 @@ import PostInput from "../components/postInput";
 import Post from "../components/post";
 
 import "../styles/home.css";
-
-function handleSignOut() {
-  signOut()
-    .then(() => {
-      console.log("Signed Out");
-    })
-    .catch(e => {
-      console.log("Error signing out", e);
-    });
-}
-
-function handleDelete() {
-  deleteUser()
-    .then(() => {
-      console.log("User deleted");
-    })
-    .catch(e => {
-      console.log("Error deleting user", e);
-    });
-}
 
 class Home extends React.Component {
   constructor(props) {
@@ -189,7 +169,6 @@ class Home extends React.Component {
         <div className="post-list">
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
         {this.state.posts && this.state.posts.map((post, index) => (
-          console.log("post", post),
           <Post 
             key={index} 
             post={post} 

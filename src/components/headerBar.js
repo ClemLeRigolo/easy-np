@@ -9,7 +9,6 @@ import {LiaUserFriendsSolid} from "react-icons/lia"
 import {IoNotificationsOutline} from "react-icons/io5"
 import {TbMessage} from "react-icons/tb"
 import {BiLogOut} from "react-icons/bi"
-import { getCurrentUser } from '../utils/firebase';
 
 import Profile from "../images/avatar.png"
 import { signOut } from '../utils/firebase';

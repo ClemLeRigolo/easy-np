@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/post.css";
-import { getCurrentUser, addComment, getComments, getUserDataById, getPostById } from "../utils/firebase";
+import { getCurrentUser, addComment, getComments, getUserDataById } from "../utils/firebase";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
@@ -135,21 +135,16 @@ class Post extends React.Component {
     const post = this.state.post;
     const comments = post.comments || [];
 
-    const autrePost = this.props.post;
-
-    if (post.likes != undefined && post.likes.hasOwnProperty(getCurrentUser().uid)) {
+    if (post.likes !== undefined && post.likes.hasOwnProperty(getCurrentUser().uid)) {
       isLiked = true;
     }
-
-    console.log(post);
-    console.log(autrePost);
 
     return (
       <div className="post">
         <div className="post-header">
-          <Link to={`/profile/${post.user}`}>           
+          <Link to={`/profile/${post.user}`} className="post-username">           
             <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
-            <div className="post-username">
+            <div>
               {post.username}
             </div>
           </Link>

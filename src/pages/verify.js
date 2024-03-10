@@ -39,7 +39,7 @@ class Verify extends React.Component {
 
   render() {
 
-    const { authState, user } = this.props;
+    const { authState } = this.props;
 
     if (authState === authStates.INITIAL_VALUE) {
       return <Loader />;

@@ -1,6 +1,6 @@
 import React from "react";
 import { FaReply } from "react-icons/fa";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import { AiOutlineHeart } from "react-icons/ai";
 
 import "../styles/comment.css";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
