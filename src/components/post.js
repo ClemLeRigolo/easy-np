@@ -19,8 +19,8 @@ class Post extends React.Component {
 
   handleLikeClick = () => {
     // Logique de gestion du clic sur le bouton Like
-    const { post, handleLikeClick } = this.props;
-    handleLikeClick(post.index);
+    const { handleLikeClick } = this.props;
+    handleLikeClick(this.state.post.id);
   };
 
   handleCommentClick = () => {
@@ -125,6 +125,7 @@ class Post extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
       this.setState({ post: this.props.post });
+      console.log("dedans", this.props.post);
     }
   }
 
@@ -134,6 +135,18 @@ class Post extends React.Component {
     var isLiked = false;
     const post = this.state.post;
     const comments = post.comments || [];
+
+    console.log("post", post);
+    console.log(this.props.post);
+
+    if (post.likes !== this.props.post.likes) {
+      this.setState((prevState) => ({
+        post: {
+          ...prevState.post,
+          likes: this.props.post.likes,
+        },
+      }));
+    }
 
     if (post.likes !== undefined && post.likes.hasOwnProperty(getCurrentUser().uid)) {
       isLiked = true;

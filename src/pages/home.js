@@ -62,6 +62,7 @@ class Home extends React.Component {
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
+        console.log(post);
       
         // Mettez à jour l'état avec le post modifié
         this.setState({
