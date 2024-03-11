@@ -31,7 +31,7 @@ Cypress.Commands.add('login', (email, password) => {
 
 Cypress.Commands.add("signup", (firstName, name, email, password1, password2) => {
   cy.get("form").find("input[name='name']").type(firstName);
-  cy.get("form").find("input[name='surnamename']").type(name);
+  cy.get("form").find("input[name='surname']").type(name);
   cy.get("form").find("input[name='email']").type(email);
   cy.get("form").find("input[name='password']").type(password1);
   cy.get("form").find("input[name='retype']").type(password2);
