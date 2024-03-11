@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, newPost, getPosts, getUserDataById, likePost } from "../utils/firebase";
+import { getUserData, newPost, listenForPostChanges, getPosts, getUserDataById, likePost } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
@@ -124,8 +124,10 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    // Récupérez les posts depuis la base de données Firebase
-    this.updatePosts();
+    // rafraichit les posts quand la base de données change
+    listenForPostChanges((posts) => {
+      this.updatePosts();
+    });
   }
 
   render() {
