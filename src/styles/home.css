@@ -13,3 +13,16 @@
     flex-direction: row;
     
 }
+
+.refresh-button {
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--selected-color);
+    color: white;
+    padding: 10px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 100%;
+  }
