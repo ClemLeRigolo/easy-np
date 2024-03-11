@@ -2,20 +2,25 @@ stages:
   - pre
   - build
   - test
+  - badges
 
 prepare:
   stage: pre 
-  image: node
+  tags:
+    - docker
+  image: cypress/base:16.18.1
   script:
     - npm i --cache .npm --prefer-offline
   cache:
-    key: npm-cache
+    key: ${CI_COMMIT_REF_SLUG}
     paths:
       - .npm/
 
 
 building:
   stage: build
+  tags:
+    - docker
   image: node
   script:
     - npm i --cache .npm --prefer-offline
@@ -26,14 +31,34 @@ building:
 
 testing:
   stage: test
-  image: node
+  tags:
+    - docker
+  image: cypress/base:16.18.1
   script:
-    - npm i # installing all the things needed
+    - npm i --cache .npm --prefer-offline
     - npx firebase emulators:start --token $FIREBASE_TOKEN > firebase_report.txt &
-    - echo firebase emulators launch
+    - npx cypress run > cypress_report.txt
   artifacts:
     paths:
       - firebase_report.txt
+      - cypress_report.txt
   dependencies:
     - building
+
+badges:
+  stage: badges
+  tags:
+    - docker
+  image: python
+  script:
+    - pip install anybadge
+    - bash generateBadges.sh
+  dependencies:
+    - testing
+  artifacts:
+    when: always
+    paths:
+      - "tests.svg"
+      - "deploy.svg"
+  when: always
 
