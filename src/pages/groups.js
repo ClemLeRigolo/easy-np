@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { getGroups } from "../utils/firebase";
+import { getGroups, joinGroup } from "../utils/firebase"; // Importez la fonction joinGroup
 import { FaLock, FaUnlock } from "react-icons/fa";
 import fr from "../utils/i18n";
 import "../styles/groups.css";
@@ -14,6 +14,7 @@ class Groups extends React.Component {
     this.state = {
       groups: [],
     };
+    this.handleJoinGroup = this.handleJoinGroup.bind(this); // Liez la méthode handleJoinGroup
   }
 
   componentDidMount() {
@@ -26,9 +27,21 @@ class Groups extends React.Component {
     });
   }
 
+  handleJoinGroup(groupId) {
+    // Implémentez la fonction pour rejoindre un groupe
+    joinGroup(groupId)
+      .then(() => {
+        console.log("Vous avez rejoint le groupe avec succès !");
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la tentative de rejoindre le groupe :", error);
+      });
+  }
+
   render() {
     const { authState, user } = this.props;
     const { groups } = this.state;
+    //const userSchool = user.school; // Récupérez l'école de l'utilisateur depuis les props ou l'objet user
 
     if (authState === authStates.INITIAL_VALUE) {
       console.log("initial value");
@@ -56,9 +69,9 @@ class Groups extends React.Component {
           uid={user.uid}
         />
         <div className="group-list">
-        <Link to="/createGroup" className="create-group-button">
-          Créer un groupe
-        </Link>
+          <Link to="/createGroup" className="create-group-button">
+            Créer un groupe
+          </Link>
           {groups.map((group) => (
             <div className="group" key={group.id}>
               <h3>
@@ -71,7 +84,13 @@ class Groups extends React.Component {
                 )}
               </h3>
               <p>{group.description}</p>
-              {group.isPublic ? <FaUnlock /> : <FaLock />}
+              {group.isPublic ? (
+                <button onClick={() => this.handleJoinGroup(group.id)}>
+                  Rejoindre
+                </button>
+              ) : (
+                <FaLock />
+              )}
             </div>
           ))}
         </div>
