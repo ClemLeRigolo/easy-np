@@ -12,7 +12,7 @@ prepare:
   script:
     - npm i --cache .npm --prefer-offline
   cache:
-    key: npm-cache
+    key: ${CI_COMMIT_REF_SLUG}
     paths:
       - .npm/
 
@@ -33,7 +33,7 @@ testing:
   stage: test
   tags:
     - docker
-  image: node
+  image: cypress/base:16.18.1
   script:
     - npm i # installing all the things needed
     - npx firebase emulators:start --token $FIREBASE_TOKEN > firebase_report.txt &
@@ -52,7 +52,7 @@ badges:
   image: python
   script:
     - pip install anybadge
-    - bash genereBadges.sh
+    - bash generateBadges.sh
   dependencies:
     - testing
   artifacts:
