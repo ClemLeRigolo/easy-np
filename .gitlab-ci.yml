@@ -8,7 +8,7 @@ prepare:
   stage: pre 
   tags:
     - docker
-  image: cypress/base:16.18.1
+  image: cypress/base
   script:
     - npm i --cache .npm --prefer-offline
   cache:
@@ -33,7 +33,7 @@ testing:
   stage: test
   tags:
     - docker
-  image: cypress/base:16.18.1
+  image: cypress/base
   script:
     - npm i --cache .npm --prefer-offline
     - npx firebase emulators:start --token $FIREBASE_TOKEN > firebase_report.txt &
