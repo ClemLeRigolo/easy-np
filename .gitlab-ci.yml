@@ -8,7 +8,7 @@ prepare:
   stage: pre 
   tags:
     - docker
-  image: node
+  image: cypress/base:16.18.1
   script:
     - npm i --cache .npm --prefer-offline
   cache:
