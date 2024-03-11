@@ -46,9 +46,11 @@ const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
         <Link to="/notification" id='notifi' style={{marginTop:"8px"}}><IoNotificationsOutline className='nav-icons'/><span>5</span></Link>
            
         <TbMessage className='nav-icons'/>
-        <LiaUserFriendsSolid
-        className='nav-icons'
-        onClick={()=>setShowMenu(true)}/>
+
+
+        <Link to="/groups" style={{marginTop:"8px"}}>
+          <LiaUserFriendsSolid className='nav-icons'/>
+        </Link>
 
         <Link to="/login" id='signout' style={{marginTop:"8px"}}>
           <BiLogOut 
