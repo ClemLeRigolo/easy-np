@@ -98,7 +98,6 @@ class Post extends React.Component {
         const promises = comments.map((comment) => {
           // On boucle sur les commentaires pour rajouter le nom d'utilisateur
           if (comment) {
-            console.log(comment.user);
             return getUserDataById(comment.user).then((user) => {
               comment.author = user.name + " " + user.surname;
               return comment;
@@ -108,7 +107,6 @@ class Post extends React.Component {
         return Promise.all(promises);
       })
       .then((updatedComments) => {
-        console.log("updatedComments", updatedComments);
         this.setState((prevState) => ({
           post: {
             ...prevState.post,
@@ -136,8 +134,6 @@ class Post extends React.Component {
     const post = this.state.post;
     const comments = post.comments || [];
 
-    console.log("post", post);
-    console.log(this.props.post);
 
     if (post.likes !== this.props.post.likes) {
       this.setState((prevState) => ({

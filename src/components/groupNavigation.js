@@ -1,52 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/groupNavigation.css";
-import { FaUserFriends, FaCalendarAlt, FaQuestionCircle} from "react-icons/fa";
+import { FaUserFriends, FaCalendarAlt, FaQuestionCircle } from "react-icons/fa";
 import { RxGlobe } from "react-icons/rx";
-import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
+import firebase from "firebase/app";
+import { getGroupsByUser } from "../utils/firebase";
+import { Link } from "react-router-dom";
 
-import "../styles/groupNavigation.css";
+const GroupNavigation = () => {
+  const [userGroups, setUserGroups] = useState([]);
 
-class GroupNavigation extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      // Définir l'état initial de la composante ici
-    };
-  }
+  useEffect(() => {
+    const user = firebase.auth().currentUser;
+    if (user) {
+      getGroupsByUser(user.uid)
+        .then((groups) => {
+          setUserGroups(groups);
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la récupération des groupes :", error);
+        });
+    }
+  }, []);
 
-  // Définir les méthodes de la classe ici
-
-  render() {
-    return (
-      <div className="group-navigation">
-        <div className="group-nav-item">
-          <RxGlobe className="group-nav-icon" />
-          <Link to="/general" className="group-nav-link">
-            {fr.GROUPS.GENERAL}
-          </Link>
-        </div>
-        <div className="group-nav-item">
+  return (
+    <div className="group-navigation">
+      {userGroups.map((group) => (
+        <Link to={`/group/${group.id}`} key={group.id}>
+        <div key={group.id} className="group-nav-item">
           <FaUserFriends className="group-nav-icon" />
-          <Link to="/members" className="group-nav-link">
-            {fr.GROUPS.MEMBERS}
-          </Link>
+          <span className="group-nav-link">{group.name}</span>
         </div>
-        <div className="group-nav-item">
-          <FaCalendarAlt className="group-nav-icon" />
-          <Link to="/events" className="group-nav-link">
-            {fr.GROUPS.EVENTS}
-          </Link>
-        </div>
-        <div className="group-nav-item">
-          <FaQuestionCircle className="group-nav-icon" />
-          <Link to="/about" className="group-nav-link">
-            {fr.GROUPS.ABOUT}
-          </Link>
-        </div>
+        </Link>
+      ))}
+      <div className="group-nav-item">
+        <FaCalendarAlt className="group-nav-icon" />
+        <span className="group-nav-link">{fr.GROUPS.EVENTS}</span>
       </div>
-    );
-  }
-}
+      <div className="group-nav-item">
+        <FaQuestionCircle className="group-nav-icon" />
+        <span className="group-nav-link">{fr.GROUPS.ABOUT}</span>
+      </div>
+    </div>
+  );
+};
 
 export default GroupNavigation;
