@@ -13,6 +13,7 @@ class CreateGroup extends React.Component {
     super(props);
     this.state = {
       groupName: "",
+      description: "",
       visibility: "public",
       school: "",
       redirect: false,
@@ -26,9 +27,9 @@ class CreateGroup extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { groupName, visibility, school } = this.state;
+    const { groupName, visibility, school, description } = this.state;
     // Logique de création du groupe
-    createGroup(groupName, visibility, school)
+    createGroup(groupName, visibility, school, description)
       .then(() => {
         console.log("Group created successfully");
         this.setState({ redirect: true });
@@ -40,7 +41,7 @@ class CreateGroup extends React.Component {
 
   render() {
     const { authState, user } = this.props;
-    const { groupName, visibility, school, redirect } = this.state;
+    const { groupName, visibility, school, redirect, description } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {
       console.log("initial value");
@@ -78,6 +79,16 @@ class CreateGroup extends React.Component {
                 onChange={this.handleInputChange}
                 required
               />
+            </div>
+            <div className="form-group">
+              <label htmlFor="description">Group Description:</label>
+              <textarea
+                id="description"
+                name="description"
+                value={description}
+                onChange={this.handleInputChange}
+                required
+              ></textarea>
             </div>
             <div className="form-group">
               <label htmlFor="visibility">Visibility:</label>

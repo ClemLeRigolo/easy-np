@@ -1,7 +1,7 @@
 .group-list {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
   }
   
   .group {
@@ -10,7 +10,7 @@
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
-    width: 100%;
+    width: 90%;
   }
   
   .group h3 {
@@ -28,4 +28,20 @@
     width: 20px;
     height: 20px;
     margin-left: 8px;
+  }
+
+  .create-group-button {
+    background-color: var(--selected-color);
+    color: white;
+    padding: 14px 20px;
+    margin: 15px 0;
+    border: none;
+    cursor: pointer;
+    width: 20%;
+    padding-bottom: 15px;
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--selected-color);
   }
