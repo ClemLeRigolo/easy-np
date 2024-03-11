@@ -12,19 +12,11 @@ class CreateGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      groups: [],
       groupName: "",
       visibility: "public",
       school: "",
       redirect: false,
     };
-  }
-
-  componentDidMount() {
-    getGroups().then((groups) => {
-      console.log("groups", groups);
-      this.setState({ groups });
-    });
   }
 
   handleInputChange = (event) => {
