@@ -5,6 +5,8 @@ import { RxGlobe } from "react-icons/rx";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
 
+import "../styles/groupNavigation.css";
+
 class GroupNavigation extends React.Component {
   constructor(props) {
     super(props);
@@ -33,13 +35,13 @@ class GroupNavigation extends React.Component {
         <div className="group-nav-item">
           <FaCalendarAlt className="group-nav-icon" />
           <Link to="/events" className="group-nav-link">
-          {fr.GROUPS.EVENTS}
+            {fr.GROUPS.EVENTS}
           </Link>
         </div>
         <div className="group-nav-item">
           <FaQuestionCircle className="group-nav-icon" />
           <Link to="/about" className="group-nav-link">
-          {fr.GROUPS.ABOUT}
+            {fr.GROUPS.ABOUT}
           </Link>
         </div>
       </div>
