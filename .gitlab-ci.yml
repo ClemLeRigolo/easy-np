@@ -35,7 +35,7 @@ testing:
     - docker
   image: cypress/base:16.18.1
   script:
-    - npm i # installing all the things needed
+    - npm i --cache .npm --prefer-offline
     - npx firebase emulators:start --token $FIREBASE_TOKEN > firebase_report.txt &
     - npx cypress run > cypress_report.txt
   artifacts:
