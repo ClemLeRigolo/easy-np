@@ -2,13 +2,14 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, newPost, listenForPostChanges, getPosts, getUserDataById, likePost } from "../utils/firebase";
+import { getUserData, newPost, listenForPostChanges, getPosts, getUserDataById, likePost, getCurrentUser } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
 import GroupNavigation from "../components/groupNavigation";
 import PostInput from "../components/postInput";
 import Post from "../components/post";
+import { IoMdRefresh } from 'react-icons/io';
 
 import "../styles/home.css";
 
@@ -23,6 +24,8 @@ class Home extends React.Component {
       commentCount: 0,
       postContent: "",
       posts: [],
+      showRefreshButton: false,
+      firstLoad: true,
     };
   }
 
@@ -123,10 +126,26 @@ class Home extends React.Component {
       });
   }
 
+  handleRefreshClick = () => {
+    this.setState({ showRefreshButton: false });
+    this.updatePosts();
+  };
+
   componentDidMount() {
     // rafraichit les posts quand la base de données change
+    this.updatePosts();
     listenForPostChanges((posts) => {
-      this.updatePosts();
+      //on récupère l'id du dernier post
+      console.log(Object.values(posts)[Object.values(posts).length-1]);
+      const post = Object.values(Object.values(posts)[Object.values(posts).length-1])[0];
+      console.log(getCurrentUser().W.X);
+      console.log(post);
+      if (post.user != getCurrentUser().W.X && !this.state.firstLoad) {
+        this.setState({showRefreshButton: true});
+      }
+      if (this.state.firstLoad) {
+        this.setState({firstLoad: false});
+      }
     });
   }
 
@@ -145,14 +164,12 @@ class Home extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      console.log("dedans");
         getUserData(user.email).then(data => {
           this.setState({
             firstName: data.name,
             lastName: data.surname,
             school: data.school,
           });
-          console.log(data.name, data.surname, data.school);
           changeColor(data.school);
         }
         );
@@ -170,6 +187,11 @@ class Home extends React.Component {
           setShowMenu={false}
           uid={user.uid}
         />
+        {this.state.showRefreshButton && (
+        <button className="refresh-button" onClick={this.handleRefreshClick}>
+          <IoMdRefresh />
+        </button>
+      )}
         <div className="main-container">
           <GroupNavigation />
           <div className="post-list">
