@@ -6,6 +6,7 @@ import { getUserData, newPost, getPosts, getUserDataById, likePost } from "../ut
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
+import GroupNavigation from "../components/groupNavigation";
 import PostInput from "../components/postInput";
 import Post from "../components/post";
 
@@ -167,18 +168,21 @@ class Home extends React.Component {
           setShowMenu={false}
           uid={user.uid}
         />
-        <div className="post-list">
-        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
-        {this.state.posts && this.state.posts.map((post, index) => (
-          <Post 
-            key={index} 
-            post={post} 
-            handleLikeClick={() => this.handleLikeClick(index)}
-            handleCommentClick={() => this.handleCommentClick(index)} 
-            likeCount={post.likeCount} 
-            commentCount={post.commentCount} 
-          />
-        ))}
+        <div className="main-container">
+          <GroupNavigation />
+          <div className="post-list">
+          <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+          {this.state.posts && this.state.posts.map((post, index) => (
+            <Post 
+              key={index} 
+              post={post} 
+              handleLikeClick={() => this.handleLikeClick(index)}
+              handleCommentClick={() => this.handleCommentClick(index)} 
+              likeCount={post.likeCount} 
+              commentCount={post.commentCount} 
+            />
+          ))}
+          </div>
         </div>
       </div>
     );

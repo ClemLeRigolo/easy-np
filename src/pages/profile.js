@@ -11,6 +11,7 @@ import { getPostByUser, likePost, getUserDataById } from "../utils/firebase";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
+import GroupNavigation from "../components/groupNavigation";
 import { withRouter } from 'react-router-dom';
 
 class Profile extends React.Component {
@@ -219,47 +220,53 @@ class Profile extends React.Component {
           profileImg={this.state.profileImg}
           uid={user.uid}
           />
-        <div className="home">
-          {/* <Left 
-          following={following}
-          setFollowing={setFollowing}
-          profileImg={profileImg}
-          modelDetails={modelDetails}
-          
-          /> */}
+        <div className="main-container">
+        <GroupNavigation />
+          <div className="home">
+            {/* <Left 
+            following={following}
+            setFollowing={setFollowing}
+            profileImg={profileImg}
+            modelDetails={modelDetails}
+            
+            /> */}
+            
+            <ProfileMiddle 
+            following={this.state.following}
+            search={this.state.search}
+            images={this.state.images}
+            setImages={this.setImages}
+            name={this.state.name}
+            setName={this.setName}
+            userName={this.state.userName}
+            setUserName={this.setUserName}
+            profileImg={this.state.profileImg}
+            setProfileImg={this.setProfileImg}
+            modelDetails={this.state.modelDetails}
+            setModelDetails={this.setModelDetails}
+            />
+            
+            {/* <Right 
+            showMenu={showMenu}
+            setShowMenu={setShowMenu}
+            following={following}
+            setFollowing={setFollowing}
+            /> */}
 
-          <ProfileMiddle 
-          following={this.state.following}
-          search={this.state.search}
-          images={this.state.images}
-          setImages={this.setImages}
-          name={this.state.name}
-          setName={this.setName}
-          userName={this.state.userName}
-          setUserName={this.setUserName}
-          profileImg={this.state.profileImg}
-          setProfileImg={this.setProfileImg}
-          modelDetails={this.state.modelDetails}
-          setModelDetails={this.setModelDetails}
-          />
-          
-          {/* <Right 
-          showMenu={showMenu}
-          setShowMenu={setShowMenu}
-          following={following}
-          setFollowing={setFollowing}
-          /> */}
+
+  {this.state.posts && this.state.posts.map((post, index) => (
+            <Post 
+              key={index} 
+              post={post} 
+              handleLikeClick={() => this.handleLikeClick(index)}
+              handleCommentClick={() => this.handleCommentClick(index)} 
+              likeCount={post.likeCount} 
+              commentCount={post.commentCount} 
+            />
+          ))} 
+
+          </div>
         </div>
-        {this.state.posts && this.state.posts.map((post, index) => (
-          <Post 
-            key={index} 
-            post={post} 
-            handleLikeClick={() => this.handleLikeClick(index)}
-            handleCommentClick={() => this.handleCommentClick(index)} 
-            likeCount={post.likeCount} 
-            commentCount={post.commentCount} 
-          />
-        ))}
       </div>
     )
       }

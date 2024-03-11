@@ -1,0 +1,10 @@
+.group-navigation {
+    background-color: #fff;
+    border-radius: 20px;
+    height: 460px;
+    margin: 20px 0;
+    padding: 10px 10px 150px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 110px;
+}

@@ -7,3 +7,9 @@
 .post-list {
     margin: 4vh;
 }
+
+.main-container {
+    display: flex;
+    flex-direction: row;
+    
+}

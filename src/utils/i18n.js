@@ -39,6 +39,14 @@ export const fr = {
   },
 
   VERIFY_EMAIL_TEXT: "Un e-mail de vérification a été envoyé. Veuillez vérifier votre boîte de réception. Vous serez automatiquement redirigé une fois votre e-mail vérifié.",
+
+  GROUPS: {
+    GENERAL: "Général",
+    MEMBERS: "Membres",
+    EVENTS: "Événements",
+    ABOUT: "À propos",
+  },
+
 };
 
 export const en = {
