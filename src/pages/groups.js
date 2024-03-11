@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { getGroups, joinGroup } from "../utils/firebase"; // Importez la fonction joinGroup
+import { getGroups, joinGroup, isUserInGroup } from "../utils/firebase"; // Importez la fonction joinGroup
 import { FaLock, FaUnlock } from "react-icons/fa";
 import fr from "../utils/i18n";
 import "../styles/groups.css";
 import HeaderBar from "../components/headerBar";
+import GroupMembership from "../components/groupMembership";
 
 class Groups extends React.Component {
   constructor(props) {
@@ -74,24 +75,18 @@ class Groups extends React.Component {
           </Link>
           {groups.map((group) => (
             <div className="group" key={group.id}>
-              <h3>
-                {group.name}{" "}
-                {!group.isPublic && (
-                  <img
-                    src={require(`../images/écoles/${group.school.toLowerCase()}.png`)}
-                    alt={group.school}
-                  />
-                )}
-              </h3>
-              <p>{group.description}</p>
-              {group.isPublic ? (
-                <button onClick={() => this.handleJoinGroup(group.id)}>
-                  Rejoindre
-                </button>
-              ) : (
-                <FaLock />
+            <h3>
+              {group.name}{" "}
+              {!group.isPublic && (
+                <img
+                  src={require(`../images/écoles/${group.school.toLowerCase()}.png`)}
+                  alt={group.school}
+                />
               )}
-            </div>
+            </h3>
+            <p>{group.description}</p>
+            <GroupMembership group={group} userSchool={null} />
+          </div>
           ))}
         </div>
       </div>
