@@ -97,7 +97,6 @@ class Home extends React.Component {
         const posts = [];
         const promises = []; // Tableau pour stocker les promesses des requêtes getUserDataById
 
-        console.log("querySnapshot", querySnapshot);
   
         Object.values(querySnapshot).forEach((doc) => {
           doc = Object.values(doc)[0];
@@ -112,12 +111,9 @@ class Home extends React.Component {
         // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
         Promise.all(promises).then(() => {
           // Inverser la liste pour avoir les derniers posts en premier
-          console.log("posts", posts);
-          console.log("querySnapshot.size", querySnapshot);
           // Trie les posts selon leur ordre d'arrivée
           posts.sort((a, b) => a.timestamp - b.timestamp);
           posts.reverse();
-          console.log("posts", posts);
           this.setState({ posts });
         });
       })
@@ -136,10 +132,7 @@ class Home extends React.Component {
     this.updatePosts();
     listenForPostChanges((posts) => {
       //on récupère l'id du dernier post
-      console.log(Object.values(posts)[Object.values(posts).length-1]);
       const post = Object.values(Object.values(posts)[Object.values(posts).length-1])[0];
-      console.log(getCurrentUser().W.X);
-      console.log(post);
       if (post.user != getCurrentUser().W.X && !this.state.firstLoad) {
         this.setState({showRefreshButton: true});
       }
@@ -176,7 +169,6 @@ class Home extends React.Component {
       return <Loader />;
     }
 
-    console.log("posts", this.state.posts);
 
     return (
       <div className="interface">

@@ -74,6 +74,7 @@ class Groups extends React.Component {
             Créer un groupe
           </Link>
           {groups.map((group) => (
+            <Link to={`/group/${group.id}`} className="group" key={group.id}>
             <div className="group" key={group.id}>
             <h3>
               {group.name}{" "}
@@ -87,6 +88,7 @@ class Groups extends React.Component {
             <p>{group.description}</p>
             <GroupMembership group={group} userSchool={null} />
           </div>
+            </Link>
           ))}
         </div>
       </div>
