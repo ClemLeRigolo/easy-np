@@ -29,12 +29,11 @@ class Home extends React.Component {
     };
   }
 
-  handlePostSubmit = () => {
-    const { postContent } = this.state;
+  handlePostSubmit = (postContent) => {
 
-    console.log("postContent", this.state.postContent);
+    console.log("postContent", postContent);
     // Enregistrez le post dans la base de données Firebase
-    newPost(postContent,"1709162579034")
+    newPost(postContent,this.state.gid)
       .then(() => {
         this.setState({ postContent: "" });
         this.handlePostContentChange(); // Réinitialisez le champ de texte du post
