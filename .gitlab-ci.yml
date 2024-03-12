@@ -10,13 +10,12 @@ testing:
   script:
     - npm i --cache .npm --prefer-offline
     - npm run build || echo $?
-    - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN > firebase_report.txt &
+    - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN &
     - sleep 30
     #- npx cypress run > cypress_report.txt
   artifacts:
     when: always
     paths:
-      - firebase_report.txt
       - cypress_report.txt
 
 badges:
