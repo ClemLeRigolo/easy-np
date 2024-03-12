@@ -1,0 +1,15 @@
+.group-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+  }
+  
+  .group-content .home {
+    width: 100%;
+  }
+
+  .group-content .postInput {
+    width: 100%;
+  }

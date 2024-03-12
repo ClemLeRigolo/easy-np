@@ -3,10 +3,10 @@ import React from "react";
 import ProfileMiddle from '../components/profileMiddle'
 // import Right from '../../Components/RightSide/Right'
 import HeaderBar from '../components/headerBar'
-import "../styles/profile.css"
+import "../styles/group.css"
 import ProfileImg from "../images/avatar.png"
 import { authStates, withAuth } from "../components/auth";
-import { getPostByUser, likePost, getUserDataById, getPostByGroup, newPost } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -23,6 +23,7 @@ class Group extends React.Component {
         gid: null,
         posts: [],
         postContent: "",
+        group: null,
     };
   }
 
@@ -172,41 +173,18 @@ class Group extends React.Component {
                 this.setState({ posts });
             });
         });
-        /*const { uid } = this.props.match.params;
-        this.state.uid = uid;
-        getUserDataById(uid)
-        .then((userData) => {
-          console.log("userData", userData);
-          this.setState({
-            userData: userData,
-          });
-          this.setProfileData(userData);
-          getPostByUser(uid).then(
-            (querySnapshot) => {
-              const posts = [];
-        
-              Object.values(querySnapshot).forEach((doc) => {
-                console.log("Doc:", doc);
-                console.log(Object.values(doc)[0]);
-                console.log(userData);
-                doc.username = userData.name + " " + userData.surname;
-                doc.school = userData.school;
-                posts.push(doc);
-              });
-
-              // Inverser la liste pour avoir les derniers posts en premier
-              console.log("posts", posts);
-              console.log("querySnapshot.size", querySnapshot);
-              // Trie les posts selon leur ordre d'arrivée
-              posts.sort((a, b) => a.timestamp - b.timestamp);
-              posts.reverse();
-              console.log("posts", posts);
-              this.setState({ posts });
-              this.render();
-            });
-        });*/
+        getGroupById(this.state.gid).then((group) => {
+            this.setState({ group: Object.values(group)[0] });
+            }
+        );
       return <Loader />;
     }
+
+    if (this.state.group === null) {
+        return <Loader />;
+    }
+
+    console.log(this.state.group);
 
     return (
       <div className='interface'>
@@ -220,20 +198,24 @@ class Group extends React.Component {
           />
         <div className="main-container">
         <GroupNavigation />
+        <div className="group-content">
+        <h1>{this.state.group.name}</h1>
+        <p>{this.state.group.description}</p>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
           <div className="home">
 
 
-  {this.state.posts && this.state.posts.map((post, index) => (
-            <Post 
-              key={index} 
-              post={post} 
-              handleLikeClick={() => this.handleLikeClick(index)}
-              handleCommentClick={() => this.handleCommentClick(index)} 
-              likeCount={post.likeCount} 
-              commentCount={post.commentCount} 
-            />
-  ))} 
+        {this.state.posts && this.state.posts.map((post, index) => (
+                    <Post 
+                    key={index} 
+                    post={post} 
+                    handleLikeClick={() => this.handleLikeClick(index)}
+                    handleCommentClick={() => this.handleCommentClick(index)} 
+                    likeCount={post.likeCount} 
+                    commentCount={post.commentCount} 
+                    />
+        ))} 
+        </div>
 
           </div>
         </div>
