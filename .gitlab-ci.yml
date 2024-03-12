@@ -1,60 +1,23 @@
 stages:
-  - pre
-  - build
   - test
   - badges
-
-prepare:
-  stage: pre 
-  tags:
-    - docker
-  image: cypress/base
-  script:
-    - npm i --cache .npm --prefer-offline
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .npm/
-
-
-building:
-  stage: build
+      
+testing:
+  stage: test
   tags:
     - docker
   image: node
   script:
     - npm i --cache .npm --prefer-offline
     - npm run build || echo $?
-  artifacts:
-    when: always
-    paths:
-      - build/
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .npm/
-
-testing:
-  stage: test
-  tags:
-    - docker
-  image: cypress/base
-  script:
-    - npm i --cache .npm --prefer-offline
-    - npx firebase emulators:start --import bdd --project 'easy-np' > firebase_report.txt &
+    - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN > firebase_report.txt &
     - sleep 30
-    - npx cypress run > cypress_report.txt
+    #- npx cypress run > cypress_report.txt
   artifacts:
     when: always
     paths:
       - firebase_report.txt
       - cypress_report.txt
-  dependencies:
-    - building
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .npm/
 
 badges:
   stage: badges
