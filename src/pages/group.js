@@ -72,10 +72,9 @@ class Group extends React.Component {
     this.setState({ postContent: event.target.value });
   };
 
-  handlePostSubmit = () => {
-    const { postContent } = this.state;
+  handlePostSubmit = (postContent) => {
 
-    console.log("postContent", this.state.postContent);
+    console.log("postContent", postContent);
     // Enregistrez le post dans la base de données Firebase
     newPost(postContent,this.state.gid)
       .then(() => {
