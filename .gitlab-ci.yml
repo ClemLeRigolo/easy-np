@@ -10,8 +10,7 @@ testing:
   script:
     - npm i --cache .npm --prefer-offline
     - npm run build || echo $?
-    - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN &
-    - sleep 30
+    - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN
     #- npx cypress run > cypress_report.txt
   artifacts:
     when: always
