@@ -185,8 +185,8 @@ class Post extends React.Component {
               {expandedComments ? "Réduire les commentaires" : "Voir les commentaires"}
               {expandedComments ? <FaAngleUp className="icon" /> : <FaAngleDown className="icon" />}
             </div>
-            {expandedComments && comments.map((comment) => (
-              <Comment key={comment.id} comment={comment} />
+            {expandedComments && comments.map((comment, index) => (
+              <Comment key={comment.id} comment={comment} commentKey={index} postId={post.id}/>
             ))}
           </div>
         )}
