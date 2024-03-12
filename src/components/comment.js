@@ -4,7 +4,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 
 import "../styles/comment.css";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { getUserDataById, answerToComment } from "../utils/firebase";
+import { getUserDataById, answerToComment, getComment } from "../utils/firebase";
 import Loader from "./loader";
 
 class Comment extends React.Component {
@@ -34,16 +34,31 @@ class Comment extends React.Component {
     console.log(commentKey)
     // Vous pouvez implémenter ici la logique pour publier la réponse
     answerToComment(postId, commentKey, replyContent)
-      .then((comment) => {
-        console.log("Réponse publiée :", replyContent);
-        // Actualiser l'état des réponses
-        this.setState((prevState) => ({
-          comment: {
-            ...prevState.comment,
-            answers: [...(prevState.comment.answers || []), comment],
-          },
-        }));
-        console.log(this.state.comment);
+      .then(() => {
+        getComment(postId, commentKey).then((comment) => {
+          console.log("Réponse publiée :", comment);
+          // Actualiser l'état des réponses
+          this.setState((prevState) => ({
+            comment: {
+              ...prevState.comment,
+              answers: comment.answers,
+            },
+          }));
+          console.log(this.state.comment);
+          const promises = [];
+          console.log(this.state.comment.answers)
+          this.state.comment.answers.forEach(answer => {
+            getUserDataById(answer.user).then((userData) => {
+              console.log("userData", userData);
+              answer.author = userData.name + " " + userData.surname;
+              promises.push(answer);
+            }
+            );
+          });
+          Promise.all(promises).then((answers) => {
+            this.setState({ answers });
+          });
+        });
       }
       );
     // Réinitialiser l'état de la réponse
@@ -55,8 +70,10 @@ class Comment extends React.Component {
   };
 
   render() {
-    const { comment, commentKey } = this.props;
-    const { isReplying, replyContent, showReplies, answers } = this.state;
+    const { comment } = this.props;
+    const { isReplying, replyContent, showReplies } = this.state;
+
+    const answers = this.state.comment.answers;
 
     console.log("comment", comment);
 
