@@ -41,7 +41,7 @@ testing:
   image: cypress/base
   script:
     - npm i --cache .npm --prefer-offline
-    - npx firebase emulators:start --import bdd --token $FIREBASE_TOKEN > firebase_report.txt &
+    - npx firebase emulators:start --import bdd --project 'easy-np' > firebase_report.txt &
     - sleep 30
     - npx cypress run > cypress_report.txt
   artifacts:
