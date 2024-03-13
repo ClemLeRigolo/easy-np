@@ -81,13 +81,14 @@ class CreateGroup extends React.Component {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="description">Group Description:</label>
+              <label className="label-description" htmlFor="description">Group Description:</label>
               <textarea
                 id="description"
                 name="description"
                 value={description}
                 onChange={this.handleInputChange}
                 required
+                className="description-input"
               ></textarea>
             </div>
             <div className="form-group">
