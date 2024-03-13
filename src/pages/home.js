@@ -102,6 +102,7 @@ class Home extends React.Component {
           const promise = getUserDataById(doc.user).then((data) => {
             doc.username = data.name + " " + data.surname;
             doc.school = data.school;
+            doc.profileImg = data.profileImg;
             posts.push(doc);
           });
           promises.push(promise);

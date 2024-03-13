@@ -151,8 +151,12 @@ class Post extends React.Component {
     return (
       <div className="post">
         <div className="post-header">
-          <Link to={`/profile/${post.user}`} className="post-username">           
-            <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
+          <Link to={`/profile/${post.user}`} className="post-username">
+          {post.profileImg ? (
+              <img src={post.profileImg} alt="Profile" className="post-avatar"/>
+            ) : (
+              <img src={require("../images/avatar.png")} alt="Profile" className="post-avatar" />
+            )}
             <div>
               {post.username}
             </div>
