@@ -6,12 +6,12 @@ testing:
   stage: test
   tags:
     - docker
-  image: node
+  image: lxsnsn/gitlab-ci-easynp
   script:
     - npm i --cache .npm --prefer-offline
     - npm run build || echo $?
     - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN
-    #- npx cypress run > cypress_report.txt
+    - npx cypress run > cypress_report.txt
   artifacts:
     when: always
     paths:
