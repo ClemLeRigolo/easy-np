@@ -16,7 +16,6 @@ class Comment extends React.Component {
       author: "bug",
       showReplies: false,
       comment: this.props.comment,
-      answers: this.props.comment.answers,
     };
   }
 
@@ -68,6 +67,40 @@ class Comment extends React.Component {
   handleShowReplies = () => {
     this.setState((prevState) => ({ showReplies: !prevState.showReplies }));
   };
+
+  componentDidMount() {
+    const { replyContent } = this.state;
+    const { commentKey, postId } = this.props;
+    console.log(commentKey)
+    // Vous pouvez implémenter ici la logique pour publier la réponse
+        getComment(postId, commentKey).then((comment) => {
+          console.log("Réponse publiée :", comment);
+          // Actualiser l'état des réponses
+          this.setState((prevState) => ({
+            comment: {
+              ...prevState.comment,
+              answers: comment.answers,
+            },
+          }));
+          console.log(this.state.comment);
+          const promises = [];
+          console.log(this.state.comment.answers)
+          if (this.state.comment.answers === undefined) {
+            return;
+          }
+          this.state.comment.answers.forEach(answer => {
+            getUserDataById(answer.user).then((userData) => {
+              console.log("userData", userData);
+              answer.author = userData.name + " " + userData.surname;
+              promises.push(answer);
+            }
+            );
+          });
+          Promise.all(promises).then((answers) => {
+            this.setState({ answers });
+          });
+        });
+    }
 
   render() {
     const { comment } = this.props;

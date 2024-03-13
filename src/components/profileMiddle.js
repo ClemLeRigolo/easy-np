@@ -92,18 +92,6 @@ const ProfileMiddle = ({following,
         userName={userName}
         setUserName={setUserName}
         />
-        
-        {/* <ProfileInputPost
-        modelDetails={modelDetails}
-        profileImg={profileImg}
-        handleSubmit={handleSubmit}
-        body ={body}
-        setBody ={setBody}
-        importFile ={importFile}
-        setImportFile ={setImportFile}
-        images={images}
-        setImages={setImages}
-        /> */}
 
     </div>
   )

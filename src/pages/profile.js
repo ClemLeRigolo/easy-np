@@ -27,7 +27,7 @@ class Profile extends React.Component {
       images: null,
       name: "",
       userName: "",
-      profileImg: ProfileImg,
+      profileImg: null,
       modelDetails: {
         ModelName: "PlaceHolder",
         ModelUserName: "@PlaceHolder",
@@ -140,40 +140,6 @@ class Profile extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      /*console.log("dedans");
-        getUserData(user.email).then(data => {
-          this.setState({
-            userData: data,
-          });
-          this.setProfileData(data);
-          getUserUID(data.email).then((uid) => {
-            console.log(uid);
-            getPostByUser(uid).then(
-              (querySnapshot) => {
-                const posts = [];
-          
-                Object.values(querySnapshot).forEach((doc) => {
-                  console.log("Doc:", doc);
-                  console.log(Object.values(doc)[0]);
-                  console.log(data);
-                  doc.username = data.name + " " + data.surname;
-                  doc.school = data.school;
-                  posts.push(doc);
-                });
-
-                // Inverser la liste pour avoir les derniers posts en premier
-                console.log("posts", posts);
-                console.log("querySnapshot.size", querySnapshot);
-                // Trie les posts selon leur ordre d'arrivée
-                posts.sort((a, b) => a.timestamp - b.timestamp);
-                posts.reverse();
-                console.log("posts", posts);
-                this.setState({ posts });
-                this.render();
-              });
-          });
-        }
-        );*/
         const { uid } = this.props.match.params;
         this.state.uid = uid;
         getUserDataById(uid)
@@ -182,6 +148,11 @@ class Profile extends React.Component {
           this.setState({
             userData: userData,
           });
+          if (userData.profileImg) {
+            this.setProfileImg(userData.profileImg);
+          } else {
+            this.setProfileImg(ProfileImg); // Utilisez l'image par défaut s'il n'y a pas d'URL de profil personnalisée
+          }
           this.setProfileData(userData);
           getPostByUser(uid).then(
             (querySnapshot) => {
@@ -209,6 +180,8 @@ class Profile extends React.Component {
         });
       return <Loader />;
     }
+
+    console.log("user", this.state.userData);
 
     return (
       <div className='interface'>
