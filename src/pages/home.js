@@ -19,6 +19,7 @@ class Home extends React.Component {
     this.state = {
       firstName: "",
       lastName: "",
+      profileImg: null,
       school: "",
       likeCount: 0,
       commentCount: 0,
@@ -165,6 +166,7 @@ class Home extends React.Component {
             firstName: data.name,
             lastName: data.surname,
             school: data.school,
+            profileImg: data.profileImg,
           });
           changeColor(data.school);
         }
@@ -181,6 +183,7 @@ class Home extends React.Component {
           setSearch={""}
           showMenu={false}
           setShowMenu={false}
+          profileImg={this.state.profileImg}
           uid={user.uid}
         />
         {this.state.showRefreshButton && (

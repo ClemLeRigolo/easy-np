@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { getGroups, joinGroup, isUserInGroup } from "../utils/firebase"; // Importez la fonction joinGroup
+import { getGroups, joinGroup, isUserInGroup, getUserDataById } from "../utils/firebase"; // Importez la fonction joinGroup
 import { FaLock, FaUnlock } from "react-icons/fa";
 import fr from "../utils/i18n";
 import "../styles/groups.css";
@@ -14,6 +14,8 @@ class Groups extends React.Component {
     super(props);
     this.state = {
       groups: [],
+      profileImg: null,
+      dataCollected: false,
     };
     this.handleJoinGroup = this.handleJoinGroup.bind(this); // Liez la méthode handleJoinGroup
   }
@@ -60,6 +62,18 @@ class Groups extends React.Component {
       return <Loader />;
     }
 
+    if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
+      getUserDataById(user.uid).then((userData) => {
+        console.log("userData", userData);
+        this.setState({
+          profileImg: userData.profileImg,
+          dataCollected: true,
+        });
+      }
+      );
+      return <Loader />;
+    }
+
     return (
       <div className="interface">
         <HeaderBar
@@ -67,6 +81,7 @@ class Groups extends React.Component {
           setSearch={""}
           showMenu={false}
           setShowMenu={false}
+          profileImg={this.state.profileImg}
           uid={user.uid}
         />
         <div className="group-list">

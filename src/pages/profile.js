@@ -21,6 +21,7 @@ class Profile extends React.Component {
     this.state = {
       uid: null,
       userData: null,
+      currentUserData: null,
       following: 3,
       search: "",
       showMenu: false,
@@ -181,6 +182,17 @@ class Profile extends React.Component {
       return <Loader />;
     }
 
+    if (authState === authStates.LOGGED_IN && !this.state.currentUserData) {
+      console.log(user);
+      getUserDataById(user.uid)
+        .then((userData) => {
+          this.setState({
+            currentUserData: userData,
+          });
+        });
+      return <Loader />;
+    }
+
     console.log("user", this.state.userData);
 
     return (
@@ -190,7 +202,7 @@ class Profile extends React.Component {
           setSearch={this.setSearch}
           showMenu={this.state.showMenu}
           setShowMenu={this.setShowMenu}
-          profileImg={this.state.profileImg}
+          profileImg={this.state.currentUserData.profileImg}
           uid={user.uid}
           />
         <div className="main-container">

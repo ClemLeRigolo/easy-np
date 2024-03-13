@@ -24,6 +24,8 @@ class Group extends React.Component {
         posts: [],
         postContent: "",
         group: null,
+        profileImg: null,
+        dataCollected: false,
     };
   }
 
@@ -139,6 +141,17 @@ class Group extends React.Component {
       return <Loader />;
     }
 
+    if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
+      getUserDataById(user.uid).then((userData) => {
+        console.log("userData", userData);
+        this.setState({
+          profileImg: userData.profileImg,
+          dataCollected: true,
+        });
+      }
+      );
+      return <Loader />;
+    }
 
     if ((this.props.match.params.gid !== this.state.gid)) {
       if(user.emailVerified === false){
