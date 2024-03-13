@@ -28,6 +28,7 @@ export default function PostInput({ handlePostSubmit }) {
         setValidationError("");
         const contentWithLinks = renderContentWithLinks();
         handlePostSubmit(contentWithLinks);
+        setPostContent("");
       }
     } else {
       setValidationError("Le contenu du post ne peut pas être vide.");

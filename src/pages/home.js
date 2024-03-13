@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, newPost, listenForPostChanges, getPosts, getUserDataById, likePost, getCurrentUser } from "../utils/firebase";
+import { getUserData, newPost, listenForNewPosts, listenForPostChanges, getPosts, getUserDataById, likePost, getCurrentUser } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
@@ -19,6 +19,7 @@ class Home extends React.Component {
     this.state = {
       firstName: "",
       lastName: "",
+      profileImg: null,
       school: "",
       likeCount: 0,
       commentCount: 0,
@@ -102,6 +103,7 @@ class Home extends React.Component {
           const promise = getUserDataById(doc.user).then((data) => {
             doc.username = data.name + " " + data.surname;
             doc.school = data.school;
+            doc.profileImg = data.profileImg;
             posts.push(doc);
           });
           promises.push(promise);
@@ -129,15 +131,18 @@ class Home extends React.Component {
   componentDidMount() {
     // rafraichit les posts quand la base de données change
     this.updatePosts();
+    console.log("mounted ");
+    console.log(this.state.showRefreshButton);
     listenForPostChanges((posts) => {
       //on récupère l'id du dernier post
       const post = Object.values(Object.values(posts)[Object.values(posts).length-1])[0];
-      if (post.user != getCurrentUser().W.X && !this.state.firstLoad) {
+      if (post.user !== getCurrentUser().W.X && !this.state.firstLoad) {
         this.setState({showRefreshButton: true});
       }
       if (this.state.firstLoad) {
         this.setState({firstLoad: false});
       }
+      console.log(this.state.showRefreshButton);
     });
   }
 
@@ -161,6 +166,7 @@ class Home extends React.Component {
             firstName: data.name,
             lastName: data.surname,
             school: data.school,
+            profileImg: data.profileImg,
           });
           changeColor(data.school);
         }
@@ -168,6 +174,7 @@ class Home extends React.Component {
       return <Loader />;
     }
 
+    console.log(this.state.showRefreshButton);
 
     return (
       <div className="interface">
@@ -176,6 +183,7 @@ class Home extends React.Component {
           setSearch={""}
           showMenu={false}
           setShowMenu={false}
+          profileImg={this.state.profileImg}
           uid={user.uid}
         />
         {this.state.showRefreshButton && (

@@ -8,6 +8,7 @@ import {BiLogOut} from "react-icons/bi"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
 import { Link } from 'react-router-dom';
+import { postProfileImg } from '../utils/firebase'
 
 const Info = ({userPostData,
               following,
@@ -27,20 +28,24 @@ const Info = ({userPostData,
   const importCover =useRef()
 
   
-  const handleFile1=(e)=>{
-    if(e.target.files && e.target.files[0]){
-      let img =e.target.files[0]
-      const imgObj= {image:URL.createObjectURL(img)}
-      const profileImg= imgObj.image
-      setProfileImg(profileImg)
+  const handleFile1 = async (e) => {
+    if (e.target.files && e.target.files[0]) {
+      let img = e.target.files[0];
+      try {
+        const url = await postProfileImg(img);
+        console.log(url);
+        setProfileImg(url);
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }
+  };
 
   const handleFile2 =(e)=>{
     if(e.target.files && e.target.files[0]){
       let img =e.target.files[0]
       const imgObj ={image:URL.createObjectURL(img)}
-      const coverImg =imgObj.image
+      const coverImg =imgObj.image;
       setCoverImg(coverImg)
     }
   }
@@ -68,6 +73,8 @@ const Info = ({userPostData,
     setModelDetails(obj)
     setOpenEdit(false)
   }
+
+  console.log(profileImg)
 
 
   return (

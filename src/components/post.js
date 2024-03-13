@@ -151,8 +151,12 @@ class Post extends React.Component {
     return (
       <div className="post">
         <div className="post-header">
-          <Link to={`/profile/${post.user}`} className="post-username">           
-            <img src={require("../images/avatar.png")} alt="Avatar" className="post-avatar" />
+          <Link to={`/profile/${post.user}`} className="post-username">
+          {post.profileImg ? (
+              <img src={post.profileImg} alt="Profile" className="post-avatar"/>
+            ) : (
+              <img src={require("../images/avatar.png")} alt="Profile" className="post-avatar" />
+            )}
             <div>
               {post.username}
             </div>
@@ -185,8 +189,8 @@ class Post extends React.Component {
               {expandedComments ? "Réduire les commentaires" : "Voir les commentaires"}
               {expandedComments ? <FaAngleUp className="icon" /> : <FaAngleDown className="icon" />}
             </div>
-            {expandedComments && comments.map((comment) => (
-              <Comment key={comment.id} comment={comment} />
+            {expandedComments && comments.map((comment, index) => (
+              <Comment key={comment.id} comment={comment} commentKey={index} postId={post.id}/>
             ))}
           </div>
         )}

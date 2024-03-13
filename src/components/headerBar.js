@@ -4,18 +4,18 @@ import "../styles/headerBar.css"
 import { Link } from 'react-router-dom';
 
 import { HiMagnifyingGlass } from "react-icons/hi2";
-import {AiOutlineHome} from "react-icons/ai"
-import {LiaUserFriendsSolid} from "react-icons/lia"
-import {IoNotificationsOutline} from "react-icons/io5"
-import {TbMessage} from "react-icons/tb"
-import {BiLogOut} from "react-icons/bi"
+import { AiOutlineHome} from "react-icons/ai"
+import { HiOutlineUserGroup } from "react-icons/hi2";
+import { IoSchoolOutline } from "react-icons/io5";
+import { TbMessage} from "react-icons/tb"
+import { BiLogOut} from "react-icons/bi"
+import { IoCalendarOutline } from "react-icons/io5";
+import { getUserDataById } from '../utils/firebase';
 
 import Profile from "../images/avatar.png"
 import { signOut } from '../utils/firebase';
 
 const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
-
-
   
   return (
     <nav>
@@ -39,17 +39,21 @@ const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
       </div>
 
       <div className="social-icons">
-        <Link to="/home" style={{textDecoration:"none",display:"flex",alignItems:"center",color:"white"}}>
+        <Link to="/home" style={{textDecoration:"none",display:"flex",alignItems:"center",color:"white",marginTop:"8px"}}>
           <AiOutlineHome className='nav-icons'/>
         </Link>
 
-        <Link to="/notification" id='notifi' style={{marginTop:"8px"}}><IoNotificationsOutline className='nav-icons'/><span>5</span></Link>
+        <Link to="/notification" id='notifi' style={{marginTop:"8px"}}><IoCalendarOutline className='nav-icons'/></Link>
            
-        <TbMessage className='nav-icons'/>
+        <TbMessage className='nav-icons' style={{marginTop:"8px"}}/>
 
 
         <Link to="/groups" style={{marginTop:"8px"}}>
-          <LiaUserFriendsSolid className='nav-icons'/>
+          <HiOutlineUserGroup className='nav-icons'/>
+        </Link>
+
+        <Link to="/courses" style={{marginTop:"8px"}}>
+          <IoSchoolOutline className='nav-icons'/>
         </Link>
 
         <Link to="/login" id='signout' style={{marginTop:"8px"}}>

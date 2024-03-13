@@ -54,12 +54,12 @@
     align-items: flex-start;
   }
   
-  label {
+  .label-description {
     width: 100px; /* Ajustez cette valeur en fonction de vos besoins */
     margin-right: 10px; /* Ajustez cette valeur en fonction de vos besoins */
   }
   
-  textarea {
+  .description-input {
     flex: 1;
     resize: none;
     width: 100%;
