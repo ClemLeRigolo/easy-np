@@ -32,13 +32,67 @@ const Info = ({userPostData,
     if (e.target.files && e.target.files[0]) {
       let img = e.target.files[0];
       try {
-        const url = await postProfileImg(img);
+        console.log(img);
+        //const compressedImg = await compressImage(img);
+        const croppedImg = await cropImage(img);
+        console.log(croppedImg);
+        const url = await postProfileImg(croppedImg);
         console.log(url);
         setProfileImg(url);
       } catch (error) {
         console.log(error);
       }
     }
+  };
+  
+  const cropImage = (img) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = (event) => {
+        const image = new Image();
+        image.src = event.target.result;
+  
+        image.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+  
+          const size = 170;
+  
+          canvas.width = size;
+          canvas.height = size;
+  
+          let offsetX = 0;
+          let offsetY = 0;
+  
+          if (image.width > image.height) {
+            offsetX = (image.width - image.height) / 2;
+          } else {
+            offsetY = (image.height - image.width) / 2;
+          }
+  
+          ctx.drawImage(image, offsetX, offsetY, image.width - 2 * offsetX, image.height - 2 * offsetY, 0, 0, size, size);
+  
+          canvas.toBlob((blob) => {
+            const croppedFile = new File([blob], img.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            resolve(croppedFile);
+          }, 'image/jpeg', 0.9);
+        };
+  
+        image.onerror = (error) => {
+          reject(error);
+        };
+      };
+  
+      reader.onerror = (error) => {
+        reject(error);
+      };
+  
+      reader.readAsDataURL(img);
+    });
   };
 
   const handleFile2 =(e)=>{
