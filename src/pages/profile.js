@@ -165,6 +165,7 @@ class Profile extends React.Component {
                 console.log(userData);
                 doc.username = userData.name + " " + userData.surname;
                 doc.school = userData.school;
+                doc.profileImg = userData.profileImg;
                 posts.push(doc);
               });
 
