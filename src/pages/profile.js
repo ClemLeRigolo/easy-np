@@ -13,6 +13,7 @@ import Loader from "../components/loader";
 import Post from "../components/post";
 import GroupNavigation from "../components/groupNavigation";
 import { withRouter } from 'react-router-dom';
+import { changeColor } from "../components/schoolChoose";
 
 class Profile extends React.Component {
 
@@ -152,7 +153,7 @@ class Profile extends React.Component {
           if (userData.profileImg) {
             this.setProfileImg(userData.profileImg);
           } else {
-            this.setProfileImg(ProfileImg); // Utilisez l'image par défaut s'il n'y a pas d'URL de profil personnalisée
+            this.setProfileImg(require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`)); // Utilisez l'image par défaut s'il n'y a pas d'URL de profil personnalisée
           }
           this.setProfileData(userData);
           getPostByUser(uid).then(
@@ -190,11 +191,13 @@ class Profile extends React.Component {
           this.setState({
             currentUserData: userData,
           });
+          if (!this.state.currentUserData.profileImg) {
+            this.state.currentUserData.profileImg = require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`);
+          }
+          changeColor(userData.school);
         });
       return <Loader />;
     }
-
-    console.log("user", this.state.userData);
 
     return (
       <div className='interface'>

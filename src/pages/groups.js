@@ -8,6 +8,7 @@ import fr from "../utils/i18n";
 import "../styles/groups.css";
 import HeaderBar from "../components/headerBar";
 import GroupMembership from "../components/groupMembership";
+import { changeColor } from "../components/schoolChoose";
 
 class Groups extends React.Component {
   constructor(props) {
@@ -69,6 +70,10 @@ class Groups extends React.Component {
           profileImg: userData.profileImg,
           dataCollected: true,
         });
+        if (!this.state.profileImg) {
+          this.setState({ profileImg: require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`) });
+        }
+        changeColor(userData.school);
       }
       );
       return <Loader />;

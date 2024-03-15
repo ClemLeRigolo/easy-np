@@ -10,7 +10,6 @@ import { IoSchoolOutline } from "react-icons/io5";
 import { TbMessage} from "react-icons/tb"
 import { BiLogOut} from "react-icons/bi"
 import { IoCalendarOutline } from "react-icons/io5";
-import { getUserDataById } from '../utils/firebase';
 
 import Profile from "../images/avatar.png"
 import { signOut } from '../utils/firebase';

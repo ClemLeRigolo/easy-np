@@ -14,6 +14,7 @@ import Post from "../components/post";
 import GroupNavigation from "../components/groupNavigation";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
+import { changeColor } from "../components/schoolChoose";
 
 class Group extends React.Component {
 
@@ -149,6 +150,10 @@ class Group extends React.Component {
           profileImg: userData.profileImg,
           dataCollected: true,
         });
+        if (!this.state.profileImg) {
+          this.setState({ profileImg: require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`) });
+        }
+        changeColor(userData.school);
       }
       );
       return <Loader />;

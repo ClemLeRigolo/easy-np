@@ -155,7 +155,7 @@ class Post extends React.Component {
           {post.profileImg ? (
               <img src={post.profileImg} alt="Profile" className="post-avatar"/>
             ) : (
-              <img src={require("../images/avatar.png")} alt="Profile" className="post-avatar" />
+              <img src={require(`../images/Profile-pictures/${post.school}-default-profile-picture.png`)} alt="Profile" className="post-avatar" />
             )}
             <div>
               {post.username}

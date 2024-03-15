@@ -168,6 +168,9 @@ class Home extends React.Component {
             school: data.school,
             profileImg: data.profileImg,
           });
+          if (!this.state.profileImg) {
+            this.setState({ profileImg: require(`../images/Profile-pictures/${data.school}-default-profile-picture.png`) });
+          }
           changeColor(data.school);
         }
         );
