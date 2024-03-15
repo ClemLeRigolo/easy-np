@@ -64,6 +64,13 @@ export const fr = {
     ABOUT: "À propos",
   },
 
+  PROFILE: {
+    EDIT: "Éditer le profil",
+    FOLLOWERS: "Abonnés",
+    FOLLOWING: "Abonnements",
+    POSTS: "Publications",
+  },
+
 };
 
 export const en = {

@@ -9,6 +9,7 @@ import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
 import { Link } from 'react-router-dom';
 import { postProfileImg } from '../utils/firebase'
+import fr from '../utils/i18n'
 
 const Info = ({userPostData,
               following,
@@ -167,7 +168,7 @@ const Info = ({userPostData,
               <BiLogOut />Logout
             </Link> */}
 
-            <button onClick={()=>setOpenEdit(true)}><LiaEdit />Edit Profile</button>
+            <button onClick={()=>setOpenEdit(true)}><LiaEdit />{fr.PROFILE.EDIT}</button>
             {/* <ModelProfile 
             name={name}
             setName={setName}
@@ -188,15 +189,15 @@ const Info = ({userPostData,
             <div className="info-col-2">
               <div>
                 <h2>7 852 665</h2>
-                <span>Followers</span>
+                <span>{fr.PROFILE.FOLLOWERS}</span>
               </div>
               <div>
                 <h2>{userPostData.length}</h2>
-                <span>Posts</span>
+                <span>{fr.PROFILE.POSTS}</span>
               </div>
               <div>
                 <h2>{following}</h2>
-                <span>Following</span>
+                <span>{fr.PROFILE.FOLLOWINGS}</span>
               </div>
             </div>
 
