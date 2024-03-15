@@ -1,10 +1,6 @@
 import React from "react";
-// import Left from '../../Components/LeftSide/Left'
-import ProfileMiddle from '../components/profileMiddle'
-// import Right from '../../Components/RightSide/Right'
 import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
-import ProfileImg from "../images/avatar.png"
 import { authStates, withAuth } from "../components/auth";
 import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
@@ -67,10 +67,10 @@ class CreateGroup extends React.Component {
       <div className="interface">
         <HeaderBar search={""} setSearch={""} showMenu={false} setShowMenu={false} uid={user.uid} />
         <div className="form-container">
-          <h2>Create a Group</h2>
+          <h2>{fr.FORM_FIELDS.CREATE_GROUP}</h2>
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
-              <label htmlFor="group-name">Group Name:</label>
+              <label htmlFor="group-name">{fr.FORM_FIELDS.GROUP_NAME}:</label>
               <input
                 type="text"
                 id="group-name"
@@ -81,7 +81,7 @@ class CreateGroup extends React.Component {
               />
             </div>
             <div className="form-group">
-              <label className="label-description" htmlFor="description">Group Description:</label>
+              <label className="label-description" htmlFor="description">{fr.FORM_FIELDS.GROUP_DESCRIPTION}:</label>
               <textarea
                 id="description"
                 name="description"
@@ -92,17 +92,17 @@ class CreateGroup extends React.Component {
               ></textarea>
             </div>
             <div className="form-group">
-              <label htmlFor="visibility">Visibility:</label>
+              <label htmlFor="visibility">{fr.FORM_FIELDS.VISIBILITY}:</label>
               <select id="visibility" name="visibility" value={visibility} onChange={this.handleInputChange}>
-                <option value="public">Public</option>
-                <option value="private">Private</option>
+                <option value="public">{fr.FORM_FIELDS.PUBLIC}</option>
+                <option value="private">{fr.FORM_FIELDS.PRIVATE}</option>
               </select>
             </div>
             {visibility === "private" && (
               <div className="form-group">
-                <label htmlFor="school">School:</label>
+                <label htmlFor="school">{fr.FORM_FIELDS.SCHOOL}:</label>
                 <select id="school" name="school" value={school} onChange={this.handleInputChange} required>
-                  <option value="">Select a school</option>
+                  <option value="">{fr.FORM_FIELDS.SELECT_SCHOOL}</option>
                   <option value="Ensimag">Ensimag</option>
                   <option value="Phelma">Phelma</option>
                   <option value="Ense3">Ense3</option>
@@ -112,7 +112,7 @@ class CreateGroup extends React.Component {
                 </select>
               </div>
             )}
-            <button type="submit">Create Group</button>
+            <button type="submit">{fr.FORM_FIELDS.CREATE_GROUP}</button>
           </form>
         </div>
       </div>

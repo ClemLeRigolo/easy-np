@@ -5,6 +5,7 @@ import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
+import fr from "../utils/i18n";
 
 class Post extends React.Component {
   constructor(props) {
@@ -100,6 +101,7 @@ class Post extends React.Component {
           if (comment) {
             return getUserDataById(comment.user).then((user) => {
               comment.author = user.name + " " + user.surname;
+              comment.profileImg = user.profileImg;
               return comment;
             });
           }
@@ -166,10 +168,10 @@ class Post extends React.Component {
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>
         <div className="post-footer">
           <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>
-            {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {likeCount}
+            {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {likeCount} {likeCount > 1 ? fr.POSTS.LIKES : fr.POSTS.LIKE}
           </button>
           <button className="post-comment-btn" onClick={this.handleCommentClick}>
-            <AiOutlineComment /> {post.commentCount}
+            <AiOutlineComment /> {post.commentCount} {post.commentCount > 1 ? fr.POSTS.COMMENTS : fr.POSTS.COMMENT}
           </button>
         </div>
         {showCommentInput && (
@@ -180,7 +182,7 @@ class Post extends React.Component {
               value={commentInputValue}
               onChange={this.handleCommentInputChange}
             />
-            <button className="comment-btn" onClick={this.handleCommentSubmit}>Publier</button>
+            <button className="comment-btn" onClick={this.handleCommentSubmit}>{fr.POSTS.PUBLISH}</button>
           </div>
         )}
         {comments.length > 0 && (

@@ -6,6 +6,7 @@ import "../styles/comment.css";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { getUserDataById, answerToComment, getComment } from "../utils/firebase";
 import Loader from "./loader";
+import fr from "../utils/i18n";
 
 class Comment extends React.Component {
   constructor(props) {
@@ -50,6 +51,8 @@ class Comment extends React.Component {
             getUserDataById(answer.user).then((userData) => {
               console.log("userData", userData);
               answer.author = userData.name + " " + userData.surname;
+              answer.profileImg = userData.profileImg;
+              answer.school = userData.school;
               promises.push(answer);
             }
             );
@@ -92,6 +95,8 @@ class Comment extends React.Component {
             getUserDataById(answer.user).then((userData) => {
               console.log("userData", userData);
               answer.author = userData.name + " " + userData.surname;
+              answer.profileImg = userData.profileImg;
+              answer.school = userData.school;
               promises.push(answer);
             }
             );
@@ -123,6 +128,12 @@ class Comment extends React.Component {
     return (
       <div className="comment">
         <Link to={`/profile/${comment.user}`} className="comment-author">
+          {comment.profileImg ? (
+              <img src={comment.profileImg} alt="Profile" className="post-avatar"/>
+            ) : (
+              <img src={require(`../images/Profile-pictures/${comment.school}-default-profile-picture.png`)} alt="Profile" className="post-avatar" />
+            )
+            }
           <div className="comment-author">{this.state.author}</div>
         </Link>
         <div className="comment-content">{comment.content}</div>
@@ -139,12 +150,12 @@ class Comment extends React.Component {
                   placeholder="Répondre..."
                 />
                 <button className="comment-publish-reply" onClick={this.handlePublishReply}>
-                  Publier
+                  {fr.POSTS.PUBLISH}
                 </button>
               </div>
             ) : (
               <button className="reply" onClick={this.handleReply}>
-                Répondre
+                {fr.POSTS.ANSWER}
                 <FaReply className="comment-icon" />
               </button>
             )}
@@ -163,6 +174,11 @@ class Comment extends React.Component {
             {answers.map((reply, index) => (
               <div className="comment-reply" key={reply.id}>
                 <Link to={`/profile/${reply.user}`} className="comment-author">
+                  {reply.profileImg ? (
+                      <img src={reply.profileImg} alt="Profile" className="post-avatar"/>
+                    ) : (
+                      <img src={require(`../images/Profile-pictures/${reply.school}-default-profile-picture.png`)} alt="Profile" className="post-avatar" />
+                    )}
                   <div className="comment-author">{reply.author}</div>
                 </Link>
                 <div className="comment-content">{reply.content}</div>

@@ -22,6 +22,14 @@ export const fr = {
     FORGOT_PASSWORD: "Mot de passe oublié ?",
     BACK_TO_LOGIN: "Retour à la page de connexion",
     RESEND: "Renvoyer le mail de vérification",
+    CREATE_GROUP: "Créer un groupe",
+    GROUP_NAME: "Nom du groupe",
+    GROUP_DESCRIPTION: "Description du groupe",
+    VISIBILITY: "Visibilité",
+    PUBLIC: "Public",
+    PRIVATE: "Privé",
+    SCHOOL: "École",
+    SELECT_SCHOOL: "Sélectionnez une école",
   },
 
   ERRORS: {
@@ -39,6 +47,15 @@ export const fr = {
   },
 
   VERIFY_EMAIL_TEXT: "Un e-mail de vérification a été envoyé. Veuillez vérifier votre boîte de réception. Vous serez automatiquement redirigé une fois votre e-mail vérifié.",
+
+  POSTS: {
+    COMMENT: "Commentaire",
+    COMMENTS: "Commentaires",
+    LIKE: "Like",
+    LIKES: "Likes",
+    PUBLISH: "Publier",
+    ANSWER: "Répondre",
+  },
 
   GROUPS: {
     GENERAL: "Général",

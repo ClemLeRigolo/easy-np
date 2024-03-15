@@ -91,7 +91,7 @@ class Groups extends React.Component {
         />
         <div className="group-list">
           <Link to="/createGroup" className="create-group-button">
-            Créer un groupe
+            {fr.FORM_FIELDS.CREATE_GROUP}
           </Link>
           {groups.map((group) => (
             <div className="group" key={group.id}>
