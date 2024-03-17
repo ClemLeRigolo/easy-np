@@ -52,17 +52,6 @@ class Groups extends React.Component {
       return <Loader />;
     }
 
-    if (authState === authStates.LOGGED_OUT) {
-      return <Redirect to="/login" />;
-    }
-
-    if (authState === authStates.LOGGED_IN && user.emailVerified === false) {
-      if (user.emailVerified === false) {
-        return <Redirect to="/verify" />;
-      }
-      return <Loader />;
-    }
-
     if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
       getUserDataById(user.uid).then((userData) => {
         console.log("userData", userData);

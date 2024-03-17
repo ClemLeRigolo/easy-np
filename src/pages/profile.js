@@ -126,17 +126,6 @@ class Profile extends React.Component {
       return <Loader />;
     }
 
-    if (authState === authStates.LOGGED_OUT) {
-      return <Redirect to="/login"></Redirect>;
-    }
-
-    if (authState === authStates.LOGGED_IN && user.emailVerified === false) {
-      if(user.emailVerified === false){
-        return <Redirect to="/verify"></Redirect>;
-      }
-      return <Loader />;
-    }
-
 
     if ((authState === authStates.LOGGED_IN && !this.state.userData) || (this.props.match.params.uid !== this.state.uid)) {
       if(user.emailVerified === false){

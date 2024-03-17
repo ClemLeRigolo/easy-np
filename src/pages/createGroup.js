@@ -48,17 +48,6 @@ class CreateGroup extends React.Component {
       return <Loader />;
     }
 
-    if (authState === authStates.LOGGED_OUT) {
-      return <Redirect to="/login"></Redirect>;
-    }
-
-    if (authState === authStates.LOGGED_IN && user.emailVerified === false) {
-      if (user.emailVerified === false) {
-        return <Redirect to="/verify"></Redirect>;
-      }
-      return <Loader />;
-    }
-
     if (redirect) {
       return <Redirect to="/groups" />;
     }
