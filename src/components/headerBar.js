@@ -42,7 +42,7 @@ const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
           <AiOutlineHome className='nav-icons'/>
         </Link>
 
-        <Link to="/notification" id='notifi' style={{marginTop:"8px"}}><IoCalendarOutline className='nav-icons'/></Link>
+        <Link to="/eventCalendar/1" id='calendar' style={{marginTop:"10px"}}><IoCalendarOutline className='nav-icons'/></Link>
            
         <TbMessage className='nav-icons' style={{marginTop:"8px"}}/>
 
