@@ -195,7 +195,8 @@ class Home extends React.Component {
         </button>
       )}
         <div className="main-container">
-          <GroupNavigation />
+          <div><GroupNavigation /></div>
+          
           <div className="post-list">
           <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
           {this.state.posts && this.state.posts.map((post, index) => (
