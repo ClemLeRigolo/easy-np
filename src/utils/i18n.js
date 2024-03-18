@@ -68,6 +68,7 @@ export const fr = {
     LIKES: "Likes",
     PUBLISH: "Publier",
     ANSWER: "Répondre",
+    SHARE: "Partager",
   },
 
   GROUPS: {

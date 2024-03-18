@@ -3,6 +3,7 @@ import "../styles/post.css";
 import { getCurrentUser, addComment, getComments, getUserDataById } from "../utils/firebase";
 import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
+import { FaShareSquare } from "react-icons/fa";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
@@ -21,6 +22,26 @@ class Post extends React.Component {
       commentCollected: false,
     };
   }
+
+  handleShareClick = () => {
+    const { post } = this.state;
+    const postUrl = `/post/${post.id}`; // Remplacez par l'URL réelle vers le post
+    //On récupère l'url de base
+    const baseUrl = window.location.origin;
+    //On enlève tout ce qu'il y a après le premier /
+    const url = baseUrl.split("/")[0] + baseUrl.split("/")[1] + "//" + baseUrl.split("/")[2];
+    const finalUrle = url + postUrl;
+  
+    navigator.clipboard.writeText(finalUrle)
+      .then(() => {
+        console.log("URL copiée avec succès :", finalUrle);
+        // Ajoutez ici une logique supplémentaire si nécessaire, par exemple, afficher un message de succès
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la copie de l'URL :", error);
+        // Ajoutez ici une logique supplémentaire si nécessaire, par exemple, afficher un message d'erreur
+      });
+  };
 
   handleLikeClick = () => {
     // Logique de gestion du clic sur le bouton Like
@@ -214,6 +235,9 @@ class Post extends React.Component {
           </button>
           <button className="post-comment-btn" onClick={this.handleCommentClick}>
             <AiOutlineComment /> {post.commentCount} {post.commentCount > 1 ? fr.POSTS.COMMENTS : fr.POSTS.COMMENT}
+          </button>
+          <button className="post-share-btn" onClick={this.handleShareClick}>
+            <FaShareSquare /> {fr.POSTS.SHARE}
           </button>
         </div>
         {showCommentInput && (
