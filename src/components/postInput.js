@@ -53,8 +53,13 @@ export default function PostInput({ handlePostSubmit }) {
 
     const contentWithLineBreaks = content.replace(/\n/g, "<br>");
 
+    /*const contentWithLinks = contentWithLineBreaks.replace(urlRegex, (url) => {
+      return `${url}`;
+    });*/
+
+    //replace link by a balise a
     const contentWithLinks = contentWithLineBreaks.replace(urlRegex, (url) => {
-      return `"${url}"`;
+      return `<a href="${url}" target="_blank">${url}</a>`;
     });
 
     return contentWithLinks;

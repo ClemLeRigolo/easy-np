@@ -218,8 +218,8 @@ class Event extends React.Component {
         <div className="main-container">
           <ChannelNavigation gid={this.state.gid} />
         <div className="group-content">
-        <h1>{this.state.group.name}</h1>
-        <p>{this.state.group.description}</p>
+        <h1>{this.state.event.title}</h1>
+        <p>{this.state.event.description}</p>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
           <div className="home">
 
