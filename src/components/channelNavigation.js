@@ -50,6 +50,8 @@ class ChannelNavigation extends React.Component {
       <div className="group-navigation">
         {this.state.groups &&
           groups.map((group) => (
+            console.log("group.id", group.id),
+            console.log("gid", gid),
             <div key={group.id} className="group-header">
               <Link to={`/group/${group.id}`}>
                 <h1 className={`group-nav-link ${group.id == gid ? 'active' : ''}`} >{group.name}</h1>

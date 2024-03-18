@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/post.css";
 import { getCurrentUser, addComment, getComments, getUserDataById } from "../utils/firebase";
+import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
@@ -200,6 +201,7 @@ class Post extends React.Component {
             )}
             <div>
               {post.username}
+              <div className="post-date">{formatPostTimestamp(post.timestamp)}</div>
             </div>
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
