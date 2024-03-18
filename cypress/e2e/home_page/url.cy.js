@@ -1,7 +1,7 @@
 context('Testing urls', () => {
   describe("User connected", () => {
     before(() => {
-      cy.visit("/");
+      cy.visit("/login");
       cy.login("user.username@grenoble-inp.org", "Password!");
       cy.get("form").submit();
       cy.contains("Easy");
