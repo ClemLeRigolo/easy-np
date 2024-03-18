@@ -6,6 +6,7 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
+import DOMPurify from "dompurify";
 
 class Post extends React.Component {
   constructor(props) {

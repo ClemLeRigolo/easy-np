@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import "../styles/postInput.css";
+import DOMPurify from "dompurify";
 
 export default function PostInput({ handlePostSubmit }) {
   const [postContent, setPostContent] = useState("");
@@ -13,44 +14,47 @@ export default function PostInput({ handlePostSubmit }) {
   const handleKeyPress = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      if (!isValidContent(postContent)) {
-        setValidationError("Le contenu du post ne peut pas contenir de code JavaScript ou HTML.");
-      } else {
-        setValidationError("");
-        const contentWithLinks = renderContentWithLinks();
-        handlePostSubmit(contentWithLinks);
-        setPostContent("");
-      }
+      handleSubmit();
     }
   };
 
   const handleSubmit = () => {
     if (postContent.trim() !== "") {
-      if (!isValidContent(postContent)) {
-        setValidationError("Le contenu du post ne peut pas contenir de code JavaScript ou HTML.");
+      if (containsHtml(postContent)) {
+        setValidationError("Le contenu du post ne peut pas contenir de code HTML.");
       } else {
-        setValidationError("");
-        const contentWithLinks = renderContentWithLinks();
-        handlePostSubmit(contentWithLinks);
+        const finalContent = replaceLinksAndTags(postContent);
+        handlePostSubmit(finalContent);
         setPostContent("");
+        setValidationError("");
       }
     } else {
       setValidationError("Le contenu du post ne peut pas être vide.");
     }
   };
 
-  const isValidContent = (content) => {
-    const jsRegex = /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi;
-    const htmlRegex = /<[^>]+>/gi;
-  
-    return !jsRegex.test(content) && !htmlRegex.test(content);
+  const containsHtml = (content) => {
+    const sanitizedContent = DOMPurify.sanitize(content, { ALLOWED_TAGS: [] });
+    return sanitizedContent !== content;
   };
 
-  const renderContentWithLinks = () => {
+  const replaceLinksAndTags = (content) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
 
-    const contentWithLinks = postContent.replace(urlRegex, (url) => {
-      return `<a href="${url}">${url}</a>`;
+    console.log("content", content);
+
+    const parser = new DOMParser();
+    //const doc = parser.parseFromString(content, "text/html");
+
+    //console.log("doc", doc);
+    //const plainText = doc.body.textContent;
+
+    //console.log("plainText", plainText);
+
+    const contentWithLineBreaks = content.replace(/\n/g, "<br>");
+
+    const contentWithLinks = contentWithLineBreaks.replace(urlRegex, (url) => {
+      return `"${url}"`;
     });
 
     return contentWithLinks;
@@ -64,6 +68,7 @@ export default function PostInput({ handlePostSubmit }) {
         value={postContent}
         onChange={handlePostContentChange}
         onKeyPress={handleKeyPress}
+        style={{ whiteSpace: "pre-wrap" }}
       />
       <button className="post-submit-btn" onClick={handleSubmit}>
         <AiOutlineArrowRight />
