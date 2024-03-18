@@ -1,27 +1,43 @@
 .group-navigation {
     background-color: #fff;
     border-radius: 20px;
-    height: 460px;
     width: 200px;
-    padding: 10px 10px 150px;
-    position: -webkit-sticky;
+    top: 84px;
     position: sticky;
-    top: 110px;
+}
+
+.nav-container {
+    background-color: #2a2e49;
+    box-shadow: 2px 0px 4px rgba(0, 0, 0, 0.2);
 }
 
 .group-nav-item{
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 16px;
-    margin-bottom: 16px;
+    background-color: var(--selected-color);
+    padding: 8px 8px 8px 20px;
+    color: white;
 }
 
 .group-nav-item:hover{
-    background-color: var(--selected-color);
-    color: white;
-    border: 1px solid #ccc;
+    background-color: white;
+    color: var(--selected-color);
 }
 
 .group-nav-item:hover a{
     color: white;
+}
+
+.group-header h1{
+    background-color: #2a2e49;
+    color: white;
+    margin: 0;
+    padding: 10px;
+    font-size: 1.5em;
+}
+
+.group-header h1:hover{
+    background-color: white;
+    color: #2a2e49;
+    margin: 0;
+    padding: 10px;
+    font-size: 1.5em;
 }
