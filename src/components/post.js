@@ -142,9 +142,6 @@ class Post extends React.Component {
     const post = this.state.post;
     const comments = post.comments || [];
 
-    console.log(comments);
-
-
     if (post.likes !== this.props.post.likes) {
       this.setState((prevState) => ({
         post: {

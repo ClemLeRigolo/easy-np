@@ -21,24 +21,38 @@ class ChannelNavigation extends React.Component {
     const { gid } = this.props;
     const { saloons, groups } = this.state;
     const user = firebase.auth().currentUser;
+    
     if (!this.state.saloonsCollected) {
-      getSaloonByGroup(gid).then((saloons) => {
-        this.setState({ saloons, saloonsCollected: true });
-      });
-      getGroupsByUser(user.uid).then((groups) => {
-        console.log("groups", groups);
-        this.setState({ groups });
-      });
+      const groupPromises = [];
+      getGroupsByUser(user.uid)
+        .then((groups) => {
+          const saloonPromises = Object.values(groups).map((group) => {
+            return getSaloonByGroup(group.id)
+              .then((saloons) => {
+                group.saloons = saloons;
+                return group;
+              });
+          });
+          return Promise.all(saloonPromises);
+        })
+        .then((groups) => {
+          this.setState({ groups, saloonsCollected: true });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
       return <Loader />;
     }
 
+    console.log(this.state.groups);
+
     return (
       <div className="group-navigation">
-        {groups &&
+        {this.state.groups &&
           groups.map((group) => (
             <div key={group.id} className="group-header">
               <Link to={`/group/${group.id}`}>
-                <h1 className="group-nav-link">{group.name}</h1>
+                <h1 className={`group-nav-link ${group.id == gid ? 'active' : ''}`} >{group.name}</h1>
               </Link>
     
               <Link to={`/group/${group.id}/createSaloon`} activeClassName="active">
@@ -55,8 +69,8 @@ class ChannelNavigation extends React.Component {
                 <div className="group-nav-item">Événements</div>
               </Link>
     
-              {saloons &&
-                saloons.map((saloon) => (
+              {group.saloons && Object.values(group.saloons).length > 0 && 
+                Object.values(group.saloons).map((saloon) => (
                   <Link
                     to={`/group/${group.id}/saloon/${saloon.id}`}
                     key={saloon.id}
