@@ -49,3 +49,30 @@
     margin-top: 5px;
     font-size: 14px;
   }
+  
+  .datetime-picker-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .datetime-picker-container input {
+    margin-right: 10px;
+  }
+  
+  .datetime-picker-container input[type="date"],
+  .datetime-picker-container input[type="time"] {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .datetime-picker-container input[type="date"]:focus,
+  .datetime-picker-container input[type="time"]:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  .datetime-picker-container label {
+    font-weight: bold;
+    margin-right: 10px;
+  }

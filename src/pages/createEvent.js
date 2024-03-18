@@ -2,11 +2,12 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { createEvent, getEvents } from "../utils/firebase"; // Importez la fonction pour créer un événement
-
+import { createEvent, getEvents } from "../utils/firebase";
 import fr from "../utils/i18n";
 import "../styles/createEvent.css";
 import HeaderBar from "../components/headerBar";
+import moment from "moment";
+import "moment/locale/fr";
 
 class CreateEvent extends React.Component {
   constructor(props) {
@@ -14,7 +15,10 @@ class CreateEvent extends React.Component {
     this.state = {
       title: "",
       description: "",
-      date: "",
+      startDate: "",
+      startTime: "",
+      endDate: "",
+      endTime: "",
       theme: "",
       redirect: false,
     };
@@ -22,14 +26,19 @@ class CreateEvent extends React.Component {
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value }, () => {
+      // Mettre à jour formattedStartTime après avoir mis à jour startTime dans l'état
+      const { startTime } = this.state;
+      this.setState({ formattedStartTime: moment(startTime, "HH:mm").format("HH:mm") });
+    });
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
-    const { title, description, date, theme } = this.state;
-    // Logique de création de l'événement
-    createEvent(title, description, date, theme)
+    const { title, description, startDate, startTime, endDate, endTime, theme } = this.state;
+    const startDatetime = new Date(`${startDate}T${startTime}`);
+    const endDatetime = new Date(`${endDate}T${endTime}`);
+    createEvent(title, description, startDatetime, endDatetime, theme)
       .then(() => {
         console.log("Event created successfully");
         this.setState({ redirect: true });
@@ -40,8 +49,9 @@ class CreateEvent extends React.Component {
   };
 
   render() {
+    moment.locale("fr");
     const { authState, user } = this.props;
-    const { title, description, date, theme, redirect } = this.state;
+    const { title, description, startDate, startTime, endDate, endTime, theme, redirect, formattedStartTime } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {
       console.log("initial value");
@@ -80,15 +90,47 @@ class CreateEvent extends React.Component {
               ></textarea>
             </div>
             <div className="form-group">
-              <label htmlFor="event-date">{fr.FORM_FIELDS.EVENT_DATE}:</label>
-              <input
-                type="date"
-                id="event-date"
-                name="date"
-                value={date}
-                onChange={this.handleInputChange}
-                required
-              />
+              <label htmlFor="event-start-date">{fr.FORM_FIELDS.EVENT_START_DATE}:</label>
+              <div className="datetime-picker-container">
+                <input
+                  type="date"
+                  id="event-start-date"
+                  name="startDate"
+                  value={startDate}
+                  onChange={this.handleInputChange}
+                  required
+                />
+                <input
+                  type="time"
+                  id="event-start-time"
+                  name="startTime"
+                  value={formattedStartTime}
+                  onChange={this.handleInputChange}
+                  required
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="event-end-date">{fr.FORM_FIELDS.EVENT_END_DATE}:</label>
+              <div className="datetime-picker-container">
+                <input
+                  type="date"
+                  id="event-end-date"
+                  name="endDate"
+                  value={endDate}
+                  onChange={this.handleInputChange}
+                  required
+                />
+                <input
+                  type="time"
+                  id="event-end-time"
+                  name="endTime"
+                  value={endTime}
+                  onChange={this.handleInputChange}
+                  required
+                  className="fr"
+                />
+              </div>
             </div>
             <div className="form-group">
               <label htmlFor="event-theme">{fr.FORM_FIELDS.EVENT_THEME}:</label>

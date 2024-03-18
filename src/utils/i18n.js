@@ -33,7 +33,8 @@ export const fr = {
     CREATE_EVENT: "Créer un événement",
     EVENT_TITLE: "Nom de l'événement",
     EVENT_DESCRIPTION: "Description de l'événement",
-    EVENT_DATE: "Date de l'événement",
+    EVENT_START_DATE: "Date de début de l'événement",
+    EVENT_END_DATE: "Date de fin de l'événement",
     EVENT_THEME: "Type d'événement",
   },
 
