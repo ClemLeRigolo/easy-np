@@ -30,6 +30,11 @@ export const fr = {
     PRIVATE: "Privé",
     SCHOOL: "École",
     SELECT_SCHOOL: "Sélectionnez une école",
+    CREATE_EVENT: "Créer un événement",
+    EVENT_TITLE: "Nom de l'événement",
+    EVENT_DESCRIPTION: "Description de l'événement",
+    EVENT_DATE: "Date de l'événement",
+    EVENT_THEME: "Type d'événement",
   },
 
   ERRORS: {

@@ -20,7 +20,8 @@ const Info = ({userPostData,
               name,
               setName,
               userName,
-              setUserName}) => {
+              setUserName,
+              canModify}) => {
 
 
   const [coverImg,setCoverImg] =useState(Info3)
@@ -139,8 +140,12 @@ const Info = ({userPostData,
         <div className="info-cover">
             <img src={coverImg} alt="" />
             <img src={profileImg} alt="" />
+            {canModify && 
             <div className='coverDiv'><IoCameraOutline className='coverSvg' onClick={()=>importCover.current.click()}/></div>
+            }
+            {canModify && 
             <div className='profileDiv'><IoCameraOutline className='profileSvg' onClick={()=>importProfile.current.click()}/></div>
+            }
         </div>
       
 
