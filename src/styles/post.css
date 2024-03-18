@@ -81,3 +81,7 @@
   .comments-toggle:hover {
     text-decoration: underline; /* Souligner le texte au survol */
   }
+
+.post-date{
+    font-weight: 100;
+}

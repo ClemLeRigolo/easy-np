@@ -66,3 +66,24 @@ export function validateEmailPassword(email, password, login) {
 
   return validatePassword(password,login);
 }
+
+// Fonction pour formater l'horodatage du post
+// helpers.js
+
+// Fonction pour formater l'horodatage du post
+// helpers.js
+
+// Fonction pour formater l'horodatage du post
+export function formatPostTimestamp(timestamp) {
+  const currentDate = new Date();
+  const diffMilliseconds = currentDate - new Date(timestamp);
+  const diffMinutes = Math.floor(diffMilliseconds / 60000);
+
+  if (diffMinutes < 60) {
+    return `Il y a ${diffMinutes} minutes`;
+  } else {
+    const options = { day: "numeric", month: "long", hour: "numeric", hour12: false, minute: "numeric" };
+    const formattedDate = new Date(timestamp).toLocaleDateString("fr-FR", options);
+    return formattedDate;
+  }
+}

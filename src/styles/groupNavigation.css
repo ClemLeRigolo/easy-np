@@ -35,9 +35,17 @@
 }
 
 .group-header h1:hover, h1.group-nav-link.active, .group-header h1:focus{
-    background-color: white;
-    color: #2a2e49;
     margin: 0;
     padding: 10px;
     font-size: 1.5em;
+}
+
+h1.group-nav-link.active, .group-header h1:focus{
+    background-color: white;
+    color: #2a2e49;
+}
+
+.group-header h1:hover{
+    background-color: #3D415A;
+    color: white;
 }
