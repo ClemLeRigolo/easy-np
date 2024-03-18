@@ -8,6 +8,7 @@ import "../styles/createEvent.css";
 import HeaderBar from "../components/headerBar";
 import moment from "moment";
 import "moment/locale/fr";
+import { withRouter } from "react-router-dom";
 
 class CreateEvent extends React.Component {
   constructor(props) {
@@ -38,7 +39,8 @@ class CreateEvent extends React.Component {
     const { title, description, startDate, startTime, endDate, endTime, theme } = this.state;
     const startDatetime = new Date(`${startDate}T${startTime}`);
     const endDatetime = new Date(`${endDate}T${endTime}`);
-    createEvent(title, description, startDatetime, endDatetime, theme)
+    const gid = this.props.match.params.gid;
+    createEvent(title, startDatetime, endDatetime, description, theme, gid)
       .then(() => {
         console.log("Event created successfully");
         this.setState({ redirect: true });
@@ -51,7 +53,7 @@ class CreateEvent extends React.Component {
   render() {
     moment.locale("fr");
     const { authState, user } = this.props;
-    const { title, description, startDate, startTime, endDate, endTime, theme, redirect, formattedStartTime } = this.state;
+    const { title, description, startDate, endDate, theme, redirect, formattedStartTime, formattedEndTime } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {
       console.log("initial value");
@@ -125,7 +127,7 @@ class CreateEvent extends React.Component {
                   type="time"
                   id="event-end-time"
                   name="endTime"
-                  value={endTime}
+                  value={formattedEndTime}
                   onChange={this.handleInputChange}
                   required
                   className="fr"
@@ -139,6 +141,7 @@ class CreateEvent extends React.Component {
                 <option value="MINP">MINP</option>
                 <option value="Kfet">Kfet</option>
                 <option value="Soirée">Soirée</option>
+                <option value="Hackaton">Hackaton</option>
               </select>
             </div>
             <button type="submit">{fr.FORM_FIELDS.CREATE_EVENT}</button>
@@ -149,4 +152,4 @@ class CreateEvent extends React.Component {
   }
 }
 
-export default withAuth(CreateEvent);
+export default withRouter(withAuth(CreateEvent));

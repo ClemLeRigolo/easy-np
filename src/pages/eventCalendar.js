@@ -9,16 +9,34 @@ import Loader from "../components/loader";
 import { withRouter } from 'react-router-dom';
 import { changeColor } from "../components/schoolChoose";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import { getEvents } from "../utils/firebase";
 
 const localizer = momentLocalizer(moment);
 
 class eventCalendar extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+          events: [],
+          eventsCollected: false,
+      };
+    }
+
     render() {
         const { authState, user } = this.props;
 
         if (authState === authStates.INITIAL_VALUE) {
           console.log("initial value");
           return <Loader />;
+        }
+
+        if (!this.state.eventsCollected) {
+          getEvents().then((events) => {
+            console.log("events", events);
+            this.setState({ events: Object.values(Object.values(events)[0]), eventsCollected: true });
+            console.log("events", this.state.events);
+          });
+          
         }
 
         moment.locale('fr'); // Définir la locale de moment sur le français
@@ -37,7 +55,7 @@ class eventCalendar extends React.Component {
                 <HeaderBar search={""} setSearch={""} showMenu={false} setShowMenu={false} uid={user.uid} />
                 <Calendar
                     localizer={localizer}
-                    events={events}
+                    events={this.state.events}
                     startAccessor="start"
                     endAccessor="end"
                     style={{ height: 500 }} // Ajuste la hauteur selon tes besoins
