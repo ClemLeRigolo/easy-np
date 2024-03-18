@@ -33,14 +33,7 @@ const GroupNavigation = () => {
         </div>
         </Link>
       ))}
-      <div className="group-nav-item">
-        <FaCalendarAlt className="group-nav-icon" />
-        <span className="group-nav-link">{fr.GROUPS.EVENTS}</span>
-      </div>
-      <div className="group-nav-item">
-        <FaQuestionCircle className="group-nav-icon" />
-        <span className="group-nav-link">{fr.GROUPS.ABOUT}</span>
-      </div>
+      
     </div>
   );
 };
