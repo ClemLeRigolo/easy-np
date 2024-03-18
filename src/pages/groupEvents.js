@@ -12,8 +12,10 @@ import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
+import { Link } from "react-router-dom";
+import fr from "../utils/i18n";
 
-class Group extends React.Component {
+class GroupEvent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -162,7 +164,7 @@ class Group extends React.Component {
       }
       //this.setState({ gid: this.props.match.params.gid });
       this.state.gid = this.props.match.params.gid;
-      getPostByGroup(this.state.gid).then(
+      /*getPostByGroup(this.state.gid).then(
         (querySnapshot) => {
           const posts = [];
           const promises = [];
@@ -188,7 +190,7 @@ class Group extends React.Component {
                 console.log("posts", posts);
                 this.setState({ posts });
             });
-        });
+        });*/
         getGroupById(this.state.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
             }
@@ -213,24 +215,14 @@ class Group extends React.Component {
           uid={user.uid}
           />
         <div className="main-container">
-          <ChannelNavigation gid={this.state.gid} />
+        <ChannelNavigation gid={this.state.gid} />
         <div className="group-content">
         <h1>{this.state.group.name}</h1>
         <p>{this.state.group.description}</p>
-        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
           <div className="home">
-
-
-        {this.state.posts && this.state.posts.map((post, index) => (
-                    <Post 
-                    key={index} 
-                    post={post} 
-                    handleLikeClick={() => this.handleLikeClick(index)}
-                    handleCommentClick={() => this.handleCommentClick(index)} 
-                    likeCount={post.likeCount} 
-                    commentCount={post.commentCount} 
-                    />
-        ))} 
+          <Link to={`/group/${this.state.gid}/createEvent`} className="create-group-button">
+            {fr.FORM_FIELDS.CREATE_EVENT}
+          </Link>
         </div>
 
           </div>
@@ -240,4 +232,4 @@ class Group extends React.Component {
       }
 }
 
-export default withRouter(withAuth(Group));
+export default withRouter(withAuth(GroupEvent));

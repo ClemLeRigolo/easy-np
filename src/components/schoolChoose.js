@@ -39,6 +39,7 @@ export function changeColor(selectedImage) {
       selectedColor = ""; // Couleur par défaut en cas de correspondance non trouvée
   }
   document.documentElement.style.setProperty('--selected-color', selectedColor);
+  return selectedColor;
 }
 
 export default function SchoolChoose({selectedImage, handleImageChange}) {

@@ -222,6 +222,7 @@ class Profile extends React.Component {
             setProfileImg={this.setProfileImg}
             modelDetails={this.state.modelDetails}
             setModelDetails={this.setModelDetails}
+            canModify={this.state.uid === user.uid}
             />
             
             {/* <Right 
