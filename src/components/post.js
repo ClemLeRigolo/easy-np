@@ -165,6 +165,7 @@ class Post extends React.Component {
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
         </div>
+        {post.title && <div className="post-title"><h1>{post.title}</h1></div>}
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>
         <div className="post-footer">
           <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>

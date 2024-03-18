@@ -36,16 +36,12 @@ class eventCalendar extends React.Component {
 
         if (!this.state.eventsCollected) {
           getEvents().then((events) => {
-            console.log("events", events);
-            //for each event
-            //change the color
             for (let i = 0; i < Object.values(Object.values(events)[0]).length; i++) {
               Object.values(Object.values(events)[0])[i].start = new Date(Object.values(Object.values(events)[0])[i].start);
               Object.values(Object.values(events)[0])[i].end = new Date(Object.values(Object.values(events)[0])[i].end);
             }
 
             this.setState({ events: Object.values(Object.values(events)[0]), eventsCollected: true });
-            console.log("events", this.state.events);
           });
           
         }

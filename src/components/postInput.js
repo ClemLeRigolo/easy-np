@@ -13,9 +13,13 @@ export default function PostInput({ handlePostSubmit }) {
   const handleKeyPress = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      if (postContent.trim() !== "") {
+      if (!isValidContent(postContent)) {
+        setValidationError("Le contenu du post ne peut pas contenir de code JavaScript ou HTML.");
+      } else {
+        setValidationError("");
         const contentWithLinks = renderContentWithLinks();
         handlePostSubmit(contentWithLinks);
+        setPostContent("");
       }
     }
   };

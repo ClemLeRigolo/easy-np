@@ -9,6 +9,7 @@ import "../styles/groups.css";
 import HeaderBar from "../components/headerBar";
 import GroupMembership from "../components/groupMembership";
 import { changeColor } from "../components/schoolChoose";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 class Groups extends React.Component {
   constructor(props) {
@@ -80,7 +81,7 @@ class Groups extends React.Component {
         />
         <div className="group-list">
           <Link to="/createGroup" className="create-group-button">
-            {fr.FORM_FIELDS.CREATE_GROUP}
+            <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_GROUP}
           </Link>
           {groups.map((group) => (
             <div className="group" key={group.id}>
