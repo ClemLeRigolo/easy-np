@@ -22,6 +22,10 @@ class eventCalendar extends React.Component {
       };
     }
 
+    handleViewChange = (view) => {
+      this.setState({ view });
+    };
+
     render() {
         const { authState, user } = this.props;
 
@@ -33,6 +37,13 @@ class eventCalendar extends React.Component {
         if (!this.state.eventsCollected) {
           getEvents().then((events) => {
             console.log("events", events);
+            //for each event
+            //change the color
+            for (let i = 0; i < Object.values(Object.values(events)[0]).length; i++) {
+              Object.values(Object.values(events)[0])[i].start = new Date(Object.values(Object.values(events)[0])[i].start);
+              Object.values(Object.values(events)[0])[i].end = new Date(Object.values(Object.values(events)[0])[i].end);
+            }
+
             this.setState({ events: Object.values(Object.values(events)[0]), eventsCollected: true });
             console.log("events", this.state.events);
           });
@@ -40,27 +51,20 @@ class eventCalendar extends React.Component {
         }
 
         moment.locale('fr'); // Définir la locale de moment sur le français
-
-        const events = [
-            //Dummy events pour l'instant
-            {
-                start: new Date(2024, 2, 15, 10, 0), // Date et heure de début
-                end: new Date(2024, 2, 15, 12, 0), // Date et heure de fin
-                title: 'Soirée étudiante (yaura de la meuf)', // Titre de l'événement
-            },
-        ];
        
         return (
-            <div>
-                <HeaderBar search={""} setSearch={""} showMenu={false} setShowMenu={false} uid={user.uid} />
-                <Calendar
-                    localizer={localizer}
-                    events={this.state.events}
-                    startAccessor="start"
-                    endAccessor="end"
-                    style={{ height: 500 }} // Ajuste la hauteur selon tes besoins
-                />
-            </div>
+          <div>
+            <HeaderBar search={""} setSearch={""} showMenu={false} setShowMenu={false} uid={user.uid} />
+            <div>{this.state.view}</div>
+            <Calendar
+              localizer={localizer}
+              events={this.state.events}
+              startAccessor="start"
+              endAccessor="end"
+              style={{ height: 500 }} // Ajuste la hauteur selon tes besoins
+              onView={this.handleViewChange}
+            />
+          </div>
         );
     }
 }
