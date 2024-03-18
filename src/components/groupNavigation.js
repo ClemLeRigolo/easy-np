@@ -24,12 +24,12 @@ const GroupNavigation = () => {
   }, []);
 
   return (
+    
     <div className="group-navigation">
       {userGroups.map((group) => (
         <Link to={`/group/${group.id}`} key={group.id}>
-        <div key={group.id} className="group-nav-item">
-          <FaUserFriends className="group-nav-icon" />
-          <span className="group-nav-link">{group.name}</span>
+        <div key={group.id} className="group-header">
+          <h1 className="group-nav-link"> {group.name}</h1>
         </div>
         </Link>
       ))}

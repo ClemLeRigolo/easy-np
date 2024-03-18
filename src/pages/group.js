@@ -210,12 +210,13 @@ class Group extends React.Component {
           uid={user.uid}
           />
         <div className="main-container">
-          <ChannelNavigation gid={this.state.gid} />
-        <div className="group-content">
+          <div className="nav-container">
+            <ChannelNavigation gid={this.state.gid} />
+          </div>
+        <div className="post-list">
         <h1>{this.state.group.name}</h1>
         <p>{this.state.group.description}</p>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
-          <div className="home">
 
 
         {this.state.posts && this.state.posts.map((post, index) => (
@@ -228,7 +229,6 @@ class Group extends React.Component {
                     commentCount={post.commentCount} 
                     />
         ))} 
-        </div>
 
           </div>
         </div>
