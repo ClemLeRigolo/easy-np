@@ -7,6 +7,7 @@ import Comment from "./comment";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
 import DOMPurify from "dompurify";
+import Loader from "./loader";
 
 class Post extends React.Component {
   constructor(props) {
@@ -16,6 +17,7 @@ class Post extends React.Component {
       commentInputValue: "",
       expandedComments: false, // État pour gérer l'affichage des commentaires
       post: this.props.post,
+      commentCollected: false,
     };
   }
 
@@ -94,7 +96,7 @@ class Post extends React.Component {
   };
 
   componentDidMount() {
-    const { post } = this.props;
+    const { post } = this.state;
   
     // Récupérer les commentaires à partir de la source de données (par exemple, Firebase)
     getComments(post.id)
@@ -140,6 +142,8 @@ class Post extends React.Component {
     const post = this.state.post;
     const comments = post.comments || [];
 
+    console.log(comments);
+
 
     if (post.likes !== this.props.post.likes) {
       this.setState((prevState) => ({
@@ -152,6 +156,40 @@ class Post extends React.Component {
 
     if (post.likes !== undefined && post.likes.hasOwnProperty(getCurrentUser().uid)) {
       isLiked = true;
+    }
+
+    //on vérifie que le premier élément de comment a un attribut school défini
+
+    if (post.comments && post.comments.length > 0 && !post.comments[0].hasOwnProperty("school")) {
+      getComments(post.id)
+      .then((comments) => {
+        const promises = comments.map((comment) => {
+          // On boucle sur les commentaires pour rajouter le nom d'utilisateur
+          if (comment) {
+            return getUserDataById(comment.user).then((user) => {
+              comment.author = user.name + " " + user.surname;
+              comment.profileImg = user.profileImg;
+              comment.school = user.school;
+              return comment;
+            });
+          }
+        });
+        return Promise.all(promises);
+      })
+      .then((updatedComments) => {
+        this.setState((prevState) => ({
+          commentCollected: true,
+          post: {
+            ...prevState.post,
+            comments: updatedComments,
+            commentCount: updatedComments.length,
+          },
+        }));
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des commentaires :", error);
+      });
+      return <Loader />;
     }
 
     return (
