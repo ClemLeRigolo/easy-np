@@ -63,6 +63,8 @@ class Post extends React.Component {
           if (comment) {
             return getUserDataById(comment.user).then((user) => {
               comment.author = user.name + " " + user.surname;
+              comment.profileImg = user.profileImg;
+              comment.school = user.school;
               return comment;
             });
           }
@@ -103,6 +105,7 @@ class Post extends React.Component {
             return getUserDataById(comment.user).then((user) => {
               comment.author = user.name + " " + user.surname;
               comment.profileImg = user.profileImg;
+              comment.school = user.school;
               return comment;
             });
           }
@@ -166,7 +169,7 @@ class Post extends React.Component {
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
         </div>
-        {post.title && <div className="post-title"><h1>{post.title}</h1></div>}
+        {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>
         <div className="post-footer">
           <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>

@@ -45,7 +45,7 @@ class ChannelNavigation extends React.Component {
         </Link>
         {saloons && saloons.map((saloon) => (
           console.log("saloon", saloon),
-          <Link to={`/group/${gid}/${saloon.id}`} activeClassName="active">
+          <Link to={`/group/${gid}/saloon/${saloon.id}`} activeClassName="active">
             <div className="group-nav-item">
             {saloon.name}
             </div>
