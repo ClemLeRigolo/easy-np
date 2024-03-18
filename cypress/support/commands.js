@@ -37,4 +37,11 @@ Cypress.Commands.add("signup", (firstName, name, email, password1, password2) =>
   cy.get("form").find("input[name='retype']").type(password2);
 });
 
+Cypress.Commands.add("getPostByAuthor", (author) => {
+  return cy.contains(author).parent(".post")
+});
 
+
+Cypress.Commands.add("getPostByText", (text) => {
+  return cy.contains(text).parents(".post")
+});
