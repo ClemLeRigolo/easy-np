@@ -1,6 +1,12 @@
 #!/bin/bash
 
+lint="build_report.txt"
+build="build_report.txt"
 cypress="cypress_report.txt"
+
+lint_image="lint.svg"
+cypress_image="cypress.svg"
+build_image="build.svg"
 
 # Bash file that read cypress_report.txt
 # and generate badges
@@ -37,12 +43,39 @@ extract() {
   fi
   color=$(number_to_color "$passed")
   echo $color
-  anybadge -o -l "TESTS" -v "$passed%" -c "$color" -f "tests.svg"
+  anybadge -o -l "TESTS" -v "$passed%" -c "$color" -f "$cypress_image"
 }
+
+badge_lint() {
+  count=$(grep "Line" "$lint" | wc -l)
+  color="green"
+  text="passed"
+  if [ $count -gt 0 ]
+  then
+    color="red"
+    text="$count errors"
+  fi
+  anybadge -o -l "LINT" -v "$text" -c "$color" -f "$lint_image"
+}
+
 
 if [ -f $cypress ]
 then
   extract
 else
-  anybadge -o -l "TESTS" -v "Failed to start" -c "red" -f "tests.svg"
+  anybadge -o -l "TESTS" -v "Failed to start" -c "red" -f "$cypress_image"
 fi
+
+
+  echo hello
+if [ -f "$lint" ] && ! grep -q "Failed to compile" $build
+then
+  echo hello2
+  anybadge -o -l "BUILD" -v "ok" -c "green" -f "$build_image"
+  badge_lint
+else
+  echo hello3
+  anybadge -o -l "BUILD" -v "Failed to build" -c "red" -f "$build_image"
+  anybadge -o -l "LINT" -v "Failed to build" -c "red" -f "$lint_image"
+fi
+

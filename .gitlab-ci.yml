@@ -24,11 +24,11 @@ building:
   image: lxsnsn/gitlab-ci-easynp
   script:
     - npm i --prefer-offline
-    - npm run build > lint_report.txt
+    - npm run build > build_report.txt
   artifacts:
     when: always
     paths:
-      - lint_report.txt
+      - build_report.txt
       - build/
   cache:
     key: ${CI_COMMIT_REF_SLUG}
@@ -69,6 +69,5 @@ badges:
     when: always
     paths:
       - "tests.svg"
-      - "deploy.svg"
   when: always
 
