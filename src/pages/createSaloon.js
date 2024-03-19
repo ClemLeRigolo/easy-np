@@ -9,6 +9,7 @@ import HeaderBar from "../components/headerBar";
 import moment from "moment";
 import "moment/locale/fr";
 import { withRouter } from "react-router-dom";
+import { replaceLinksAndTags, containsHtml } from "../components/postInput";
 
 class CreateSaloon extends React.Component {
   constructor(props) {
@@ -35,6 +36,14 @@ class CreateSaloon extends React.Component {
     event.preventDefault();
     const { saloonName, description, writePermission } = this.state;
     const gid = this.props.match.params.gid;
+
+    const finalDescription = replaceLinksAndTags(description);
+
+    if (containsHtml(finalDescription)) {
+      this.setState({ hasHtmlError: true });
+      return; // Arrêter le traitement si du HTML est détecté
+    }
+    
     addSaloon(saloonName, description, writePermission, gid)
         .then(() => {
             console.log("Saloon created successfully");
@@ -92,7 +101,9 @@ class CreateSaloon extends React.Component {
                 value={description}
                 onChange={this.handleInputChange}
                 required
+                style={{ whiteSpace: "pre-wrap" }}
               ></textarea>
+              {this.state.hasHtmlError && <p className="error-message">{fr.FORM_FIELDS.NO_HTML}</p>}
             </div>
             <div className="form-group">
             <label htmlFor="write-permission">{fr.FORM_FIELDS.WRITE_PERMISSION}:</label>

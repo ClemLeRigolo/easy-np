@@ -4,10 +4,8 @@ import Info3 from "../images/banner.jpg"
 import {LiaEdit} from "react-icons/lia"
 
 import {IoCameraOutline} from "react-icons/io5"
-import {BiLogOut} from "react-icons/bi"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { Link } from 'react-router-dom';
 import { postProfileImg } from '../utils/firebase'
 import fr from '../utils/i18n'
 
@@ -106,7 +104,11 @@ const Info = ({userPostData,
     }
   }
 
-  const [openEdit,setOpenEdit] =useState(false)
+  const setOpenEdit=(value)=>{
+    console.log(value)
+  }
+
+  /*const [openEdit,setOpenEdit] =useState(false)
 
   const [countryName,setCountryName]= useState("")
   const [jobName,setJobName]= useState("")
@@ -128,7 +130,7 @@ const Info = ({userPostData,
 
     setModelDetails(obj)
     setOpenEdit(false)
-  }
+  }*/
 
   console.log(profileImg)
 

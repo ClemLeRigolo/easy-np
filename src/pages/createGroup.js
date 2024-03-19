@@ -2,11 +2,12 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { createGroup, getGroups } from "../utils/firebase"; // Importez la fonction pour créer un groupe
+import { createGroup } from "../utils/firebase"; // Importez la fonction pour créer un groupe
 
 import fr from "../utils/i18n";
 import "../styles/createGroup.css";
 import HeaderBar from "../components/headerBar";
+import { replaceLinksAndTags, containsHtml } from "../components/postInput";
 
 class CreateGroup extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ class CreateGroup extends React.Component {
       visibility: "public",
       school: "",
       redirect: false,
+      hasHTMLerror: false,
     };
   }
 
@@ -29,6 +31,14 @@ class CreateGroup extends React.Component {
     event.preventDefault();
     const { groupName, visibility, school, description } = this.state;
     // Logique de création du groupe
+    const finalDescription = replaceLinksAndTags(description);
+    console.log("finalDescription", finalDescription);
+
+    if (containsHtml(finalDescription)) {
+      this.setState({ hasHtmlError: true });
+      return; // Arrêter le traitement si du HTML est détecté
+    }
+
     createGroup(groupName, visibility, school, description)
       .then(() => {
         console.log("Group created successfully");
@@ -78,7 +88,9 @@ class CreateGroup extends React.Component {
                 onChange={this.handleInputChange}
                 required
                 className="description-input"
+                style={{ whiteSpace: "pre-wrap" }}
               ></textarea>
+              {this.state.hasHtmlError && <p className="error-message">{fr.FORM_FIELDS.NO_HTML}</p>}
             </div>
             <div className="form-group">
               <label htmlFor="visibility">{fr.FORM_FIELDS.VISIBILITY}:</label>

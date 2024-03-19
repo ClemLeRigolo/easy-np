@@ -1,12 +1,6 @@
 import React from "react";
 import Info from './info'
 
-import Profile from "../images/avatar.png"
-import img1 from "../images/banner.jpg"
-import img2 from "../images/banner.jpg"
-import img3 from "../images/banner.jpg"
-import { useEffect, useState } from 'react'
-
 //import ProfileInputPost from './ProfileComponents/ProfileInputPost'
 
 const ProfileMiddle = ({following,
@@ -23,13 +17,13 @@ const ProfileMiddle = ({following,
                         setModelDetails,
                         canModify}) => {
 
-  const [userPostData ,setUserPostData] =useState(
+  /*const [userPostData ,setUserPostData] =useState(
     [
       //réupérer les données de la base de données
     ]
   )
   const [body,setBody] =useState("")
-  const [importFile,setImportFile] =useState("")
+  //const [importFile,setImportFile] =useState("")
   
  
 
@@ -74,9 +68,9 @@ const ProfileMiddle = ({following,
        setSearchResults(searchData)
        
     },[userPostData,search])
-
+*/
    
-
+  const userPostData = [];
     
 
   return (

@@ -3,6 +3,38 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 import "../styles/postInput.css";
 import DOMPurify from "dompurify";
 
+export const containsHtml = (content) => {
+  const sanitizedContent = DOMPurify.sanitize(content, { ALLOWED_TAGS: [] });
+  return sanitizedContent !== content;
+};
+
+export const replaceLinksAndTags = (content) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  console.log("content", content);
+
+  //const parser = new DOMParser();
+  //const doc = parser.parseFromString(content, "text/html");
+
+  //console.log("doc", doc);
+  //const plainText = doc.body.textContent;
+
+  //console.log("plainText", plainText);
+
+  const contentWithLineBreaks = content.replace(/\n/g, "<br>");
+
+  /*const contentWithLinks = contentWithLineBreaks.replace(urlRegex, (url) => {
+    return `${url}`;
+  });*/
+
+  //replace link by a balise a
+  const contentWithLinks = contentWithLineBreaks.replace(urlRegex, (url) => {
+    return `<a href="${url}" target="_blank">${url}</a>`;
+  });
+
+  return contentWithLinks;
+};
+
 export default function PostInput({ handlePostSubmit }) {
   const [postContent, setPostContent] = useState("");
   const [validationError, setValidationError] = useState("");
@@ -31,38 +63,6 @@ export default function PostInput({ handlePostSubmit }) {
     } else {
       setValidationError("Le contenu du post ne peut pas être vide.");
     }
-  };
-
-  const containsHtml = (content) => {
-    const sanitizedContent = DOMPurify.sanitize(content, { ALLOWED_TAGS: [] });
-    return sanitizedContent !== content;
-  };
-
-  const replaceLinksAndTags = (content) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-
-    console.log("content", content);
-
-    const parser = new DOMParser();
-    //const doc = parser.parseFromString(content, "text/html");
-
-    //console.log("doc", doc);
-    //const plainText = doc.body.textContent;
-
-    //console.log("plainText", plainText);
-
-    const contentWithLineBreaks = content.replace(/\n/g, "<br>");
-
-    /*const contentWithLinks = contentWithLineBreaks.replace(urlRegex, (url) => {
-      return `${url}`;
-    });*/
-
-    //replace link by a balise a
-    const contentWithLinks = contentWithLineBreaks.replace(urlRegex, (url) => {
-      return `<a href="${url}" target="_blank">${url}</a>`;
-    });
-
-    return contentWithLinks;
   };
 
   return (

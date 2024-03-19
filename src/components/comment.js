@@ -72,7 +72,6 @@ class Comment extends React.Component {
   };
 
   componentDidMount() {
-    const { replyContent } = this.state;
     const { commentKey, postId } = this.props;
     console.log(commentKey)
     // Vous pouvez implémenter ici la logique pour publier la réponse

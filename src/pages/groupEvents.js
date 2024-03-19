@@ -7,10 +7,8 @@ import { likePost, getUserDataById, getGroupById, getEventsByGroup } from "../ut
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import GroupNavigation from "../components/groupNavigation";
 import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
-import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
@@ -148,9 +146,11 @@ class GroupEvent extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      //this.setState({ gid: this.props.match.params.gid });
-      this.state.gid = this.props.match.params.gid;
-      getEventsByGroup(this.state.gid).then(
+      ;
+      console.log("this.state.gid", this.state.gid,)
+      //this.state.gid = this.props.match.params.gid;
+      this.setState({ gid: this.props.match.params.gid })
+      getEventsByGroup(this.props.match.params.gid).then(
         (querySnapshot) => {
           const posts = [];
           const promises = [];
@@ -178,7 +178,7 @@ class GroupEvent extends React.Component {
                 this.setState({ posts });
             });
         });
-        getGroupById(this.state.gid).then((group) => {
+        getGroupById(this.props.match.params.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
             }
         );
@@ -202,7 +202,9 @@ class GroupEvent extends React.Component {
           uid={user.uid}
           />
         <div className="main-container">
-        <ChannelNavigation gid={this.state.gid} />
+        <div className="nav-container">
+          <ChannelNavigation gid={this.state.gid} />
+        </div>
         <div className="group-content">
         <h1>{this.state.group.name}</h1>
         <p>{this.state.group.description}</p>

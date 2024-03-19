@@ -2,13 +2,14 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { createEvent, getEvents } from "../utils/firebase";
+import { createEvent } from "../utils/firebase";
 import fr from "../utils/i18n";
 import "../styles/createEvent.css";
 import HeaderBar from "../components/headerBar";
 import moment from "moment";
 import "moment/locale/fr";
 import { withRouter } from "react-router-dom";
+import { replaceLinksAndTags, containsHtml } from "../components/postInput";
 
 class CreateEvent extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class CreateEvent extends React.Component {
       endTime: "",
       theme: "",
       redirect: false,
+      hasHtmlError: false,
     };
   }
 
@@ -40,7 +42,15 @@ class CreateEvent extends React.Component {
     const startDatetime = new Date(`${startDate}T${startTime}`);
     const endDatetime = new Date(`${endDate}T${endTime}`);
     const gid = this.props.match.params.gid;
-    createEvent(title, startDatetime, endDatetime, description, theme, gid)
+    const finalDescription = replaceLinksAndTags(description);
+    console.log("finalDescription", finalDescription);
+
+    if (containsHtml(finalDescription)) {
+      this.setState({ hasHtmlError: true });
+      return; // Arrêter le traitement si du HTML est détecté
+    }
+
+    createEvent(title, startDatetime, endDatetime, finalDescription, theme, gid)
       .then(() => {
         console.log("Event created successfully");
         this.setState({ redirect: true });
@@ -89,7 +99,9 @@ class CreateEvent extends React.Component {
                 value={description}
                 onChange={this.handleInputChange}
                 required
+                style={{ whiteSpace: "pre-wrap" }}
               ></textarea>
+              {this.state.hasHtmlError && <div className="error-message">{fr.FORM_FIELDS.NO_HTML}</div>}
             </div>
             <div className="form-group">
               <label htmlFor="event-start-date">{fr.FORM_FIELDS.EVENT_START_DATE}:</label>

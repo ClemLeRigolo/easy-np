@@ -7,7 +7,6 @@ import { likePost, getUserDataById, getPostBySaloon, newPost, getSaloonById, get
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import GroupNavigation from "../components/groupNavigation";
 import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
@@ -161,10 +160,11 @@ class Saloon extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      //this.setState({ gid: this.props.match.params.gid });
-      this.state.gid = this.props.match.params.gid;
-      this.state.sid = this.props.match.params.sid;
-      getPostBySaloon(this.state.gid + this.state.sid).then(
+      this.setState({ gid: this.props.match.params.gid });
+      //this.state.gid = this.props.match.params.gid;
+      this.setState({ sid: this.props.match.params.sid });
+      //this.state.sid = this.props.match.params.sid;
+      getPostBySaloon(this.props.match.params.gid + this.props.match.params.sid).then(
         (querySnapshot) => {
           const posts = [];
           const promises = [];
@@ -188,11 +188,11 @@ class Saloon extends React.Component {
                 this.setState({ posts });
             });
         });
-        getSaloonById(this.state.sid).then((saloon) => {
+        getSaloonById(this.props.match.params.sid).then((saloon) => {
             this.setState({ saloon: Object.values(saloon)[0] });
             }
         );
-        getGroupById(this.state.gid).then((group) => {
+        getGroupById(this.props.match.params.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
             }
         );
@@ -216,9 +216,12 @@ class Saloon extends React.Component {
           uid={user.uid}
           />
         <div className="main-container">
+          <div className="nav-container">
           <ChannelNavigation gid={this.state.gid} />
+          </div>
         <div className="group-content">
         <h1>{this.state.saloon.name}</h1>
+        <p dangerouslySetInnerHTML={{ __html: this.state.saloon.description }}></p>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
           <div className="home">
 

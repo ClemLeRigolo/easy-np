@@ -4,7 +4,6 @@ import ProfileMiddle from '../components/profileMiddle'
 // import Right from '../../Components/RightSide/Right'
 import HeaderBar from '../components/headerBar'
 import "../styles/profile.css"
-import ProfileImg from "../images/avatar.png"
 import { authStates, withAuth } from "../components/auth";
 import { getPostByUser, likePost, getUserDataById } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
@@ -131,13 +130,14 @@ class Profile extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-        const { uid } = this.props.match.params;
-        this.state.uid = uid;
-        getUserDataById(uid)
+        //this.state.uid = uid;
+        //this.setState({uid: this.props.match.params.uid});
+        getUserDataById(this.props.match.params.uid)
         .then((userData) => {
           console.log("userData", userData);
           this.setState({
             userData: userData,
+            uid: this.props.match.params.uid,
           });
           if (userData.profileImg) {
             this.setProfileImg(userData.profileImg);
@@ -145,7 +145,7 @@ class Profile extends React.Component {
             this.setProfileImg(require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`)); // Utilisez l'image par défaut s'il n'y a pas d'URL de profil personnalisée
           }
           this.setProfileData(userData);
-          getPostByUser(uid).then(
+          getPostByUser(this.props.match.params.uid).then(
             (querySnapshot) => {
               const posts = [];
         
@@ -181,7 +181,13 @@ class Profile extends React.Component {
             currentUserData: userData,
           });
           if (!this.state.currentUserData.profileImg) {
-            this.state.currentUserData.profileImg = require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`);
+            //this.state.currentUserData.profileImg = require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`);
+            this.setState({
+              currentUserData: {
+                ...this.state.currentUserData,
+                profileImg: require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`),
+              },
+            });
           }
           changeColor(userData.school);
         });
@@ -199,7 +205,9 @@ class Profile extends React.Component {
           uid={user.uid}
           />
         <div className="main-container">
+          <div className="nav-container">
         <GroupNavigation />
+        </div>
           <div className="home">
             {/* <Left 
             following={following}

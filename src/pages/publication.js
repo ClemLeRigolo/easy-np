@@ -2,15 +2,13 @@ import React from "react";
 import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, getPostById } from "../utils/firebase";
+import { likePost, getUserDataById, getPostById } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import ChannelNavigation from "../components/channelNavigation";
 import GroupNavigation from "../components/groupNavigation";
 import { withRouter } from 'react-router-dom';
-import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
 
 class Publication extends React.Component {
@@ -98,8 +96,9 @@ class Publication extends React.Component {
         return <Redirect to="/verify"></Redirect>;
       }
       //this.setState({ gid: this.props.match.params.gid });
-      this.state.pid = this.props.match.params.pid;
-      getPostById(this.state.pid).then((post) => {
+      //this.state.pid = this.props.match.params.pid;
+      this.setState({ pid: this.props.match.params.pid });
+      getPostById(this.props.match.params.pid).then((post) => {
         console.log("post", post);
         post = Object.values(post)[0];
           getUserDataById(post.user).then((userData) => {
@@ -112,6 +111,10 @@ class Publication extends React.Component {
       return <Loader />;
     }
 
+    if (!this.state.post) {
+        return <Loader />;
+        }
+
     return (
       <div className='interface'>
           <HeaderBar
@@ -123,7 +126,9 @@ class Publication extends React.Component {
           uid={user.uid}
           />
         <div className="main-container">
-          <GroupNavigation />
+        <div className="nav-container">
+            <GroupNavigation />
+        </div>
         <div className="group-content">
             <Post 
                 post={this.state.post} 

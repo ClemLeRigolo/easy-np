@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaLock, FaUnlock } from "react-icons/fa";
+import { FaLock } from "react-icons/fa";
 import { isUserInGroup, joinGroup, leaveGroup } from "../utils/firebase";
 import "../styles/groupMembership.css";
 

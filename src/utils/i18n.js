@@ -43,6 +43,7 @@ export const fr = {
     CREATE_SALOON: "Créer un salon",
     SALOON_NAME: "Nom du salon",
     SALOON_DESCRIPTION: "Description du salon",
+    NO_HTML: "Le message ne peut pas contenir de HTML",
   },
 
   ERRORS: {
