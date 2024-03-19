@@ -42,7 +42,7 @@ extract() {
     echo "$passed"
   fi
   color=$(number_to_color "$passed")
-  echo $color
+  echo "cypress : $passed $color"
   anybadge -o -l "TESTS" -v "$passed%" -c "$color" -f "$cypress_image"
 }
 
@@ -55,6 +55,7 @@ badge_lint() {
     color="red"
     text="$count errors"
   fi
+  echo "lint : $text $color"
   anybadge -o -l "LINT" -v "$text" -c "$color" -f "$lint_image"
 }
 
@@ -67,14 +68,11 @@ else
 fi
 
 
-  echo hello
 if [ -f "$lint" ] && ! grep -q "Failed to compile" $build
 then
-  echo hello2
   anybadge -o -l "BUILD" -v "ok" -c "green" -f "$build_image"
   badge_lint
 else
-  echo hello3
   anybadge -o -l "BUILD" -v "Failed to build" -c "red" -f "$build_image"
   anybadge -o -l "LINT" -v "Failed to build" -c "red" -f "$lint_image"
 fi
