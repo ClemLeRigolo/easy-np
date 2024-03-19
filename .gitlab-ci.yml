@@ -1,6 +1,5 @@
 stages:
   - pre
-  - build
   - test
   - badges
 
@@ -15,26 +14,6 @@ prepare:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
       - node_modules/
-
-
-building:
-  stage: build
-  tags:
-    - docker
-  image: lxsnsn/gitlab-ci-easynp
-  script:
-    - npm i --prefer-offline
-    - npm run build > lint_report.txt
-  artifacts:
-    when: always
-    paths:
-      - lint_report.txt
-      - build/
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - node_modules/
-
       
 testing:
   stage: test
@@ -43,15 +22,15 @@ testing:
   image: lxsnsn/gitlab-ci-easynp
   script:
     - npm i --prefer-offline
+    - npm run build > build_report.txt
     - npx firebase emulators:start --import bdd2 --token $FIREBASE_LOGIN &
     # wait for firebase to init emulators
     - sleep 45
     - npx cypress run > cypress_report.txt
-  dependencies:
-    - building
   artifacts:
     when: always
     paths:
+      - build_report.txt
       - cypress_report.txt
 
 badges:
@@ -63,12 +42,12 @@ badges:
     - pip install anybadge
     - bash generateBadges.sh
   dependencies:
-    - building
     - testing
   artifacts:
     when: always
     paths:
-      - "tests.svg"
-      - "deploy.svg"
+      - "lint.svg"
+      - "cypress.svg"
+      - "build.svg"
   when: always
 

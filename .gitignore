@@ -14,6 +14,7 @@ package-lock.json
 
 # Removing examples from cypress module
 cypress/e2e/2*/
+cypress/screenshots/
 
 # Removing debug files from firebase
 database-debug.log
@@ -21,3 +22,4 @@ ui-debug.log
 
 # Removing python virtual env
 venv/
+
