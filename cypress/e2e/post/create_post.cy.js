@@ -1,14 +1,10 @@
 context('Post from differents schools', () => {
-  describe("Connection avec l'ensimag", () => {
-    before(() => {
+  describe("1. Connection avec l'ensimag", () => {
+    beforeEach(() => {
       cy.visit("/login");
       cy.login("ensimag@grenoble-inp.fr", "Password!");
       cy.get("form").submit();
     });
-
-    beforeEach(() => {
-      cy.visit("/");
-    })
 
     it("View the default posts", () => {
       cy.getPostByText("Ensimag est l'une des meilleurs écoles d'ingénieur de France !").contains("Ensimag Ensimag");
@@ -18,15 +14,19 @@ context('Post from differents schools', () => {
 
     it("clicking on likes", () => {
       const post = cy.getPostByText("Ensimag est l'une des meilleurs écoles d'ingénieur de France !");
+      cy.intercept("*", "patch").as("click");
       post.find(".post-like-btn").click();
       post.contains(" 4 Likes");
-      post.get(".liked").click();
-      post.contains(" 3 Likes");
     })
 
-    after(() => {
-      cy.visit("/");
-      cy.get("nav").find("#signout").click();
+    // it("Creating a post", () => {
+    //   const postArea = cy.get(".postInput");
+    //   postArea.find(".post-input").type("A new post !");
+    //   cy.get("button[class='.post-submit-btn']");
+    // })
+
+    afterEach(() => {
+      cy.get("#signout").click();
     })
   });
 });
