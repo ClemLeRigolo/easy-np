@@ -59,6 +59,17 @@ badge_lint() {
   anybadge -o -l "LINT" -v "$text" -c "$color" -f "$lint_image"
 }
 
+badge_build() {
+  text="ok"
+  color="green"
+  if grep -q "Failed to compile" $build
+  then
+    color="red"
+    text="failed"
+  fi
+  anybadge -o -l "BUILD" -v "$text" -c "$color" -f "$build"  
+}
+
 
 if [ -f $cypress ]
 then
@@ -67,13 +78,6 @@ else
   anybadge -o -l "TESTS" -v "Failed to start" -c "red" -f "$cypress_image"
 fi
 
-
-if [ -f "$lint" ] && ! grep -q "Failed to compile" $build
-then
-  anybadge -o -l "BUILD" -v "ok" -c "green" -f "$build_image"
-  badge_lint
-else
-  anybadge -o -l "BUILD" -v "Failed to build" -c "red" -f "$build_image"
-  anybadge -o -l "LINT" -v "Failed to build" -c "red" -f "$lint_image"
-fi
+badge_lint
+badge_build
 
