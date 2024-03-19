@@ -42,7 +42,6 @@ badges:
     - pip install anybadge
     - bash generateBadges.sh
   dependencies:
-    - building
     - testing
   artifacts:
     when: always
