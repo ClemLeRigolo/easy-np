@@ -1,11 +1,15 @@
 import React from "react";
 import "../styles/post.css";
 import { getCurrentUser, addComment, getComments, getUserDataById } from "../utils/firebase";
+import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
+import { FaShareSquare } from "react-icons/fa";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
+import DOMPurify from "dompurify";
+import Loader from "./loader";
 
 class Post extends React.Component {
   constructor(props) {
@@ -15,8 +19,29 @@ class Post extends React.Component {
       commentInputValue: "",
       expandedComments: false, // État pour gérer l'affichage des commentaires
       post: this.props.post,
+      commentCollected: false,
     };
   }
+
+  handleShareClick = () => {
+    const { post } = this.state;
+    const postUrl = `/post/${post.id}`; // Remplacez par l'URL réelle vers le post
+    //On récupère l'url de base
+    const baseUrl = window.location.origin;
+    //On enlève tout ce qu'il y a après le premier /
+    const url = baseUrl.split("/")[0] + baseUrl.split("/")[1] + "//" + baseUrl.split("/")[2];
+    const finalUrle = url + postUrl;
+  
+    navigator.clipboard.writeText(finalUrle)
+      .then(() => {
+        console.log("URL copiée avec succès :", finalUrle);
+        // Ajoutez ici une logique supplémentaire si nécessaire, par exemple, afficher un message de succès
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la copie de l'URL :", error);
+        // Ajoutez ici une logique supplémentaire si nécessaire, par exemple, afficher un message d'erreur
+      });
+  };
 
   handleLikeClick = () => {
     // Logique de gestion du clic sur le bouton Like
@@ -62,6 +87,8 @@ class Post extends React.Component {
           if (comment) {
             return getUserDataById(comment.user).then((user) => {
               comment.author = user.name + " " + user.surname;
+              comment.profileImg = user.profileImg;
+              comment.school = user.school;
               return comment;
             });
           }
@@ -91,7 +118,7 @@ class Post extends React.Component {
   };
 
   componentDidMount() {
-    const { post } = this.props;
+    const { post } = this.state;
   
     // Récupérer les commentaires à partir de la source de données (par exemple, Firebase)
     getComments(post.id)
@@ -102,6 +129,7 @@ class Post extends React.Component {
             return getUserDataById(comment.user).then((user) => {
               comment.author = user.name + " " + user.surname;
               comment.profileImg = user.profileImg;
+              comment.school = user.school;
               return comment;
             });
           }
@@ -136,7 +164,6 @@ class Post extends React.Component {
     const post = this.state.post;
     const comments = post.comments || [];
 
-
     if (post.likes !== this.props.post.likes) {
       this.setState((prevState) => ({
         post: {
@@ -150,6 +177,40 @@ class Post extends React.Component {
       isLiked = true;
     }
 
+    //on vérifie que le premier élément de comment a un attribut school défini
+
+    if (post.comments && post.comments.length > 0 && !post.comments[0].hasOwnProperty("school")) {
+      getComments(post.id)
+      .then((comments) => {
+        const promises = comments.map((comment) => {
+          // On boucle sur les commentaires pour rajouter le nom d'utilisateur
+          if (comment) {
+            return getUserDataById(comment.user).then((user) => {
+              comment.author = user.name + " " + user.surname;
+              comment.profileImg = user.profileImg;
+              comment.school = user.school;
+              return comment;
+            });
+          }
+        });
+        return Promise.all(promises);
+      })
+      .then((updatedComments) => {
+        this.setState((prevState) => ({
+          commentCollected: true,
+          post: {
+            ...prevState.post,
+            comments: updatedComments,
+            commentCount: updatedComments.length,
+          },
+        }));
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des commentaires :", error);
+      });
+      return <Loader />;
+    }
+
     return (
       <div className="post">
         <div className="post-header">
@@ -161,10 +222,12 @@ class Post extends React.Component {
             )}
             <div>
               {post.username}
+              <div className="post-date">{formatPostTimestamp(post.timestamp)}</div>
             </div>
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
         </div>
+        {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>
         <div className="post-footer">
           <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>
@@ -172,6 +235,9 @@ class Post extends React.Component {
           </button>
           <button className="post-comment-btn" onClick={this.handleCommentClick}>
             <AiOutlineComment /> {post.commentCount} {post.commentCount > 1 ? fr.POSTS.COMMENTS : fr.POSTS.COMMENT}
+          </button>
+          <button className="post-share-btn" onClick={this.handleShareClick}>
+            <FaShareSquare /> {fr.POSTS.SHARE}
           </button>
         </div>
         {showCommentInput && (

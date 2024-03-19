@@ -36,6 +36,13 @@ export const fr = {
     EVENT_START_DATE: "Date de début de l'événement",
     EVENT_END_DATE: "Date de fin de l'événement",
     EVENT_THEME: "Type d'événement",
+    WRITE_PERMISSION: "Permission d'écriture",
+    SELECT_WRITE_PERMISSION: "Sélectionnez une permission d'écriture",
+    ADMIN_ONLY: "Admin seulement",
+    EVERYONE: "Tout le monde",
+    CREATE_SALOON: "Créer un salon",
+    SALOON_NAME: "Nom du salon",
+    SALOON_DESCRIPTION: "Description du salon",
   },
 
   ERRORS: {
@@ -61,6 +68,7 @@ export const fr = {
     LIKES: "Likes",
     PUBLISH: "Publier",
     ANSWER: "Répondre",
+    SHARE: "Partager",
   },
 
   GROUPS: {

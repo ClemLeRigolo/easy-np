@@ -2,7 +2,7 @@ import React from "react";
 import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById } from "../utils/firebase";
+import { likePost, getUserDataById, getGroupById, getEventsByGroup } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -14,6 +14,7 @@ import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 class GroupEvent extends React.Component {
 
@@ -74,23 +75,8 @@ class GroupEvent extends React.Component {
     this.setState({ postContent: event.target.value });
   };
 
-  handlePostSubmit = (postContent) => {
-
-    console.log("postContent", postContent);
-    // Enregistrez le post dans la base de données Firebase
-    newPost(postContent,this.state.gid)
-      .then(() => {
-        this.setState({ postContent: "" });
-        this.handlePostContentChange(); // Réinitialisez le champ de texte du post
-        this.updatePosts();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de l'enregistrement du post :", error);
-      });
-  };
-
   updatePosts = () => {
-    getPostByGroup(this.state.gid).then(
+    getEventsByGroup(this.state.gid).then(
       (querySnapshot) => {
         const posts = [];
         const promises = [];
@@ -164,13 +150,14 @@ class GroupEvent extends React.Component {
       }
       //this.setState({ gid: this.props.match.params.gid });
       this.state.gid = this.props.match.params.gid;
-      /*getPostByGroup(this.state.gid).then(
+      getEventsByGroup(this.state.gid).then(
         (querySnapshot) => {
           const posts = [];
           const promises = [];
 
           Object.values(querySnapshot).forEach((doc) => {
-            const promise = getUserDataById(doc.user).then((data) => {
+            doc.content = doc.description;
+            const promise = getUserDataById(doc.creator).then((data) => {
                 doc.username = data.name + " " + data.surname;
                 doc.school = data.school;
                 doc.profileImg = data.profileImg;
@@ -190,7 +177,7 @@ class GroupEvent extends React.Component {
                 console.log("posts", posts);
                 this.setState({ posts });
             });
-        });*/
+        });
         getGroupById(this.state.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
             }
@@ -219,10 +206,21 @@ class GroupEvent extends React.Component {
         <div className="group-content">
         <h1>{this.state.group.name}</h1>
         <p>{this.state.group.description}</p>
-          <div className="home">
-          <Link to={`/group/${this.state.gid}/createEvent`} className="create-group-button">
-            {fr.FORM_FIELDS.CREATE_EVENT}
+        <Link to={`/group/${this.state.gid}/createEvent`} className="create-group-button">
+            <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EVENT}
           </Link>
+          <div className="home">
+          
+          {this.state.posts && this.state.posts.map((post, index) => (
+                    <Post 
+                    key={index} 
+                    post={post} 
+                    handleLikeClick={() => this.handleLikeClick(index)}
+                    handleCommentClick={() => this.handleCommentClick(index)} 
+                    likeCount={post.likeCount} 
+                    commentCount={post.commentCount} 
+                    />
+        ))} 
         </div>
 
           </div>

@@ -119,11 +119,15 @@ class Comment extends React.Component {
 
     if (this.state.author === "bug") {
       getUserDataById(comment.user).then((userData) => {
-        console.log("userData", userData);
-        this.setState({ author: userData.name + " " + userData.surname });
+        this.setState({ 
+          author: userData.name + " " + userData.surname 
+        });
       });
       return <Loader />;
     }
+
+    console.log("comment", comment);
+    console.log("school", comment.school);
 
     return (
       <div className="comment">

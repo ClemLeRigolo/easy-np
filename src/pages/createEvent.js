@@ -61,7 +61,7 @@ class CreateEvent extends React.Component {
     }
 
     if (redirect) {
-      return <Redirect to="/events" />;
+      return <Redirect to={`/group/${this.props.match.params.gid}/events`} />;
     }
 
     return (

@@ -2,26 +2,27 @@ import React from "react";
 import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import GroupNavigation from "../components/groupNavigation";
 import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
 
-class Group extends React.Component {
+class Event extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
         gid: null,
+        eid: null,
         posts: [],
         postContent: "",
         group: null,
+        event: null,
         profileImg: null,
         dataCollected: false,
     };
@@ -153,12 +154,13 @@ class Group extends React.Component {
       return <Loader />;
     }
 
-    if ((this.props.match.params.gid !== this.state.gid)) {
+    if ((this.props.match.params.gid !== this.state.gid) || (this.props.match.params.eid !== this.state.eid)) {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
       //this.setState({ gid: this.props.match.params.gid });
       this.state.gid = this.props.match.params.gid;
+      this.state.eid = this.props.match.params.eid;
       getPostByGroup(this.state.gid).then(
         (querySnapshot) => {
           const posts = [];
@@ -190,10 +192,14 @@ class Group extends React.Component {
             this.setState({ group: Object.values(group)[0] });
             }
         );
+        getEventById(this.state.eid).then((event) => {
+            this.setState({ event: Object.values(event)[0] });
+            }
+        );
       return <Loader />;
     }
 
-    if (this.state.group === null) {
+    if (this.state.group === null || this.state.event === null) {
         return <Loader />;
     }
 
@@ -210,13 +216,12 @@ class Group extends React.Component {
           uid={user.uid}
           />
         <div className="main-container">
-          <div className="nav-container">
-            <ChannelNavigation gid={this.state.gid} />
-          </div>
-        <div className="post-list">
-        <h1>{this.state.group.name}</h1>
-        <p>{this.state.group.description}</p>
+          <ChannelNavigation gid={this.state.gid} />
+        <div className="group-content">
+        <h1>{this.state.event.title}</h1>
+        <p>{this.state.event.description}</p>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+          <div className="home">
 
 
         {this.state.posts && this.state.posts.map((post, index) => (
@@ -229,6 +234,7 @@ class Group extends React.Component {
                     commentCount={post.commentCount} 
                     />
         ))} 
+        </div>
 
           </div>
         </div>
@@ -237,4 +243,4 @@ class Group extends React.Component {
       }
 }
 
-export default withRouter(withAuth(Group));
+export default withRouter(withAuth(Event));

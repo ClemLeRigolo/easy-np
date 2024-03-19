@@ -2,7 +2,7 @@ import React from "react";
 import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById } from "../utils/firebase";
+import { likePost, getUserDataById, getPostBySaloon, newPost, getSaloonById, getGroupById } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -13,7 +13,7 @@ import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
 
-class Group extends React.Component {
+class Saloon extends React.Component {
 
   constructor(props) {
     super(props);
@@ -22,6 +22,7 @@ class Group extends React.Component {
         posts: [],
         postContent: "",
         group: null,
+        saloon: null,
         profileImg: null,
         dataCollected: false,
     };
@@ -76,7 +77,7 @@ class Group extends React.Component {
 
     console.log("postContent", postContent);
     // Enregistrez le post dans la base de données Firebase
-    newPost(postContent,this.state.gid)
+    newPost(postContent,this.state.gid + this.state.sid)
       .then(() => {
         this.setState({ postContent: "" });
         this.handlePostContentChange(); // Réinitialisez le champ de texte du post
@@ -88,7 +89,7 @@ class Group extends React.Component {
   };
 
   updatePosts = () => {
-    getPostByGroup(this.state.gid).then(
+    getPostBySaloon(this.state.gid + this.state.sid).then(
       (querySnapshot) => {
         const posts = [];
         const promises = [];
@@ -106,9 +107,12 @@ class Group extends React.Component {
         // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
         Promise.all(promises).then(() => {
             // Inverser la liste pour avoir les derniers posts en premier
+            console.log("posts", posts);
+            console.log("querySnapshot.size", querySnapshot);
             // Trie les posts selon leur ordre d'arrivée
             posts.sort((a, b) => a.timestamp - b.timestamp);
             posts.reverse();
+            console.log("posts", posts);
             this.setState({ posts });
           });
       });
@@ -153,13 +157,14 @@ class Group extends React.Component {
       return <Loader />;
     }
 
-    if ((this.props.match.params.gid !== this.state.gid)) {
+    if ((this.props.match.params.gid !== this.state.gid && this.state.gid !== null) || (this.props.match.params.sid !== this.state.sid && this.state.sid !== null)) {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
       //this.setState({ gid: this.props.match.params.gid });
       this.state.gid = this.props.match.params.gid;
-      getPostByGroup(this.state.gid).then(
+      this.state.sid = this.props.match.params.sid;
+      getPostBySaloon(this.state.gid + this.state.sid).then(
         (querySnapshot) => {
           const posts = [];
           const promises = [];
@@ -177,15 +182,16 @@ class Group extends React.Component {
           // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
             Promise.all(promises).then(() => {
                 // Inverser la liste pour avoir les derniers posts en premier
-                console.log("posts", posts);
-                console.log("querySnapshot.size", querySnapshot);
                 // Trie les posts selon leur ordre d'arrivée
                 posts.sort((a, b) => a.timestamp - b.timestamp);
                 posts.reverse();
-                console.log("posts", posts);
                 this.setState({ posts });
             });
         });
+        getSaloonById(this.state.sid).then((saloon) => {
+            this.setState({ saloon: Object.values(saloon)[0] });
+            }
+        );
         getGroupById(this.state.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
             }
@@ -210,13 +216,11 @@ class Group extends React.Component {
           uid={user.uid}
           />
         <div className="main-container">
-          <div className="nav-container">
-            <ChannelNavigation gid={this.state.gid} />
-          </div>
-        <div className="post-list">
-        <h1>{this.state.group.name}</h1>
-        <p>{this.state.group.description}</p>
+          <ChannelNavigation gid={this.state.gid} />
+        <div className="group-content">
+        <h1>{this.state.saloon.name}</h1>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+          <div className="home">
 
 
         {this.state.posts && this.state.posts.map((post, index) => (
@@ -229,6 +233,7 @@ class Group extends React.Component {
                     commentCount={post.commentCount} 
                     />
         ))} 
+        </div>
 
           </div>
         </div>
@@ -237,4 +242,4 @@ class Group extends React.Component {
       }
 }
 
-export default withRouter(withAuth(Group));
+export default withRouter(withAuth(Saloon));
