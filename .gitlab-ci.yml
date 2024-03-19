@@ -42,7 +42,7 @@ testing:
     - docker
   image: lxsnsn/gitlab-ci-easynp
   script:
-    - npm i .npm --prefer-offline
+    - npm i --prefer-offline
     - npx firebase emulators:start --import bdd2 --token $FIREBASE_LOGIN &
     # wait for firebase to init emulators
     - sleep 45
