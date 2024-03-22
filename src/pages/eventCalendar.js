@@ -4,10 +4,8 @@ import moment from 'moment';
 import 'moment/locale/fr'; // Importez la locale française de moment
 import HeaderBar from '../components/headerBar'
 import { authStates, withAuth } from "../components/auth";
-import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import { withRouter } from 'react-router-dom';
-import { changeColor } from "../components/schoolChoose";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getEvents } from "../utils/firebase";
 

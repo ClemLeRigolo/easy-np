@@ -158,10 +158,11 @@ class Event extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      //this.setState({ gid: this.props.match.params.gid });
-      this.state.gid = this.props.match.params.gid;
-      this.state.eid = this.props.match.params.eid;
-      getPostByGroup(this.state.gid).then(
+      this.setState({ gid: this.props.match.params.gid });
+      //this.state.gid = this.props.match.params.gid;
+      this.setState({ eid: this.props.match.params.eid });
+      //this.state.eid = this.props.match.params.eid;
+      getPostByGroup(this.props.match.params.gid).then(
         (querySnapshot) => {
           const posts = [];
           const promises = [];
@@ -188,11 +189,11 @@ class Event extends React.Component {
                 this.setState({ posts });
             });
         });
-        getGroupById(this.state.gid).then((group) => {
+        getGroupById(this.props.match.params.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
             }
         );
-        getEventById(this.state.eid).then((event) => {
+        getEventById(this.props.match.params.eid).then((event) => {
             this.setState({ event: Object.values(event)[0] });
             }
         );
@@ -216,10 +217,12 @@ class Event extends React.Component {
           uid={user.uid}
           />
         <div className="main-container">
+          <div className="nav-container">
           <ChannelNavigation gid={this.state.gid} />
+          </div>
         <div className="group-content">
         <h1>{this.state.event.title}</h1>
-        <p>{this.state.event.description}</p>
+        <p dangerouslySetInnerHTML={{ __html: this.state.event.description }}></p>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
           <div className="home">
 

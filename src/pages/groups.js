@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { Redirect, Link } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { getGroups, joinGroup, isUserInGroup, getUserDataById } from "../utils/firebase"; // Importez la fonction joinGroup
-import { FaLock, FaUnlock } from "react-icons/fa";
+import { getGroups, joinGroup, getUserDataById } from "../utils/firebase"; // Importez la fonction joinGroup
 import fr from "../utils/i18n";
 import "../styles/groups.css";
 import HeaderBar from "../components/headerBar";

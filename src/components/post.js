@@ -8,7 +8,6 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
-import DOMPurify from "dompurify";
 import Loader from "./loader";
 
 class Post extends React.Component {
@@ -91,6 +90,8 @@ class Post extends React.Component {
               comment.school = user.school;
               return comment;
             });
+          } else {
+            return null;
           }
         });
         return Promise.all(promises);
@@ -132,6 +133,8 @@ class Post extends React.Component {
               comment.school = user.school;
               return comment;
             });
+          } else {
+            return null;
           }
         });
         return Promise.all(promises);
@@ -191,6 +194,8 @@ class Post extends React.Component {
               comment.school = user.school;
               return comment;
             });
+          } else {
+            return null;
           }
         });
         return Promise.all(promises);

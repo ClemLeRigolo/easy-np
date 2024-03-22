@@ -7,7 +7,6 @@ import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById } from
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import GroupNavigation from "../components/groupNavigation";
 import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
@@ -157,9 +156,9 @@ class Group extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      //this.setState({ gid: this.props.match.params.gid });
-      this.state.gid = this.props.match.params.gid;
-      getPostByGroup(this.state.gid).then(
+      this.setState({ gid: this.props.match.params.gid });
+      //this.state.gid = this.props.match.params.gid;
+      getPostByGroup(this.props.match.params.gid).then(
         (querySnapshot) => {
           const posts = [];
           const promises = [];
@@ -186,7 +185,7 @@ class Group extends React.Component {
                 this.setState({ posts });
             });
         });
-        getGroupById(this.state.gid).then((group) => {
+        getGroupById(this.props.match.params.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
             }
         );
@@ -215,7 +214,7 @@ class Group extends React.Component {
           </div>
         <div className="post-list">
         <h1>{this.state.group.name}</h1>
-        <p>{this.state.group.description}</p>
+        <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
 
 

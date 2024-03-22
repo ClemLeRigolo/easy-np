@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../styles/groupNavigation.css";
-import { FaUserFriends, FaCalendarAlt, FaQuestionCircle } from "react-icons/fa";
-import { RxGlobe } from "react-icons/rx";
-import fr from "../utils/i18n";
 import firebase from "firebase/app";
 import { getGroupsByUser } from "../utils/firebase";
 import { Link } from "react-router-dom";
