@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { createGroup } from "../utils/firebase"; // Importez la fonction pour créer un groupe
+import { createGroup } from "../utils/firebase";
 
 import fr from "../utils/i18n";
 import "../styles/createGroup.css";
@@ -20,16 +20,6 @@ class CreateGroup extends React.Component {
       redirect: false,
       hasHTMLerror: false,
     };
-  }
-
-  toggleSubscription = () => {
-    // Effectuez les actions nécessaires pour s'abonner/désabonner ici
-    // Par exemple, vous pouvez effectuer une requête à votre backend pour mettre à jour l'état de l'abonnement
-  
-    // Mettez à jour l'état avec le nouvel état de l'abonnement
-    this.setState((prevState) => ({
-      isSubscribed: !prevState.isSubscribed,
-    }));
   }
 
   handleInputChange = (event) => {

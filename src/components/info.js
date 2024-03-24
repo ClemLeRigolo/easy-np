@@ -22,11 +22,14 @@ const Info = ({userPostData,
               canModify,
               uid,
               isSubscribedProps,
+              nbSubscribers,
+              nbSubscriptions
             }) => {
 
 
   const [coverImg,setCoverImg] =useState(Info3)
   const [isSubscribed,setIsSubscribed] =useState(isSubscribedProps)
+  const [isHovered, setIsHovered] = useState(false);
 
   console.log(isSubscribed)
 
@@ -128,6 +131,17 @@ const Info = ({userPostData,
       console.log("unsubscribed")
       setIsSubscribed(false)
     });
+    setIsHovered(false);
+  }
+
+  const changeHover=()=>{
+    console.log("hovered")
+    setIsHovered(true)
+  }
+
+  const changeHoverOut=()=>{
+    console.log("hovered out")
+    setIsHovered(false)
   }
 
   /*const [openEdit,setOpenEdit] =useState(false)
@@ -154,7 +168,7 @@ const Info = ({userPostData,
     setOpenEdit(false)
   }*/
 
-  console.log(profileImg)
+  console.log(isHovered)
 
 
   return (
@@ -200,8 +214,9 @@ const Info = ({userPostData,
             <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.PROFILE.EDIT}</button>
 
 
-            {!canModify && isSubscribed && <button onClick={()=>handleUnsubscription()} >{fr.PROFILE.SUBSCRIBED}</button>}
             {!canModify && !isSubscribed && <button onClick={()=>handleSubscription()} >{fr.PROFILE.SUBSCRIBE}</button>}
+            {!canModify && isSubscribed && isHovered && <button onClick={()=>handleUnsubscription()} onMouseLeave={changeHoverOut} >{fr.PROFILE.UNSUBSCRIBE}</button>}
+            {!canModify && isSubscribed && !isHovered && <button onClick={()=>handleSubscription()} onMouseEnter={changeHover} >{fr.PROFILE.SUBSCRIBED}</button>}
             
 
             {/* <ModelProfile 
@@ -223,7 +238,7 @@ const Info = ({userPostData,
 
             <div className="info-col-2">
               <div>
-                <h2>7 852 665</h2>
+                <h2>{nbSubscribers}</h2>
                 <span>{fr.PROFILE.FOLLOWERS}</span>
               </div>
               <div>
@@ -231,7 +246,7 @@ const Info = ({userPostData,
                 <span>{fr.PROFILE.POSTS}</span>
               </div>
               <div>
-                <h2>{following}</h2>
+                <h2>{nbSubscriptions}</h2>
                 <span>{fr.PROFILE.FOLLOWINGS}</span>
               </div>
             </div>

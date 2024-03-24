@@ -1,6 +1,5 @@
 import React from 'react';
 import { getCurrentUserData, getUserDataById } from '../utils/firebase';
-import Loader from './loader';
 import '../styles/headerBar.css';
 import { Link } from 'react-router-dom';
 

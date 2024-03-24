@@ -18,6 +18,8 @@ const ProfileMiddle = ({following,
                         canModify,
                         uid,
                         isSubscribedProps,
+                        nbSubscribers,
+                        nbSubscriptions,
                       }) => {
 
   /*const [userPostData ,setUserPostData] =useState(
@@ -92,6 +94,8 @@ const ProfileMiddle = ({following,
         canModify={canModify}
         uid={uid}
         isSubscribedProps={isSubscribedProps}
+        nbSubscribers={nbSubscribers}
+        nbSubscriptions={nbSubscriptions}
         />
 
     </div>

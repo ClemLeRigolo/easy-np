@@ -35,6 +35,10 @@ class Profile extends React.Component {
       },
       posts: [],
       isSubscribed: undefined,
+      subscriptions: [],
+      subscribers: [],
+      nbSubscribers: null,
+      nbSubscriptions: null,
     };
   }
 
@@ -188,6 +192,8 @@ class Profile extends React.Component {
           this.setState({
             userData: userData,
             uid: this.props.match.params.uid,
+            subscribers: userData.followers,
+            subscriptions: userData.subscriptions,
           });
           if (userData.profileImg) {
             this.setProfileImg(userData.profileImg);
@@ -253,6 +259,19 @@ class Profile extends React.Component {
       return <Loader />;
     }
 
+    if (this.state.nbSubscribers === null || this.state.nbSubscriptions === null) {
+      if (this.state.subscribers !== undefined) {
+        this.state.nbSubscribers = this.state.subscribers.length;
+      } else {
+        this.state.nbSubscribers = 0;
+      }
+      if (this.state.subscriptions !== undefined) {
+        this.state.nbSubscriptions = this.state.subscriptions.length;
+      } else {
+        this.state.nbSubscriptions = 0;
+      }
+    }
+
     if (this.state.isSubscribed === undefined) {
       return <Loader />;
     }
@@ -296,6 +315,8 @@ class Profile extends React.Component {
             canModify={this.state.uid === user.uid}
             uid={this.state.uid}
             isSubscribedProps={this.state.isSubscribed}
+            nbSubscribers={this.state.nbSubscribers}
+            nbSubscriptions={this.state.nbSubscriptions}
             />
             
             {/* <Right 

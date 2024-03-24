@@ -87,6 +87,7 @@ export const fr = {
     POSTS: "Publications",
     SUBSCRIBE: "S'abonner",
     SUBSCRIBED: "Abonné",
+    UNSUBSCRIBE: "Se désabonner",
   },
 
 };
