@@ -9,7 +9,7 @@ build/
 
 
 .firebase/
-.firebase-debug.log
+firebase-debug.log
 
 # Removing package-lock
 package-lock.json
