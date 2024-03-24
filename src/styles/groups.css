@@ -36,9 +36,12 @@
     padding: 14px 20px;
     margin: 15px 0;
     border: none;
+    border-radius: 10px;
     cursor: pointer;
     width: 20%;
     padding-bottom: 15px;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
 
   .create-group-button:hover {

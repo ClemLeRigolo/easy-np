@@ -15,6 +15,7 @@
     background-color: var(--selected-color);
     padding: 8px 8px 8px 20px;
     color: white;
+    transition: background-color 0.3s ease;
 }
 
 .group-nav-item:hover{
@@ -32,6 +33,7 @@
     margin: 0;
     padding: 10px;
     font-size: 1.5em;
+    transition: background-color 0.3s ease;
 }
 
 .group-header h1:hover, h1.group-nav-link.active, .group-header h1:focus{

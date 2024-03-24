@@ -37,6 +37,8 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 16px;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   }
   
   .form-container button[type="submit"]:hover {

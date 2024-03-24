@@ -132,12 +132,15 @@ class Comment extends React.Component {
 
     return (
       <div className="comment">
+        <div className="comment-thread">
         <Link to={`/profile/${comment.user}`} className="comment-author">
           <ProfileImage uid={comment.user} post={true} />
-          <div className="comment-author">{this.state.author}</div>
+          <div>
+            <div className="comment-author">{this.state.author}</div>
+            <div className="comment-timestamp">{formatPostTimestamp(comment.timestamp)}</div>
+          </div>
         </Link>
         <div className="comment-content">{comment.content}</div>
-        <div className="comment-timestamp">{formatPostTimestamp(comment.timestamp)}</div>
         <div className="comment-actions">
           <div className="classics-buttons"> {/* Nouveau div pour regrouper les éléments bouton répondre et texte pour afficher/masquer les réponses */}
             {isReplying ? (
@@ -169,9 +172,11 @@ class Comment extends React.Component {
               </button>
             )}
         </div>
+        </div>
         {showReplies && answers && (
           <div className="comment-replies">
             {answers.map((reply, index) => (
+              <div className="comment-thread">
               <div className="comment-reply" key={reply.id}>
                 <Link to={`/profile/${reply.user}`} className="comment-author">
                   {reply.profileImg ? (
@@ -179,9 +184,13 @@ class Comment extends React.Component {
                     ) : (
                       <img src={require(`../images/Profile-pictures/${reply.school}-default-profile-picture.png`)} alt="Profile" className="post-avatar" />
                     )}
+                  <div>
                   <div className="comment-author">{reply.author}</div>
+                  <div className="comment-timestamp">{formatPostTimestamp(reply.timestamp)}</div>
+                  </div>
                 </Link>
                 <div className="comment-content">{reply.content}</div>
+              </div>
               </div>
             ))}
           </div>
