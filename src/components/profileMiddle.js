@@ -20,6 +20,9 @@ const ProfileMiddle = ({following,
                         isSubscribedProps,
                         nbSubscribers,
                         nbSubscriptions,
+                        nbPosts,
+                        coverImg,
+                        setCoverImg
                       }) => {
 
   /*const [userPostData ,setUserPostData] =useState(
@@ -96,6 +99,9 @@ const ProfileMiddle = ({following,
         isSubscribedProps={isSubscribedProps}
         nbSubscribers={nbSubscribers}
         nbSubscriptions={nbSubscriptions}
+        nbPosts={nbPosts}
+        coverImg={coverImg}
+        setCoverImg={setCoverImg}
         />
 
     </div>

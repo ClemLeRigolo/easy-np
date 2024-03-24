@@ -13,6 +13,7 @@ import Post from "../components/post";
 import GroupNavigation from "../components/groupNavigation";
 import { withRouter } from 'react-router-dom';
 import { changeColor } from "../components/schoolChoose";
+import Info3 from "../images/banner.jpg"
 
 class Profile extends React.Component {
 
@@ -29,6 +30,7 @@ class Profile extends React.Component {
       name: "",
       userName: "",
       profileImg: null,
+      coverImg: null,
       modelDetails: {
         ModelName: "PlaceHolder",
         ModelUserName: "@PlaceHolder",
@@ -39,6 +41,7 @@ class Profile extends React.Component {
       subscribers: [],
       nbSubscribers: null,
       nbSubscriptions: null,
+      nbPosts: null,
     };
   }
 
@@ -79,6 +82,10 @@ class Profile extends React.Component {
 
   setModelDetails = (value) => {
     this.setState({ modelDetails: value });
+  }
+
+  setCoverImg = (value) => {
+    this.setState({ coverImg: value });
   }
 
   toggleSubscription = () => {
@@ -163,6 +170,7 @@ class Profile extends React.Component {
         posts.reverse();
         console.log("posts", posts);
         this.setState({ posts });
+        this.setState({ nbPosts: posts.length });
         this.render();
       });
   }
@@ -200,15 +208,17 @@ class Profile extends React.Component {
           } else {
             this.setProfileImg(require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`)); // Utilisez l'image par défaut s'il n'y a pas d'URL de profil personnalisée
           }
+          if (userData.coverImg) {
+            this.setCoverImg(userData.coverImg);
+          } else {
+            this.setCoverImg(Info3); // Utilisez l'image par défaut s'il n'y a pas d'URL de profil personnalisée
+          }
           this.setProfileData(userData);
           getPostByUser(this.props.match.params.uid).then(
             (querySnapshot) => {
               const posts = [];
         
               Object.values(querySnapshot).forEach((doc) => {
-                console.log("Doc:", doc);
-                console.log(Object.values(doc)[0]);
-                console.log(userData);
                 doc.username = userData.name + " " + userData.surname;
                 doc.school = userData.school;
                 doc.profileImg = userData.profileImg;
@@ -247,11 +257,9 @@ class Profile extends React.Component {
           }
           //check if this.props.match.params.uid is in this.state.currentUserData.subscriptions
           console.log(userData.subscriptions);
-          if (userData.subscriptions.includes(this.props.match.params.uid)) {
-            console.log("is subscribed");
+          if (userData.subscriptions && userData.subscriptions.includes(this.props.match.params.uid)) {
             this.setState({ isSubscribed: true });
           } else {
-            console.log("is not subscribed");
             this.setState({ isSubscribed: false });
           }
           changeColor(userData.school);
@@ -259,22 +267,34 @@ class Profile extends React.Component {
       return <Loader />;
     }
 
-    if (this.state.nbSubscribers === null || this.state.nbSubscriptions === null) {
-      if (this.state.subscribers !== undefined) {
-        this.state.nbSubscribers = this.state.subscribers.length;
-      } else {
-        this.state.nbSubscribers = 0;
-      }
-      if (this.state.subscriptions !== undefined) {
-        this.state.nbSubscriptions = this.state.subscriptions.length;
-      } else {
-        this.state.nbSubscriptions = 0;
-      }
+
+    if (this.state.subscribers !== undefined) {
+      this.state.nbSubscribers = this.state.subscribers.length;
+      //this.setState({ nbSubscribers: this.state.subscribers.length });
+    } else {
+      this.state.nbSubscribers = 0;
+      //this.setState({ nbSubscribers: 0 });
+    }
+    if (this.state.subscriptions !== undefined) {
+      this.state.nbSubscriptions = this.state.subscriptions.length;
+      //this.setState({ nbSubscriptions: this.state.subscriptions.length });
+    } else {
+      this.state.nbSubscriptions = 0;
     }
 
-    if (this.state.isSubscribed === undefined) {
+    if (this.state.posts !== undefined) {
+      this.state.nbPosts = this.state.posts.length;
+    } else {
+      this.state.nbPosts = 0;
+    }
+    
+
+
+    if (this.state.isSubscribed === undefined || this.state.nbPosts === null || this.state.nbSubscribers === null || this.state.nbSubscriptions === null || this.state.posts === undefined || this.state.userData === null || this.state.currentUserData === null) {
       return <Loader />;
     }
+
+    console.log("this.state", this.state.userData);
 
     return (
       <div className='interface'>
@@ -317,6 +337,9 @@ class Profile extends React.Component {
             isSubscribedProps={this.state.isSubscribed}
             nbSubscribers={this.state.nbSubscribers}
             nbSubscriptions={this.state.nbSubscriptions}
+            nbPosts={this.state.nbPosts}
+            coverImg={this.state.coverImg}
+            setCoverImg={this.setCoverImg}
             />
             
             {/* <Right 

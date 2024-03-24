@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import Info3 from "../images/banner.jpg"
 
 import {LiaEdit} from "react-icons/lia"
 
 import {IoCameraOutline} from "react-icons/io5"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postProfileImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
+import { postProfileImg, postCoverImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
 import fr from '../utils/i18n'
 
 const Info = ({userPostData,
@@ -23,11 +22,12 @@ const Info = ({userPostData,
               uid,
               isSubscribedProps,
               nbSubscribers,
-              nbSubscriptions
+              nbSubscriptions,
+              nbPosts,
+              coverImg,
+              setCoverImg
             }) => {
 
-
-  const [coverImg,setCoverImg] =useState(Info3)
   const [isSubscribed,setIsSubscribed] =useState(isSubscribedProps)
   const [isHovered, setIsHovered] = useState(false);
 
@@ -41,18 +41,70 @@ const Info = ({userPostData,
     if (e.target.files && e.target.files[0]) {
       let img = e.target.files[0];
       try {
-        console.log(img);
-        //const compressedImg = await compressImage(img);
         const croppedImg = await cropImage(img);
-        console.log(croppedImg);
         const url = await postProfileImg(croppedImg);
-        console.log(url);
         setProfileImg(url);
       } catch (error) {
         console.log(error);
       }
     }
   };
+
+  const compressImage = (img) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = (event) => {
+        const image = new Image();
+        image.src = event.target.result;
+  
+        image.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+  
+          const maxSize = 1024;
+  
+          let width = image.width;
+          let height = image.height;
+  
+          if (width > height) {
+            if (width > maxSize) {
+              height *= maxSize / width;
+              width = maxSize;
+            }
+          } else {
+            if (height > maxSize) {
+              width *= maxSize / height;
+              height = maxSize;
+            }
+          }
+  
+          canvas.width = width;
+          canvas.height = height;
+  
+          ctx.drawImage(image, 0, 0, width, height);
+  
+          canvas.toBlob((blob) => {
+            const compressedFile = new File([blob], img.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            });
+            resolve(compressedFile);
+          }, 'image/jpeg', 0.9);
+        };
+  
+        image.onerror = (error) => {
+          reject(error);
+        };
+      };
+  
+      reader.onerror = (error) => {
+        reject(error);
+      };
+  
+      reader.readAsDataURL(img);
+    });
+  }
   
   const cropImage = (img) => {
     return new Promise((resolve, reject) => {
@@ -104,12 +156,17 @@ const Info = ({userPostData,
     });
   };
 
-  const handleFile2 =(e)=>{
-    if(e.target.files && e.target.files[0]){
-      let img =e.target.files[0]
-      const imgObj ={image:URL.createObjectURL(img)}
-      const coverImg =imgObj.image;
-      setCoverImg(coverImg)
+  const handleFile2 = async (e)=>{
+    if (e.target.files && e.target.files[0]) {
+      let img = e.target.files[0];
+      try {
+        console.log(img);
+        const compressedImg = await compressImage(img);
+        const url = await postCoverImg(compressedImg);
+        setCoverImg(url);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
@@ -118,29 +175,23 @@ const Info = ({userPostData,
   }
 
   const handleSubscription=()=>{
-    console.log("subscribing...")
     subscribeToUser(uid).then(()=>{
-      console.log("subscribed")
       setIsSubscribed(true)
     });
   }
 
   const handleUnsubscription=()=>{
-    console.log("unsubscribing...")
     unsubscribeFromUser(uid).then(()=>{
-      console.log("unsubscribed")
       setIsSubscribed(false)
     });
     setIsHovered(false);
   }
 
   const changeHover=()=>{
-    console.log("hovered")
     setIsHovered(true)
   }
 
   const changeHoverOut=()=>{
-    console.log("hovered out")
     setIsHovered(false)
   }
 
@@ -242,7 +293,7 @@ const Info = ({userPostData,
                 <span>{fr.PROFILE.FOLLOWERS}</span>
               </div>
               <div>
-                <h2>{userPostData.length}</h2>
+                <h2>{nbPosts}</h2>
                 <span>{fr.PROFILE.POSTS}</span>
               </div>
               <div>

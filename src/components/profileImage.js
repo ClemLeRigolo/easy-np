@@ -32,9 +32,6 @@ class ProfileImage extends React.Component {
 
   render() {
     const { user, loading } = this.state;
-
-    console.log(user);
-    console.log(this.props.uid)
     
 
     if (loading) {
