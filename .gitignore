@@ -1,6 +1,7 @@
 # Removing all node_modules 
 # They can be installed with npm i
 node_modules/
+yarn.lock
 
 # Removing the build folder
 # It can be created with npm run build 
@@ -8,6 +9,7 @@ build/
 
 
 .firebase/
+firebase-debug.log
 
 # Removing package-lock
 package-lock.json
@@ -23,3 +25,6 @@ ui-debug.log
 # Removing python virtual env
 venv/
 
+# Removing the report for coverage
+.nyc_output/
+coverage/
