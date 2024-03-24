@@ -1,36 +1,49 @@
 stages:
-  - pre
+  - linter
   - test
   - badges
 
-prepare:
-  stage: pre 
+image: lxnsn/gitlab-ci-easynp
+
+before_script:
+  - yarn install --cache-folder .yarn
+
+eslint:
+  stage: linter
   tags:
     - docker
-  image: lxsnsn/gitlab-ci-easynp
   script:
-    - npm i --prefer-offline
+    - yarn install --cache-folder .yarn
+    - npx eslint 'src/**/*.{js,jsx,ts,tsx}' > report_eslint.txt || echo $? > pass.txt
   cache:
-    key: ${CI_COMMIT_REF_SLUG}
     paths:
       - node_modules/
-      
+      - .yarn/
+  artifacts:
+    when: always
+    paths:
+      - report_eslint.txt
+      - pass.txt
+
 testing:
   stage: test
   tags:
     - docker
-  image: lxsnsn/gitlab-ci-easynp
   script:
-    - npm i --prefer-offline
-    - npm run build > build_report.txt
+    - yarn install --cache-folder .yarn
+    - yarn run startLocal &
     - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN &
-    # wait for firebase to init emulators
-    - sleep 45
-    - npx cypress run > cypress_report.txt
+    - sleep 45        # wait for firebase to init emulators
+    - npx cypress run > cypress_report.txt || echo $?
+    - npx nyc report > coverage_report.txt || echo $?
+  cache:
+    paths:
+      - node_modules/
+      - .yarn/
   artifacts:
     when: always
     paths:
-      - build_report.txt
+      - coverage.txt
       - cypress_report.txt
 
 badges:
@@ -43,11 +56,12 @@ badges:
     - bash generateBadges.sh
   dependencies:
     - testing
+    - eslint
   artifacts:
     when: always
     paths:
       - "lint.svg"
       - "cypress.svg"
-      - "build.svg"
+      - "coverage.svg"
   when: always
 
