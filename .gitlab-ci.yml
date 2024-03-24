@@ -9,7 +9,7 @@ eslint:
   stage: linter
   tags:
     - docker
-  image: lxnsn/gitlab-ci-easynp
+  image: lxsnsn/gitlab-ci-easynp
   script:
     - yarn install --cache-folder .yarn
     - npx eslint 'src/**/*.{js,jsx,ts,tsx}' > report_eslint.txt || echo $? > pass.txt
@@ -27,7 +27,7 @@ testing:
   stage: test
   tags:
     - docker
-  image: lxnsn/gitlab-ci-easynp
+  image: lxsnsn/gitlab-ci-easynp
   script:
     - yarn install --cache-folder .yarn
     - yarn run startLocal &
