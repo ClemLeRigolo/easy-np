@@ -1,12 +1,14 @@
 import React from "react";
 import { FaReply } from "react-icons/fa";
 import { AiOutlineHeart } from "react-icons/ai";
+import { formatPostTimestamp } from "../utils/helpers";
 
 import "../styles/comment.css";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { getUserDataById, answerToComment, getComment } from "../utils/firebase";
 import Loader from "./loader";
 import fr from "../utils/i18n";
+import ProfileImage from "./profileImage";
 
 class Comment extends React.Component {
   constructor(props) {
@@ -131,16 +133,11 @@ class Comment extends React.Component {
     return (
       <div className="comment">
         <Link to={`/profile/${comment.user}`} className="comment-author">
-          {comment.profileImg ? (
-              <img src={comment.profileImg} alt="Profile" className="post-avatar"/>
-            ) : (
-              <img src={require(`../images/Profile-pictures/${comment.school}-default-profile-picture.png`)} alt="Profile" className="post-avatar" />
-            )
-            }
+          <ProfileImage uid={comment.user} post={true} />
           <div className="comment-author">{this.state.author}</div>
         </Link>
         <div className="comment-content">{comment.content}</div>
-        <div className="comment-timestamp">{new Date(comment.timestamp).toLocaleTimeString()}</div>
+        <div className="comment-timestamp">{formatPostTimestamp(comment.timestamp)}</div>
         <div className="comment-actions">
           <div className="classics-buttons"> {/* Nouveau div pour regrouper les éléments bouton répondre et texte pour afficher/masquer les réponses */}
             {isReplying ? (

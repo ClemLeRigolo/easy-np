@@ -22,6 +22,16 @@ class CreateGroup extends React.Component {
     };
   }
 
+  toggleSubscription = () => {
+    // Effectuez les actions nécessaires pour s'abonner/désabonner ici
+    // Par exemple, vous pouvez effectuer une requête à votre backend pour mettre à jour l'état de l'abonnement
+  
+    // Mettez à jour l'état avec le nouvel état de l'abonnement
+    this.setState((prevState) => ({
+      isSubscribed: !prevState.isSubscribed,
+    }));
+  }
+
   handleInputChange = (event) => {
     const { name, value } = event.target;
     this.setState({ [name]: value });

@@ -9,6 +9,9 @@ import Comment from "./comment";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
 import Loader from "./loader";
+import ProfileImage from "./profileImage";
+import { FaEllipsisH } from "react-icons/fa";
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 class Post extends React.Component {
   constructor(props) {
@@ -118,6 +121,12 @@ class Post extends React.Component {
     }));
   };
 
+  handleDeletePost = () => {
+    // Logique de suppression du post
+    const { handleDeletePost } = this.props;
+    handleDeletePost(this.state.post.id);
+  }
+
   componentDidMount() {
     const { post } = this.state;
   
@@ -220,17 +229,23 @@ class Post extends React.Component {
       <div className="post">
         <div className="post-header">
           <Link to={`/profile/${post.user}`} className="post-username">
-          {post.profileImg ? (
-              <img src={post.profileImg} alt="Profile" className="post-avatar"/>
-            ) : (
-              <img src={require(`../images/Profile-pictures/${post.school}-default-profile-picture.png`)} alt="Profile" className="post-avatar" />
-            )}
+          <ProfileImage uid={post.user} post={true} />
             <div>
               {post.username}
               <div className="post-date">{formatPostTimestamp(post.timestamp)}</div>
             </div>
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
+          {getCurrentUser().uid === post.user && (
+          <div className="post-menu">
+          <ContextMenuTrigger id={post.id}>
+            <FaEllipsisH className="post-options" />
+          </ContextMenuTrigger>
+
+          <ContextMenu id={post.id}>
+            <MenuItem onClick={this.handleDeletePost}>{fr.POSTS.DELETE}</MenuItem>
+          </ContextMenu>
+          </div>)}
         </div>
         {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>

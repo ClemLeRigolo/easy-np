@@ -13,6 +13,7 @@ import { IoCalendarOutline } from "react-icons/io5";
 
 import Profile from "../images/avatar.png"
 import { signOut } from '../utils/firebase';
+import ProfileImage from './profileImage';
 
 const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
   
@@ -65,7 +66,7 @@ const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
 
        <div className="n-profile" >
           <Link to={`/profile/${uid}`}> 
-            <img src={profileImg ? (profileImg) : Profile} className='n-img' alt='profile' style={{marginBottom:"-7px"} }/>
+            <ProfileImage header={true} />
           </Link>
       </div>
   

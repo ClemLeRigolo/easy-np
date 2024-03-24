@@ -2,7 +2,7 @@ import React from "react";
 import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getGroupById, getEventsByGroup } from "../utils/firebase";
+import { likePost, getUserDataById, getGroupById, getEventsByGroup, deletePost } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -64,6 +64,19 @@ class GroupEvent extends React.Component {
       posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
     });
   };
+
+  handleDeletePost = (id) => {
+    // Supprimez le post de la base de données Firebase
+    deletePost(id)
+      .then(() => {
+        console.log("Post deleted");
+        this.updatePosts();
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
+  }
+
 
   handlePostContentChange = event => {
     if (event === undefined) {
@@ -219,6 +232,7 @@ class GroupEvent extends React.Component {
                     post={post} 
                     handleLikeClick={() => this.handleLikeClick(index)}
                     handleCommentClick={() => this.handleCommentClick(index)} 
+                    handleDeletePost={() => this.handleDeletePost(post.id)}
                     likeCount={post.likeCount} 
                     commentCount={post.commentCount} 
                     />

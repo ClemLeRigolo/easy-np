@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, newPost, listenForPostChanges, getPosts, getUserDataById, likePost, getCurrentUser } from "../utils/firebase";
+import { getUserData, newPost, listenForPostChanges, getPosts, getUserDataById, likePost, getCurrentUser, deletePost } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
@@ -90,6 +90,18 @@ class Home extends React.Component {
       posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
     });
   };
+
+  handleDeletePost = (id) => {
+    // Supprimez le post de la base de données Firebase
+    deletePost(id)
+      .then(() => {
+        console.log("Post deleted");
+        this.updatePosts();
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
+  }
 
   updatePosts = () => {
     getPosts()
@@ -206,6 +218,7 @@ class Home extends React.Component {
               post={post} 
               handleLikeClick={() => this.handleLikeClick(index)}
               handleCommentClick={() => this.handleCommentClick(index)} 
+              handleDeletePost={() => this.handleDeletePost(post.id)}
               likeCount={post.likeCount} 
               commentCount={post.commentCount} 
             />

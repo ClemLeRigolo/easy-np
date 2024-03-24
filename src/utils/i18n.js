@@ -70,6 +70,7 @@ export const fr = {
     PUBLISH: "Publier",
     ANSWER: "Répondre",
     SHARE: "Partager",
+    DELETE: "Supprimer",
   },
 
   GROUPS: {
@@ -82,8 +83,10 @@ export const fr = {
   PROFILE: {
     EDIT: "Éditer le profil",
     FOLLOWERS: "Abonnés",
-    FOLLOWING: "Abonnements",
+    FOLLOWINGS: "Abonnements",
     POSTS: "Publications",
+    SUBSCRIBE: "S'abonner",
+    SUBSCRIBED: "Abonné",
   },
 
 };

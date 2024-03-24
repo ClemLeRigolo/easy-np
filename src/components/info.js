@@ -6,7 +6,7 @@ import {LiaEdit} from "react-icons/lia"
 import {IoCameraOutline} from "react-icons/io5"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postProfileImg } from '../utils/firebase'
+import { postProfileImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
 import fr from '../utils/i18n'
 
 const Info = ({userPostData,
@@ -19,10 +19,16 @@ const Info = ({userPostData,
               setName,
               userName,
               setUserName,
-              canModify}) => {
+              canModify,
+              uid,
+              isSubscribedProps,
+            }) => {
 
 
   const [coverImg,setCoverImg] =useState(Info3)
+  const [isSubscribed,setIsSubscribed] =useState(isSubscribedProps)
+
+  console.log(isSubscribed)
 
   const importProfile=useRef()
   const importCover =useRef()
@@ -108,6 +114,22 @@ const Info = ({userPostData,
     console.log(value)
   }
 
+  const handleSubscription=()=>{
+    console.log("subscribing...")
+    subscribeToUser(uid).then(()=>{
+      console.log("subscribed")
+      setIsSubscribed(true)
+    });
+  }
+
+  const handleUnsubscription=()=>{
+    console.log("unsubscribing...")
+    unsubscribeFromUser(uid).then(()=>{
+      console.log("unsubscribed")
+      setIsSubscribed(false)
+    });
+  }
+
   /*const [openEdit,setOpenEdit] =useState(false)
 
   const [countryName,setCountryName]= useState("")
@@ -175,7 +197,13 @@ const Info = ({userPostData,
               <BiLogOut />Logout
             </Link> */}
 
-            <button onClick={()=>setOpenEdit(true)}><LiaEdit />{fr.PROFILE.EDIT}</button>
+            <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.PROFILE.EDIT}</button>
+
+
+            {!canModify && isSubscribed && <button onClick={()=>handleUnsubscription()} >{fr.PROFILE.SUBSCRIBED}</button>}
+            {!canModify && !isSubscribed && <button onClick={()=>handleSubscription()} >{fr.PROFILE.SUBSCRIBE}</button>}
+            
+
             {/* <ModelProfile 
             name={name}
             setName={setName}

@@ -5,7 +5,7 @@ import ProfileMiddle from '../components/profileMiddle'
 import HeaderBar from '../components/headerBar'
 import "../styles/profile.css"
 import { authStates, withAuth } from "../components/auth";
-import { getPostByUser, likePost, getUserDataById } from "../utils/firebase";
+import { getPostByUser, likePost, getUserDataById, deletePost } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -34,6 +34,7 @@ class Profile extends React.Component {
         ModelUserName: "@PlaceHolder",
       },
       posts: [],
+      isSubscribed: undefined,
     };
   }
 
@@ -76,6 +77,16 @@ class Profile extends React.Component {
     this.setState({ modelDetails: value });
   }
 
+  toggleSubscription = () => {
+    // Effectuez les actions nécessaires pour s'abonner/désabonner ici
+    // Par exemple, vous pouvez effectuer une requête à votre backend pour mettre à jour l'état de l'abonnement
+  
+    // Mettez à jour l'état avec le nouvel état de l'abonnement
+    this.setState((prevState) => ({
+      isSubscribed: !prevState.isSubscribed,
+    }));
+  }
+
   handleLikeClick = (postIndex) => {
     const { posts } = this.state;
     const post = posts[postIndex];
@@ -112,6 +123,45 @@ class Profile extends React.Component {
       posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
     });
   };
+
+  handleDeletePost = (id) => {
+    // Supprimez le post de la base de données Firebase
+    deletePost(id)
+      .then(() => {
+        console.log("Post deleted");
+        this.updatePosts();
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
+  }
+
+  updatePosts = () => {
+    getPostByUser(this.state.uid).then(
+      (querySnapshot) => {
+        const posts = [];
+  
+        Object.values(querySnapshot).forEach((doc) => {
+          console.log("Doc:", doc);
+          console.log(Object.values(doc)[0]);
+          console.log(this.state.userData);
+          doc.username = this.state.userData.name + " " + this.state.userData.surname;
+          doc.school = this.state.userData.school;
+          doc.profileImg = this.state.userData.profileImg;
+          posts.push(doc);
+        });
+
+        // Inverser la liste pour avoir les derniers posts en premier
+        console.log("posts", posts);
+        console.log("querySnapshot.size", querySnapshot);
+        // Trie les posts selon leur ordre d'arrivée
+        posts.sort((a, b) => a.timestamp - b.timestamp);
+        posts.reverse();
+        console.log("posts", posts);
+        this.setState({ posts });
+        this.render();
+      });
+  }
 
   render() {
     //const [user, setUser] = useState(getCurrentUser());
@@ -189,8 +239,21 @@ class Profile extends React.Component {
               },
             });
           }
+          //check if this.props.match.params.uid is in this.state.currentUserData.subscriptions
+          console.log(userData.subscriptions);
+          if (userData.subscriptions.includes(this.props.match.params.uid)) {
+            console.log("is subscribed");
+            this.setState({ isSubscribed: true });
+          } else {
+            console.log("is not subscribed");
+            this.setState({ isSubscribed: false });
+          }
           changeColor(userData.school);
         });
+      return <Loader />;
+    }
+
+    if (this.state.isSubscribed === undefined) {
       return <Loader />;
     }
 
@@ -231,6 +294,8 @@ class Profile extends React.Component {
             modelDetails={this.state.modelDetails}
             setModelDetails={this.setModelDetails}
             canModify={this.state.uid === user.uid}
+            uid={this.state.uid}
+            isSubscribedProps={this.state.isSubscribed}
             />
             
             {/* <Right 
@@ -247,6 +312,7 @@ class Profile extends React.Component {
               post={post} 
               handleLikeClick={() => this.handleLikeClick(index)}
               handleCommentClick={() => this.handleCommentClick(index)} 
+              handleDeletePost={() => this.handleDeletePost(post.id)}
               likeCount={post.likeCount} 
               commentCount={post.commentCount} 
             />

@@ -2,7 +2,7 @@ import React from "react";
 import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, deletePost } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -85,6 +85,19 @@ class Group extends React.Component {
         console.error("Erreur lors de l'enregistrement du post :", error);
       });
   };
+
+  handleDeletePost = (id) => {
+    // Supprimez le post de la base de données Firebase
+    deletePost(id)
+      .then(() => {
+        console.log("Post deleted");
+        this.updatePosts();
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
+  }
+
 
   updatePosts = () => {
     getPostByGroup(this.state.gid).then(
@@ -224,6 +237,7 @@ class Group extends React.Component {
                     post={post} 
                     handleLikeClick={() => this.handleLikeClick(index)}
                     handleCommentClick={() => this.handleCommentClick(index)} 
+                    handleDeletePost={() => this.handleDeletePost(post.id)}
                     likeCount={post.likeCount} 
                     commentCount={post.commentCount} 
                     />
