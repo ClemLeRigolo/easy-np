@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@cypress/code-coverage": "^3.12.30",
+    "@cypress/instrument-cra": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -20,7 +22,8 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
+    "start": "PORT=8080 react-scripts --openssl-legacy-provider start",
+    "startLocal": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
