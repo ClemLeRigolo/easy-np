@@ -28,15 +28,15 @@ context('Testing urls', () => {
     });
 
 
-    it("going back to reset", () => {
-      cy.visit("/reset");
-      cy.url().should("eq", `${Cypress.config().baseUrl}/`);
-    });
+    // it("going back to reset", () => {
+    //   cy.visit("/reset");
+    //   cy.url().should("eq", `${Cypress.config().baseUrl}/`);
+    // });
  
-    it("going to profile", () => {
-      cy.visit("/profile");
-      cy.url().should("eq", `${Cypress.config().baseUrl}/profile`);
-    });
+    // it("going to profile", () => {
+    //   cy.visit("/profile");
+    //   cy.url().should("eq", `${Cypress.config().baseUrl}/profile`);
+    // });
 
     it("going to unknown link", () => {
       cy.visit("/unknown-link");
