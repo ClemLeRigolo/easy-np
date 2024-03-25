@@ -8,6 +8,8 @@ import Loader from "../components/loader";
 import { withRouter } from 'react-router-dom';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { getEvents } from "../utils/firebase";
+import '../styles/eventCalendar.css';
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 const localizer = momentLocalizer(moment);
 
@@ -17,8 +19,20 @@ class eventCalendar extends React.Component {
       this.state = {
           events: [],
           eventsCollected: false,
+          selectedEvent: null,
+          showDetails: false,
+          clickPosition: { x: 0, y: 0 },
       };
     }
+
+    handleEventClick = (event, e) => {
+      const { clientX, clientY } = e.nativeEvent;
+      this.setState((prevState) =>({
+        selectedEvent: event,
+        showDetails: !prevState.showDetails,
+        clickPosition: { x: clientX, y: clientY },
+      }));
+    };
 
     handleViewChange = (view) => {
       this.setState({ view });
@@ -46,18 +60,34 @@ class eventCalendar extends React.Component {
 
         moment.locale('fr'); // Définir la locale de moment sur le français
        
+        const { selectedEvent, showDetails, clickPosition } = this.state;
+
         return (
           <div>
             <HeaderBar search={""} setSearch={""} showMenu={false} setShowMenu={false} uid={user.uid} />
+
             <div>{this.state.view}</div>
             <Calendar
               localizer={localizer}
               events={this.state.events}
               startAccessor="start"
               endAccessor="end"
-              style={{ height: 500 }} // Ajuste la hauteur selon tes besoins
+              style={{ height: 500 }}
               onView={this.handleViewChange}
+              onSelectEvent={this.handleEventClick}
             />
+
+            {selectedEvent && showDetails && (
+              <div
+                className="event-details"
+                style={{ top: clickPosition.y - 250, left: clickPosition.x - 100 }}
+              >
+                <h3>{selectedEvent.title}</h3>
+                <p>Date de début : {selectedEvent.start.toString()}</p>
+                <p>Date de fin : {selectedEvent.end.toString()}</p>
+                <Link to={`/event/${selectedEvent.id}`}>Voir plus</Link>
+              </div>
+            )}
           </div>
         );
     }

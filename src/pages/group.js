@@ -29,6 +29,9 @@ class Group extends React.Component {
         groupImg: Info2,
         groupBanner: Info3,
         membres: [],
+        admins: [],
+        membersData: [],
+        canModify: false,
     };
   }
 
@@ -73,6 +76,14 @@ class Group extends React.Component {
 
   setCoverImg = (value) => {
     this.setState({ coverImg: value });
+  }
+
+  addAdmin = (value) => {
+    this.setState({ admins: [...this.state.admins, value] });
+  }
+
+  removeAdmin = (value) => {
+    this.setState({ admins: this.state.admins.filter((admin) => admin !== value) });
   }
 
   handleLikeClick = (postIndex) => {
@@ -249,9 +260,19 @@ class Group extends React.Component {
         });
         getGroupById(this.props.match.params.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
-            if (group.coverImg) this.setState({ groupBanner: group.coverImg });
-            if (group.groupImg) this.setState({ groupImg: group.groupImg });
+            if (group.coverImg) {
+              this.setState({ groupBanner: group.coverImg });
+            } else {
+              this.setState({ groupBanner: Info3 });
+            }
+            if (group.groupImg) {
+              this.setState({ groupImg: group.groupImg });
+            } else {
+              this.setState({ groupImg: Info2 })
+            }
             if (group.members) this.setState({ membres: group.members });
+            if (group.admins) this.setState({ admins: group.admins });
+            if (group.admins) this.setState({ canModify: group.admins.includes(user.uid) })
             }
         );
       return <Loader />;
@@ -269,7 +290,21 @@ class Group extends React.Component {
     };
 
     // TODO: Vérifiez si l'utilisateur peut modifier le groupe
-    const canModify = true;
+    const canModify = this.state.admins && this.state.admins.includes(user.uid);
+
+    if (this.state.membersData.length !== this.state.membres.length) {
+      const promises = [];
+      let membersData = [];
+      this.state.membres.forEach(member => {
+        promises.push(getUserDataById(member).then((userData) => {
+          membersData.push(userData);
+        }));
+      });
+      Promise.all(promises).then(() => {
+        this.setState({ membersData});
+      });
+      return <Loader />;
+    }
 
     return (
       <div className='interface'>
@@ -299,7 +334,7 @@ class Group extends React.Component {
             setProfileImg={this.setProfileImg}
             modelDetails={modelDetails}
             setModelDetails={this.setModelDetails}
-            canModify={canModify}
+            canModify={this.state.canModify}
             uid={this.state.uid}
             isSubscribedProps={this.state.isSubscribed}
             nbSubscribers={this.state.nbSubscribers}
@@ -309,6 +344,11 @@ class Group extends React.Component {
             coverImg={this.state.groupBanner}
             setCoverImg={this.setCoverImg}
             groupId={this.state.gid}
+            members={this.state.membres}
+            admins={this.state.admins}
+            membersData={this.state.membersData}
+            addAdmin={this.addAdmin}
+            removeAdmin={this.removeAdmin}
             />
         {/*<h1>{this.state.group.name}</h1>*/}
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>

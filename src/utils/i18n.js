@@ -83,6 +83,11 @@ export const fr = {
     POSTS: "Publications",
     MEMBERS_COUNT: "Membres",
     EDIT: "Éditer",
+    MANAGE: "Gérer les membres",
+    SELECT_ROLE: "Sélectionner un rôle",
+    ADMIN: "Admin",
+    MEMBER: "Membre",
+    CLOSE: "Fermer",
   },
 
   PROFILE: {

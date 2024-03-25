@@ -22,6 +22,11 @@ const GroupMiddle = ({following,
                         coverImg,
                         setCoverImg,
                         groupId,
+                        members,
+                        admins,
+                        membersData,
+                        addAdmin,
+                        removeAdmin,
                       }) => {
 
   /*const [userPostData ,setUserPostData] =useState(
@@ -100,6 +105,11 @@ const GroupMiddle = ({following,
         coverImg={coverImg}
         setCoverImg={setCoverImg}
         groupId={groupId}
+        members={members}
+        admins={admins}
+        membersData={membersData}
+        addAdmin={addAdmin}
+        removeAdmin={removeAdmin}
         />
 
     </div>
