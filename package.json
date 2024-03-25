@@ -24,7 +24,7 @@
     "yarn": "^1.22.22"
   },
   "scripts": {
-    "start": "PORT=8080 react-scripts --openssl-legacy-provider start",
+    "start": "cross-env PORT=8080 react-scripts --openssl-legacy-provider start",
     "startLocal": "react-scripts -r @cypress/instrument-cra start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
@@ -44,5 +44,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
