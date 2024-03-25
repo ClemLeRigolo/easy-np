@@ -44,7 +44,7 @@ testing:
   artifacts:
     when: always
     paths:
-      - coverage.txt
+      - coverage_report.txt
       - cypress_report.txt
 
 badges:
