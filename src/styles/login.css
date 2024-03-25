@@ -26,6 +26,7 @@ input[type="password"] {
   border: none;
   cursor: pointer;
   width: 100%;
+  transition: opacity 0.3s ease;
 }
 
 /* Add a hover effect for buttons */

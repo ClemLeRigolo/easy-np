@@ -53,6 +53,10 @@ class Post extends React.Component {
 
   handleCommentClick = () => {
     // Logique de gestion du clic sur le bouton Comment
+    if (this.state.showCommentInput) {
+      this.setState({ showCommentInput: false });
+      return;
+    }
     this.setState({ showCommentInput: true });
   };
 
@@ -274,12 +278,16 @@ class Post extends React.Component {
         {comments.length > 0 && (
           <div className={`comments ${expandedComments ? "expanded" : ""}`}>
             <div className="comments-toggle" onClick={this.toggleCommentVisibility}>
-              {expandedComments ? "Réduire les commentaires" : "Voir les commentaires"}
-              {expandedComments ? <FaAngleUp className="icon" /> : <FaAngleDown className="icon" />}
+              {expandedComments ? "" : "Voir les commentaires"}
+              {expandedComments ? "" : <FaAngleDown className="icon" />}
             </div>
             {expandedComments && comments.map((comment, index) => (
               <Comment key={comment.id} comment={comment} commentKey={index} postId={post.id}/>
             ))}
+            <div className="comments-toggle" onClick={this.toggleCommentVisibility}>
+              {expandedComments ? "Réduire les commentaires" : ""}
+              {expandedComments ? <FaAngleUp className="icon" /> : ""}
+            </div>
           </div>
         )}
       </div>

@@ -1,11 +1,12 @@
 import React from "react";
 import { FaReply } from "react-icons/fa";
 import { AiOutlineHeart } from "react-icons/ai";
+import { AiFillHeart } from "react-icons/ai";
 import { formatPostTimestamp } from "../utils/helpers";
 
 import "../styles/comment.css";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { getUserDataById, answerToComment, getComment } from "../utils/firebase";
+import { getUserDataById, answerToComment, getComment, likeComment, getCurrentUser } from "../utils/firebase";
 import Loader from "./loader";
 import fr from "../utils/i18n";
 import ProfileImage from "./profileImage";
@@ -19,11 +20,17 @@ class Comment extends React.Component {
       author: "bug",
       showReplies: false,
       comment: this.props.comment,
+      liked: false,
+      likeCount: 0,
     };
   }
 
   handleReply = () => {
-    this.setState({ isReplying: true });
+    if (this.state.isReplying) {
+      this.setState({ isReplying: false });
+    } else {
+      this.setState({ isReplying: true });
+    }
   };
 
   handleInputChange = (event) => {
@@ -69,6 +76,32 @@ class Comment extends React.Component {
     this.setState({ isReplying: false, replyContent: "" });
   };
 
+  handleLike = () => {
+    const { commentKey, postId } = this.props;
+    likeComment(postId, commentKey).then(() => {
+      getComment(postId, commentKey).then((comment) => {
+        console.log("Commentaire liké :", comment);
+        if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid)) {
+          //this.state.liked = true;
+          this.setState({ liked: true })
+          this.setState({ likeCount: this.state.likeCount + 1})
+        } else {
+          this.setState({ liked: false })
+          this.setState({ likeCount: this.state.likeCount - 1})
+        }
+        console.log(comment.likes)
+        if (comment.likes !== undefined) {
+          const likeCount = Object.keys(comment.likes).length;
+          this.setState({ likeCount });
+        } else {
+          this.setState({ likeCount: 0})
+        }
+        this.setState({ comment })
+        console.log(this.state.comment);
+      });
+    });
+  };
+
   handleShowReplies = () => {
     this.setState((prevState) => ({ showReplies: !prevState.showReplies }));
   };
@@ -86,6 +119,17 @@ class Comment extends React.Component {
               answers: comment.answers,
             },
           }));
+          if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid)) {
+            this.setState({ liked: true });
+          } else {
+            this.setState({ liked: false });
+          }
+          if (comment.likes !== undefined) {
+            const likeCount = Object.keys(comment.likes).length;
+            this.setState({ likeCount });
+          } else {
+            this.setState({ likeCount: 0})
+          }
           console.log(this.state.comment);
           const promises = [];
           console.log(this.state.comment.answers)
@@ -109,7 +153,7 @@ class Comment extends React.Component {
     }
 
   render() {
-    const { comment } = this.props;
+    const { comment } = this.state;
     const { isReplying, replyContent, showReplies } = this.state;
 
     const answers = this.state.comment.answers;
@@ -127,20 +171,41 @@ class Comment extends React.Component {
       return <Loader />;
     }
 
-    console.log("comment", comment);
-    console.log("school", comment.school);
+    let isLiked = this.state.liked;
+    if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid) && !isLiked) {
+      isLiked = true;
+    }
+
+    console.log("likeCount", this.state.likeCount);
 
     return (
       <div className="comment">
+        <div className="comment-thread">
         <Link to={`/profile/${comment.user}`} className="comment-author">
           <ProfileImage uid={comment.user} post={true} />
-          <div className="comment-author">{this.state.author}</div>
+          <div>
+            <div className="comment-author">{this.state.author}</div>
+            <div className="comment-timestamp">{formatPostTimestamp(comment.timestamp)}</div>
+          </div>
         </Link>
         <div className="comment-content">{comment.content}</div>
-        <div className="comment-timestamp">{formatPostTimestamp(comment.timestamp)}</div>
         <div className="comment-actions">
           <div className="classics-buttons"> {/* Nouveau div pour regrouper les éléments bouton répondre et texte pour afficher/masquer les réponses */}
-            {isReplying ? (
+              <button className="reply" onClick={this.handleReply}>
+                <FaReply className="comment-icon" />
+                {fr.POSTS.ANSWER}
+              </button>
+            <button className={`comment-like ${isLiked ? 'liked' : ''}`} onClick={this.handleLike}>
+              {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {this.state.likeCount} {this.state.likeCount > 1 ? fr.POSTS.LIKES : fr.POSTS.LIKE}
+            </button>
+            </div>
+            {answers && answers.length > 0 && (
+              <button className="comment-show-replies" onClick={this.handleShowReplies}>
+                {showReplies ? "Masquer les réponses" : "Voir les réponses"}
+              </button>
+            )}
+        </div>
+        {isReplying && (
               <div>
                 <input
                   type="text"
@@ -153,25 +218,12 @@ class Comment extends React.Component {
                   {fr.POSTS.PUBLISH}
                 </button>
               </div>
-            ) : (
-              <button className="reply" onClick={this.handleReply}>
-                {fr.POSTS.ANSWER}
-                <FaReply className="comment-icon" />
-              </button>
-            )}
-            <button className="comment-like">
-              <AiOutlineHeart className="comment-icon" />
-            </button>
-            </div>
-            {answers && answers.length > 0 && (
-              <button className="comment-show-replies" onClick={this.handleShowReplies}>
-                {showReplies ? "Masquer les réponses" : "Voir les réponses"}
-              </button>
             )}
         </div>
         {showReplies && answers && (
           <div className="comment-replies">
             {answers.map((reply, index) => (
+              <div className="comment-thread">
               <div className="comment-reply" key={reply.id}>
                 <Link to={`/profile/${reply.user}`} className="comment-author">
                   {reply.profileImg ? (
@@ -179,9 +231,13 @@ class Comment extends React.Component {
                     ) : (
                       <img src={require(`../images/Profile-pictures/${reply.school}-default-profile-picture.png`)} alt="Profile" className="post-avatar" />
                     )}
+                  <div>
                   <div className="comment-author">{reply.author}</div>
+                  <div className="comment-timestamp">{formatPostTimestamp(reply.timestamp)}</div>
+                  </div>
                 </Link>
                 <div className="comment-content">{reply.content}</div>
+              </div>
               </div>
             ))}
           </div>

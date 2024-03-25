@@ -78,6 +78,11 @@ export const fr = {
     MEMBERS: "Membres",
     EVENTS: "Événements",
     ABOUT: "À propos",
+    JOIN: "Rejoindre",
+    LEAVE: "Quitter",
+    POSTS: "Publications",
+    MEMBERS_COUNT: "Membres",
+    EDIT: "Éditer",
   },
 
   PROFILE: {
