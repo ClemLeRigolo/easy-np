@@ -85,7 +85,7 @@ class eventCalendar extends React.Component {
                 <h3>{selectedEvent.title}</h3>
                 <p>Date de début : {selectedEvent.start.toString()}</p>
                 <p>Date de fin : {selectedEvent.end.toString()}</p>
-                <Link to={`/event/${selectedEvent.id}`}>Voir plus</Link>
+                <Link to={`/group/${selectedEvent.groupId}/event/${selectedEvent.id}`}>Voir plus</Link>
               </div>
             )}
           </div>

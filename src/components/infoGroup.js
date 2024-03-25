@@ -5,11 +5,12 @@ import { MdOutlineManageAccounts } from "react-icons/md";
 import {IoCameraOutline} from "react-icons/io5"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postGroupImg, postCoverGroupImg, changeRole } from '../utils/firebase'
+import { postGroupImg, postCoverGroupImg, changeRole, removeMember } from '../utils/firebase'
 import fr from '../utils/i18n'
 import '../styles/infoGroup.css'
 import Loader from './loader';
 import { Link } from 'react-router-dom';
+import { IoPersonRemoveOutline } from "react-icons/io5";
 
 const InfoGroup = ({userPostData,
               following,
@@ -33,6 +34,7 @@ const InfoGroup = ({userPostData,
               membersData,
               addAdmin,
               removeAdmin,
+              removeMbr,
             }) => {
 
 
@@ -63,7 +65,14 @@ const InfoGroup = ({userPostData,
       )
       .catch((error) => console.log(error));
   };
-    
+
+  const removeMember = (memberId) => {
+    removeMember(groupId, memberId)
+      .then(() => {
+        removeMbr(memberId);
+      })
+      .catch((error) => console.log(error));
+  };  
   
   const handleFile1 = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -302,6 +311,9 @@ const InfoGroup = ({userPostData,
                     <option value="admin">{fr.GROUPS.ADMIN}</option>
                     <option value="member">{fr.GROUPS.MEMBER}</option>
                   </select>
+                  {!admins.includes(member.toString()) && (
+                    <button onClick={() => removeMember(member)}><IoPersonRemoveOutline /></button>
+                  )}
                 </li>
               ))}
             </ul>
