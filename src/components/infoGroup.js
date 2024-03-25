@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {LiaEdit} from "react-icons/lia"
-
+import { MdOutlineManageAccounts } from "react-icons/md";
 import {IoCameraOutline} from "react-icons/io5"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postGroupImg, postCoverGroupImg } from '../utils/firebase'
+import { postGroupImg, postCoverGroupImg, changeRole } from '../utils/firebase'
 import fr from '../utils/i18n'
+import '../styles/infoGroup.css'
+import Loader from './loader';
 
 const InfoGroup = ({userPostData,
               following,
@@ -24,13 +26,43 @@ const InfoGroup = ({userPostData,
               nbPosts,
               coverImg,
               setCoverImg,
-              groupId
+              groupId,
+              members,
+              admins,
+              membersData,
+              addAdmin,
+              removeAdmin,
             }) => {
 
+
+
+  const [showManageWindow, setShowManageWindow] = useState(false);
 
   const importProfile=useRef()
   const importCover =useRef()
 
+
+  const openManageWindow = () => {
+    setShowManageWindow(true);
+  };
+  
+  const closeManageWindow = () => {
+    setShowManageWindow(false);
+  };
+
+  const handleRoleChange = (memberId, role, index) => {
+    changeRole(groupId, memberId, role)
+      .then(() => {
+        if (role === 'admin') {
+          addAdmin(memberId);
+        } else {
+          removeAdmin(memberId);
+        }
+      }
+      )
+      .catch((error) => console.log(error));
+  };
+    
   
   const handleFile1 = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -213,6 +245,7 @@ const InfoGroup = ({userPostData,
               <BiLogOut />Logout
             </Link> */}
 
+            {canModify && <button onClick={() => openManageWindow()} className='edit-btn2'><MdOutlineManageAccounts />{fr.GROUPS.MANAGE}</button>}
             {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.GROUPS.EDIT}</button>}
             {/* <ModelProfile 
             name={name}
@@ -246,6 +279,29 @@ const InfoGroup = ({userPostData,
 
 
         </div>
+
+        {showManageWindow && (membersData.length == members.length) && (
+          <div className="manage-window">
+            <h3>{fr.GROUPS.MANAGE_MEMBERS}</h3>
+            <ul>
+              {members.map((member,index) => (
+                console.log(member),
+                console.log(index),
+                <li key={member}>
+                  <span>{membersData[index].name}</span>
+                  <select
+                    value={admins.includes(member.toString()) ? 'admin' : 'member'}
+                    onChange={(e) => handleRoleChange(member, e.target.value)}
+                  >
+                    <option value="admin">{fr.GROUPS.ADMIN}</option>
+                    <option value="member">{fr.GROUPS.MEMBER}</option>
+                  </select>
+                </li>
+              ))}
+            </ul>
+            <button onClick={closeManageWindow}>{fr.GROUPS.CLOSE}</button>
+          </div>
+        )}
     </div>
   )
 }

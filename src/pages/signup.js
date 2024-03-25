@@ -54,7 +54,7 @@ class SignUp extends React.Component {
         length: password.length >= 8,
         uppercase: /[A-Z]/.test(password),
         lowercase: /[a-z]/.test(password),
-        specialChar: /[!@#$%^&*()]/.test(password)
+        specialChar: /[!@#$%^&*().?,/+-]/.test(password)
       };
       this.setState({
         password: password,

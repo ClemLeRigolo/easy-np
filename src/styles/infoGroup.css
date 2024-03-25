@@ -1,0 +1,51 @@
+.manage-window {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border: 2px solid var(--selected-color);
+    border-radius: 5px;
+    padding: 20px;
+    z-index: 9999;
+    width: 60%;
+    max-height: 60%;
+    opacity: 0.95;
+  }
+  
+  .manage-window h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .manage-window ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .manage-window li {
+    margin-bottom: 10px;
+  }
+  
+  .manage-window span {
+    margin-right: 10px;
+  }
+  
+  .manage-window select {
+    padding: 5px;
+  }
+  
+  .manage-window button {
+    padding: 10px 20px;
+    background: var(--selected-color);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity ease 0.3s;
+  }
+  
+  .manage-window button:hover {
+    opacity: 0.8;
+  }

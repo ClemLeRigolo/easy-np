@@ -26,6 +26,6 @@ export default function PasswordCheck({props}) {
     <PasswordCheckUnit valid={props.length}>Longueur minimale de 8 caractères</PasswordCheckUnit>
     <PasswordCheckUnit valid={props.uppercase}>Au moins une lettre majuscule</PasswordCheckUnit>
     <PasswordCheckUnit valid={props.lowercase}>Au moins une lettre minuscule</PasswordCheckUnit>
-    <PasswordCheckUnit valid={props.specialChar}>Au moins un caractère spécial (!@#$%^&amp;*())</PasswordCheckUnit>
+    <PasswordCheckUnit valid={props.specialChar}>Au moins un caractère spécial</PasswordCheckUnit>
   </div>;
 }

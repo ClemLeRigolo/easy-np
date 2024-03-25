@@ -166,6 +166,12 @@
     right: 10px;
 }
 
+.edit-btn2{
+    position: absolute;
+    top: 300px;
+    right: 10px;
+}
+
 .info-follow button:hover{
     border: none;
     background: linear-gradient(107deg, var(--selected-color) 11.1%, #2a2e49 95.3%);
