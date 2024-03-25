@@ -25,10 +25,11 @@
   },
   "scripts": {
     "start": "cross-env PORT=8080 react-scripts --openssl-legacy-provider start",
-    "startLocal": "react-scripts -r @cypress/instrument-cra start",
+    "startLocal": "react-scripts --openssl-legacy-provider -r @cypress/instrument-cra start",
     "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:ci" : "NO_COLOR=1 cypress run"
   },
   "eslintConfig": {
     "extends": "react-app"

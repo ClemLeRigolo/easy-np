@@ -30,12 +30,11 @@ testing:
   image: lxsnsn/gitlab-ci-easynp
   script:
     - yarn install --cache-folder .yarn
-    - export NODE_OPTIONS=--openssl-legacy-provider
     - npm run startLocal &
     - sleep 15
     - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN &
     - sleep 45        # wait for firebase to init emulators
-    - npx cypress run > cypress_report.txt || echo $?
+    - npm cypress:ci cypress_report.txt || echo $?
     - npx nyc report > coverage_report.txt || echo $?
   cache:
     paths:
