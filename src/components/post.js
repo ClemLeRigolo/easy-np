@@ -53,6 +53,10 @@ class Post extends React.Component {
 
   handleCommentClick = () => {
     // Logique de gestion du clic sur le bouton Comment
+    if (this.state.showCommentInput) {
+      this.setState({ showCommentInput: false });
+      return;
+    }
     this.setState({ showCommentInput: true });
   };
 

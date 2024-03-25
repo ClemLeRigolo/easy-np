@@ -69,11 +69,17 @@
 }
 
 .comment-publish-reply {
-  background-color: blue;
+  background-color: var(--selected-color);
   color: white;
   border: none;
   padding: 5px 10px;
   cursor: pointer;
+  border-radius: 5px;
+  transition: opacity 0.3s ease;
+}
+
+.comment-publish-reply:hover {
+  opacity: 0.8;
 }
 
 .comment-reply {
@@ -114,7 +120,7 @@
   padding: 8px 8px;
     border: none;
     border-radius: 4px;
-    background-color: #ffffff;
+    background-color: inherit;
     margin-right: 8px;
     cursor: pointer;
     color: black;

@@ -26,7 +26,11 @@ class Comment extends React.Component {
   }
 
   handleReply = () => {
-    this.setState({ isReplying: true });
+    if (this.state.isReplying) {
+      this.setState({ isReplying: false });
+    } else {
+      this.setState({ isReplying: true });
+    }
   };
 
   handleInputChange = (event) => {
@@ -187,7 +191,21 @@ class Comment extends React.Component {
         <div className="comment-content">{comment.content}</div>
         <div className="comment-actions">
           <div className="classics-buttons"> {/* Nouveau div pour regrouper les éléments bouton répondre et texte pour afficher/masquer les réponses */}
-            {isReplying ? (
+              <button className="reply" onClick={this.handleReply}>
+                <FaReply className="comment-icon" />
+                {fr.POSTS.ANSWER}
+              </button>
+            <button className={`comment-like ${isLiked ? 'liked' : ''}`} onClick={this.handleLike}>
+              {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {this.state.likeCount} {this.state.likeCount > 1 ? fr.POSTS.LIKES : fr.POSTS.LIKE}
+            </button>
+            </div>
+            {answers && answers.length > 0 && (
+              <button className="comment-show-replies" onClick={this.handleShowReplies}>
+                {showReplies ? "Masquer les réponses" : "Voir les réponses"}
+              </button>
+            )}
+        </div>
+        {isReplying && (
               <div>
                 <input
                   type="text"
@@ -200,22 +218,7 @@ class Comment extends React.Component {
                   {fr.POSTS.PUBLISH}
                 </button>
               </div>
-            ) : (
-              <button className="reply" onClick={this.handleReply}>
-                <FaReply className="comment-icon" />
-                {fr.POSTS.ANSWER}
-              </button>
             )}
-            <button className={`comment-like ${isLiked ? 'liked' : ''}`} onClick={this.handleLike}>
-              {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {this.state.likeCount} {this.state.likeCount > 1 ? fr.POSTS.LIKES : fr.POSTS.LIKE}
-            </button>
-            </div>
-            {answers && answers.length > 0 && (
-              <button className="comment-show-replies" onClick={this.handleShowReplies}>
-                {showReplies ? "Masquer les réponses" : "Voir les réponses"}
-              </button>
-            )}
-        </div>
         </div>
         {showReplies && answers && (
           <div className="comment-replies">
