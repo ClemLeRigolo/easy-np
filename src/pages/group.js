@@ -11,6 +11,9 @@ import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
+import GroupMiddle from "../components/groupMiddle";
+import Info3 from "../images/banner.jpg"
+import Info2 from "../images/group-profile-default.jpg"
 
 class Group extends React.Component {
 
@@ -23,7 +26,53 @@ class Group extends React.Component {
         group: null,
         profileImg: null,
         dataCollected: false,
+        groupImg: Info2,
+        groupBanner: Info3,
+        membres: [],
     };
+  }
+
+  setProfileData = (data) => {
+    this.setState({
+      name: data.name + " " + data.surname,
+      userName: data.name + "_" + data.surname,
+      modelDetails: {
+        ModelName: data.name + " " + data.surname,
+        ModelUserName: "@" + data.name + "_" + data.surname,
+      },
+    });
+  }
+
+  setSearch = (value) => {
+    this.setState({ search: value });
+  }
+
+  setShowMenu = (value) => {
+    this.setState({ showMenu: value });
+  }
+
+  setImages = (value) => {
+    this.setState({ images: value });
+  }
+
+  setName = (value) => {
+    this.setState({ name: value });
+  }
+
+  setUserName = (value) => {
+    this.setState({ userName: value });
+  }
+
+  setProfileImg = (value) => {
+    this.setState({ groupImg: value });
+  }
+
+  setModelDetails = (value) => {
+    this.setState({ modelDetails: value });
+  }
+
+  setCoverImg = (value) => {
+    this.setState({ coverImg: value });
   }
 
   handleLikeClick = (postIndex) => {
@@ -200,6 +249,9 @@ class Group extends React.Component {
         });
         getGroupById(this.props.match.params.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
+            if (group.coverImg) this.setState({ groupBanner: group.coverImg });
+            if (group.groupImg) this.setState({ groupImg: group.groupImg });
+            if (group.members) this.setState({ membres: group.members });
             }
         );
       return <Loader />;
@@ -210,6 +262,14 @@ class Group extends React.Component {
     }
 
     console.log(this.state.group);
+
+    const modelDetails = {
+      ModelName: this.state.group.name,
+      ModelUserName: "@" + this.state.group.name,
+    };
+
+    // TODO: Vérifiez si l'utilisateur peut modifier le groupe
+    const canModify = true;
 
     return (
       <div className='interface'>
@@ -226,7 +286,31 @@ class Group extends React.Component {
             <ChannelNavigation gid={this.state.gid} />
           </div>
         <div className="post-list">
-        <h1>{this.state.group.name}</h1>
+        <GroupMiddle 
+            following={this.state.following}
+            search={this.state.search}
+            images={this.state.images}
+            setImages={this.setImages}
+            name={this.state.name}
+            setName={this.setName}
+            userName={this.state.userName}
+            setUserName={this.setUserName}
+            profileImg={this.state.groupImg}
+            setProfileImg={this.setProfileImg}
+            modelDetails={modelDetails}
+            setModelDetails={this.setModelDetails}
+            canModify={canModify}
+            uid={this.state.uid}
+            isSubscribedProps={this.state.isSubscribed}
+            nbSubscribers={this.state.nbSubscribers}
+            nbSubscriptions={this.state.nbSubscriptions}
+            nbPosts={this.state.posts.length}
+            nbMembers={this.state.membres.length}
+            coverImg={this.state.groupBanner}
+            setCoverImg={this.setCoverImg}
+            groupId={this.state.gid}
+            />
+        {/*<h1>{this.state.group.name}</h1>*/}
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
 

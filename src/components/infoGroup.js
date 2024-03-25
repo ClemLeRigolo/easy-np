@@ -5,10 +5,10 @@ import {LiaEdit} from "react-icons/lia"
 import {IoCameraOutline} from "react-icons/io5"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postProfileImg, postCoverImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
+import { postGroupImg, postCoverGroupImg } from '../utils/firebase'
 import fr from '../utils/i18n'
 
-const Info = ({userPostData,
+const InfoGroup = ({userPostData,
               following,
               modelDetails,
               setModelDetails,
@@ -20,18 +20,13 @@ const Info = ({userPostData,
               setUserName,
               canModify,
               uid,
-              isSubscribedProps,
-              nbSubscribers,
-              nbSubscriptions,
+              nbMembers,
               nbPosts,
               coverImg,
-              setCoverImg
+              setCoverImg,
+              groupId
             }) => {
 
-  const [isSubscribed,setIsSubscribed] =useState(isSubscribedProps)
-  const [isHovered, setIsHovered] = useState(false);
-
-  console.log(isSubscribed)
 
   const importProfile=useRef()
   const importCover =useRef()
@@ -41,8 +36,11 @@ const Info = ({userPostData,
     if (e.target.files && e.target.files[0]) {
       let img = e.target.files[0];
       try {
+        console.log(img);
         const croppedImg = await cropImage(img);
-        const url = await postProfileImg(croppedImg);
+        console.log(croppedImg);
+        const url = await postGroupImg(groupId, croppedImg);
+        console.log(url);
         setProfileImg(url);
       } catch (error) {
         console.log(error);
@@ -162,7 +160,7 @@ const Info = ({userPostData,
       try {
         console.log(img);
         const compressedImg = await compressImage(img);
-        const url = await postCoverImg(compressedImg);
+        const url = await postCoverGroupImg(groupId, compressedImg);
         setCoverImg(url);
       } catch (error) {
         console.log(error);
@@ -173,53 +171,6 @@ const Info = ({userPostData,
   const setOpenEdit=(value)=>{
     console.log(value)
   }
-
-  const handleSubscription=()=>{
-    subscribeToUser(uid).then(()=>{
-      setIsSubscribed(true)
-    });
-  }
-
-  const handleUnsubscription=()=>{
-    unsubscribeFromUser(uid).then(()=>{
-      setIsSubscribed(false)
-    });
-    setIsHovered(false);
-  }
-
-  const changeHover=()=>{
-    setIsHovered(true)
-  }
-
-  const changeHoverOut=()=>{
-    setIsHovered(false)
-  }
-
-  /*const [openEdit,setOpenEdit] =useState(false)
-
-  const [countryName,setCountryName]= useState("")
-  const [jobName,setJobName]= useState("")
-  
-  const handleModel=(e)=>{
-    e.preventDefault()
-
-    const ModelName =name
-    const ModelUserName=userName
-    const ModelCountryName=countryName
-    const ModelJobName = jobName
-
-    let obj={
-          ModelName:ModelName,
-          ModelUserName:ModelUserName,
-          ModelCountryName:ModelCountryName,
-          ModelJobName:ModelJobName,
-    }
-
-    setModelDetails(obj)
-    setOpenEdit(false)
-  }*/
-
-  console.log(isHovered)
 
 
   return (
@@ -256,20 +207,13 @@ const Info = ({userPostData,
 
         <div className="info-follow">
             <h1>{modelDetails.ModelName}</h1>
-            <p>{modelDetails.ModelUserName}</p>
+            {/*<p>{modelDetails.ModelUserName}</p>*/}
 
             {/* <Link to="/" className='logout'>
               <BiLogOut />Logout
             </Link> */}
 
-            {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.PROFILE.EDIT}</button>}
-
-
-            {!canModify && !isSubscribed && <button onClick={()=>handleSubscription()} >{fr.PROFILE.SUBSCRIBE}</button>}
-            {!canModify && isSubscribed && isHovered && <button onClick={()=>handleUnsubscription()} onMouseLeave={changeHoverOut} >{fr.PROFILE.UNSUBSCRIBE}</button>}
-            {!canModify && isSubscribed && !isHovered && <button onClick={()=>handleSubscription()} onMouseEnter={changeHover} >{fr.PROFILE.SUBSCRIBED}</button>}
-            
-
+            {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.GROUPS.EDIT}</button>}
             {/* <ModelProfile 
             name={name}
             setName={setName}
@@ -289,16 +233,12 @@ const Info = ({userPostData,
 
             <div className="info-col-2">
               <div>
-                <h2>{nbSubscribers}</h2>
-                <span>{fr.PROFILE.FOLLOWERS}</span>
+                <h2>{nbMembers}</h2>
+                <span>{fr.GROUPS.MEMBERS_COUNT}</span>
               </div>
               <div>
                 <h2>{nbPosts}</h2>
-                <span>{fr.PROFILE.POSTS}</span>
-              </div>
-              <div>
-                <h2>{nbSubscriptions}</h2>
-                <span>{fr.PROFILE.FOLLOWINGS}</span>
+                <span>{fr.GROUPS.POSTS}</span>
               </div>
             </div>
 
@@ -310,4 +250,4 @@ const Info = ({userPostData,
   )
 }
 
-export default Info
+export default InfoGroup
