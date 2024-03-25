@@ -12,7 +12,7 @@ eslint:
   image: lxsnsn/gitlab-ci-easynp
   script:
     - yarn install --cache-folder .yarn
-    - npx eslint 'src/**/*.{js,jsx,ts,tsx}' > report_eslint.txt || echo $? > pass.txt
+    - npx eslint 'src/**/*.{js,jsx,ts,tsx}' > eslint_report.txt || echo $? > pass.txt
   cache:
     paths:
       - node_modules/
@@ -20,7 +20,7 @@ eslint:
   artifacts:
     when: always
     paths:
-      - report_eslint.txt
+      - eslint_report.txt
       - pass.txt
 
 testing:
@@ -30,7 +30,9 @@ testing:
   image: lxsnsn/gitlab-ci-easynp
   script:
     - yarn install --cache-folder .yarn
-    - yarn run startLocal &
+    - export NODE_OPTIONS=--openssl-legacy-provider
+    - npm run startLocal &
+    - sleep 15
     - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN &
     - sleep 45        # wait for firebase to init emulators
     - npx cypress run > cypress_report.txt || echo $?

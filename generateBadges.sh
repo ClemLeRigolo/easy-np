@@ -3,12 +3,12 @@
 lint="eslint_report.txt"
 build="build_report.txt"
 cypress="cypress_report.txt"
-covarage="coverage_report.txt"
+coverage="coverage_report.txt"
 
 lint_image="lint.svg"
 cypress_image="cypress.svg"
 build_image="build.svg"
-covarage_image="covarage.svg"
+coverage_image="coverage.svg"
 
 # Bash file that read cypress_report.txt
 # and generate badges
@@ -49,24 +49,25 @@ extract() {
 }
 
 badge_lint() {
-  count=$(grep "Line" "$lint" | wc -l)
+  count=$(grep "problems" "$lint" | sed 's/.*(\(.*\))/\1/')
   color="green"
   text="passed"
-  if [ $count -gt 0 ]
+  echo $count
+  if [ -n "$count" ]
   then
     color="red"
-    text="$count errors"
+    text="$count"
   fi
   echo "lint : $text $color"
   anybadge -o -l "LINT" -v "$text" -c "$color" -f "$lint_image"
 }
 
 badge_coverage() {
-  coverage=$(grep "All files" "$covarage" | awk '{print $4}')
+  coverage=$(grep "All files" "$coverage" | awk '{print $4}')
   coverage=$(printf '%.*f\n' 0 $coverage)
   color=$(number_to_color "$coverage")
   echo "coverage : $coverage $color"
-  anybadge -o -l "COVERAGE" -v "$coverage%" -c "$color" -f "$covarage_image"
+  anybadge -o -l "COVERAGE" -v "$coverage%" -c "$color" -f "$coverage_image"
 }
 
 # badge_build() {
@@ -80,25 +81,29 @@ badge_coverage() {
 #   anybadge -o -l "BUILD" -v "$text" -c "$color" -f "$build"  
 # }
 
-
+echo "cypress badge"
 if [ -f $cypress ]
 then
   extract
 else
+  echo "no cypress_report file"
   anybadge -o -l "TESTS" -v "Failed to start" -c "red" -f "$cypress_image"
 fi
 
-if [ -f $covarage ]
+echo "coverage badge"
+if [ -f $coverage ]
 then
   badge_coverage
 else
-  anybadge -o -l "COVERAGE" -v "Failed to start" -c "red" -f "$covarage_image"
+  echo "no coverage file"
+  anybadge -o -l "COVERAGE" -v "Failed to start" -c "red" -f "$coverage_image"
 fi
-
+echo "lint badge"
 if [ -f $lint ]
 then
   badge_lint
 else
+  echo "no lint file"
   anybadge -o -l "LINT" -v "Failed to start" -c "red" -f "$lint_image"
 fi
 

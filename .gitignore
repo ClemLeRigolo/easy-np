@@ -28,3 +28,7 @@ venv/
 # Removing the report for coverage
 .nyc_output/
 coverage/
+
+# Files generated during the gitlab pipeline
+*.svg
+*_report.txt
