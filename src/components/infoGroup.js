@@ -9,6 +9,7 @@ import { postGroupImg, postCoverGroupImg, changeRole } from '../utils/firebase'
 import fr from '../utils/i18n'
 import '../styles/infoGroup.css'
 import Loader from './loader';
+import { Link } from 'react-router-dom';
 
 const InfoGroup = ({userPostData,
               following,
@@ -285,10 +286,15 @@ const InfoGroup = ({userPostData,
             <h3>{fr.GROUPS.MANAGE_MEMBERS}</h3>
             <ul>
               {members.map((member,index) => (
-                console.log(member),
-                console.log(index),
-                <li key={member}>
-                  <span>{membersData[index].name}</span>
+                <li key={member} className='row-member'>
+                  <Link to={`/profile/${member}`} className='member-name'>
+                  {membersData[index].profileImg ? (
+                    <img src={membersData[index].profileImg} alt="" className='post-avatar' />
+                  ) : (
+                    <img src={require(`../images/Profile-pictures/${membersData[index].school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                  )}
+                  <span>{membersData[index].name} {membersData[index].surname}</span>
+                  </Link>
                   <select
                     value={admins.includes(member.toString()) ? 'admin' : 'member'}
                     onChange={(e) => handleRoleChange(member, e.target.value)}
