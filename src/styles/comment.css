@@ -51,6 +51,10 @@
   cursor: pointer;
 }
 
+.liked {
+  color: var(--selected-color);
+}
+
 .comment-show-replies {
   background-color: transparent;
   border: none;
