@@ -1,0 +1,12 @@
+.event-details {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 300px;
+    padding: 10px;
+    background-color: white;
+    border: 1px solid var(--selected-color);
+    border-radius: 5px;
+    z-index: 9999;;
+    opacity: 0.8;
+  }
