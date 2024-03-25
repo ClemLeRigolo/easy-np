@@ -34,7 +34,7 @@ testing:
     - sleep 15
     - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN &
     - sleep 45        # wait for firebase to init emulators
-    - npm run cypress:ci cypress_report.txt || echo $?
+    - npm run cypress:ci > cypress_report.txt || echo $?
     - npx nyc report > coverage_report.txt || echo $?
   cache:
     paths:
