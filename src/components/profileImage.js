@@ -30,6 +30,29 @@ class ProfileImage extends React.Component {
     }
   }
 
+  async componentDidUpdate(prevProps) {
+    if (prevProps.uid !== this.props.uid) {
+      try {
+        if (!this.props.uid) {
+          const user = await getCurrentUserData();
+          this.setState({
+            user: user,
+            loading: false
+          });
+            } else {
+                const user = await getUserDataById(this.props.uid);
+                this.setState({
+                  user: user,
+                  loading: false
+                });
+            }
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données utilisateur :', error);
+        this.setState({ loading: false });
+      }
+    }
+  }
+
   render() {
     const { user, loading } = this.state;
     
