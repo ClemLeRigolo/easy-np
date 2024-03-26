@@ -99,11 +99,11 @@ class CreateGroup extends React.Component {
                 <option value="private">{fr.FORM_FIELDS.PRIVATE}</option>
               </select>
             </div>
-            {visibility === "private" && (
               <div className="form-group">
                 <label htmlFor="school">{fr.FORM_FIELDS.SCHOOL}:</label>
                 <select id="school" name="school" value={school} onChange={this.handleInputChange} required>
                   <option value="">{fr.FORM_FIELDS.SELECT_SCHOOL}</option>
+                  <option value="Ensim">Toutes les écoles</option>
                   <option value="Ensimag">Ensimag</option>
                   <option value="Phelma">Phelma</option>
                   <option value="Ense3">Ense3</option>
@@ -112,7 +112,6 @@ class CreateGroup extends React.Component {
                   <option value="Esisar">Esisar</option>
                 </select>
               </div>
-            )}
             <button type="submit">{fr.FORM_FIELDS.CREATE_GROUP}</button>
           </form>
         </div>

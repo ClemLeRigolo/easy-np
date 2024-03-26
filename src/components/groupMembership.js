@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { FaLock } from "react-icons/fa";
-import { isUserInGroup, joinGroup, leaveGroup } from "../utils/firebase";
+import { isUserInGroup, isUserInWaitingList, joinGroup, leaveGroup } from "../utils/firebase";
 import "../styles/groupMembership.css";
 
 const GroupMembership = ({ group, userSchool }) => {
   const [isInGroup, setIsInGroup] = useState(false);
+  const [isInW, setIsInW] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
@@ -13,7 +14,14 @@ const GroupMembership = ({ group, userSchool }) => {
       try {
         const inGroup = await isUserInGroup(group.id);
         setIsInGroup(inGroup);
-        setIsLoading(false);
+        if (!inGroup) {
+          console.log("Pas dans le groupe")
+          const inWaitingList = await isUserInWaitingList(group.id);
+          setIsInW(inWaitingList);
+          setIsLoading(false);
+        } else {
+          setIsLoading(false);
+        }
       } catch (error) {
         console.error("Erreur lors de la vérification de l'appartenance au groupe :", error);
         setIsLoading(false);
@@ -25,9 +33,13 @@ const GroupMembership = ({ group, userSchool }) => {
   const handleJoinGroup = () => {
     setIsTransitioning(true);
     joinGroup(group.id)
-      .then(() => {
+      .then((status) => {
         console.log("Vous avez rejoint le groupe avec succès !");
-        setIsInGroup(true);
+        if (status === 2) {
+          setIsInW(true)
+        } else {
+          setIsInGroup(true);
+        }
         // Délai de 2 secondes (2000 millisecondes) avant de désactiver l'état de transition
         setTimeout(() => {
           setIsTransitioning(false);
@@ -45,6 +57,7 @@ const GroupMembership = ({ group, userSchool }) => {
       .then(() => {
         console.log("Vous avez quitté le groupe avec succès !");
         setIsInGroup(false);
+        setIsInW(false);  
         // Délai de 2 secondes (2000 millisecondes) avant de désactiver l'état de transition
         setTimeout(() => {
           setIsTransitioning(false);
@@ -81,6 +94,31 @@ const GroupMembership = ({ group, userSchool }) => {
       );
     }
   } else {
+    if (isTransitioning) {
+      return (
+            <button className="disabled-group-button" onClick={handleLeaveGroup}>
+                {isInW ? "Envoi de la demande" : "Quitté"}
+            </button>
+            );
+    } else if (isInGroup) {
+      return (
+        <button className="leave-group-button" onClick={handleLeaveGroup}>
+          Quitter le groupe
+        </button>
+      );
+    } else if (isInW) {
+      return (
+        <button className="disabled-group-button" onClick={handleJoinGroup}>
+          Demande envoyée
+        </button>
+      );
+    } else {
+      return (
+        <button className="join-group-button" onClick={handleJoinGroup}>
+          Demander à rejoindre
+        </button>
+      );
+    }
     return <FaLock />;
   }
 };

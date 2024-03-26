@@ -35,6 +35,7 @@ const InfoGroup = ({userPostData,
               addAdmin,
               removeAdmin,
               removeMbr,
+              group,
             }) => {
 
 
@@ -214,6 +215,10 @@ const InfoGroup = ({userPostData,
     console.log(value)
   }
 
+  const isAdmin = admins.includes(uid);
+  const isCreator = uid === group.creator;
+
+  console.log(isCreator)
 
   return (
 
@@ -304,14 +309,27 @@ const InfoGroup = ({userPostData,
                   )}
                   <span>{membersData[index].name} {membersData[index].surname}</span>
                   </Link>
-                  <select
+                  {member === group.creator ? (
+                    <select
+                    value='creator'
+                  >
+                    <option value="creator">{fr.GROUPS.CREATOR}</option>
+                  </select>
+                    ) : admins.includes(member.toString()) && !isCreator ? (
+                    <select
+                    value='admin'
+                  >
+                    <option value="admin">{fr.GROUPS.ADMIN}</option>
+                  </select>) : (
+                    <select
                     value={admins.includes(member.toString()) ? 'admin' : 'member'}
                     onChange={(e) => handleRoleChange(member, e.target.value)}
                   >
-                    <option value="admin">{fr.GROUPS.ADMIN}</option>
                     <option value="member">{fr.GROUPS.MEMBER}</option>
+                    <option value="admin">{fr.GROUPS.ADMIN}</option>
                   </select>
-                  {!admins.includes(member.toString()) && (
+                  )}
+                  {member !== uid && (isCreator || !admins.includes(member.toString())) && (
                     <button onClick={() => removeMember(member)}><IoPersonRemoveOutline /></button>
                   )}
                 </li>

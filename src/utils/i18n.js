@@ -88,6 +88,7 @@ export const fr = {
     ADMIN: "Admin",
     MEMBER: "Membre",
     CLOSE: "Fermer",
+    CREATOR: "Créateur",
   },
 
   PROFILE: {

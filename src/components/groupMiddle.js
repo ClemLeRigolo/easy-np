@@ -28,6 +28,7 @@ const GroupMiddle = ({following,
                         addAdmin,
                         removeAdmin,
                         removeMbr,
+                        group,
                       }) => {
 
   /*const [userPostData ,setUserPostData] =useState(
@@ -112,6 +113,7 @@ const GroupMiddle = ({following,
         addAdmin={addAdmin}
         removeAdmin={removeAdmin}
         removeMbr={removeMbr}
+        group={group}
         />
 
     </div>

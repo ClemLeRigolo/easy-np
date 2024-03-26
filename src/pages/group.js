@@ -336,7 +336,7 @@ class Group extends React.Component {
             modelDetails={modelDetails}
             setModelDetails={this.setModelDetails}
             canModify={this.state.canModify}
-            uid={this.state.uid}
+            uid={user.uid}
             isSubscribedProps={this.state.isSubscribed}
             nbSubscribers={this.state.nbSubscribers}
             nbSubscriptions={this.state.nbSubscriptions}
@@ -351,6 +351,7 @@ class Group extends React.Component {
             addAdmin={this.addAdmin}
             removeAdmin={this.removeAdmin}
             removeMbr={this.removeMbr}
+            group={this.state.group}
             />
         {/*<h1>{this.state.group.name}</h1>*/}
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>

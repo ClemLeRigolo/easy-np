@@ -87,7 +87,7 @@ class Groups extends React.Component {
             <Link to={`/group/${group.id}`} >
             <h3>
               {group.name}{" "}
-              {!group.isPublic && (
+              {group.school && (
                 <img
                   src={require(`../images/écoles/${group.school.toLowerCase()}.png`)}
                   alt={group.school}
