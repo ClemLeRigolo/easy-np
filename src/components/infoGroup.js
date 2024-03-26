@@ -5,12 +5,15 @@ import { MdOutlineManageAccounts } from "react-icons/md";
 import {IoCameraOutline} from "react-icons/io5"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postGroupImg, postCoverGroupImg, changeRole, removeMember } from '../utils/firebase'
+import { postGroupImg, postCoverGroupImg, changeRole, removeMemberFromId, acceptMemberFromId, refuseMemberFromId } from '../utils/firebase'
 import fr from '../utils/i18n'
 import '../styles/infoGroup.css'
 import Loader from './loader';
 import { Link } from 'react-router-dom';
 import { IoPersonRemoveOutline } from "react-icons/io5";
+import { FaCheck } from "react-icons/fa6";
+import { ImCross } from "react-icons/im";
+import GroupMembership from './groupMembership';
 
 const InfoGroup = ({userPostData,
               following,
@@ -36,15 +39,23 @@ const InfoGroup = ({userPostData,
               removeAdmin,
               removeMbr,
               group,
+              waitingList,
+              waitingListData,
+              acceptMember,
+              refuseMember,
             }) => {
 
 
 
   const [showManageWindow, setShowManageWindow] = useState(false);
+  const [windowManageMember, setWindowManageMember] = useState('membres');
 
   const importProfile=useRef()
   const importCover =useRef()
 
+  const changeManageWindow = (window) => {
+    setWindowManageMember(window);
+  };
 
   const openManageWindow = () => {
     setShowManageWindow(true);
@@ -68,12 +79,28 @@ const InfoGroup = ({userPostData,
   };
 
   const removeMember = (memberId) => {
-    removeMember(groupId, memberId)
+    removeMemberFromId(groupId, memberId)
       .then(() => {
         removeMbr(memberId);
       })
       .catch((error) => console.log(error));
   };  
+
+  const handleAcceptMember = (memberId) => {
+    acceptMemberFromId(groupId, memberId)
+      .then(() => {
+        acceptMember(memberId);
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleRefuseMember = (memberId) => {
+    refuseMemberFromId(groupId, memberId)
+      .then(() => {
+        refuseMember(memberId);
+      })
+      .catch((error) => console.log(error));
+  };
   
   const handleFile1 = async (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -218,7 +245,8 @@ const InfoGroup = ({userPostData,
   const isAdmin = admins.includes(uid);
   const isCreator = uid === group.creator;
 
-  console.log(isCreator)
+  console.log(members)
+  console.log(membersData)
 
   return (
 
@@ -262,6 +290,7 @@ const InfoGroup = ({userPostData,
 
             {canModify && <button onClick={() => openManageWindow()} className='edit-btn2'><MdOutlineManageAccounts />{fr.GROUPS.MANAGE}</button>}
             {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.GROUPS.EDIT}</button>}
+            <GroupMembership group={group} userSchool={null} />
             {/* <ModelProfile 
             name={name}
             setName={setName}
@@ -297,7 +326,23 @@ const InfoGroup = ({userPostData,
 
         {showManageWindow && (membersData.length == members.length) && (
           <div className="manage-window">
-            <h3>{fr.GROUPS.MANAGE_MEMBERS}</h3>
+            <div className="manage-window-buttons">
+              <button
+                className={windowManageMember === 'membres' ? 'active' : ''}
+                onClick={() => changeManageWindow('membres')}
+              >
+                {fr.GROUPS.MEMBERS}
+              </button>
+              <button
+                className={windowManageMember === 'waitingList' ? 'active' : ''}
+                onClick={() => changeManageWindow('waitingList')}
+              >
+                {fr.GROUPS.WAITING_LIST}
+              </button>
+            </div>
+            {windowManageMember === 'membres' ? (
+            <div>
+            <h3>{fr.GROUPS.MANAGE}</h3>
             <ul>
               {members.map((member,index) => (
                 <li key={member} className='row-member'>
@@ -335,6 +380,28 @@ const InfoGroup = ({userPostData,
                 </li>
               ))}
             </ul>
+            </div>
+            ) : (
+              <div>
+              <h3>{fr.GROUPS.WAITING_LIST}</h3>
+              <ul>
+                {waitingList.map((member,index) => (
+                  <li key={member} className='row-member'>
+                    <Link to={`/profile/${member}`} className='member-name'>
+                    {waitingListData[index].profileImg ? (
+                      <img src={waitingListData[index].profileImg} alt="" className='post-avatar' />
+                    ) : (
+                      <img src={require(`../images/Profile-pictures/${waitingListData[index].school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                    )}
+                    <span>{waitingListData[index].name} {waitingListData[index].surname}</span>
+                    </Link>
+                    <button onClick={() => handleAcceptMember(member)}> <FaCheck /> </button>
+                    <button onClick={() => handleRefuseMember(member)}> <ImCross /> </button>
+                  </li>
+                ))}
+              </ul>
+              </div>
+            )}
             <button onClick={closeManageWindow}>{fr.GROUPS.CLOSE}</button>
           </div>
         )}

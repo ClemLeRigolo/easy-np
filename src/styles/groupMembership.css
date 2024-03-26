@@ -1,5 +1,5 @@
 .join-group-button{
-    background-color: var(--selected-color);
+    background-color: var(--selected-color) !important;
     color: white;
     padding: 14px 20px;
     margin: 15px 0;
@@ -13,7 +13,7 @@
 }
 
 .leave-group-button{
-    background-color: #2a2e49;
+    background-color: #2a2e49 !important;
     color: white;
     padding: 14px 20px;
     margin: 15px 0;
@@ -27,7 +27,7 @@
 }
 
 .disabled-group-button{
-    background-color: #929292;
+    background-color: #929292 !important;
     color: white;
     padding: 14px 20px;
     margin: 15px 0;

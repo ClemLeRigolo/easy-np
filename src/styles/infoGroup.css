@@ -68,3 +68,46 @@
     justify-content: flex-start;
     width: 100%;
   }
+
+  .manage-window div {
+    width: 100%;
+  }
+
+  .manage-window-buttons {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .manage-window-buttons button {
+    background-color: #fff;
+    color: black;
+    border: none;
+    border-radius: 0px !important;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+  
+  .manage-window-buttons button.active {
+    background-color: #fff;
+    border-bottom: 3px solid green;
+  }
+  
+  .manage-window-buttons button:not(.active) {
+    border-bottom: 3px solid black;
+  }
+
+  .row-member button {
+    border: none;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+
+  .row-member button:nth-last-child(2) {
+    background-color: green;
+  }
+
+  .row-member button:last-child {
+    background-color: red;
+  }

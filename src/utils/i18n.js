@@ -89,6 +89,7 @@ export const fr = {
     MEMBER: "Membre",
     CLOSE: "Fermer",
     CREATOR: "Créateur",
+    WAITING_LIST: "Liste d'attente",
   },
 
   PROFILE: {

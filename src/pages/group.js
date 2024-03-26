@@ -30,7 +30,11 @@ class Group extends React.Component {
         groupBanner: Info3,
         membres: [],
         admins: [],
+        waitingList: [],
         membersData: [],
+        waitingListData: [],
+        membersSetted: false,
+        waitingListSetted: false,
         canModify: false,
     };
   }
@@ -88,6 +92,17 @@ class Group extends React.Component {
 
   removeMbr = (value) => {
     this.setState({ membres: this.state.membres.filter((mbr) => mbr !== value) });
+  }
+
+  acceptMember = (value) => {
+    this.setState({ waitingList: this.state.waitingList.filter((mbr) => mbr !== value) });
+    this.setState({ waitingListData: this.state.waitingListData.filter((mbr) => mbr.uid !== value) })
+    this.setState({ membres: [...this.state.membres, value] });
+  }
+
+  refuseMember = (value) => {
+    this.setState({ waitingList: this.state.waitingList.filter((mbr) => mbr !== value) });
+    this.setState({ waitingListData: this.state.waitingListData.filter((mbr) => mbr.uid !== value) })
   }
 
   handleLikeClick = (postIndex) => {
@@ -276,6 +291,7 @@ class Group extends React.Component {
             }
             if (group.members) this.setState({ membres: group.members });
             if (group.admins) this.setState({ admins: group.admins });
+            if (group.waitingList) this.setState({ waitingList: group.waitingList });
             if (group.admins) this.setState({ canModify: group.admins.includes(user.uid) })
             }
         );
@@ -293,7 +309,7 @@ class Group extends React.Component {
       ModelUserName: "@" + this.state.group.name,
     };
 
-    if (this.state.membersData.length !== this.state.membres.length) {
+    if (this.state.membersData.length !== this.state.membres.length && !this.state.membersSetted) {
       const promises = [];
       let membersData = [];
       this.state.membres.forEach(member => {
@@ -302,7 +318,25 @@ class Group extends React.Component {
         }));
       });
       Promise.all(promises).then(() => {
+        //revert the list to have the last members first
+        membersData.reverse();
         this.setState({ membersData});
+        this.setState({ membersSetted: true });
+      });
+      return <Loader />;
+    }
+
+    if (this.state.waitingListData.length !== this.state.waitingList.length && !this.state.waitingListSetted) {
+      const promises = [];
+      let waitingListData = [];
+      this.state.waitingList.forEach(waiter => {
+        promises.push(getUserDataById(waiter).then((userData) => {
+          waitingListData.push(userData);
+        }));
+      });
+      Promise.all(promises).then(() => {
+        this.setState({ waitingListData});
+        this.setState({ waitingListSetted: true });
       });
       return <Loader />;
     }
@@ -352,13 +386,18 @@ class Group extends React.Component {
             removeAdmin={this.removeAdmin}
             removeMbr={this.removeMbr}
             group={this.state.group}
+            waitingList={this.state.waitingList}
+            waitingListData={this.state.waitingListData}
+            acceptMember={this.acceptMember}
+            refuseMember={this.refuseMember}
             />
         {/*<h1>{this.state.group.name}</h1>*/}
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>
-        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+        {this.state.membres.includes(user.uid) && (
+          <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+        )}
 
-
-        {this.state.posts && this.state.posts.map((post, index) => (
+        {this.state.membres.includes(user.uid) && this.state.posts && this.state.posts.map((post, index) => (
                     <Post 
                     key={index} 
                     post={post} 
