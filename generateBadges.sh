@@ -36,16 +36,21 @@ number_to_color() {
 extract() {
   if grep -q "All specs passed!" "$cypress"
   then
-    passed="100"
+    text="100%"
+    color="green"
   else
-    failure=$(grep -Eo "[[:digit:]]+%" "$cypress"| tr -d '%')
-    failure="75"
-    passed=$((100 - failure))
-    echo "$passed"
+    result=$(grep -E "[[:digit:]]+%" "$cypress" | sed 's/[ ][ ]*/ /g')
+    echo "$result"
+    tests_number=$(echo "$result" | cut -d ' ' -f 9)
+    passed_number=$(echo "$result" | cut -d ' ' -f 10)
+    failure_number=$(echo "$result" | cut -d ' ' -f 11)
+    passed=$(($passed_number * 100 / $tests_number))
+    text="$passed% (tests: $tests_number, passed: $passed_number, failed: $failure_number)"
+    color=$(number_to_color "$passed")
   fi
-  color=$(number_to_color "$passed")
-  echo "cypress : $passed $color"
-  anybadge -o -l "TESTS" -v "$passed%" -c "$color" -f "$cypress_image"
+  echo $text $color
+  echo "cypress : $text $color"
+  anybadge -o -l "TESTS" -v "$text" -c "$color" -f "$cypress_image"
 }
 
 badge_lint() {

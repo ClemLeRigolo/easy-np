@@ -86,6 +86,10 @@ class Group extends React.Component {
     this.setState({ admins: this.state.admins.filter((admin) => admin !== value) });
   }
 
+  removeMbr = (value) => {
+    this.setState({ membres: this.state.membres.filter((mbr) => mbr !== value) });
+  }
+
   handleLikeClick = (postIndex) => {
     const { posts } = this.state;
     const post = posts[postIndex];
@@ -289,9 +293,6 @@ class Group extends React.Component {
       ModelUserName: "@" + this.state.group.name,
     };
 
-    // TODO: Vérifiez si l'utilisateur peut modifier le groupe
-    const canModify = this.state.admins && this.state.admins.includes(user.uid);
-
     if (this.state.membersData.length !== this.state.membres.length) {
       const promises = [];
       let membersData = [];
@@ -349,6 +350,7 @@ class Group extends React.Component {
             membersData={this.state.membersData}
             addAdmin={this.addAdmin}
             removeAdmin={this.removeAdmin}
+            removeMbr={this.removeMbr}
             />
         {/*<h1>{this.state.group.name}</h1>*/}
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>

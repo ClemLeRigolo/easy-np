@@ -8,9 +8,12 @@
     border-radius: 5px;
     padding: 20px;
     z-index: 9999;
-    width: 60%;
+    width: 50%;
     max-height: 60%;
     opacity: 0.95;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   
   .manage-window h3 {
@@ -22,6 +25,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    width: 100%;
   }
   
   .manage-window li {
@@ -34,6 +38,7 @@
   
   .manage-window select {
     padding: 5px;
+    width: 20%;
   }
   
   .manage-window button {
@@ -48,4 +53,18 @@
   
   .manage-window button:hover {
     opacity: 0.8;
+  }
+
+  .member-name {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+    width: 70%;
+  }
+
+  .row-member {
+    display: flex;
+    justify-content: flex-start;
+    width: 100%;
   }
