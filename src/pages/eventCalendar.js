@@ -48,12 +48,18 @@ class eventCalendar extends React.Component {
 
         if (!this.state.eventsCollected) {
           getEvents().then((events) => {
+            if (!events) {
+              return;
+            }
             for (let i = 0; i < Object.values(Object.values(events)[0]).length; i++) {
               Object.values(Object.values(events)[0])[i].start = new Date(Object.values(Object.values(events)[0])[i].start);
               Object.values(Object.values(events)[0])[i].end = new Date(Object.values(Object.values(events)[0])[i].end);
             }
 
             this.setState({ events: Object.values(Object.values(events)[0]), eventsCollected: true });
+          })
+          .catch((error) => {
+            console.error("Erreur lors de la récupération des événements :", error);
           });
           
         }

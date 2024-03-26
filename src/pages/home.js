@@ -106,10 +106,11 @@ class Home extends React.Component {
   updatePosts = () => {
     getPosts()
       .then((querySnapshot) => {
+        if (!querySnapshot) {
+          return;
+        }
         const posts = [];
         const promises = []; // Tableau pour stocker les promesses des requêtes getUserDataById
-
-  
         Object.values(querySnapshot).forEach((doc) => {
           doc = Object.values(doc)[0];
           const promise = getUserDataById(doc.user).then((data) => {
@@ -147,6 +148,9 @@ class Home extends React.Component {
     console.log(this.state.showRefreshButton);
     listenForPostChanges((posts) => {
       //on récupère l'id du dernier post
+      if (!posts) {
+        return;
+      }
       const post = Object.values(Object.values(posts)[Object.values(posts).length-1])[0];
       if (post.user !== getCurrentUser().W.X && !this.state.firstLoad) {
         this.setState({showRefreshButton: true});
