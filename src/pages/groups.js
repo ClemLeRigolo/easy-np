@@ -99,7 +99,7 @@ class Groups extends React.Component {
             </h3>
             <p>{group.description}</p>
             </Link>
-            <GroupMembership group={group} userSchool={null} />
+            <GroupMembership group={group} userSchool={null} fromGroup={false} />
           </div>
           ))}
         </div>

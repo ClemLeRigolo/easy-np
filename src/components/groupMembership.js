@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { FaLock } from "react-icons/fa";
 import { isUserInGroup, isUserInWaitingList, joinGroup, leaveGroup } from "../utils/firebase";
 import "../styles/groupMembership.css";
+import { Redirect } from "react-router-dom";
 
-const GroupMembership = ({ group, userSchool }) => {
+const GroupMembership = ({ group, userSchool, fromGroup }) => {
   const [isInGroup, setIsInGroup] = useState(false);
   const [isInW, setIsInW] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
   useEffect(() => {
     const checkMembership = async () => {
@@ -61,6 +63,7 @@ const GroupMembership = ({ group, userSchool }) => {
         // Délai de 2 secondes (2000 millisecondes) avant de désactiver l'état de transition
         setTimeout(() => {
           setIsTransitioning(false);
+          setRedirect(true); // Activer la redirection
         }, 2000);
       })
       .catch((error) => {
@@ -71,6 +74,10 @@ const GroupMembership = ({ group, userSchool }) => {
 
   if (isLoading) {
     return <div>Chargement...</div>;
+  }
+
+  if (redirect && fromGroup) {
+    return <Redirect to="/groups" />;
   }
 
   if (group.isPublic || group.school === userSchool) {
@@ -109,17 +116,16 @@ const GroupMembership = ({ group, userSchool }) => {
     } else if (isInW) {
       return (
         <button className="disabled-group-button" onClick={handleJoinGroup}>
-          Demande envoyée
+          Demande envoyée 
         </button>
       );
     } else {
       return (
         <button className="join-group-button" onClick={handleJoinGroup}>
-          Demander à rejoindre
+          Demander à rejoindre <FaLock />
         </button>
       );
     }
-    return <FaLock />;
   }
 };
 

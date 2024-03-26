@@ -290,7 +290,7 @@ const InfoGroup = ({userPostData,
 
             {canModify && <button onClick={() => openManageWindow()} className='edit-btn2'><MdOutlineManageAccounts />{fr.GROUPS.MANAGE}</button>}
             {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.GROUPS.EDIT}</button>}
-            <GroupMembership group={group} userSchool={null} />
+            <GroupMembership group={group} userSchool={null} fromGroup={true} />
             {/* <ModelProfile 
             name={name}
             setName={setName}
