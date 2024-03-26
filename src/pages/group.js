@@ -353,7 +353,7 @@ class Group extends React.Component {
           />
         <div className="main-container">
           <div className="nav-container">
-            <ChannelNavigation gid={this.state.gid} />
+            <ChannelNavigation gid={this.state.gid} canModify={this.state.canModify} />
           </div>
         <div className="post-list">
         <GroupMiddle 
@@ -406,6 +406,7 @@ class Group extends React.Component {
                     handleDeletePost={() => this.handleDeletePost(post.id)}
                     likeCount={post.likeCount} 
                     commentCount={post.commentCount} 
+                    canModify={this.state.canModify}
                     />
         ))} 
 

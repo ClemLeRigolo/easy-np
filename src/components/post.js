@@ -240,7 +240,7 @@ class Post extends React.Component {
             </div>
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
-          {getCurrentUser().uid === post.user && (
+          {(getCurrentUser().uid === post.user || this.props.canModify) && (
           <div className="post-menu">
           <ContextMenuTrigger id={post.id}>
             <FaEllipsisH className="post-options" />
