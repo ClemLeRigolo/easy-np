@@ -23,6 +23,7 @@ class Groups extends React.Component {
 
   componentDidMount() {
     getGroups().then((groups) => {
+      if(!groups) return;
       const groups2 = [];
       Object.values(groups).forEach((group) => {
         groups2.push(Object.values(group)[0]);
