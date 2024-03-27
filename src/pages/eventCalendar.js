@@ -2,7 +2,6 @@ import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'moment/locale/fr'; // Importez la locale française de moment
-import HeaderBar from '../components/headerBar'
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
 import { withRouter } from 'react-router-dom';
@@ -70,8 +69,6 @@ class eventCalendar extends React.Component {
 
         return (
           <div>
-            <HeaderBar search={""} setSearch={""} showMenu={false} setShowMenu={false} uid={user.uid} />
-
             <div>{this.state.view}</div>
             <Calendar
               localizer={localizer}

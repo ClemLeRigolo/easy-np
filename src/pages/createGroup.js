@@ -6,7 +6,6 @@ import { createGroup } from "../utils/firebase";
 
 import fr from "../utils/i18n";
 import "../styles/createGroup.css";
-import HeaderBar from "../components/headerBar";
 import { replaceLinksAndTags, containsHtml } from "../components/postInput";
 
 class CreateGroup extends React.Component {
@@ -64,7 +63,6 @@ class CreateGroup extends React.Component {
 
     return (
       <div className="interface">
-        <HeaderBar search={""} setSearch={""} showMenu={false} setShowMenu={false} uid={user.uid} />
         <div className="form-container">
           <h2>{fr.FORM_FIELDS.CREATE_GROUP}</h2>
           <form onSubmit={this.handleSubmit}>

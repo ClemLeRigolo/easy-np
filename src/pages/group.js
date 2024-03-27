@@ -1,5 +1,4 @@
 import React from "react";
-import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
 import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, deletePost } from "../utils/firebase";
@@ -354,14 +353,6 @@ class Group extends React.Component {
 
     return (
       <div className='interface'>
-          <HeaderBar
-          search={this.state.search}
-          setSearch={this.setSearch}
-          showMenu={this.state.showMenu}
-          setShowMenu={this.setShowMenu}
-          profileImg={this.state.profileImg}
-          uid={user.uid}
-          />
         <div className="main-container">
           <div className="nav-container">
             <ChannelNavigation gid={this.state.gid} canModify={this.state.canModify} />

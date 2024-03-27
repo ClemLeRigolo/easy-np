@@ -63,7 +63,7 @@ class ChannelNavigation extends React.Component {
         {this.state.groups &&
           groups.map((group) => (
             <div key={group.id} className="group-header">
-              <Link to={`/group/${group.id}`}>
+              {/* <Link to={`/group/${group.id}`}> */}
                 <h1
                   className={`group-nav-link ${group.id === gid ? 'active' : ''}`}
                   onClick={() => this.handleGroupClick(group.id)}
@@ -75,7 +75,7 @@ class ChannelNavigation extends React.Component {
                   <MdKeyboardArrowRight className="dropdown-icon" />
                 )}
                 </h1>
-              </Link>
+              {/* </Link> */}
 
               {this.state.activeGroup === group.id && (
                 <>
