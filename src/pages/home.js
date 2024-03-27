@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, newPost, listenForPostChanges, getPosts, getUserDataById, likePost, getCurrentUser, deletePost } from "../utils/firebase";
+import { getUserData, newPost, listenForPostChanges, getPosts, getUserDataById, likePost, getCurrentUser, deletePost, getForUserPosts } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import HeaderBar from "../components/headerBar";
@@ -27,6 +27,7 @@ class Home extends React.Component {
       posts: [],
       showRefreshButton: false,
       firstLoad: true,
+      gid: 1710178386585,
     };
   }
 
@@ -104,29 +105,35 @@ class Home extends React.Component {
   }
 
   updatePosts = () => {
-    getPosts()
+    getForUserPosts()
       .then((querySnapshot) => {
+        console.log("querySnapshot", querySnapshot);
         if (!querySnapshot) {
           return;
         }
         const posts = [];
         const promises = []; // Tableau pour stocker les promesses des requêtes getUserDataById
-        Object.values(querySnapshot).forEach((doc) => {
-          doc = Object.values(doc)[0];
-          const promise = getUserDataById(doc.user).then((data) => {
-            doc.username = data.name + " " + data.surname;
-            doc.school = data.school;
-            doc.profileImg = data.profileImg;
-            posts.push(doc);
-          });
-          promises.push(promise);
+        querySnapshot.forEach((doc) => {
+          console.log("doc", doc);
+          //doc = Object.values(doc)[0];
+          if (doc !== undefined) {
+            const promise = getUserDataById(doc.user).then((data) => {
+              doc.username = data.name + " " + data.surname;
+              doc.school = data.school;
+              doc.profileImg = data.profileImg;
+              posts.push(doc);
+            });
+            promises.push(promise);
+          }
         });
   
         // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
         Promise.all(promises).then(() => {
           // Inverser la liste pour avoir les derniers posts en premier
           // Trie les posts selon leur ordre d'arrivée
-          posts.sort((a, b) => a.timestamp - b.timestamp);
+          //posts.sort((a, b) => a.timestamp - b.timestamp);
+          //posts.reverse();
+          posts.sort((a, b) => a.points - b.points);
           posts.reverse();
           this.setState({ posts });
         });

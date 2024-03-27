@@ -79,7 +79,7 @@ class Group extends React.Component {
   }
 
   setCoverImg = (value) => {
-    this.setState({ coverImg: value });
+    this.setState({ groupBanner: value });
   }
 
   addAdmin = (value) => {

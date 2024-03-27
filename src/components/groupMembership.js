@@ -37,6 +37,7 @@ const GroupMembership = ({ group, userSchool, fromGroup }) => {
     joinGroup(group.id)
       .then((status) => {
         console.log("Vous avez rejoint le groupe avec succès !");
+        console.log(status)
         if (status === 2) {
           setIsInW(true)
         } else {

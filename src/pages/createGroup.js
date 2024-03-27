@@ -103,13 +103,13 @@ class CreateGroup extends React.Component {
                 <label htmlFor="school">{fr.FORM_FIELDS.SCHOOL}:</label>
                 <select id="school" name="school" value={school} onChange={this.handleInputChange} required>
                   <option value="">{fr.FORM_FIELDS.SELECT_SCHOOL}</option>
-                  <option value="Ensim">Toutes les écoles</option>
-                  <option value="Ensimag">Ensimag</option>
-                  <option value="Phelma">Phelma</option>
-                  <option value="Ense3">Ense3</option>
-                  <option value="Gi">Gi</option>
-                  <option value="Pagora">Pagora</option>
-                  <option value="Esisar">Esisar</option>
+                  <option value="all">Toutes les écoles</option>
+                  <option value="ensimag">Ensimag</option>
+                  <option value="phelma">Phelma</option>
+                  <option value="ense3">Ense3</option>
+                  <option value="gi">Gi</option>
+                  <option value="pagora">Pagora</option>
+                  <option value="esisar">Esisar</option>
                 </select>
               </div>
             <button type="submit">{fr.FORM_FIELDS.CREATE_GROUP}</button>
