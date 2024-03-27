@@ -265,9 +265,9 @@ const Info = ({userPostData,
             {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.PROFILE.EDIT}</button>}
 
 
-            {!canModify && !isSubscribed && <button onClick={()=>handleSubscription()} >{fr.PROFILE.SUBSCRIBE}</button>}
-            {!canModify && isSubscribed && isHovered && <button onClick={()=>handleUnsubscription()} onMouseLeave={changeHoverOut} >{fr.PROFILE.UNSUBSCRIBE}</button>}
-            {!canModify && isSubscribed && !isHovered && <button onClick={()=>handleSubscription()} onMouseEnter={changeHover} >{fr.PROFILE.SUBSCRIBED}</button>}
+            {!canModify && !isSubscribed && <button className='sub-btn' onClick={()=>handleSubscription()} >{fr.PROFILE.SUBSCRIBE}</button>}
+            {!canModify && isSubscribed && isHovered && <button className='sub-btn' onClick={()=>handleUnsubscription()} onMouseLeave={changeHoverOut} >{fr.PROFILE.UNSUBSCRIBE}</button>}
+            {!canModify && isSubscribed && !isHovered && <button className='sub-btn' onClick={()=>handleSubscription()} onMouseEnter={changeHover} >{fr.PROFILE.SUBSCRIBED}</button>}
             
 
             {/* <ModelProfile 

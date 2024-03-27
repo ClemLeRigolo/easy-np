@@ -36,6 +36,9 @@ class Group extends React.Component {
         membersSetted: false,
         waitingListSetted: false,
         canModify: false,
+        showManage: false,
+        firstMemberSet: true,
+        firstWaitingSet: true
     };
   }
 
@@ -92,17 +95,22 @@ class Group extends React.Component {
 
   removeMbr = (value) => {
     this.setState({ membres: this.state.membres.filter((mbr) => mbr !== value) });
+    this.setState({ membersSetted: false });
+    this.setState({ showManage: true })
   }
 
   acceptMember = (value) => {
     this.setState({ waitingList: this.state.waitingList.filter((mbr) => mbr !== value) });
-    this.setState({ waitingListData: this.state.waitingListData.filter((mbr) => mbr.uid !== value) })
+    this.setState({ waitingListSetted: false });
     this.setState({ membres: [...this.state.membres, value] });
+    this.setState({ membersSetted: false });
+    this.setState({ showManage: true })
   }
 
   refuseMember = (value) => {
     this.setState({ waitingList: this.state.waitingList.filter((mbr) => mbr !== value) });
-    this.setState({ waitingListData: this.state.waitingListData.filter((mbr) => mbr.uid !== value) })
+    this.setState({ waitingListSetted: false });
+    this.setState({ showManage: true })
   }
 
   handleLikeClick = (postIndex) => {
@@ -319,7 +327,10 @@ class Group extends React.Component {
       });
       Promise.all(promises).then(() => {
         //revert the list to have the last members first
-        membersData.reverse();
+        if (this.state.firstMemberSet) {
+          membersData.reverse();
+          this.setState({ firstMemberSet: false })
+        }
         this.setState({ membersData});
         this.setState({ membersSetted: true });
       });
@@ -390,6 +401,7 @@ class Group extends React.Component {
             waitingListData={this.state.waitingListData}
             acceptMember={this.acceptMember}
             refuseMember={this.refuseMember}
+            showManage={this.state.showManage}
             />
         {/*<h1>{this.state.group.name}</h1>*/}
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>

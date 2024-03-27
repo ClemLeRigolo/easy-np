@@ -43,11 +43,12 @@ const InfoGroup = ({userPostData,
               waitingListData,
               acceptMember,
               refuseMember,
+              showManage,
             }) => {
 
 
 
-  const [showManageWindow, setShowManageWindow] = useState(false);
+  const [showManageWindow, setShowManageWindow] = useState(showManage);
   const [windowManageMember, setWindowManageMember] = useState('membres');
 
   const importProfile=useRef()
@@ -58,6 +59,7 @@ const InfoGroup = ({userPostData,
   };
 
   const openManageWindow = () => {
+    console.log("on ouvre")
     setShowManageWindow(true);
   };
   
@@ -247,6 +249,10 @@ const InfoGroup = ({userPostData,
 
   console.log(members)
   console.log(membersData)
+  //membersData.reverse()
+  console.log(admins)
+  console.log(waitingList)
+  console.log(waitingListData)
 
   return (
 
@@ -324,7 +330,7 @@ const InfoGroup = ({userPostData,
 
         </div>
 
-        {showManageWindow && (membersData.length == members.length) && (
+        {showManageWindow && (
           <div className="manage-window">
             <div className="manage-window-buttons">
               <button
