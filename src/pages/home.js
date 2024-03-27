@@ -9,6 +9,8 @@ import GroupNavigation from "../components/groupNavigation";
 import PostInput from "../components/postInput";
 import Post from "../components/post";
 import { IoMdRefresh } from 'react-icons/io';
+import HeaderBar from "../components/headerBar";
+
 
 import "../styles/home.css";
 
