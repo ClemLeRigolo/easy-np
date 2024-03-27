@@ -2,7 +2,6 @@ import React from "react";
 // import Left from '../../Components/LeftSide/Left'
 import ProfileMiddle from '../components/profileMiddle'
 // import Right from '../../Components/RightSide/Right'
-import HeaderBar from '../components/headerBar'
 import "../styles/profile.css"
 import { authStates, withAuth } from "../components/auth";
 import { getPostByUser, likePost, getUserDataById, deletePost } from "../utils/firebase";
@@ -298,14 +297,6 @@ class Profile extends React.Component {
 
     return (
       <div className='interface'>
-          <HeaderBar
-          search={this.state.search}
-          setSearch={this.setSearch}
-          showMenu={this.state.showMenu}
-          setShowMenu={this.setShowMenu}
-          profileImg={this.state.currentUserData.profileImg}
-          uid={user.uid}
-          />
         <div className="main-container">
           <div className="nav-container">
         <GroupNavigation />

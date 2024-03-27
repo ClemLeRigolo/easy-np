@@ -5,7 +5,6 @@ import { authStates, withAuth } from "../components/auth";
 import { getUserData, newPost, listenForPostChanges, getPosts, getUserDataById, likePost, getCurrentUser, deletePost, getForUserPosts } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
-import HeaderBar from "../components/headerBar";
 import GroupNavigation from "../components/groupNavigation";
 import PostInput from "../components/postInput";
 import Post from "../components/post";
@@ -114,7 +113,7 @@ class Home extends React.Component {
         const posts = [];
         const promises = []; // Tableau pour stocker les promesses des requêtes getUserDataById
         querySnapshot.forEach((doc) => {
-          console.log("doc", doc);
+          //console.log("doc", doc);
           //doc = Object.values(doc)[0];
           if (doc !== undefined) {
             const promise = getUserDataById(doc.user).then((data) => {
@@ -204,14 +203,6 @@ class Home extends React.Component {
 
     return (
       <div className="interface">
-        <HeaderBar 
-          search={""}
-          setSearch={""}
-          showMenu={false}
-          setShowMenu={false}
-          profileImg={this.state.profileImg}
-          uid={user.uid}
-        />
         {this.state.showRefreshButton && (
         <button className="refresh-button" onClick={this.handleRefreshClick}>
           <IoMdRefresh />

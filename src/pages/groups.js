@@ -5,7 +5,6 @@ import Loader from "../components/loader";
 import { getGroups, joinGroup, getUserDataById, getGroupsBySchool } from "../utils/firebase"; // Importez la fonction joinGroup
 import fr from "../utils/i18n";
 import "../styles/groups.css";
-import HeaderBar from "../components/headerBar";
 import GroupMembership from "../components/groupMembership";
 import { changeColor } from "../components/schoolChoose";
 import { AiOutlinePlusCircle } from "react-icons/ai";
@@ -74,14 +73,6 @@ class Groups extends React.Component {
 
     return (
       <div className="interface">
-        <HeaderBar
-          search={""}
-          setSearch={""}
-          showMenu={false}
-          setShowMenu={false}
-          profileImg={this.state.profileImg}
-          uid={user.uid}
-        />
         <div className="group-list">
           <Link to="/createGroup" className="create-group-button">
             <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_GROUP}
