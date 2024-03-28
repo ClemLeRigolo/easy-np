@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostBySaloon, newPost, getSaloonById, getGroupById, deletePost, newPostWithImages } from "../utils/firebase";
+import { likePost, getUserDataById, getPostBySaloon, newPost, getSaloonById, getGroupById, deletePost, newPostWithImages, newPostWithPool } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -84,7 +84,7 @@ class Saloon extends React.Component {
     this.setState({ postContent: event.target.value });
   };
 
-  handlePostSubmit = (postContent, postImages) => {
+  handlePostSubmit = (postContent, postImages, pool) => {
 
     console.log("postImages", postImages);
     console.log("postContent", postContent);
@@ -92,6 +92,19 @@ class Saloon extends React.Component {
     // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
     if (postImages.length > 0) {
       newPostWithImages(postContent, this.state.gid + this.state.sid, postImages)
+        .then((finito) => {
+          if (finito) {
+            console.log("Post enregistré avec succès");
+          }
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else if (pool.length > 0) {
+      newPostWithPool(postContent, this.state.gid + this.state.sid, pool)
         .then((finito) => {
           if (finito) {
             console.log("Post enregistré avec succès");

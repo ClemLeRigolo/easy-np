@@ -281,6 +281,11 @@ class Post extends React.Component {
       );
     }
 
+    const pollStyles1 = {
+      align: 'center',
+      theme: 'blue'
+    }
+
     return (
       <div className="post">
         <div className="post-header">
@@ -318,8 +323,8 @@ class Post extends React.Component {
           <div className="post-pool">
             {/*loop on post.pool*/}
             {this.state.vote ? 
-              <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} vote={this.state.vote}/>
-              : <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} />}
+              <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} vote={this.state.vote} customStyles={pollStyles1} />
+              : <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} customStyles={pollStyles1} />}
           </div>
         )}
         <div className="post-footer">

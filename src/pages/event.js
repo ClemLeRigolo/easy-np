@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, newPostWithImages } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, newPostWithImages, newPostWithPool } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -72,7 +72,7 @@ class Event extends React.Component {
     this.setState({ postContent: event.target.value });
   };
 
-  handlePostSubmit = (postContent, postImages) => {
+  handlePostSubmit = (postContent, postImages, pool) => {
 
     console.log("postImages", postImages);
     console.log("postContent", postContent);
@@ -84,6 +84,17 @@ class Event extends React.Component {
           if (finito) {
             console.log("Post enregistré avec succès");
           }
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else if (pool.length > 0) {
+      // Enregistrez le post dans la base de données Firebase
+      newPostWithPool(postContent, this.state.gid, pool)
+        .then(() => {
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post
           this.updatePosts();
