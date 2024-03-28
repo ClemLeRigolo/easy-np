@@ -13,6 +13,7 @@ import { IoPersonRemoveOutline } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import { ImCross } from "react-icons/im";
 import GroupMembership from './groupMembership';
+import { compressImage, cropImage } from '../utils/helpers';
 
 const InfoGroup = ({userPostData,
               following,
@@ -117,112 +118,6 @@ const InfoGroup = ({userPostData,
         console.log(error);
       }
     }
-  };
-
-  const compressImage = (img) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-  
-      reader.onload = (event) => {
-        const image = new Image();
-        image.src = event.target.result;
-  
-        image.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-  
-          const maxSize = 1024;
-  
-          let width = image.width;
-          let height = image.height;
-  
-          if (width > height) {
-            if (width > maxSize) {
-              height *= maxSize / width;
-              width = maxSize;
-            }
-          } else {
-            if (height > maxSize) {
-              width *= maxSize / height;
-              height = maxSize;
-            }
-          }
-  
-          canvas.width = width;
-          canvas.height = height;
-  
-          ctx.drawImage(image, 0, 0, width, height);
-  
-          canvas.toBlob((blob) => {
-            const compressedFile = new File([blob], img.name, {
-              type: 'image/jpeg',
-              lastModified: Date.now(),
-            });
-            resolve(compressedFile);
-          }, 'image/jpeg', 0.9);
-        };
-  
-        image.onerror = (error) => {
-          reject(error);
-        };
-      };
-  
-      reader.onerror = (error) => {
-        reject(error);
-      };
-  
-      reader.readAsDataURL(img);
-    });
-  }
-  
-  const cropImage = (img) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-  
-      reader.onload = (event) => {
-        const image = new Image();
-        image.src = event.target.result;
-  
-        image.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-  
-          const size = 170;
-  
-          canvas.width = size;
-          canvas.height = size;
-  
-          let offsetX = 0;
-          let offsetY = 0;
-  
-          if (image.width > image.height) {
-            offsetX = (image.width - image.height) / 2;
-          } else {
-            offsetY = (image.height - image.width) / 2;
-          }
-  
-          ctx.drawImage(image, offsetX, offsetY, image.width - 2 * offsetX, image.height - 2 * offsetY, 0, 0, size, size);
-  
-          canvas.toBlob((blob) => {
-            const croppedFile = new File([blob], img.name, {
-              type: 'image/jpeg',
-              lastModified: Date.now(),
-            });
-            resolve(croppedFile);
-          }, 'image/jpeg', 0.9);
-        };
-  
-        image.onerror = (error) => {
-          reject(error);
-        };
-      };
-  
-      reader.onerror = (error) => {
-        reject(error);
-      };
-  
-      reader.readAsDataURL(img);
-    });
   };
 
   const handleFile2 = async (e)=>{

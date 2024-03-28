@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, newPost, listenForPostChanges, getUserDataById, likePost, getCurrentUser, deletePost, getForUserPosts } from "../utils/firebase";
+import { getUserData, newPost, newPostWithImages, listenForPostChanges, getUserDataById, likePost, getCurrentUser, deletePost, getForUserPosts } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import GroupNavigation from "../components/groupNavigation";
@@ -31,19 +31,37 @@ class Home extends React.Component {
     };
   }
 
-  handlePostSubmit = (postContent) => {
+  handlePostSubmit = (postContent, postImages) => {
 
+    console.log("postImages", postImages);
     console.log("postContent", postContent);
-    // Enregistrez le post dans la base de données Firebase
-    newPost(postContent,this.state.gid)
-      .then(() => {
-        this.setState({ postContent: "" });
-        this.handlePostContentChange(); // Réinitialisez le champ de texte du post
-        this.updatePosts();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de l'enregistrement du post :", error);
-      });
+
+    // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
+    if (postImages.length > 0) {
+      newPostWithImages(postContent, "général", postImages)
+        .then((finito) => {
+          if (finito) {
+            console.log("Post enregistré avec succès");
+          }
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else {
+      // Enregistrez le post dans la base de données Firebase
+      newPost(postContent,"général")
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    }
   };
 
   handlePostContentChange = event => {
@@ -201,6 +219,7 @@ class Home extends React.Component {
     }
 
     console.log(this.state.showRefreshButton);
+    console.log(this.state.posts);
 
     return (
       <div className="interface">

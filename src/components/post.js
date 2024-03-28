@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/post.css";
-import { getCurrentUser, addComment, getComments, getUserDataById } from "../utils/firebase";
+import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById } from "../utils/firebase";
 import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaShareSquare } from "react-icons/fa";
@@ -169,7 +169,16 @@ class Post extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
       this.setState({ post: this.props.post });
-      console.log("dedans", this.props.post);
+      getImagesFromPost(this.props.post.id)
+      .then((images) => {
+        console.log(images)
+        this.setState((prevState) => ({
+          post: {
+            ...prevState.post,
+            images: images || undefined,
+          },
+        }));
+      })
     }
   }
 
@@ -226,6 +235,15 @@ class Post extends React.Component {
       .catch((error) => {
         console.error("Erreur lors de la récupération des commentaires :", error);
       });
+      /*getImagesFromPost(post.id)
+      .then((images) => {
+        this.setState((prevState) => ({
+          post: {
+            ...prevState.post,
+            images: images || undefined,
+          },
+        }));
+      })*/
       return <Loader />;
     }
 
@@ -253,6 +271,15 @@ class Post extends React.Component {
         </div>
         {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>
+        {post.images && (
+          <div className="post-photos">
+            {Object.values(post.images).map((image, index) => (
+              <div key={index} className="post-photo">
+                <img src={image} alt="Post" />
+              </div>
+            ))}
+          </div>
+        )}
         <div className="post-footer">
           <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>
             {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {likeCount} {likeCount > 1 ? fr.POSTS.LIKES : fr.POSTS.LIKE}
