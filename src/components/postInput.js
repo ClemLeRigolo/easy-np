@@ -27,13 +27,18 @@ export default function PostInput({ handlePostSubmit }) {
   const [photos, setPhotos] = useState([]);
   const [pollOptions, setPollOptions] = useState([]);
   const [showPoll, setShowPoll] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const togglePoll = () => {
-    setShowPoll(!showPoll);
-    if (!showPoll) {
-      setPollOptions(["", ""]); // Ajouter deux options de sondage par défaut lorsque vous basculez pour afficher les options
+    if (selectedOption === "poll") {
+      setSelectedOption(null);
+      setShowPoll(false);
+      setPollOptions([]);
     } else {
-      setPollOptions([]); // Réinitialiser les options de sondage lors du basculement pour masquer les options
+      setSelectedOption("poll");
+      setShowPoll(true);
+      setPollOptions(["", ""]);
+      setPhotos([]);
     }
   };
 
@@ -111,11 +116,10 @@ export default function PostInput({ handlePostSubmit }) {
     const files = event.target.files;
     const selectedPhotos = [];
   
-    console.log(files);
-
     if (files.length > 4) {
       setValidationError("Vous ne pouvez importer que 4 photos à la fois.");
       setPhotos([]);
+      setSelectedOption(null);
       return;
     }
   
@@ -133,6 +137,9 @@ export default function PostInput({ handlePostSubmit }) {
   
         if (selectedPhotos.length === files.length) {
           setPhotos(selectedPhotos);
+          setSelectedOption("image");
+          setShowPoll(false);
+          setPollOptions([]);
         }
       };
   
@@ -141,7 +148,15 @@ export default function PostInput({ handlePostSubmit }) {
   };
 
   const handleCameraIconClick = () => {
-    document.getElementById("photo-input").click();
+    if (selectedOption === "image") {
+      setSelectedOption(null);
+      setPhotos([]);
+    } else {
+      setSelectedOption("image");
+      setShowPoll(false);
+      setPollOptions([]);
+      document.getElementById("photo-input").click();
+    }
   };
 
   const handleDeletePhoto = (index) => {
