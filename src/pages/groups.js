@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { getGroups, joinGroup, getUserDataById, getGroupsBySchool } from "../utils/firebase"; // Importez la fonction joinGroup
+import { joinGroup, getUserDataById, getGroupsBySchool } from "../utils/firebase"; // Importez la fonction joinGroup
 import fr from "../utils/i18n";
 import "../styles/groups.css";
 import GroupMembership from "../components/groupMembership";

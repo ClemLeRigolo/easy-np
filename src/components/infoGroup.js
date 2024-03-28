@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import {LiaEdit} from "react-icons/lia"
 import { MdOutlineManageAccounts } from "react-icons/md";
@@ -8,7 +8,6 @@ import { useRef } from 'react';
 import { postGroupImg, postCoverGroupImg, changeRole, removeMemberFromId, acceptMemberFromId, refuseMemberFromId } from '../utils/firebase'
 import fr from '../utils/i18n'
 import '../styles/infoGroup.css'
-import Loader from './loader';
 import { Link } from 'react-router-dom';
 import { IoPersonRemoveOutline } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
@@ -244,15 +243,7 @@ const InfoGroup = ({userPostData,
     console.log(value)
   }
 
-  const isAdmin = admins.includes(uid);
   const isCreator = uid === group.creator;
-
-  console.log(members)
-  console.log(membersData)
-  //membersData.reverse()
-  console.log(admins)
-  console.log(waitingList)
-  console.log(waitingListData)
 
   return (
 
@@ -350,38 +341,38 @@ const InfoGroup = ({userPostData,
             <div>
             <h3>{fr.GROUPS.MANAGE}</h3>
             <ul>
-              {members.map((member,index) => (
-                <li key={member} className='row-member'>
-                  <Link to={`/profile/${member}`} className='member-name'>
-                  {membersData[index].profileImg ? (
-                    <img src={membersData[index].profileImg} alt="" className='post-avatar' />
+              {membersData.map((member,index) => (
+                <li key={member.uid} className='row-member'>
+                  <Link to={`/profile/${member.uid}`} className='member-name'>
+                  {member.profileImg ? (
+                    <img src={member.profileImg} alt="" className='post-avatar' />
                   ) : (
-                    <img src={require(`../images/Profile-pictures/${membersData[index].school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                    <img src={require(`../images/Profile-pictures/${member.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
                   )}
-                  <span>{membersData[index].name} {membersData[index].surname}</span>
+                  <span>{member.name} {member.surname}</span>
                   </Link>
-                  {member === group.creator ? (
+                  {member.uid === group.creator ? (
                     <select
                     value='creator'
                   >
                     <option value="creator">{fr.GROUPS.CREATOR}</option>
                   </select>
-                    ) : admins.includes(member.toString()) && !isCreator ? (
+                    ) : admins.includes(member.uid.toString()) && !isCreator ? (
                     <select
                     value='admin'
                   >
                     <option value="admin">{fr.GROUPS.ADMIN}</option>
                   </select>) : (
                     <select
-                    value={admins.includes(member.toString()) ? 'admin' : 'member'}
-                    onChange={(e) => handleRoleChange(member, e.target.value)}
+                    value={admins.includes(member.uid.toString()) ? 'admin' : 'member'}
+                    onChange={(e) => handleRoleChange(member.uid, e.target.value)}
                   >
                     <option value="member">{fr.GROUPS.MEMBER}</option>
                     <option value="admin">{fr.GROUPS.ADMIN}</option>
                   </select>
                   )}
-                  {member !== uid && (isCreator || !admins.includes(member.toString())) && (
-                    <button onClick={() => removeMember(member)}><IoPersonRemoveOutline /></button>
+                  {member.uid !== uid && (isCreator || !admins.includes(member.uid.toString())) && (
+                    <button onClick={() => removeMember(member.uid)}><IoPersonRemoveOutline /></button>
                   )}
                 </li>
               ))}
@@ -391,18 +382,18 @@ const InfoGroup = ({userPostData,
               <div>
               <h3>{fr.GROUPS.WAITING_LIST}</h3>
               <ul>
-                {waitingList.map((member,index) => (
-                  <li key={member} className='row-member'>
-                    <Link to={`/profile/${member}`} className='member-name'>
-                    {waitingListData[index].profileImg ? (
-                      <img src={waitingListData[index].profileImg} alt="" className='post-avatar' />
+                {waitingListData.map((member,index) => (
+                  <li key={member.uid} className='row-member'>
+                    <Link to={`/profile/${member.uid}`} className='member-name'>
+                    {member.profileImg ? (
+                      <img src={member.profileImg} alt="" className='post-avatar' />
                     ) : (
-                      <img src={require(`../images/Profile-pictures/${waitingListData[index].school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                      <img src={require(`../images/Profile-pictures/${member.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
                     )}
-                    <span>{waitingListData[index].name} {waitingListData[index].surname}</span>
+                    <span>{member.name} {member.surname}</span>
                     </Link>
-                    <button onClick={() => handleAcceptMember(member)}> <FaCheck /> </button>
-                    <button onClick={() => handleRefuseMember(member)}> <ImCross /> </button>
+                    <button onClick={() => handleAcceptMember(member.uid)}> <FaCheck /> </button>
+                    <button onClick={() => handleRefuseMember(member.uid)}> <ImCross /> </button>
                   </li>
                 ))}
               </ul>

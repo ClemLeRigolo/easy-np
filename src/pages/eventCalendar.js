@@ -38,7 +38,7 @@ class eventCalendar extends React.Component {
     };
 
     render() {
-        const { authState, user } = this.props;
+        const { authState } = this.props;
 
         if (authState === authStates.INITIAL_VALUE) {
           console.log("initial value");

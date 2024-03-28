@@ -49,7 +49,7 @@ class CreateGroup extends React.Component {
   };
 
   render() {
-    const { authState, user } = this.props;
+    const { authState } = this.props;
     const { groupName, visibility, school, redirect, description } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {

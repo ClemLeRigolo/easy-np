@@ -255,7 +255,11 @@ class Group extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      this.setState({ gid: this.props.match.params.gid });
+      this.setState({ 
+        gid: this.props.match.params.gid,
+        membersSetted: false,
+        waitingListSetted: false,
+      });
       //this.state.gid = this.props.match.params.gid;
       getPostByGroup(this.props.match.params.gid).then(
         (querySnapshot) => {
@@ -296,11 +300,27 @@ class Group extends React.Component {
             } else {
               this.setState({ groupImg: Info2 })
             }
-            if (group.members) this.setState({ membres: group.members });
-            if (group.admins) this.setState({ admins: group.admins });
-            if (group.waitingList) this.setState({ waitingList: group.waitingList });
-            if (group.admins) this.setState({ canModify: group.admins.includes(user.uid) })
+            if (group.members) {
+              this.setState({ membres: group.members });
+            } else {
+              this.setState({ membres: [] });
             }
+            if (group.admins) {
+              this.setState({ admins: group.admins });
+            } else {
+              this.setState({ admins: [] });
+            }
+            if (group.waitingList) {
+              this.setState({ waitingList: group.waitingList });
+            } else {
+              this.setState({ waitingList: [] });
+            }
+            if (group.admins) {
+              this.setState({ canModify: group.admins.includes(user.uid) })
+            } else {
+              this.setState({ canModify: false });
+            }
+          }
         );
       return <Loader />;
     }
@@ -321,15 +341,13 @@ class Group extends React.Component {
       let membersData = [];
       this.state.membres.forEach(member => {
         promises.push(getUserDataById(member).then((userData) => {
+          userData.uid = member;
           membersData.push(userData);
         }));
       });
       Promise.all(promises).then(() => {
-        //revert the list to have the last members first
-        if (this.state.firstMemberSet) {
-          membersData.reverse();
-          this.setState({ firstMemberSet: false })
-        }
+        //sort by uid
+        //membersData.sort((a, b) => a.uid - b.uid);
         this.setState({ membersData});
         this.setState({ membersSetted: true });
       });
@@ -341,10 +359,13 @@ class Group extends React.Component {
       let waitingListData = [];
       this.state.waitingList.forEach(waiter => {
         promises.push(getUserDataById(waiter).then((userData) => {
+          userData.uid = waiter;
           waitingListData.push(userData);
         }));
       });
       Promise.all(promises).then(() => {
+        //sort by uid
+        //waitingListData.sort((a, b) => a.uid - b.uid);
         this.setState({ waitingListData});
         this.setState({ waitingListSetted: true });
       });

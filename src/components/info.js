@@ -7,6 +7,7 @@ import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
 import { postProfileImg, postCoverImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
 import fr from '../utils/i18n'
+import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
 const Info = ({userPostData,
               following,
@@ -21,8 +22,8 @@ const Info = ({userPostData,
               canModify,
               uid,
               isSubscribedProps,
-              nbSubscribers,
-              nbSubscriptions,
+              subscribersData,
+              subscriptionsData,
               nbPosts,
               coverImg,
               setCoverImg
@@ -30,8 +31,8 @@ const Info = ({userPostData,
 
   const [isSubscribed,setIsSubscribed] =useState(isSubscribedProps)
   const [isHovered, setIsHovered] = useState(false);
-
-  console.log(isSubscribed)
+  const [showSubscribers, setShowSubscribers] = useState(false);
+  const [showSubscriptions, setShowSubscriptions] = useState(false);
 
   const importProfile=useRef()
   const importCover =useRef()
@@ -195,6 +196,23 @@ const Info = ({userPostData,
     setIsHovered(false)
   }
 
+  const openSubscribers=()=>{
+    console.log("openSubscribers")
+    setShowSubscribers(true)
+  }
+
+  const closeSubscribers=()=>{
+    setShowSubscribers(false)
+  }
+
+  const openSubscriptions=()=>{
+    setShowSubscriptions(true)
+  }
+
+  const closeSubscriptions=()=>{
+    setShowSubscriptions(false)
+  }
+
   /*const [openEdit,setOpenEdit] =useState(false)
 
   const [countryName,setCountryName]= useState("")
@@ -219,7 +237,6 @@ const Info = ({userPostData,
     setOpenEdit(false)
   }*/
 
-  console.log(isHovered)
 
 
   return (
@@ -288,21 +305,63 @@ const Info = ({userPostData,
           <div className="info-details">
 
             <div className="info-col-2">
-              <div>
-                <h2>{nbSubscribers}</h2>
+              <div onClick={() => openSubscribers()}>
+                <h2>{subscribersData.length}</h2>
                 <span>{fr.PROFILE.FOLLOWERS}</span>
               </div>
               <div>
                 <h2>{nbPosts}</h2>
                 <span>{fr.PROFILE.POSTS}</span>
               </div>
-              <div>
-                <h2>{nbSubscriptions}</h2>
+              <div onClick={() => openSubscriptions()}>
+                <h2>{subscriptionsData.length}</h2>
                 <span>{fr.PROFILE.FOLLOWINGS}</span>
               </div>
             </div>
 
           </div>
+
+          {showSubscribers && (
+            <div className="manage-window">
+              <h2>{fr.PROFILE.FOLLOWERS}</h2>
+              <div className="subscribers-list">
+                {subscribersData.map((subscriber,index) => (
+                  <div key={subscriber.uid} className="subscriber">
+                    <Link to={`/profile/${subscriber.uid}`} className='member-name'>
+                    {subscriber.profileImg ? (
+                      <img src={subscriber.profileImg} alt="" className='post-avatar' />
+                    ) : (
+                      <img src={require(`../images/Profile-pictures/${subscriber.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                    )}
+                    <span>{subscriber.name} {subscriber.surname}</span>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => closeSubscribers()}>{fr.PROFILE.CLOSE}</button>
+            </div>
+          )}
+
+          {showSubscriptions && (
+            <div className="manage-window">
+              <h2>{fr.PROFILE.FOLLOWINGS}</h2>
+              <div className="subscribers-list">
+                {subscriptionsData.map((subscription,index) => (
+                  <div key={subscription.uid} className="subscriber">
+                    <Link to={`/profile/${subscription.uid}`} className='member-name'>
+                    {subscription.profileImg ? (
+                      <img src={subscription.profileImg} alt="" className='post-avatar' />
+                    ) : (
+                      <img src={require(`../images/Profile-pictures/${subscription.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                    )}
+                    <span>{subscription.name} {subscription.surname}</span>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+              <button onClick={() => closeSubscriptions()}>{fr.PROFILE.CLOSE}</button>
+            </div>
+          )}
 
 
         </div>

@@ -61,7 +61,7 @@ class CreateEvent extends React.Component {
 
   render() {
     moment.locale("fr");
-    const { authState, user } = this.props;
+    const { authState } = this.props;
     const { title, description, startDate, endDate, theme, redirect, formattedStartTime, formattedEndTime } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {

@@ -100,6 +100,7 @@ export const fr = {
     SUBSCRIBE: "S'abonner",
     SUBSCRIBED: "Abonné",
     UNSUBSCRIBE: "Se désabonner",
+    CLOSE: "Fermer",
   },
 
 };

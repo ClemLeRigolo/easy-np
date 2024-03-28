@@ -18,8 +18,8 @@ const ProfileMiddle = ({following,
                         canModify,
                         uid,
                         isSubscribedProps,
-                        nbSubscribers,
-                        nbSubscriptions,
+                        subscribersData,
+                        subscriptionsData,
                         nbPosts,
                         coverImg,
                         setCoverImg
@@ -97,8 +97,8 @@ const ProfileMiddle = ({following,
         canModify={canModify}
         uid={uid}
         isSubscribedProps={isSubscribedProps}
-        nbSubscribers={nbSubscribers}
-        nbSubscriptions={nbSubscriptions}
+        subscribersData={subscribersData}
+        subscriptionsData={subscriptionsData}
         nbPosts={nbPosts}
         coverImg={coverImg}
         setCoverImg={setCoverImg}
