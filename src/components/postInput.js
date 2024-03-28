@@ -59,6 +59,9 @@ export default function PostInput({ handlePostSubmit }) {
   };
 
   const validatePollOption = () => {
+    if (!showPoll) {
+      return false;
+    }
     const isEmpty = pollOptions.every((option) => option.trim() === "");
     return isEmpty;
   };

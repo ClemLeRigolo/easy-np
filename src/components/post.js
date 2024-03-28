@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/post.css";
-import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById } from "../utils/firebase";
+import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById, voteFor } from "../utils/firebase";
 import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaShareSquare } from "react-icons/fa";
@@ -12,6 +12,7 @@ import Loader from "./loader";
 import ProfileImage from "./profileImage";
 import { FaEllipsisH } from "react-icons/fa";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
+import Poll from 'react-polls';
 
 class Post extends React.Component {
   constructor(props) {
@@ -22,6 +23,9 @@ class Post extends React.Component {
       expandedComments: false, // État pour gérer l'affichage des commentaires
       post: this.props.post,
       commentCollected: false,
+      pollAnswers: [],
+      pollSetted: false,
+      vote: null,
     };
   }
 
@@ -182,6 +186,18 @@ class Post extends React.Component {
     }
   }
 
+  handleVote = (answer) => {
+    console.log("answer", answer);
+    const { pollAnswers } = this.state;
+    const newPollAnswers = pollAnswers.map((pollAnswer,index) => {
+      if (pollAnswer.option === answer) {
+        pollAnswer.votes += 1;
+        voteFor(this.state.post.id, index);
+      }
+      return pollAnswer;
+    });
+  }
+
   render() {
     const { likeCount } = this.props;
     const { showCommentInput, commentInputValue, expandedComments } = this.state;
@@ -247,6 +263,24 @@ class Post extends React.Component {
       return <Loader />;
     }
 
+    if (post.pool && !this.state.pollSetted) {
+      for (let i = 0; i < post.pool.length; i++) {
+        this.state.pollAnswers.push({ option: post.pool[i], votes: post.poolObj[i] });
+      }
+      this.setState({ pollSetted: true });
+    }
+
+    if (post.voters) {
+      post.voters.forEach((voter, index) => {
+        if (voter.includes(getCurrentUser().uid)) {
+          //this.setState({ vote: post.pool[index] });
+          console.log("vote", post.pool[index]);
+          this.state.vote = post.pool[index];
+        }
+      }
+      );
+    }
+
     return (
       <div className="post">
         <div className="post-header">
@@ -278,6 +312,14 @@ class Post extends React.Component {
                 <img src={image} alt="Post" />
               </div>
             ))}
+          </div>
+        )}
+        {post.pool && (
+          <div className="post-pool">
+            {/*loop on post.pool*/}
+            {this.state.vote ? 
+              <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} vote={this.state.vote}/>
+              : <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} />}
           </div>
         )}
         <div className="post-footer">
