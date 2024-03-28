@@ -157,19 +157,37 @@ class Group extends React.Component {
     this.setState({ postContent: event.target.value });
   };
 
-  handlePostSubmit = (postContent) => {
+  handlePostSubmit = (postContent, postImages) => {
 
+    console.log("postImages", postImages);
     console.log("postContent", postContent);
-    // Enregistrez le post dans la base de données Firebase
-    newPost(postContent,this.state.gid)
-      .then(() => {
-        this.setState({ postContent: "" });
-        this.handlePostContentChange(); // Réinitialisez le champ de texte du post
-        this.updatePosts();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de l'enregistrement du post :", error);
-      });
+
+    // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
+    if (postImages.length > 0) {
+      newPostWithImages(postContent, "général", postImages)
+        .then((finito) => {
+          if (finito) {
+            console.log("Post enregistré avec succès");
+          }
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else {
+      // Enregistrez le post dans la base de données Firebase
+      newPost(postContent,"général")
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    }
   };
 
   handleDeletePost = (id) => {
