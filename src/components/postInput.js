@@ -25,6 +25,43 @@ export default function PostInput({ handlePostSubmit }) {
   const [postContent, setPostContent] = useState("");
   const [validationError, setValidationError] = useState("");
   const [photos, setPhotos] = useState([]);
+  const [pollOptions, setPollOptions] = useState([]);
+  const [showPoll, setShowPoll] = useState(false);
+
+  const togglePoll = () => {
+    setShowPoll(!showPoll);
+    if (!showPoll) {
+      setPollOptions(["", ""]); // Ajouter deux options de sondage par défaut lorsque vous basculez pour afficher les options
+    } else {
+      setPollOptions([]); // Réinitialiser les options de sondage lors du basculement pour masquer les options
+    }
+  };
+
+  const addPollOption = () => {
+    if (pollOptions.length < 4) {
+      setPollOptions([...pollOptions, ""]);
+    }
+  };
+
+  const deletePollOption = (index) => {
+    const updatedOptions = [...pollOptions];
+    updatedOptions.splice(index, 1);
+    setPollOptions(updatedOptions);
+    if (updatedOptions.length === 1) {
+      setShowPoll(false);
+    }
+  };
+
+  const updatePollOption = (index, value) => {
+    const updatedOptions = [...pollOptions];
+    updatedOptions[index] = value;
+    setPollOptions(updatedOptions);
+  };
+
+  const validatePollOption = () => {
+    const isEmpty = pollOptions.every((option) => option.trim() === "");
+    return isEmpty;
+  };
 
   const handlePostContentChange = (event) => {
     setPostContent(event.target.value);
@@ -43,14 +80,19 @@ export default function PostInput({ handlePostSubmit }) {
         setValidationError("Le contenu du post ne peut pas contenir de code HTML.");
       } else {
         const finalContent = replaceLinksAndTags(postContent);
+        if (validatePollOption()) {
+          setValidationError("Veuillez saisir au moins une option de sondage.");
+          return;
+        }
         const compressedImagesPromises = photos.map((photo) => compressImage(photo.file));
         
         Promise.all(compressedImagesPromises)
           .then((compressedImages) => {
-            handlePostSubmit(finalContent, compressedImages);
+            handlePostSubmit(finalContent, compressedImages, pollOptions);
             setPhotos([]);
             setPostContent("");
             setValidationError("");
+            setPollOptions([]); // Réinitialiser les options de sondage après la soumission
           })
           .catch((error) => {
             console.error("Erreur lors de la compression des images :", error);
@@ -117,12 +159,35 @@ export default function PostInput({ handlePostSubmit }) {
           onKeyPress={handleKeyPress}
           style={{ whiteSpace: "pre-wrap" }}
         />
+        {showPoll && (
+          <div className="poll-options-wrapper">
+            {pollOptions.map((option, index) => (
+              <div key={index} className="poll-option">
+                <input
+                  type="text"
+                  className="poll-option-input"
+                  placeholder={`Option ${index + 1}`}
+                  value={option}
+                  onChange={(event) => updatePollOption(index, event.target.value)}
+                />
+                <div className="delete-poll-option" onClick={() => deletePollOption(index)}>
+                  <AiOutlineCloseCircle />
+                </div>
+              </div>
+            ))}
+            {pollOptions.length < 4 && (
+              <div className="add-poll-option" onClick={addPollOption}>
+                +
+              </div>
+            )}
+          </div>
+        )}
         <div className="post-input-icons">
           <div className="post-input-icon" onClick={handleCameraIconClick}>
             <AiOutlineCamera />
           </div>
-          <div className="post-input-icon">
-            <AiOutlineBarChart />
+          <div className="post-input-icon" onClick={togglePoll}>
+            {showPoll ? <AiOutlineCloseCircle /> : <AiOutlineBarChart />}
           </div>
           <div className="post-input-icon">
             <AiOutlineGif />

@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, deletePost } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, deletePost, newPostWithImages } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -164,7 +164,7 @@ class Group extends React.Component {
 
     // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
     if (postImages.length > 0) {
-      newPostWithImages(postContent, "général", postImages)
+      newPostWithImages(postContent, this.state.gid, postImages)
         .then((finito) => {
           if (finito) {
             console.log("Post enregistré avec succès");
@@ -178,7 +178,7 @@ class Group extends React.Component {
         });
     } else {
       // Enregistrez le post dans la base de données Firebase
-      newPost(postContent,"général")
+      newPost(postContent, this.state.gid)
         .then(() => {
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post

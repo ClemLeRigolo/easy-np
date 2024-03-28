@@ -85,3 +85,38 @@
     gap: 10px;
     margin-top: 10px;
   }
+
+  .poll-options-wrapper {
+    margin-top: 10px;
+  }
+  
+  .poll-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .poll-option-input {
+    flex: 1;
+    margin-right: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .delete-poll-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .add-poll-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+  }
