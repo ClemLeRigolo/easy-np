@@ -186,3 +186,16 @@
     object-fit: cover;
     border-radius: 10px;
   }
+
+  .post-gif {
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .post-gif img {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+  }

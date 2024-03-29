@@ -319,6 +319,11 @@ class Post extends React.Component {
             ))}
           </div>
         )}
+        {post.gif && (
+          <div className="post-gif">
+            <img src={post.gif} alt="GIF" />
+          </div>
+        )}
         {post.pool && (
           <div className="post-pool">
             {/*loop on post.pool*/}

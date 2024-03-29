@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, newPostWithImages, newPostWithPool } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, newPostWithImages, newPostWithPool, newPostWithGif } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -72,7 +72,7 @@ class Event extends React.Component {
     this.setState({ postContent: event.target.value });
   };
 
-  handlePostSubmit = (postContent, postImages, pool) => {
+  handlePostSubmit = (postContent, postImages, pool, gif) => {
 
     console.log("postImages", postImages);
     console.log("postContent", postContent);
@@ -94,6 +94,17 @@ class Event extends React.Component {
     } else if (pool.length > 0) {
       // Enregistrez le post dans la base de données Firebase
       newPostWithPool(postContent, this.state.gid, pool)
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else if (gif) {
+      // Enregistrez le post dans la base de données Firebase
+      newPostWithGif(postContent, this.state.gid, gif)
         .then(() => {
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post

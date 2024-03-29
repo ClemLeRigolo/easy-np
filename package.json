@@ -5,9 +5,11 @@
   "dependencies": {
     "@cypress/code-coverage": "^3.12.30",
     "@cypress/instrument-cra": "^1.4.0",
+    "@giphy/react-components": "^9.3.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "axios": "^1.6.8",
     "cypress": "^13.6.6",
     "dompurify": "^3.0.9",
     "firebase": "^7.24.0",

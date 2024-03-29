@@ -3,6 +3,7 @@ import { AiOutlineCloseCircle, AiOutlineArrowRight, AiOutlineCamera, AiOutlineBa
 import "../styles/postInput.css";
 import DOMPurify from "dompurify";
 import { compressImage } from "../utils/helpers";
+import { SearchExperience } from "./gif";
 
 export const containsHtml = (content) => {
   const sanitizedContent = DOMPurify.sanitize(content, { ALLOWED_TAGS: [] });
@@ -28,6 +29,22 @@ export default function PostInput({ handlePostSubmit }) {
   const [pollOptions, setPollOptions] = useState([]);
   const [showPoll, setShowPoll] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [showGifSearch, setShowGifSearch] = useState(false);
+  const [selectedGif, setSelectedGif] = useState(null);
+
+  const toggleGifSearch = () => {
+    if (selectedOption === "gif") {
+      setSelectedOption(null);
+      setShowGifSearch(false);
+      setSelectedGif(null);
+    } else {
+      setSelectedOption("gif");
+      setShowGifSearch(true);
+      setPhotos([]);
+      setShowPoll(false);
+      setPollOptions([]);
+    }
+  };
 
   const togglePoll = () => {
     if (selectedOption === "poll") {
@@ -37,8 +54,10 @@ export default function PostInput({ handlePostSubmit }) {
     } else {
       setSelectedOption("poll");
       setShowPoll(true);
+      setShowGifSearch(false);
       setPollOptions(["", ""]);
       setPhotos([]);
+      setSelectedGif(null);
     }
   };
 
@@ -96,11 +115,14 @@ export default function PostInput({ handlePostSubmit }) {
         
         Promise.all(compressedImagesPromises)
           .then((compressedImages) => {
-            handlePostSubmit(finalContent, compressedImages, pollOptions);
+            handlePostSubmit(finalContent, compressedImages, pollOptions, selectedGif.images.original.url);
             setPhotos([]);
             setPostContent("");
             setValidationError("");
             setPollOptions([]); // Réinitialiser les options de sondage après la soumission
+            setShowPoll(false);
+            setShowGifSearch(false);
+            setSelectedGif(null);
           })
           .catch((error) => {
             console.error("Erreur lors de la compression des images :", error);
@@ -139,6 +161,7 @@ export default function PostInput({ handlePostSubmit }) {
           setPhotos(selectedPhotos);
           setSelectedOption("image");
           setShowPoll(false);
+          setShowGifSearch(false);
           setPollOptions([]);
         }
       };
@@ -154,6 +177,8 @@ export default function PostInput({ handlePostSubmit }) {
     } else {
       setSelectedOption("image");
       setShowPoll(false);
+      setShowGifSearch(false);
+      setSelectedGif(null);
       setPollOptions([]);
       document.getElementById("photo-input").click();
     }
@@ -164,6 +189,8 @@ export default function PostInput({ handlePostSubmit }) {
     updatedPhotos.splice(index, 1);
     setPhotos(updatedPhotos);
   };
+
+  console.log(selectedGif);
 
   return (
     <div className="post-wrapper">
@@ -207,7 +234,7 @@ export default function PostInput({ handlePostSubmit }) {
           <div className="post-input-icon" onClick={togglePoll}>
             {showPoll ? <AiOutlineCloseCircle /> : <AiOutlineBarChart />}
           </div>
-          <div className="post-input-icon">
+          <div className="post-input-icon" onClick={toggleGifSearch}>
             <AiOutlineGif />
           </div>
           <div className="post-input-icon">
@@ -244,6 +271,14 @@ export default function PostInput({ handlePostSubmit }) {
         </div>
       ))}
       </div>
+      {selectedGif && (
+        <div className="selected-gif-container">
+          <img src={selectedGif.images.original.url} alt="Selected GIF" />
+        </div>
+      )}
+      {showGifSearch && (<div className="gif-search">
+        <SearchExperience setSelectedGif={setSelectedGif} />
+      </div>)}
       {validationError && <div className="error-message">{validationError}</div>}
       <input type="file" id="photo-input" multiple accept="image/*" onChange={handlePhotoImport} style={{ display: "none" }} />
     </div>

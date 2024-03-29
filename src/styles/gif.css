@@ -1,0 +1,14 @@
+.search-bar-container {
+    margin-bottom: 20px;
+  }
+  
+  .suggestion-bar-container {
+    margin-bottom: 20px;
+  }
+  
+  .grid-container {
+    display: flex;
+    justify-content: center;
+    max-height: 500px; /* Définissez la hauteur maximale souhaitée */
+    overflow-y: auto; /* Ajoutez une barre de défilement verticale lorsque nécessaire */
+  }
