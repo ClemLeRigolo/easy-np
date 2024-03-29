@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getGroupById, getEventsByGroup, deletePost } from "../utils/firebase";
+import { likePost, getUserDataById, getGroupById, getEventsByGroup, deletePost, likeEvent } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -12,6 +12,7 @@ import { changeColor } from "../components/schoolChoose";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import Event from "../components/event";
 
 class GroupEvent extends React.Component {
 
@@ -34,12 +35,15 @@ class GroupEvent extends React.Component {
     console.log("posts", posts);
     console.log("post", post);
 
-    likePost(post.id)
+    likeEvent(post.id)
       .then((data) => {
         console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
+
+        console.log("post.likeCount", post.likeCount);
+        console.log("post.likes", post.likes);
       
         // Mettez à jour l'état avec le post modifié
         this.setState({
@@ -218,14 +222,14 @@ class GroupEvent extends React.Component {
           <div className="home">
           
           {this.state.posts && this.state.posts.map((post, index) => (
-                    <Post 
-                    key={index} 
-                    post={post} 
-                    handleLikeClick={() => this.handleLikeClick(index)}
-                    handleCommentClick={() => this.handleCommentClick(index)} 
-                    handleDeletePost={() => this.handleDeletePost(post.id)}
-                    likeCount={post.likeCount} 
-                    commentCount={post.commentCount} 
+                    <Event 
+                      key={index} 
+                      post={post} 
+                      handleLikeClick={() => this.handleLikeClick(index)}
+                      handleCommentClick={() => this.handleCommentClick(index)} 
+                      handleDeletePost={() => this.handleDeletePost(post.id)}
+                      likeCount={post.likeCount} 
+                      commentCount={post.commentCount} 
                     />
         ))} 
         </div>
