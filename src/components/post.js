@@ -271,7 +271,8 @@ class Post extends React.Component {
     }
 
     if (post.voters) {
-      post.voters.forEach((voter, index) => {
+      console.log("voters", post.voters);
+      Object.values(post.voters).forEach((voter, index) => {
         if (voter.includes(getCurrentUser().uid)) {
           //this.setState({ vote: post.pool[index] });
           console.log("vote", post.pool[index]);

@@ -115,7 +115,7 @@ export default function PostInput({ handlePostSubmit }) {
         
         Promise.all(compressedImagesPromises)
           .then((compressedImages) => {
-            handlePostSubmit(finalContent, compressedImages, pollOptions, selectedGif.images.original.url);
+            handlePostSubmit(finalContent, compressedImages, pollOptions, selectedGif ? selectedGif.images.original.url : null);
             setPhotos([]);
             setPostContent("");
             setValidationError("");
