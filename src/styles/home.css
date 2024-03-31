@@ -31,3 +31,28 @@
   body {
     overflow-y: scroll;
   }
+
+  .post-list-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .post-list-header button {
+    background-color: white;
+    color: black;
+    padding: 10px 10px;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  .post-list-header button.active {
+    background-color: #fff;
+    border-bottom: 3px solid green;
+  }
+  
+  .post-list-header button:not(.active) {
+    border-bottom: 3px solid black;
+  }

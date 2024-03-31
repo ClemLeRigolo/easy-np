@@ -31,7 +31,7 @@ class Event extends React.Component {
 
   handleShareClick = () => {
     const { post } = this.state;
-    const postUrl = `/post/${post.id}`; // Remplacez par l'URL réelle vers le post
+    const postUrl = `/group/${post.groupId}/event/${post.id}`; // Remplacez par l'URL réelle vers le post
     //On récupère l'url de base
     const baseUrl = window.location.origin;
     //On enlève tout ce qu'il y a après le premier /
@@ -309,7 +309,7 @@ class Event extends React.Component {
           </div>)}
         </div>
         {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
-        <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>
+        <div className="post-body" dangerouslySetInnerHTML={{ __html: post.description }}></div>
         {post.images && (
           <div className="post-photos">
             {Object.values(post.images).map((image, index) => (

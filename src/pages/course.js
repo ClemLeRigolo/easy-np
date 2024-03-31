@@ -25,6 +25,7 @@ class Course extends React.Component {
         groupBanner: Info3,
         school: "",
         course: null,
+        window: "discussion",
     };
   }
 
@@ -71,32 +72,8 @@ class Course extends React.Component {
     this.setState({ groupBanner: value });
   }
 
-  addAdmin = (value) => {
-    this.setState({ admins: [...this.state.admins, value] });
-  }
-
-  removeAdmin = (value) => {
-    this.setState({ admins: this.state.admins.filter((admin) => admin !== value) });
-  }
-
-  removeMbr = (value) => {
-    this.setState({ membres: this.state.membres.filter((mbr) => mbr !== value) });
-    this.setState({ membersSetted: false });
-    this.setState({ showManage: true })
-  }
-
-  acceptMember = (value) => {
-    this.setState({ waitingList: this.state.waitingList.filter((mbr) => mbr !== value) });
-    this.setState({ waitingListSetted: false });
-    this.setState({ membres: [...this.state.membres, value] });
-    this.setState({ membersSetted: false });
-    this.setState({ showManage: true })
-  }
-
-  refuseMember = (value) => {
-    this.setState({ waitingList: this.state.waitingList.filter((mbr) => mbr !== value) });
-    this.setState({ waitingListSetted: false });
-    this.setState({ showManage: true })
+  handleWindow = (value) => {
+    this.setState({ window: value });
   }
 
   render() {
@@ -174,6 +151,13 @@ class Course extends React.Component {
             setCoverImg={this.setCoverImg}
             />
         <p dangerouslySetInnerHTML={{ __html: this.state.course.description }}></p>
+        </div>
+        <div className="course-navigation">
+          <button className={this.state.window === 'discussion' ? 'active' : ""} onClick={() => this.handleWindow('discussion')}>Discussion</button>
+          <button className={this.state.window === 'tds' ? 'active' : ""} onClick={() => this.handleWindow('tds')}>TDs</button>
+          <button className={this.state.window === 'tps' ? 'active' : ""} onClick={() => this.handleWindow('tps')}>TPs</button>
+          <button className={this.state.window === 'exams' ? 'active' : ""} onClick={() => this.handleWindow('exams')}>Exams</button>
+          <button className={this.state.window === 'fiches' ? 'active' : ""} onClick={() => this.handleWindow('fiches')}>Fiches</button>
         </div>
       </div>
     )

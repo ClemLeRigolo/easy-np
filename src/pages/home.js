@@ -2,13 +2,14 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, newPost, newPostWithImages, newPostWithPool, newPostWithGif, listenForPostChanges, getUserDataById, likePost, getCurrentUser, deletePost, getForUserPosts } from "../utils/firebase";
+import { getUserData, newPost, newPostWithImages, newPostWithPool, newPostWithGif, listenForPostChanges, getUserDataById, likePost, likeEvent, getCurrentUser, deletePost, getForUserPosts, getEvents } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import GroupNavigation from "../components/groupNavigation";
 import PostInput from "../components/postInput";
 import Post from "../components/post";
 import { IoMdRefresh } from 'react-icons/io';
+import Event from "../components/event";
 
 
 import "../styles/home.css";
@@ -28,6 +29,8 @@ class Home extends React.Component {
       showRefreshButton: false,
       firstLoad: true,
       gid: 1710178386585,
+      window: "posts",
+      events: [],
     };
   }
 
@@ -120,6 +123,45 @@ class Home extends React.Component {
       });
   };
 
+  handleEventLikeClick = (postIndex) => {
+    const { events } = this.state;
+    const post = events[postIndex];
+
+    console.log("post", post);
+
+    likeEvent(post.id)
+      .then((data) => {
+        console.log("Liked post");
+        // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
+        post.likeCount += data.status;
+        post.likes = data.likes;
+
+        console.log("post.likeCount", post.likeCount);
+        console.log("post.likes", post.likes);
+      
+        // Mettez à jour l'état avec le post modifié
+        this.setState({
+          events: [...events.slice(0, postIndex), post, ...events.slice(postIndex + 1)]
+        });
+      })
+      .catch((error) => {
+        console.error("Erreur lors du like du post :", error);
+      });
+  };
+
+  handleCommentClick = (postIndex) => {
+    const { posts } = this.state;
+    const post = posts[postIndex];
+
+    // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le commentCount
+    post.commentCount += 1;
+  
+    // Mettez à jour l'état avec le post modifié
+    this.setState({
+      posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
+    });
+  };
+
   handleCommentClick = (postIndex) => {
     const { posts } = this.state;
     const post = posts[postIndex];
@@ -189,6 +231,10 @@ class Home extends React.Component {
     this.updatePosts();
   };
 
+  handleWindowChange = (window) => {
+    this.setState({ window });
+  }
+
   componentDidMount() {
     // rafraichit les posts quand la base de données change
     this.updatePosts();
@@ -208,6 +254,23 @@ class Home extends React.Component {
       }
       console.log(this.state.showRefreshButton);
     });
+    getEvents().then((events) => {
+      console.log("events", events);
+      if (!events) {
+        return;
+      }
+      const events2 = [];
+      Object.values(events).forEach((event) => {
+        getUserDataById(Object.values(event)[0].creator).then((data) => {
+          Object.values(event)[0].username = data.name + " " + data.surname;
+          Object.values(event)[0].school = data.school;
+          Object.values(event)[0].profileImg = data.profileImg;
+          events2.push(Object.values(event)[0]);
+        });
+      });
+      this.setState({ events: events2 });
+    }
+    );
   }
 
   render() {
@@ -241,8 +304,8 @@ class Home extends React.Component {
       return <Loader />;
     }
 
-    console.log(this.state.showRefreshButton);
-    console.log(this.state.posts);
+    console.log(this.state.window);
+    console.log(this.state.events);
 
     return (
       <div className="interface">
@@ -256,6 +319,12 @@ class Home extends React.Component {
             <div><GroupNavigation /></div>
           </div>
           <div className="post-list">
+          <div className="post-list-header">
+            <button className={this.state.window === 'posts' ? 'active' : ''} onClick={() => this.handleWindowChange("posts")}>Posts</button>
+            <button className={this.state.window === 'events' ? 'active' : ''} onClick={() => this.handleWindowChange("events")}>Événements</button>
+          </div>
+          {this.state.window === 'posts' ? (
+            <>
           <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
           {this.state.posts && this.state.posts.map((post, index) => (
             <Post 
@@ -268,6 +337,21 @@ class Home extends React.Component {
               commentCount={post.commentCount} 
             />
           ))}
+          </>) : (
+            <>
+            {this.state.events && this.state.events.map((event, index) => (
+              <Event 
+                      key={index} 
+                      post={event} 
+                      handleLikeClick={() => this.handleEventLikeClick(index)}
+                      handleCommentClick={() => this.handleCommentClick(index)} 
+                      handleDeletePost={() => this.handleDeletePost(event.id)}
+                      likeCount={event.likeCount} 
+                      commentCount={event.commentCount} 
+                    />
+            ))}
+            </>
+          )}
           </div>
         </div>
       </div>

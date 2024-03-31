@@ -172,7 +172,6 @@ class GroupEvent extends React.Component {
           const promises = [];
 
           Object.values(querySnapshot).forEach((doc) => {
-            doc.content = doc.description;
             const promise = getUserDataById(doc.creator).then((data) => {
                 doc.username = data.name + " " + data.surname;
                 doc.school = data.school;
