@@ -122,6 +122,7 @@ export const fr = {
     IF: "Ingénierie pour la Finance",
     MMIS: "Modélisation Mathématique, Image, Simulation",
     COMMON: "Tronc Commun",
+    NO_COURSES: "Aucun cours pour l'instant",
   }
 
 };
