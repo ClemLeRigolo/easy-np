@@ -190,6 +190,12 @@ export default function PostInput({ handlePostSubmit }) {
     setPhotos(updatedPhotos);
   };
 
+  const handleDeleteGif = () => {
+    setSelectedGif(null);
+    setSelectedOption(null);
+    setShowGifSearch(false);
+  }
+
   console.log(selectedGif);
 
   return (
@@ -273,10 +279,26 @@ export default function PostInput({ handlePostSubmit }) {
       </div>
       {selectedGif && (
         <div className="selected-gif-container">
+          <div style={{ marginBottom: '10px', position: 'relative' }}>
           <img src={selectedGif.images.original.url} alt="Selected GIF" />
+          <div
+            className="delete-icon"
+            onClick={() => handleDeleteGif()}
+            style={{
+              position: 'absolute',
+              top: '5px',
+              right: '5px',
+              borderRadius: '50%',
+              padding: '5px',
+              cursor: 'pointer',
+            }}
+          >
+          <AiOutlineCloseCircle style={{ color: 'red', fontSize: '18px' }} />
+        </div>
+        </div>
         </div>
       )}
-      {showGifSearch && (<div className="gif-search">
+      {showGifSearch && !selectedGif && (<div className="gif-search">
         <SearchExperience setSelectedGif={setSelectedGif} />
       </div>)}
       {validationError && <div className="error-message">{validationError}</div>}

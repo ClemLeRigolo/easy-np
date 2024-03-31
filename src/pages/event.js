@@ -79,7 +79,7 @@ class Event extends React.Component {
 
     // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
     if (postImages.length > 0) {
-      newPostWithImages(postContent, this.state.gid, postImages)
+      newPostWithImages(postContent, this.state.gid + this.state.eid, postImages)
         .then((finito) => {
           if (finito) {
             console.log("Post enregistré avec succès");
@@ -93,7 +93,7 @@ class Event extends React.Component {
         });
     } else if (pool.length > 0) {
       // Enregistrez le post dans la base de données Firebase
-      newPostWithPool(postContent, this.state.gid, pool)
+      newPostWithPool(postContent, this.state.gid + this.state.eid, pool)
         .then(() => {
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post
@@ -104,7 +104,7 @@ class Event extends React.Component {
         });
     } else if (gif) {
       // Enregistrez le post dans la base de données Firebase
-      newPostWithGif(postContent, this.state.gid, gif)
+      newPostWithGif(postContent, this.state.gid + this.state.eid, gif)
         .then(() => {
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post
@@ -115,7 +115,7 @@ class Event extends React.Component {
         });
     } else {
       // Enregistrez le post dans la base de données Firebase
-      newPost(postContent, this.state.gid)
+      newPost(postContent, this.state.gid + this.state.eid)
         .then(() => {
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post
@@ -128,7 +128,7 @@ class Event extends React.Component {
   };
 
   updatePosts = () => {
-    getPostByGroup(this.state.gid).then(
+    getPostByGroup(this.state.gid + this.state.eid).then(
       (querySnapshot) => {
         const posts = [];
         const promises = [];
@@ -201,7 +201,7 @@ class Event extends React.Component {
       //this.state.gid = this.props.match.params.gid;
       this.setState({ eid: this.props.match.params.eid });
       //this.state.eid = this.props.match.params.eid;
-      getPostByGroup(this.props.match.params.gid).then(
+      getPostByGroup(this.props.match.params.gid + this.props.match.params.eid).then(
         (querySnapshot) => {
           const posts = [];
           const promises = [];

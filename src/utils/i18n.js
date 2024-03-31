@@ -44,6 +44,17 @@ export const fr = {
     SALOON_NAME: "Nom du salon",
     SALOON_DESCRIPTION: "Description du salon",
     NO_HTML: "Le message ne peut pas contenir de HTML",
+    CREATE_COURSE: "Créer un cours",
+    COURSE_NAME: "Nom du cours",
+    COURSE_DESCRIPTION: "Description du cours",
+    COURSE_YEAR: "Année d'enseignement",
+    SELECT_YEAR: "Sélectionnez une année",
+    FIRST_YEAR: "1ère année",
+    SECOND_YEAR: "2ème année",
+    THIRD_YEAR: "3ème année",
+    CHOOSE_PROGRAM: "Choisissez une filière",
+    SELECT_PROGRAM: "Sélectionnez une filière",
+    ALL_PROGRAMS: "Tronc commun",
   },
 
   ERRORS: {
@@ -102,6 +113,16 @@ export const fr = {
     UNSUBSCRIBE: "Se désabonner",
     CLOSE: "Fermer",
   },
+
+  COURSES: {
+    FIRST_YEAR: "1ère année",
+    SECOND_YEAR: "2ème année",
+    THIRD_YEAR: "3ème année",
+    ISI: "Ingénierie des Systèmes d'Information",
+    IF: "Ingénierie pour la Finance",
+    MMIS: "Modélisation Mathématique, Image, Simulation",
+    COMMON: "Tronc Commun",
+  }
 
 };
 

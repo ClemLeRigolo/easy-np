@@ -1,0 +1,250 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import { authStates, withAuth } from "../components/auth";
+import Loader from "../components/loader";
+import { getUserDataById, getCoursesBySchool } from "../utils/firebase";
+import fr from "../utils/i18n";
+import "../styles/courses.css";
+import { changeColor } from "../components/schoolChoose";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+
+class Courses extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      profileImg: null,
+      dataCollected: false,
+      admin: false,
+      school: "",
+      firstYearCourses: [],
+      secondYearCommonCourses: [], // Cours du tronc commun
+      secondYearISICourses: [], // Cours de la filière ISI
+      secondYearIFCourses: [], // Cours de la filière IF
+      secondYearMMISCourses: [], // Cours de la filière MMIS
+      thirdYearCommonCourses: [], // Cours du tronc commun
+      thirdYearISICourses: [], // Cours de la filière ISI
+      thirdYearIFCourses: [], // Cours de la filière IF
+      thirdYearMMISCourses: [], // Cours de la filière MMIS
+      showFirstYearCourses: false,
+      showSecondYearCourses: false,
+      showSecondYearCommonCourses: false,
+      showSecondYearISICourses: false,
+      showSecondYearIFCourses: false,
+      showSecondYearMMISCourses: false,
+      showThirdYearCourses: false,
+        showThirdYearCommonCourses: false,
+        showThirdYearISICourses: false,
+        showThirdYearIFCourses: false,
+        showThirdYearMMISCourses: false,
+      coursesSetted: false,
+    };
+  }
+
+  render() {
+    const { authState, user } = this.props;
+
+    if (authState === authStates.INITIAL_VALUE) {
+      console.log("initial value");
+      return <Loader />;
+    }
+
+    if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
+      getUserDataById(user.uid).then((userData) => {
+        console.log("userData", userData);
+        this.setState({
+          profileImg: userData.profileImg,
+          dataCollected: true,
+          admin: userData.admin ? true : false,
+          school: userData.school,
+        });
+        if (!this.state.profileImg) {
+          this.setState({
+            profileImg: require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`),
+          });
+        }
+        changeColor(userData.school);
+      });
+      return <Loader />;
+    }
+
+    if (!this.state.coursesSetted) {
+      getCoursesBySchool(this.state.school).then((courses) => {
+        console.log("courses", courses);
+        if (!courses) {
+          return;
+        }
+
+        const firstYearCourses = [];
+        const secondYearCommonCourses = [];
+        const secondYearISICourses = [];
+        const secondYearIFCourses = [];
+        const secondYearMMISCourses = [];
+        const thirdYearCommonCourses = [];
+        const thirdYearISICourses = [];
+        const thirdYearIFCourses = [];
+        const thirdYearMMISCourses = [];
+
+        Object.values(courses).forEach((course) => {
+          console.log("course", course);
+          if (course.year === "1") {
+            firstYearCourses.push(course);
+          } else if (course.year === "2") {
+            if (course.program === "Common") {
+              secondYearCommonCourses.push(course);
+            } else if (course.program === "ISI") {
+              secondYearISICourses.push(course);
+            } else if (course.program === "IF") {
+              secondYearIFCourses.push(course);
+            } else if (course.program === "MMIS") {
+              secondYearMMISCourses.push(course);
+            }
+          } else if (course.year === "3") {
+            if (course.program === "Common") {
+              thirdYearCommonCourses.push(course);
+            } else if (course.program === "ISI") {
+              thirdYearISICourses.push(course);
+            } else if (course.program === "IF") {
+              thirdYearIFCourses.push(course);
+            } else if (course.program === "MMIS") {
+              thirdYearMMISCourses.push(course);
+            }
+          }
+        });
+
+        this.setState({
+          firstYearCourses,
+          secondYearCommonCourses,
+          secondYearISICourses,
+          secondYearIFCourses,
+          secondYearMMISCourses,
+          thirdYearCommonCourses,
+          thirdYearISICourses,
+          thirdYearIFCourses,
+          thirdYearMMISCourses,
+          coursesSetted: true,
+        });
+      });
+    }
+
+    console.log(this.state.firstYearCourses);
+
+    return (
+      <div className="interface">
+        <div className="course-list">
+          {this.state.admin && (
+           <Link to="/createCourse" className="create-course-button">
+              <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_COURSE}
+            </Link>
+          )}
+          <div className="year-courses">
+            <h2
+              className="year-title"
+              onClick={() =>
+                this.setState((prevState) => ({
+                  showFirstYearCourses: !prevState.showFirstYearCourses,
+                }))
+              }
+            >
+              {fr.COURSES.FIRST_YEAR}
+            </h2>
+            {this.state.showFirstYearCourses &&
+              this.state.firstYearCourses.map((course) => (
+                <div className="course" key={course.id}>
+                  <h3>{course.name}</h3>
+                  <p>{course.description}</p>
+                </div>
+              ))}
+
+            <h2
+              className="year-title"
+              onClick={() =>
+                this.setState((prevState) => ({
+                  showSecondYearCourses: !prevState.showSecondYearCourses,
+                }))
+              }
+            >
+              {fr.COURSES.SECOND_YEAR}
+            </h2>
+            {this.state.showSecondYearCourses && (
+              <>
+                <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showSecondYearCommonCourses: !prevState.showSecondYearCommonCourses }))}>{fr.COURSES.COMMON}</h2>
+                {this.state.showSecondYearCommonCourses && this.state.secondYearCommonCourses.map((course) => (
+                  <div className="course" key={course.id}>
+                    <h3>{course.name}</h3>
+                    <p>{course.description}</p>
+                  </div>
+                ))}
+                <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showSecondYearISICourses: !prevState.showSecondYearISICourses }))}>{fr.COURSES.ISI}</h2>
+                {this.state.showSecondYearISICourses && this.state.secondYearISICourses.map((course) => (
+                  <div className="course" key={course.id}>
+                    <h3>{course.name}</h3>
+                    <p>{course.description}</p>
+                  </div>
+                ))}
+                <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showSecondYearIFCourses: !prevState.showSecondYearIFCourses }))}>{fr.COURSES.IF}</h2>
+                {this.state.showSecondYearIFCourses && this.state.secondYearIFCourses.map((course) => (
+                  <div className="course" key={course.id}>
+                    <h3>{course.name}</h3>
+                    <p>{course.description}</p>
+                  </div>
+                ))}
+                <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showSecondYearMMISCourses: !prevState.showSecondYearMMISCourses }))}>{fr.COURSES.MMIS}</h2>
+                {this.state.showSecondYearMMISCourses && this.state.secondYearMMISCourses.map((course) => (
+                  <div className="course" key={course.id}>
+                    <h3>{course.name}</h3>
+                    <p>{course.description}</p>
+                  </div>
+                ))}
+              </>
+            )}
+
+            <h2
+              className="year-title"
+              onClick={() =>
+                this.setState((prevState) => ({
+                  showThirdYearCourses: !prevState.showThirdYearCourses,
+                }))
+              }
+            >
+              {fr.COURSES.THIRD_YEAR}
+            </h2>
+            {this.state.showThirdYearCourses && (
+              <>
+                <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showThirdYearCommonCourses: !prevState.showThirdYearCommonCourses }))}>{fr.COURSES.COMMON}</h2>
+                {this.state.showThirdYearCommonCourses && this.state.thirdYearCommonCourses.map((course) => (
+                  <div className="course" key={course.id}>
+                    <h3>{course.name}</h3>
+                    <p>{course.description}</p>
+                  </div>
+                ))}
+                <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showThirdYearISICourses: !prevState.showThirdYearISICourses }))}>{fr.COURSES.ISI}</h2>
+                {this.state.showThirdYearISICourses && this.state.thirdYearISICourses.map((course) => (
+                  <div className="course" key={course.id}>
+                    <h3>{course.name}</h3>
+                    <p>{course.description}</p>
+                  </div>
+                ))}
+                <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showThirdYearIFCourses: !prevState.showThirdYearIFCourses }))}>{fr.COURSES.IF}</h2>
+                {this.state.showThirdYearIFCourses && this.state.thirdYearIFCourses.map((course) => (
+                  <div className="course" key={course.id}>
+                    <h3>{course.name}</h3>
+                    <p>{course.description}</p>
+                  </div>
+                ))}
+                <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showThirdYearMMISCourses: !prevState.showThirdYearMMISCourses }))}>{fr.COURSES.MMIS}</h2>
+                {this.state.showThirdYearMMISCourses && this.state.thirdYearMMISCourses.map((course) => (
+                  <div className="course" key={course.id}>
+                    <h3>{course.name}</h3>
+                    <p>{course.description}</p>
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default withAuth(Courses);

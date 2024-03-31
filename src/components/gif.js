@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import '../styles/gif.css'
 
 import {
@@ -30,9 +30,9 @@ const Components = ({setSelectedGif}) => {
         <SearchBar />
       </div>
 
-      <div className="suggestion-bar-container">
+      {/*<div className="suggestion-bar-container">
         <SuggestionBar />
-      </div>
+      </div>*/}
 
       <div className="grid-container">
         <Grid
