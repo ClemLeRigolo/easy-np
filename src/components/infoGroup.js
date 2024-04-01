@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import {LiaEdit} from "react-icons/lia"
 import { MdOutlineManageAccounts } from "react-icons/md";
@@ -8,12 +8,12 @@ import { useRef } from 'react';
 import { postGroupImg, postCoverGroupImg, changeRole, removeMemberFromId, acceptMemberFromId, refuseMemberFromId } from '../utils/firebase'
 import fr from '../utils/i18n'
 import '../styles/infoGroup.css'
-import Loader from './loader';
 import { Link } from 'react-router-dom';
 import { IoPersonRemoveOutline } from "react-icons/io5";
 import { FaCheck } from "react-icons/fa6";
 import { ImCross } from "react-icons/im";
 import GroupMembership from './groupMembership';
+import { compressImage, cropImage } from '../utils/helpers';
 
 const InfoGroup = ({userPostData,
               following,
@@ -43,11 +43,12 @@ const InfoGroup = ({userPostData,
               waitingListData,
               acceptMember,
               refuseMember,
+              showManage,
             }) => {
 
 
 
-  const [showManageWindow, setShowManageWindow] = useState(false);
+  const [showManageWindow, setShowManageWindow] = useState(showManage);
   const [windowManageMember, setWindowManageMember] = useState('membres');
 
   const importProfile=useRef()
@@ -58,6 +59,7 @@ const InfoGroup = ({userPostData,
   };
 
   const openManageWindow = () => {
+    console.log("on ouvre")
     setShowManageWindow(true);
   };
   
@@ -118,112 +120,6 @@ const InfoGroup = ({userPostData,
     }
   };
 
-  const compressImage = (img) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-  
-      reader.onload = (event) => {
-        const image = new Image();
-        image.src = event.target.result;
-  
-        image.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-  
-          const maxSize = 1024;
-  
-          let width = image.width;
-          let height = image.height;
-  
-          if (width > height) {
-            if (width > maxSize) {
-              height *= maxSize / width;
-              width = maxSize;
-            }
-          } else {
-            if (height > maxSize) {
-              width *= maxSize / height;
-              height = maxSize;
-            }
-          }
-  
-          canvas.width = width;
-          canvas.height = height;
-  
-          ctx.drawImage(image, 0, 0, width, height);
-  
-          canvas.toBlob((blob) => {
-            const compressedFile = new File([blob], img.name, {
-              type: 'image/jpeg',
-              lastModified: Date.now(),
-            });
-            resolve(compressedFile);
-          }, 'image/jpeg', 0.9);
-        };
-  
-        image.onerror = (error) => {
-          reject(error);
-        };
-      };
-  
-      reader.onerror = (error) => {
-        reject(error);
-      };
-  
-      reader.readAsDataURL(img);
-    });
-  }
-  
-  const cropImage = (img) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-  
-      reader.onload = (event) => {
-        const image = new Image();
-        image.src = event.target.result;
-  
-        image.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-  
-          const size = 170;
-  
-          canvas.width = size;
-          canvas.height = size;
-  
-          let offsetX = 0;
-          let offsetY = 0;
-  
-          if (image.width > image.height) {
-            offsetX = (image.width - image.height) / 2;
-          } else {
-            offsetY = (image.height - image.width) / 2;
-          }
-  
-          ctx.drawImage(image, offsetX, offsetY, image.width - 2 * offsetX, image.height - 2 * offsetY, 0, 0, size, size);
-  
-          canvas.toBlob((blob) => {
-            const croppedFile = new File([blob], img.name, {
-              type: 'image/jpeg',
-              lastModified: Date.now(),
-            });
-            resolve(croppedFile);
-          }, 'image/jpeg', 0.9);
-        };
-  
-        image.onerror = (error) => {
-          reject(error);
-        };
-      };
-  
-      reader.onerror = (error) => {
-        reject(error);
-      };
-  
-      reader.readAsDataURL(img);
-    });
-  };
-
   const handleFile2 = async (e)=>{
     if (e.target.files && e.target.files[0]) {
       let img = e.target.files[0];
@@ -242,11 +138,7 @@ const InfoGroup = ({userPostData,
     console.log(value)
   }
 
-  const isAdmin = admins.includes(uid);
   const isCreator = uid === group.creator;
-
-  console.log(members)
-  console.log(membersData)
 
   return (
 
@@ -324,7 +216,7 @@ const InfoGroup = ({userPostData,
 
         </div>
 
-        {showManageWindow && (membersData.length == members.length) && (
+        {showManageWindow && (
           <div className="manage-window">
             <div className="manage-window-buttons">
               <button
@@ -344,38 +236,38 @@ const InfoGroup = ({userPostData,
             <div>
             <h3>{fr.GROUPS.MANAGE}</h3>
             <ul>
-              {members.map((member,index) => (
-                <li key={member} className='row-member'>
-                  <Link to={`/profile/${member}`} className='member-name'>
-                  {membersData[index].profileImg ? (
-                    <img src={membersData[index].profileImg} alt="" className='post-avatar' />
+              {membersData.map((member,index) => (
+                <li key={member.uid} className='row-member'>
+                  <Link to={`/profile/${member.uid}`} className='member-name'>
+                  {member.profileImg ? (
+                    <img src={member.profileImg} alt="" className='post-avatar' />
                   ) : (
-                    <img src={require(`../images/Profile-pictures/${membersData[index].school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                    <img src={require(`../images/Profile-pictures/${member.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
                   )}
-                  <span>{membersData[index].name} {membersData[index].surname}</span>
+                  <span>{member.name} {member.surname}</span>
                   </Link>
-                  {member === group.creator ? (
+                  {member.uid === group.creator ? (
                     <select
                     value='creator'
                   >
                     <option value="creator">{fr.GROUPS.CREATOR}</option>
                   </select>
-                    ) : admins.includes(member.toString()) && !isCreator ? (
+                    ) : admins.includes(member.uid.toString()) && !isCreator ? (
                     <select
                     value='admin'
                   >
                     <option value="admin">{fr.GROUPS.ADMIN}</option>
                   </select>) : (
                     <select
-                    value={admins.includes(member.toString()) ? 'admin' : 'member'}
-                    onChange={(e) => handleRoleChange(member, e.target.value)}
+                    value={admins.includes(member.uid.toString()) ? 'admin' : 'member'}
+                    onChange={(e) => handleRoleChange(member.uid, e.target.value)}
                   >
                     <option value="member">{fr.GROUPS.MEMBER}</option>
                     <option value="admin">{fr.GROUPS.ADMIN}</option>
                   </select>
                   )}
-                  {member !== uid && (isCreator || !admins.includes(member.toString())) && (
-                    <button onClick={() => removeMember(member)}><IoPersonRemoveOutline /></button>
+                  {member.uid !== uid && (isCreator || !admins.includes(member.uid.toString())) && (
+                    <button onClick={() => removeMember(member.uid)}><IoPersonRemoveOutline /></button>
                   )}
                 </li>
               ))}
@@ -385,18 +277,18 @@ const InfoGroup = ({userPostData,
               <div>
               <h3>{fr.GROUPS.WAITING_LIST}</h3>
               <ul>
-                {waitingList.map((member,index) => (
-                  <li key={member} className='row-member'>
-                    <Link to={`/profile/${member}`} className='member-name'>
-                    {waitingListData[index].profileImg ? (
-                      <img src={waitingListData[index].profileImg} alt="" className='post-avatar' />
+                {waitingListData.map((member,index) => (
+                  <li key={member.uid} className='row-member'>
+                    <Link to={`/profile/${member.uid}`} className='member-name'>
+                    {member.profileImg ? (
+                      <img src={member.profileImg} alt="" className='post-avatar' />
                     ) : (
-                      <img src={require(`../images/Profile-pictures/${waitingListData[index].school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                      <img src={require(`../images/Profile-pictures/${member.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
                     )}
-                    <span>{waitingListData[index].name} {waitingListData[index].surname}</span>
+                    <span>{member.name} {member.surname}</span>
                     </Link>
-                    <button onClick={() => handleAcceptMember(member)}> <FaCheck /> </button>
-                    <button onClick={() => handleRefuseMember(member)}> <ImCross /> </button>
+                    <button onClick={() => handleAcceptMember(member.uid)}> <FaCheck /> </button>
+                    <button onClick={() => handleRefuseMember(member.uid)}> <ImCross /> </button>
                   </li>
                 ))}
               </ul>

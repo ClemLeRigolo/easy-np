@@ -1,8 +1,7 @@
 import React from "react";
-import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, newPostWithImages, newPostWithPool, newPostWithGif } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -73,23 +72,63 @@ class Event extends React.Component {
     this.setState({ postContent: event.target.value });
   };
 
-  handlePostSubmit = (postContent) => {
+  handlePostSubmit = (postContent, postImages, pool, gif) => {
 
+    console.log("postImages", postImages);
     console.log("postContent", postContent);
-    // Enregistrez le post dans la base de données Firebase
-    newPost(postContent,this.state.gid)
-      .then(() => {
-        this.setState({ postContent: "" });
-        this.handlePostContentChange(); // Réinitialisez le champ de texte du post
-        this.updatePosts();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de l'enregistrement du post :", error);
-      });
+
+    // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
+    if (postImages.length > 0) {
+      newPostWithImages(postContent, this.state.gid + this.state.eid, postImages)
+        .then((finito) => {
+          if (finito) {
+            console.log("Post enregistré avec succès");
+          }
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else if (pool.length > 0) {
+      // Enregistrez le post dans la base de données Firebase
+      newPostWithPool(postContent, this.state.gid + this.state.eid, pool)
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else if (gif) {
+      // Enregistrez le post dans la base de données Firebase
+      newPostWithGif(postContent, this.state.gid + this.state.eid, gif)
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else {
+      // Enregistrez le post dans la base de données Firebase
+      newPost(postContent, this.state.gid + this.state.eid)
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    }
   };
 
   updatePosts = () => {
-    getPostByGroup(this.state.gid).then(
+    getPostByGroup(this.state.gid + this.state.eid).then(
       (querySnapshot) => {
         const posts = [];
         const promises = [];
@@ -162,7 +201,7 @@ class Event extends React.Component {
       //this.state.gid = this.props.match.params.gid;
       this.setState({ eid: this.props.match.params.eid });
       //this.state.eid = this.props.match.params.eid;
-      getPostByGroup(this.props.match.params.gid).then(
+      getPostByGroup(this.props.match.params.gid + this.props.match.params.eid).then(
         (querySnapshot) => {
           const posts = [];
           const promises = [];
@@ -208,14 +247,6 @@ class Event extends React.Component {
 
     return (
       <div className='interface'>
-          <HeaderBar
-          search={this.state.search}
-          setSearch={this.setSearch}
-          showMenu={this.state.showMenu}
-          setShowMenu={this.setShowMenu}
-          profileImg={this.state.profileImg}
-          uid={user.uid}
-          />
         <div className="main-container">
           <div className="nav-container">
           <ChannelNavigation gid={this.state.gid} />

@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/post.css";
-import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById, voteFor } from "../utils/firebase";
+import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById, voteFor, addEventComment, getEventComments } from "../utils/firebase";
 import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaShareSquare } from "react-icons/fa";
@@ -14,7 +14,7 @@ import { FaEllipsisH } from "react-icons/fa";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import Poll from 'react-polls';
 
-class Post extends React.Component {
+class Event extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +31,7 @@ class Post extends React.Component {
 
   handleShareClick = () => {
     const { post } = this.state;
-    const postUrl = `/post/${post.id}`; // Remplacez par l'URL réelle vers le post
+    const postUrl = `/group/${post.groupId}/event/${post.id}`; // Remplacez par l'URL réelle vers le post
     //On récupère l'url de base
     const baseUrl = window.location.origin;
     //On enlève tout ce qu'il y a après le premier /
@@ -74,7 +74,7 @@ class Post extends React.Component {
     const { post } = this.props;
     const { commentInputValue } = this.state;
   
-    addComment(post.id, commentInputValue)
+    addEventComment(post.id, commentInputValue)
       .then(() => {
         console.log("Commentaire ajouté avec succès");
         // Réinitialiser la zone de texte des commentaires
@@ -89,7 +89,7 @@ class Post extends React.Component {
       })
       .then(() => {
         // Actualiser les commentaires après un court délai
-        return getComments(post.id);
+        return getEventComments(post.id);
       })
       .then((comments) => {
         const promises = comments.map((comment) => {
@@ -139,7 +139,7 @@ class Post extends React.Component {
     const { post } = this.state;
   
     // Récupérer les commentaires à partir de la source de données (par exemple, Firebase)
-    getComments(post.id)
+    getEventComments(post.id)
       .then((comments) => {
         const promises = comments.map((comment) => {
           // On boucle sur les commentaires pour rajouter le nom d'utilisateur
@@ -221,7 +221,7 @@ class Post extends React.Component {
     //on vérifie que le premier élément de comment a un attribut school défini
 
     if (post.comments && post.comments.length > 0 && !post.comments[0].hasOwnProperty("school")) {
-      getComments(post.id)
+        getEventComments(post.id)
       .then((comments) => {
         const promises = comments.map((comment) => {
           // On boucle sur les commentaires pour rajouter le nom d'utilisateur
@@ -271,8 +271,7 @@ class Post extends React.Component {
     }
 
     if (post.voters) {
-      console.log("voters", post.voters);
-      Object.values(post.voters).forEach((voter, index) => {
+      post.voters.forEach((voter, index) => {
         if (voter.includes(getCurrentUser().uid)) {
           //this.setState({ vote: post.pool[index] });
           console.log("vote", post.pool[index]);
@@ -288,7 +287,7 @@ class Post extends React.Component {
     }
 
     return (
-      <div className="post" data-cy="post">
+      <div className="post">
         <div className="post-header">
           <Link to={`/profile/${post.user}`} className="post-username">
           <ProfileImage uid={post.user} post={true} />
@@ -310,7 +309,7 @@ class Post extends React.Component {
           </div>)}
         </div>
         {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
-        <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>
+        <div className="post-body" dangerouslySetInnerHTML={{ __html: post.description }}></div>
         {post.images && (
           <div className="post-photos">
             {Object.values(post.images).map((image, index) => (
@@ -318,11 +317,6 @@ class Post extends React.Component {
                 <img src={image} alt="Post" />
               </div>
             ))}
-          </div>
-        )}
-        {post.gif && (
-          <div className="post-gif">
-            <img src={post.gif} alt="GIF" />
           </div>
         )}
         {post.pool && (
@@ -334,13 +328,13 @@ class Post extends React.Component {
           </div>
         )}
         <div className="post-footer">
-          <button className={`post-like-btn ${isLiked ? "liked" : ""}`} data-cy="like" onClick={this.handleLikeClick} likes={likeCount}>
+          <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>
             {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {likeCount} {likeCount > 1 ? fr.POSTS.LIKES : fr.POSTS.LIKE}
           </button>
-          <button className="post-comment-btn" data-cy="comment" onClick={this.handleCommentClick}>
+          <button className="post-comment-btn" onClick={this.handleCommentClick}>
             <AiOutlineComment /> {post.commentCount} {post.commentCount > 1 ? fr.POSTS.COMMENTS : fr.POSTS.COMMENT}
           </button>
-          <button className="post-share-btn" data-cy="share" onClick={this.handleShareClick}>
+          <button className="post-share-btn" onClick={this.handleShareClick}>
             <FaShareSquare /> {fr.POSTS.SHARE}
           </button>
         </div>
@@ -356,13 +350,13 @@ class Post extends React.Component {
           </div>
         )}
         {comments.length > 0 && (
-          <div className={`comments ${expandedComments ? "expanded" : ""}`} data-cy="comments">
-            <div className="comments-toggle" data-cy="toggleComments" onClick={this.toggleCommentVisibility}>
+          <div className={`comments ${expandedComments ? "expanded" : ""}`}>
+            <div className="comments-toggle" onClick={this.toggleCommentVisibility}>
               {expandedComments ? "" : "Voir les commentaires"}
               {expandedComments ? "" : <FaAngleDown className="icon" />}
             </div>
             {expandedComments && comments.map((comment, index) => (
-              <Comment key={comment.id} comment={comment} commentKey={index} postId={post.id}/>
+              <Comment key={comment.id} comment={comment} commentKey={index} postId={post.id} event={true}/>
             ))}
             <div className="comments-toggle" onClick={this.toggleCommentVisibility}>
               {expandedComments ? "Réduire les commentaires" : ""}
@@ -375,4 +369,4 @@ class Post extends React.Component {
   }
 }
 
-export default Post;
+export default Event;

@@ -2,7 +2,6 @@ import React from "react";
 // import Left from '../../Components/LeftSide/Left'
 import ProfileMiddle from '../components/profileMiddle'
 // import Right from '../../Components/RightSide/Right'
-import HeaderBar from '../components/headerBar'
 import "../styles/profile.css"
 import { authStates, withAuth } from "../components/auth";
 import { getPostByUser, likePost, getUserDataById, deletePost } from "../utils/firebase";
@@ -39,8 +38,10 @@ class Profile extends React.Component {
       isSubscribed: undefined,
       subscriptions: [],
       subscribers: [],
-      nbSubscribers: null,
-      nbSubscriptions: null,
+      subscribersData: [],
+      subscriptionsData: [],
+      subscribersSet: false,
+      subscriptionsSet: false,
       nbPosts: null,
     };
   }
@@ -200,8 +201,12 @@ class Profile extends React.Component {
           this.setState({
             userData: userData,
             uid: this.props.match.params.uid,
-            subscribers: userData.followers,
-            subscriptions: userData.subscriptions,
+            subscribers: userData.followers ? userData.followers : [],
+            subscribersData: [],
+            subscriptions: userData.subscriptions ? userData.subscriptions : [],
+            subscriptionsData: [],
+            subscribersSet: false,
+            subscriptionsSet: false,
           });
           if (userData.profileImg) {
             this.setProfileImg(userData.profileImg);
@@ -232,7 +237,10 @@ class Profile extends React.Component {
               posts.sort((a, b) => a.timestamp - b.timestamp);
               posts.reverse();
               console.log("posts", posts);
-              this.setState({ posts });
+              this.setState({ 
+                posts : posts,
+                nbPosts: posts.length,
+              });
               this.render();
             });
         });
@@ -266,46 +274,43 @@ class Profile extends React.Component {
         });
       return <Loader />;
     }
-
-
-    if (this.state.subscribers !== undefined) {
-      this.state.nbSubscribers = this.state.subscribers.length;
-      //this.setState({ nbSubscribers: this.state.subscribers.length });
-    } else {
-      this.state.nbSubscribers = 0;
-      //this.setState({ nbSubscribers: 0 });
-    }
-    if (this.state.subscriptions !== undefined) {
-      this.state.nbSubscriptions = this.state.subscriptions.length;
-      //this.setState({ nbSubscriptions: this.state.subscriptions.length });
-    } else {
-      this.state.nbSubscriptions = 0;
-    }
-
-    if (this.state.posts !== undefined) {
-      this.state.nbPosts = this.state.posts.length;
-    } else {
-      this.state.nbPosts = 0;
-    }
     
+    if (this.state.subscribers.length > 0 && !this.state.subscribersSet) {
+      this.state.subscribers.forEach((subscriber) => {
+        getUserDataById(subscriber)
+          .then((userData) => {
+            userData.uid = subscriber;
+            this.setState({
+              subscribersData: [...this.state.subscribersData, userData],
+            });
+          });
+      });
+      this.setState({ subscribersSet: true });
+    }
 
+    if (this.state.subscriptions.length > 0 && !this.state.subscriptionsSet) {
+      this.state.subscriptions.forEach((subscription) => {
+        getUserDataById(subscription)
+          .then((userData) => {
+            userData.uid = subscription;
+            this.setState({
+              subscriptionsData: [...this.state.subscriptionsData, userData],
+            });
+          });
+      });
+      this.setState({ subscriptionsSet: true });
+    }
 
-    if (this.state.isSubscribed === undefined || this.state.nbPosts === null || this.state.nbSubscribers === null || this.state.nbSubscriptions === null || this.state.posts === undefined || this.state.userData === null || this.state.currentUserData === null) {
+    if (this.state.isSubscribed === undefined || this.state.nbPosts === null || this.state.posts === undefined || this.state.userData === null || this.state.currentUserData === null) {
       return <Loader />;
     }
 
     console.log("this.state", this.state.userData);
+    console.log(this.state.subscriptions)
+    console.log(this.state.subscriptionsData);
 
     return (
       <div className='interface'>
-          <HeaderBar
-          search={this.state.search}
-          setSearch={this.setSearch}
-          showMenu={this.state.showMenu}
-          setShowMenu={this.setShowMenu}
-          profileImg={this.state.currentUserData.profileImg}
-          uid={user.uid}
-          />
         <div className="main-container">
           <div className="nav-container">
         <GroupNavigation />
@@ -335,8 +340,8 @@ class Profile extends React.Component {
             canModify={this.state.uid === user.uid}
             uid={this.state.uid}
             isSubscribedProps={this.state.isSubscribed}
-            nbSubscribers={this.state.nbSubscribers}
-            nbSubscriptions={this.state.nbSubscriptions}
+            subscribersData={this.state.subscribersData}
+            subscriptionsData={this.state.subscriptionsData}
             nbPosts={this.state.nbPosts}
             coverImg={this.state.coverImg}
             setCoverImg={this.setCoverImg}

@@ -1,0 +1,28 @@
+.course-container {
+    margin: 5%;
+    margin-bottom: 0;
+}
+
+.course-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.course-navigation button {
+    background-color: white;
+    color: black;
+    padding: 10px 10px;
+    border: none;
+    cursor: pointer;
+}
+
+.course-navigation button.active {
+    border-bottom: 3px solid green;
+}
+
+.course-navigation button:not(.active) {
+    border-bottom: 3px solid black;
+}

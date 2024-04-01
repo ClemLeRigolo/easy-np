@@ -6,7 +6,7 @@ import { formatPostTimestamp } from "../utils/helpers";
 
 import "../styles/comment.css";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { getUserDataById, answerToComment, getComment, likeComment, getCurrentUser } from "../utils/firebase";
+import { getUserDataById, answerToComment, getComment, likeComment, getCurrentUser, getEventComment } from "../utils/firebase";
 import Loader from "./loader";
 import fr from "../utils/i18n";
 import ProfileImage from "./profileImage";
@@ -42,34 +42,63 @@ class Comment extends React.Component {
     const { commentKey, postId } = this.props;
     console.log(commentKey)
     // Vous pouvez implémenter ici la logique pour publier la réponse
-    answerToComment(postId, commentKey, replyContent)
+    answerToComment(postId, commentKey, replyContent, this.props.event)
       .then(() => {
-        getComment(postId, commentKey).then((comment) => {
-          console.log("Réponse publiée :", comment);
-          // Actualiser l'état des réponses
-          this.setState((prevState) => ({
-            comment: {
-              ...prevState.comment,
-              answers: comment.answers,
-            },
-          }));
-          console.log(this.state.comment);
-          const promises = [];
-          console.log(this.state.comment.answers)
-          this.state.comment.answers.forEach(answer => {
-            getUserDataById(answer.user).then((userData) => {
-              console.log("userData", userData);
-              answer.author = userData.name + " " + userData.surname;
-              answer.profileImg = userData.profileImg;
-              answer.school = userData.school;
-              promises.push(answer);
-            }
-            );
+        if (!this.props.event) {
+          getComment(postId, commentKey).then((comment) => {
+            console.log("Réponse publiée :", comment);
+            // Actualiser l'état des réponses
+            this.setState((prevState) => ({
+              comment: {
+                ...prevState.comment,
+                answers: comment.answers,
+              },
+            }));
+            console.log(this.state.comment);
+            const promises = [];
+            console.log(this.state.comment.answers)
+            this.state.comment.answers.forEach(answer => {
+              getUserDataById(answer.user).then((userData) => {
+                console.log("userData", userData);
+                answer.author = userData.name + " " + userData.surname;
+                answer.profileImg = userData.profileImg;
+                answer.school = userData.school;
+                promises.push(answer);
+              }
+              );
+            });
+            Promise.all(promises).then((answers) => {
+              this.setState({ answers });
+            });
           });
-          Promise.all(promises).then((answers) => {
-            this.setState({ answers });
+        } else {
+          getEventComment(postId, commentKey).then((comment) => {
+            console.log("Réponse publiée :", comment);
+            // Actualiser l'état des réponses
+            this.setState((prevState) => ({
+              comment: {
+                ...prevState.comment,
+                answers: comment.answers,
+              },
+            }));
+            console.log(this.state.comment);
+            const promises = [];
+            console.log(this.state.comment.answers)
+            this.state.comment.answers.forEach(answer => {
+              getUserDataById(answer.user).then((userData) => {
+                console.log("userData", userData);
+                answer.author = userData.name + " " + userData.surname;
+                answer.profileImg = userData.profileImg;
+                answer.school = userData.school;
+                promises.push(answer);
+              }
+              );
+            });
+            Promise.all(promises).then((answers) => {
+              this.setState({ answers });
+            });
           });
-        });
+        }
       }
       );
     // Réinitialiser l'état de la réponse
@@ -79,26 +108,49 @@ class Comment extends React.Component {
   handleLike = () => {
     const { commentKey, postId } = this.props;
     likeComment(postId, commentKey).then(() => {
-      getComment(postId, commentKey).then((comment) => {
-        console.log("Commentaire liké :", comment);
-        if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid)) {
-          //this.state.liked = true;
-          this.setState({ liked: true })
-          this.setState({ likeCount: this.state.likeCount + 1})
-        } else {
-          this.setState({ liked: false })
-          this.setState({ likeCount: this.state.likeCount - 1})
-        }
-        console.log(comment.likes)
-        if (comment.likes !== undefined) {
-          const likeCount = Object.keys(comment.likes).length;
-          this.setState({ likeCount });
-        } else {
-          this.setState({ likeCount: 0})
-        }
-        this.setState({ comment })
-        console.log(this.state.comment);
-      });
+      if (!this.props.event) {
+        getComment(postId, commentKey).then((comment) => {
+          console.log("Commentaire liké :", comment);
+          if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid)) {
+            //this.state.liked = true;
+            this.setState({ liked: true })
+            this.setState({ likeCount: this.state.likeCount + 1})
+          } else {
+            this.setState({ liked: false })
+            this.setState({ likeCount: this.state.likeCount - 1})
+          }
+          console.log(comment.likes)
+          if (comment.likes !== undefined) {
+            const likeCount = Object.keys(comment.likes).length;
+            this.setState({ likeCount });
+          } else {
+            this.setState({ likeCount: 0})
+          }
+          this.setState({ comment })
+          console.log(this.state.comment);
+        });
+      } else {
+        getEventComment(postId, commentKey).then((comment) => {
+          console.log("Commentaire liké :", comment);
+          if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid)) {
+            //this.state.liked = true;
+            this.setState({ liked: true })
+            this.setState({ likeCount: this.state.likeCount + 1})
+          } else {
+            this.setState({ liked: false })
+            this.setState({ likeCount: this.state.likeCount - 1})
+          }
+          console.log(comment.likes)
+          if (comment.likes !== undefined) {
+            const likeCount = Object.keys(comment.likes).length;
+            this.setState({ likeCount });
+          } else {
+            this.setState({ likeCount: 0})
+          }
+          this.setState({ comment })
+          console.log(this.state.comment);
+        });
+      }
     });
   };
 
@@ -110,6 +162,7 @@ class Comment extends React.Component {
     const { commentKey, postId } = this.props;
     console.log(commentKey)
     // Vous pouvez implémenter ici la logique pour publier la réponse
+      if (!this.props.event) {
         getComment(postId, commentKey).then((comment) => {
           console.log("Réponse publiée :", comment);
           // Actualiser l'état des réponses
@@ -150,6 +203,48 @@ class Comment extends React.Component {
             this.setState({ answers });
           });
         });
+      } else {
+        getEventComment(postId, commentKey).then((comment) => {
+          console.log("Réponse publiée :", comment);
+          // Actualiser l'état des réponses
+          this.setState((prevState) => ({
+            comment: {
+              ...prevState.comment,
+              answers: comment.answers,
+            },
+          }));
+          if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid)) {
+            this.setState({ liked: true });
+          } else {
+            this.setState({ liked: false });
+          }
+          if (comment.likes !== undefined) {
+            const likeCount = Object.keys(comment.likes).length;
+            this.setState({ likeCount });
+          } else {
+            this.setState({ likeCount: 0})
+          }
+          console.log(this.state.comment);
+          const promises = [];
+          console.log(this.state.comment.answers)
+          if (this.state.comment.answers === undefined) {
+            return;
+          }
+          this.state.comment.answers.forEach(answer => {
+            getUserDataById(answer.user).then((userData) => {
+              console.log("userData", userData);
+              answer.author = userData.name + " " + userData.surname;
+              answer.profileImg = userData.profileImg;
+              answer.school = userData.school;
+              promises.push(answer);
+            }
+            );
+          });
+          Promise.all(promises).then((answers) => {
+            this.setState({ answers });
+          });
+        });
+      }
     }
 
   render() {

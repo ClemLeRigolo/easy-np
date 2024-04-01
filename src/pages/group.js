@@ -1,8 +1,7 @@
 import React from "react";
-import HeaderBar from '../components/headerBar'
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, deletePost } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, deletePost, newPostWithImages, newPostWithPool, newPostWithGif } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -36,6 +35,9 @@ class Group extends React.Component {
         membersSetted: false,
         waitingListSetted: false,
         canModify: false,
+        showManage: false,
+        firstMemberSet: true,
+        firstWaitingSet: true
     };
   }
 
@@ -79,7 +81,7 @@ class Group extends React.Component {
   }
 
   setCoverImg = (value) => {
-    this.setState({ coverImg: value });
+    this.setState({ groupBanner: value });
   }
 
   addAdmin = (value) => {
@@ -92,17 +94,22 @@ class Group extends React.Component {
 
   removeMbr = (value) => {
     this.setState({ membres: this.state.membres.filter((mbr) => mbr !== value) });
+    this.setState({ membersSetted: false });
+    this.setState({ showManage: true })
   }
 
   acceptMember = (value) => {
     this.setState({ waitingList: this.state.waitingList.filter((mbr) => mbr !== value) });
-    this.setState({ waitingListData: this.state.waitingListData.filter((mbr) => mbr.uid !== value) })
+    this.setState({ waitingListSetted: false });
     this.setState({ membres: [...this.state.membres, value] });
+    this.setState({ membersSetted: false });
+    this.setState({ showManage: true })
   }
 
   refuseMember = (value) => {
     this.setState({ waitingList: this.state.waitingList.filter((mbr) => mbr !== value) });
-    this.setState({ waitingListData: this.state.waitingListData.filter((mbr) => mbr.uid !== value) })
+    this.setState({ waitingListSetted: false });
+    this.setState({ showManage: true })
   }
 
   handleLikeClick = (postIndex) => {
@@ -150,19 +157,59 @@ class Group extends React.Component {
     this.setState({ postContent: event.target.value });
   };
 
-  handlePostSubmit = (postContent) => {
+  handlePostSubmit = (postContent, postImages, pool, gif) => {
 
+    console.log("postImages", postImages);
     console.log("postContent", postContent);
-    // Enregistrez le post dans la base de données Firebase
-    newPost(postContent,this.state.gid)
-      .then(() => {
-        this.setState({ postContent: "" });
-        this.handlePostContentChange(); // Réinitialisez le champ de texte du post
-        this.updatePosts();
-      })
-      .catch((error) => {
-        console.error("Erreur lors de l'enregistrement du post :", error);
-      });
+
+    // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
+    if (postImages.length > 0) {
+      newPostWithImages(postContent, this.state.gid, postImages)
+        .then((finito) => {
+          if (finito) {
+            console.log("Post enregistré avec succès");
+          }
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else if (pool.length > 0) {
+      // Enregistrez le post dans la base de données Firebase
+      newPostWithPool(postContent, this.state.gid, pool)
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else if (gif) {
+      // Enregistrez le post dans la base de données Firebase
+      newPostWithGif(postContent, this.state.gid, gif)
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else {
+      // Enregistrez le post dans la base de données Firebase
+      newPost(postContent, this.state.gid)
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    }
   };
 
   handleDeletePost = (id) => {
@@ -248,7 +295,11 @@ class Group extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      this.setState({ gid: this.props.match.params.gid });
+      this.setState({ 
+        gid: this.props.match.params.gid,
+        membersSetted: false,
+        waitingListSetted: false,
+      });
       //this.state.gid = this.props.match.params.gid;
       getPostByGroup(this.props.match.params.gid).then(
         (querySnapshot) => {
@@ -289,11 +340,27 @@ class Group extends React.Component {
             } else {
               this.setState({ groupImg: Info2 })
             }
-            if (group.members) this.setState({ membres: group.members });
-            if (group.admins) this.setState({ admins: group.admins });
-            if (group.waitingList) this.setState({ waitingList: group.waitingList });
-            if (group.admins) this.setState({ canModify: group.admins.includes(user.uid) })
+            if (group.members) {
+              this.setState({ membres: group.members });
+            } else {
+              this.setState({ membres: [] });
             }
+            if (group.admins) {
+              this.setState({ admins: group.admins });
+            } else {
+              this.setState({ admins: [] });
+            }
+            if (group.waitingList) {
+              this.setState({ waitingList: group.waitingList });
+            } else {
+              this.setState({ waitingList: [] });
+            }
+            if (group.admins) {
+              this.setState({ canModify: group.admins.includes(user.uid) })
+            } else {
+              this.setState({ canModify: false });
+            }
+          }
         );
       return <Loader />;
     }
@@ -314,12 +381,13 @@ class Group extends React.Component {
       let membersData = [];
       this.state.membres.forEach(member => {
         promises.push(getUserDataById(member).then((userData) => {
+          userData.uid = member;
           membersData.push(userData);
         }));
       });
       Promise.all(promises).then(() => {
-        //revert the list to have the last members first
-        membersData.reverse();
+        //sort by uid
+        //membersData.sort((a, b) => a.uid - b.uid);
         this.setState({ membersData});
         this.setState({ membersSetted: true });
       });
@@ -331,10 +399,13 @@ class Group extends React.Component {
       let waitingListData = [];
       this.state.waitingList.forEach(waiter => {
         promises.push(getUserDataById(waiter).then((userData) => {
+          userData.uid = waiter;
           waitingListData.push(userData);
         }));
       });
       Promise.all(promises).then(() => {
+        //sort by uid
+        //waitingListData.sort((a, b) => a.uid - b.uid);
         this.setState({ waitingListData});
         this.setState({ waitingListSetted: true });
       });
@@ -343,14 +414,6 @@ class Group extends React.Component {
 
     return (
       <div className='interface'>
-          <HeaderBar
-          search={this.state.search}
-          setSearch={this.setSearch}
-          showMenu={this.state.showMenu}
-          setShowMenu={this.setShowMenu}
-          profileImg={this.state.profileImg}
-          uid={user.uid}
-          />
         <div className="main-container">
           <div className="nav-container">
             <ChannelNavigation gid={this.state.gid} canModify={this.state.canModify} />
@@ -390,6 +453,7 @@ class Group extends React.Component {
             waitingListData={this.state.waitingListData}
             acceptMember={this.acceptMember}
             refuseMember={this.refuseMember}
+            showManage={this.state.showManage}
             />
         {/*<h1>{this.state.group.name}</h1>*/}
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>

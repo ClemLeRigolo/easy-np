@@ -176,12 +176,6 @@ const Info = ({userPostData,
 
             {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.PROFILE.EDIT}</button>}
 
-
-            {!canModify && !isSubscribed && <button className='sub-btn' onClick={()=>handleSubscription()} >{fr.PROFILE.SUBSCRIBE}</button>}
-            {!canModify && isSubscribed && isHovered && <button className='sub-btn' onClick={()=>handleUnsubscription()} onMouseLeave={changeHoverOut} >{fr.PROFILE.UNSUBSCRIBE}</button>}
-            {!canModify && isSubscribed && !isHovered && <button className='sub-btn' onClick={()=>handleSubscription()} onMouseEnter={changeHover} >{fr.PROFILE.SUBSCRIBED}</button>}
-            
-
             {/* <ModelProfile 
             name={name}
             setName={setName}
@@ -200,65 +194,20 @@ const Info = ({userPostData,
           <div className="info-details">
 
             <div className="info-col-2">
-              <div onClick={() => openSubscribers()}>
-                <h2>{subscribersData.length}</h2>
+              <div>
+                <h2>0</h2>
                 <span>{fr.PROFILE.FOLLOWERS}</span>
               </div>
               <div>
-                <h2>{nbPosts}</h2>
+                <h2>0</h2>
                 <span>{fr.PROFILE.POSTS}</span>
               </div>
-              <div onClick={() => openSubscriptions()}>
-                <h2>{subscriptionsData.length}</h2>
+              <div>
+                <h2>0</h2>
                 <span>{fr.PROFILE.FOLLOWINGS}</span>
               </div>
             </div>
-
           </div>
-
-          {showSubscribers && (
-            <div className="manage-window">
-              <h2>{fr.PROFILE.FOLLOWERS}</h2>
-              <div className="subscribers-list">
-                {subscribersData.map((subscriber,index) => (
-                  <div key={subscriber.uid} className="subscriber">
-                    <Link to={`/profile/${subscriber.uid}`} className='member-name'>
-                    {subscriber.profileImg ? (
-                      <img src={subscriber.profileImg} alt="" className='post-avatar' />
-                    ) : (
-                      <img src={require(`../images/Profile-pictures/${subscriber.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
-                    )}
-                    <span>{subscriber.name} {subscriber.surname}</span>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-              <button onClick={() => closeSubscribers()}>{fr.PROFILE.CLOSE}</button>
-            </div>
-          )}
-
-          {showSubscriptions && (
-            <div className="manage-window">
-              <h2>{fr.PROFILE.FOLLOWINGS}</h2>
-              <div className="subscribers-list">
-                {subscriptionsData.map((subscription,index) => (
-                  <div key={subscription.uid} className="subscriber">
-                    <Link to={`/profile/${subscription.uid}`} className='member-name'>
-                    {subscription.profileImg ? (
-                      <img src={subscription.profileImg} alt="" className='post-avatar' />
-                    ) : (
-                      <img src={require(`../images/Profile-pictures/${subscription.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
-                    )}
-                    <span>{subscription.name} {subscription.surname}</span>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-              <button onClick={() => closeSubscriptions()}>{fr.PROFILE.CLOSE}</button>
-            </div>
-          )}
-
-
         </div>
     </div>
   )

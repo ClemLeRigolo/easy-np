@@ -5,7 +5,6 @@ import Loader from "../components/loader";
 import { createEvent } from "../utils/firebase";
 import fr from "../utils/i18n";
 import "../styles/createEvent.css";
-import HeaderBar from "../components/headerBar";
 import moment from "moment";
 import "moment/locale/fr";
 import { withRouter } from "react-router-dom";
@@ -62,7 +61,7 @@ class CreateEvent extends React.Component {
 
   render() {
     moment.locale("fr");
-    const { authState, user } = this.props;
+    const { authState } = this.props;
     const { title, description, startDate, endDate, theme, redirect, formattedStartTime, formattedEndTime } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {
@@ -76,7 +75,6 @@ class CreateEvent extends React.Component {
 
     return (
       <div className="interface">
-        <HeaderBar search={""} setSearch={""} showMenu={false} setShowMenu={false} uid={user.uid} />
         <div className="form-container">
           <h2>{fr.FORM_FIELDS.CREATE_EVENT}</h2>
           <form onSubmit={this.handleSubmit}>

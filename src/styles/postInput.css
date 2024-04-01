@@ -1,13 +1,25 @@
+.post-wrapper {
+  background-color: #f7f7f7;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  padding: 10px;
+  margin-top: 0px !important;
+  padding-top: 0px !important;
+}
+
 .postInput {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: center;
-    margin-bottom: 20px;
-    background-color: #f7f7f7;
-    border-radius: 20px;
     padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 90%;
+    padding-bottom: 0px !important;
+    width: auto;
   }
   
   .post-input {
@@ -34,4 +46,103 @@
 
   .post-submit-btn:hover {
     opacity: 0.8;
+  }
+
+  .post-input-icons {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+  }
+  
+  .post-input-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 20%;
+    margin-left: 8px;
+    margin-right: 8px;
+    padding: 4px;
+    cursor: pointer;
+  }
+
+  .post-input-icon:hover svg {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .post-input-icon svg {
+    width: 30px;
+    height: 30px;
+    color: #333;
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+
+  .photos-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+
+  .poll-options-wrapper {
+    margin-top: 10px;
+  }
+  
+  .poll-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .poll-option-input {
+    flex: 1;
+    margin-right: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .delete-poll-option {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .add-poll-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .gif-search{
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+    padding-left: 2%;
+    padding-right: 2%;
+    margin-left: 3%;
+    padding-top: 2%;
+    padding-bottom: 20px;
+    background-color: #2a2e49;
+    border-radius: 20px;
+  }
+
+  .selected-gif-container {
+    display: flex;
+    justify-content: left;
+    margin: 20px;
+  }
+  
+  .selected-gif-container img {
+    max-width: 100%;
+    max-height: 100px;
   }
