@@ -6,7 +6,6 @@ import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, delet
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
@@ -414,10 +413,6 @@ class Group extends React.Component {
 
     return (
       <div className='interface'>
-        <div className="main-container">
-          <div className="nav-container">
-            <ChannelNavigation gid={this.state.gid} canModify={this.state.canModify} />
-          </div>
         <div className="post-list">
         <GroupMiddle 
             following={this.state.following}
@@ -476,7 +471,6 @@ class Group extends React.Component {
 
           </div>
         </div>
-      </div>
     )
       }
 }

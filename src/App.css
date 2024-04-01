@@ -1,6 +1,6 @@
-/*.App {
-  text-align: center;
-}*/
+.App {
+  /* text-align: center; */
+}
 
 /* h1 {
   color: white;
@@ -10,6 +10,11 @@
   padding: 16px;
   width: 80%;
   margin: auto;
+}
+
+.main-content {
+  display: flex;
+  height: 100%;
 }
 
 .container {

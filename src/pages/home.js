@@ -314,10 +314,6 @@ class Home extends React.Component {
           <IoMdRefresh />
         </button>
       )}
-        <div className="main-container">
-          <div className="nav-container">
-            <div><GroupNavigation /></div>
-          </div>
           <div className="post-list">
           <div className="post-list-header">
             <button className={this.state.window === 'posts' ? 'active' : ''} onClick={() => this.handleWindowChange("posts")}>Posts</button>
@@ -354,7 +350,6 @@ class Home extends React.Component {
           )}
           </div>
         </div>
-      </div>
     );
   }
 }

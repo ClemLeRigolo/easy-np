@@ -6,7 +6,6 @@ import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEv
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
@@ -247,10 +246,6 @@ class Event extends React.Component {
 
     return (
       <div className='interface'>
-        <div className="main-container">
-          <div className="nav-container">
-          <ChannelNavigation gid={this.state.gid} />
-          </div>
         <div className="group-content">
         <h1>{this.state.event.title}</h1>
         <p dangerouslySetInnerHTML={{ __html: this.state.event.description }}></p>
@@ -272,7 +267,6 @@ class Event extends React.Component {
 
           </div>
         </div>
-      </div>
     )
       }
 }

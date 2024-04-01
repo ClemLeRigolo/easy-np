@@ -20,7 +20,7 @@ const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
   return (
     <nav>
 
-      <div className="menu-icon">
+      <div className="menu-icon" style={{marginTop:"8px"}}>
         <RxHamburgerMenu 
         className='nav-icons'
         onClick={()=>setShowMenu(true)}/>

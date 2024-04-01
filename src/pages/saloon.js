@@ -6,7 +6,6 @@ import { likePost, getUserDataById, getPostBySaloon, newPost, getSaloonById, get
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
@@ -263,10 +262,6 @@ class Saloon extends React.Component {
 
     return (
       <div className='interface'>
-        <div className="main-container">
-          <div className="nav-container">
-          <ChannelNavigation gid={this.state.gid} />
-          </div>
         <div className="group-content">
         <h1>{this.state.saloon.name}</h1>
         <p dangerouslySetInnerHTML={{ __html: this.state.saloon.description }}></p>
@@ -289,7 +284,6 @@ class Saloon extends React.Component {
 
           </div>
         </div>
-      </div>
     )
       }
 }

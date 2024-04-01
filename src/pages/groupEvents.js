@@ -6,7 +6,6 @@ import { likePost, getUserDataById, getGroupById, getEventsByGroup, deletePost, 
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import ChannelNavigation from "../components/channelNavigation";
 import { withRouter } from 'react-router-dom';
 import { changeColor } from "../components/schoolChoose";
 import { Link } from "react-router-dom";
@@ -208,10 +207,6 @@ class GroupEvent extends React.Component {
 
     return (
       <div className='interface'>
-        <div className="main-container">
-        <div className="nav-container">
-          <ChannelNavigation gid={this.state.gid} />
-        </div>
         <div className="group-content">
         <h1>{this.state.group.name}</h1>
         <p>{this.state.group.description}</p>
@@ -235,7 +230,6 @@ class GroupEvent extends React.Component {
 
           </div>
         </div>
-      </div>
     )
       }
 }

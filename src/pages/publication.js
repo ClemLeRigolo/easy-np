@@ -116,10 +116,6 @@ class Publication extends React.Component {
 
     return (
       <div className='interface'>
-        <div className="main-container">
-        <div className="nav-container">
-            <GroupNavigation />
-        </div>
         <div className="group-content">
             <Post 
                 post={this.state.post} 
@@ -130,7 +126,6 @@ class Publication extends React.Component {
             />
           </div>
         </div>
-      </div>
     )
       }
 }

@@ -9,7 +9,6 @@ import { getPostByUser, likePost, getUserDataById, deletePost } from "../utils/f
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import GroupNavigation from "../components/groupNavigation";
 import { withRouter } from 'react-router-dom';
 import { changeColor } from "../components/schoolChoose";
 import Info3 from "../images/banner.jpg"
@@ -311,10 +310,6 @@ class Profile extends React.Component {
 
     return (
       <div className='interface'>
-        <div className="main-container">
-          <div className="nav-container">
-        <GroupNavigation />
-        </div>
           <div className="home">
             {/* <Left 
             following={following}
@@ -369,7 +364,6 @@ class Profile extends React.Component {
 
           </div>
         </div>
-      </div>
     )
       }
 }
