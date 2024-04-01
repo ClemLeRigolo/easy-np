@@ -2,7 +2,7 @@
 
 context('Home', () => {
   before(() => {
-    cy.resetUser();
+    cy.logout();
   });
 
   beforeEach(() => {
@@ -10,19 +10,19 @@ context('Home', () => {
   });
 
   it("Connection to an account", () => {
-    cy.login("user.username@grenoble-inp.org", "Password!");
+    cy.fillLogin("user.username@grenoble-inp.org", "Password!");
     cy.get("form").submit();
     cy.get("nav").find("#signout").click();
   });
 
   it("Wrong password", () => {
-    cy.login("user.username@grenoble-inp.org", "WrongPassword");
+    cy.fillLogin("user.username@grenoble-inp.org", "WrongPassword");
     cy.get("form").submit();
     cy.contains("Incorrect email/password");
   });
 
   it("Wrong email", () => {
-    cy.login("unknown.user@grenoble-inp.org", "Password!");
+    cy.fillLogin("unknown.user@grenoble-inp.org", "Password!");
     cy.get("form").submit();
     cy.contains("Incorrect email/password");
   });

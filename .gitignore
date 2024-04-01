@@ -32,3 +32,5 @@ coverage/
 # Files generated during the gitlab pipeline
 *.svg
 *_report.txt
+
+serviceAccount.json

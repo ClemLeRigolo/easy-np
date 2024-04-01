@@ -74,7 +74,7 @@ class Groups extends React.Component {
     return (
       <div className="interface">
         <div className="group-list">
-          <Link to="/createGroup" className="create-group-button">
+          <Link to="/createGroup" className="create-group-button" data-cy="createGroupButton">
             <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_GROUP}
           </Link>
           {groups.map((group) => (

@@ -25,15 +25,10 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 
-Cypress.Commands.add('login', (email, password) => {
+Cypress.Commands.add('fillLogin', (email, password) => {
   cy.get("input[name='email']").type(email);
   cy.get("input[name='password']").type(password);
 })
-
-Cypress.Commands.add("resetUser", () => {
-  cy.visit("/");
-  cy.get("#signout").if().click();
-}) 
 
 Cypress.Commands.add("signup", (firstName, name, email, password1, password2) => {
   cy.get("form").find("input[name='name']").type(firstName);
@@ -70,4 +65,13 @@ Cypress.Commands.add("openComments", () => {
 
 Cypress.Commands.add("closeComments", () => {
   cy.get("div[data-cy='closeComments']").click();
+})
+
+Cypress.Commands.add("fillGroupForm", (name, desc, rights, school) => {
+  cy.get("[data-cy='createGroupForm']").within(() => {
+    cy.get("#group-name").type(name);
+    cy.get("#description").type(desc);
+    cy.get("#visibility").select(rights); 
+    cy.get("#school").select(school);
+  })
 })

@@ -65,7 +65,7 @@ class CreateGroup extends React.Component {
       <div className="interface">
         <div className="form-container">
           <h2>{fr.FORM_FIELDS.CREATE_GROUP}</h2>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} data-cy="createGroupForm">
             <div className="form-group">
               <label htmlFor="group-name">{fr.FORM_FIELDS.GROUP_NAME}:</label>
               <input

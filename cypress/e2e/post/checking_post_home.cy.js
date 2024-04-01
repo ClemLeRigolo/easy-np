@@ -1,8 +1,8 @@
 context('Post from user from ensimag in the main thread', () => {
   before(() => {
-    cy.resetUser();
+    cy.logout();
     cy.visit("/login");
-    cy.login("user.username@grenoble-inp.org", "Password!");
+    cy.fillLogin("user.username@grenoble-inp.org", "Password!");
     cy.get("form").submit();
   });
 

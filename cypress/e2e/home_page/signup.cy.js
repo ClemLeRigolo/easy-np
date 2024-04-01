@@ -1,6 +1,6 @@
 context('Signup page', () => {
   beforeEach(() => {
-    cy.resetUser();
+    cy.logout();
     cy.visit("/signup");
   });
 
