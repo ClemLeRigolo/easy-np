@@ -82,12 +82,12 @@ class Groups extends React.Component {
             <Link to={`/group/${group.id}`} >
             <h3>
               {group.name}{" "}
-              {group.school && (
+              {group.school !== "all" ? (
                 <img
                   src={require(`../images/écoles/${group.school.toLowerCase()}.png`)}
                   alt={group.school}
                 />
-              )}
+              ) : null}
             </h3>
             <p>{group.description}</p>
             </Link>
