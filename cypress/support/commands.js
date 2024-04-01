@@ -38,10 +38,10 @@ Cypress.Commands.add("signup", (firstName, name, email, password1, password2) =>
 });
 
 Cypress.Commands.add("getPostByAuthor", (author) => {
-  return cy.contains(author).parent(".post")
+  return cy.contains(author).parent("div[data-cy='post']");
 });
 
 
 Cypress.Commands.add("getPostByText", (text) => {
-  return cy.contains(text).parents(".post")
+  return cy.contains(text).parents("div[data-cy='post']");
 });

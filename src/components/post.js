@@ -288,7 +288,7 @@ class Post extends React.Component {
     }
 
     return (
-      <div className="post">
+      <div className="post" data-cy="post">
         <div className="post-header">
           <Link to={`/profile/${post.user}`} className="post-username">
           <ProfileImage uid={post.user} post={true} />
@@ -334,13 +334,13 @@ class Post extends React.Component {
           </div>
         )}
         <div className="post-footer">
-          <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>
+          <button className={`post-like-btn ${isLiked ? "liked" : ""}`} data-cy="like" onClick={this.handleLikeClick} likes={likeCount}>
             {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {likeCount} {likeCount > 1 ? fr.POSTS.LIKES : fr.POSTS.LIKE}
           </button>
-          <button className="post-comment-btn" onClick={this.handleCommentClick}>
+          <button className="post-comment-btn" data-cy="comment" onClick={this.handleCommentClick}>
             <AiOutlineComment /> {post.commentCount} {post.commentCount > 1 ? fr.POSTS.COMMENTS : fr.POSTS.COMMENT}
           </button>
-          <button className="post-share-btn" onClick={this.handleShareClick}>
+          <button className="post-share-btn" data-cy="share" onClick={this.handleShareClick}>
             <FaShareSquare /> {fr.POSTS.SHARE}
           </button>
         </div>
@@ -356,8 +356,8 @@ class Post extends React.Component {
           </div>
         )}
         {comments.length > 0 && (
-          <div className={`comments ${expandedComments ? "expanded" : ""}`}>
-            <div className="comments-toggle" onClick={this.toggleCommentVisibility}>
+          <div className={`comments ${expandedComments ? "expanded" : ""}`} data-cy="comments">
+            <div className="comments-toggle" data-cy="toggleComments" onClick={this.toggleCommentVisibility}>
               {expandedComments ? "" : "Voir les commentaires"}
               {expandedComments ? "" : <FaAngleDown className="icon" />}
             </div>
