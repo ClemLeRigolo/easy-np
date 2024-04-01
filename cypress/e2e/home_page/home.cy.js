@@ -1,6 +1,10 @@
 /// <reference types="cypress" />
 
 context('Home', () => {
+  before(() => {
+    cy.resetUser();
+  });
+
   beforeEach(() => {
     cy.visit("/");
   });

@@ -274,7 +274,7 @@ class Comment extends React.Component {
     console.log("likeCount", this.state.likeCount);
 
     return (
-      <div className="comment">
+      <div className="comment" data-cy="comment">
         <div className="comment-thread">
         <Link to={`/profile/${comment.user}`} className="comment-author">
           <ProfileImage uid={comment.user} post={true} />
@@ -283,14 +283,14 @@ class Comment extends React.Component {
             <div className="comment-timestamp">{formatPostTimestamp(comment.timestamp)}</div>
           </div>
         </Link>
-        <div className="comment-content">{comment.content}</div>
+        <div className="comment-content" data-cy="commentContent">{comment.content}</div>
         <div className="comment-actions">
           <div className="classics-buttons"> {/* Nouveau div pour regrouper les éléments bouton répondre et texte pour afficher/masquer les réponses */}
-              <button className="reply" onClick={this.handleReply}>
+              <button className="reply" data-cy="commentReply" onClick={this.handleReply}>
                 <FaReply className="comment-icon" />
                 {fr.POSTS.ANSWER}
               </button>
-            <button className={`comment-like ${isLiked ? 'liked' : ''}`} onClick={this.handleLike}>
+            <button className={`comment-like ${isLiked ? 'liked' : ''}`} data-cy="commentLikes" onClick={this.handleLike}>
               {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {this.state.likeCount} {this.state.likeCount > 1 ? fr.POSTS.LIKES : fr.POSTS.LIKE}
             </button>
             </div>

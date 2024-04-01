@@ -200,13 +200,14 @@ export default function PostInput({ handlePostSubmit }) {
 
   return (
     <div className="post-wrapper">
-    <div className="postInput">
+    <div className="postInput" data-cy="postInput">
       <div className="post-input-wrapper">
         <textarea
           className="post-input"
           placeholder="Exprimez-vous..."
           value={postContent}
           onChange={handlePostContentChange}
+          data-cy="postInput"
           onKeyPress={handleKeyPress}
           style={{ whiteSpace: "pre-wrap" }}
         />
@@ -248,7 +249,7 @@ export default function PostInput({ handlePostSubmit }) {
           </div>
         </div>
       </div>
-      <button className="post-submit-btn" onClick={handleSubmit}>
+      <button className="post-submit-btn" data-cy="postInput" onClick={handleSubmit}>
         <AiOutlineArrowRight />
       </button>
       </div>

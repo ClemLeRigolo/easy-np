@@ -357,14 +357,14 @@ class Post extends React.Component {
         )}
         {comments.length > 0 && (
           <div className={`comments ${expandedComments ? "expanded" : ""}`} data-cy="comments">
-            <div className="comments-toggle" data-cy="toggleComments" onClick={this.toggleCommentVisibility}>
+            <div className="comments-toggle" data-cy="openComments" onClick={this.toggleCommentVisibility}>
               {expandedComments ? "" : "Voir les commentaires"}
               {expandedComments ? "" : <FaAngleDown className="icon" />}
             </div>
             {expandedComments && comments.map((comment, index) => (
               <Comment key={comment.id} comment={comment} commentKey={index} postId={post.id}/>
             ))}
-            <div className="comments-toggle" onClick={this.toggleCommentVisibility}>
+            <div className="comments-toggle" onClick={this.toggleCommentVisibility} data-cy="closeComments">
               {expandedComments ? "Réduire les commentaires" : ""}
               {expandedComments ? <FaAngleUp className="icon" /> : ""}
             </div>

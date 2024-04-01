@@ -1,15 +1,11 @@
 context('Testing urls', () => {
   describe("User connected", () => {
     before(() => {
+      cy.resetUser();
       cy.visit("/login");
       cy.login("user.username@grenoble-inp.org", "Password!");
       cy.get("form").submit();
       cy.contains("Easy");
-    });
-
-    after(() => {
-      cy.visit("/");
-      cy.get("nav").find("#signout").click();
     });
 
     it("going back to login", () => {
@@ -46,6 +42,7 @@ context('Testing urls', () => {
 
   describe("User disconnected", () => {
     before("user disconnected", () => {
+      cy.resetUser();
       cy.visit("/");
     });
 
