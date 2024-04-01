@@ -166,6 +166,15 @@ nav{
 }
 
 @media screen and (max-width:768px){
+
+    .search-bar{
+        display: none;
+    }
+
+    .nav-container{
+        display: none;
+    }
+
     nav{
         width: 100vw;
         padding: 12px 0px;
@@ -287,7 +296,7 @@ nav{
     }
     .social-icons{
         width: 100vw;
-        background-color:orangered;
+        background-color: var(--selected-color);
         position: fixed;
         bottom: 0px;
         color: #fff;

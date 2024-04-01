@@ -10,6 +10,7 @@ import { IoSchoolOutline } from "react-icons/io5";
 import { TbMessage} from "react-icons/tb"
 import { BiLogOut} from "react-icons/bi"
 import { IoCalendarOutline } from "react-icons/io5";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 import { signOut } from '../utils/firebase';
 import ProfileImage from './profileImage';
@@ -18,13 +19,20 @@ const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
   
   return (
     <nav>
+
+      <div className="menu-icon">
+        <RxHamburgerMenu 
+        className='nav-icons'
+        onClick={()=>setShowMenu(true)}/>
+      </div>
+
         <div className="n-logo">
             <Link to="/home" className='logo' style={{color:"black",textDecoration:"none"}}>
               <h1>Easy <span>NP</span></h1>
             </Link>
         </div>
 
-      <div className="n-form-button" >
+      <div className="n-form-button search-bar" >
 
         <form className='n-form' onSubmit={(e)=>e.preventDefault()} >
           <HiMagnifyingGlass className='search-icon'/>

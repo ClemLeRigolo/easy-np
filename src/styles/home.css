@@ -12,7 +12,7 @@
 .main-container {
     display: flex;
     flex-direction: row;
-    
+    height: 100%;
 }
 
 .refresh-button {
@@ -55,4 +55,13 @@
   
   .post-list-header button:not(.active) {
     border-bottom: 3px solid black;
+  }
+
+
+  @media screen and (max-width:768px){
+    .post-list, .group-content {
+      padding-bottom: 5vh !important;
+    }
+
+
   }
