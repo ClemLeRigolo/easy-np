@@ -15,15 +15,17 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { signOut } from '../utils/firebase';
 import ProfileImage from './profileImage';
 
-const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
-  
+import "../utils/responsiveScript.js";
+
+const HeaderBar = ({search,setSearch,toggleMenu,profileImg,uid}) => {
+
   return (
     <nav>
 
       <div className="menu-icon" style={{marginTop:"8px"}}>
         <RxHamburgerMenu 
         className='nav-icons'
-        onClick={()=>setShowMenu(true)}/>
+        onClick={()=>toggleMenu()}/>
       </div>
 
         <div className="n-logo">
@@ -52,8 +54,9 @@ const HeaderBar = ({search,setSearch,setShowMenu,profileImg,uid}) => {
 
         <Link to="/eventCalendar" id='calendar' style={{marginTop:"10px"}}><IoCalendarOutline className='nav-icons'/></Link>
            
-        <TbMessage className='nav-icons' style={{marginTop:"8px"}}/>
-
+        <Link to="/chats" style={{marginTop:"8px"}}>
+          <TbMessage className='nav-icons' style={{marginTop:"8px"}}/>
+        </Link>
 
         <Link to="/groups" style={{marginTop:"8px"}}>
           <HiOutlineUserGroup className='nav-icons'/>

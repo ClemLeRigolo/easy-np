@@ -51,3 +51,69 @@ h1.group-nav-link.active, .group-header h1:focus{
     background-color: #3D415A;
     color: white;
 }
+
+.group-menu {
+    transition: transform 0.3s ease;
+}
+  
+.group-menu.open {
+    transform: translateX(0); 
+}
+  
+.group-menu.closed {
+    transform: translateX(-100%);
+}
+
+
+@media screen and (max-width:1024px){
+    /* .group-navigation{
+        display: none;
+    } */
+
+    /* Mobile display of the menu */
+    .group-navigation{
+        position: fixed;
+        top: 102.47px;
+        left: 0;
+        width: 40%;
+        height: 100%;
+        background-color: #2a2e49;
+        z-index: 1000;
+    }
+
+    .group-navigation.active{
+        display: block;
+    }
+
+    .group-nav-item{
+        background-color: #2a2e49;
+        color: white;
+        padding: 10px 20px;
+    }
+
+    .group-nav-item:hover{
+        background-color: #3D415A;
+        color: white;
+    }
+}
+
+@media screen and (max-width:768px){
+    .group-navigation{
+        top: 72.19px;
+    }
+
+    .group-navigation.active{
+        display: block;
+    }
+
+    .group-nav-item{
+        background-color: #2a2e49;
+        color: white;
+        padding: 10px 20px;
+    }
+
+    .group-nav-item:hover{
+        background-color: #3D415A;
+        color: white;
+    }
+}

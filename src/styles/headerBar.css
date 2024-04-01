@@ -20,10 +20,33 @@ nav{
     font-size: 30px;
     margin: 0px 20px;
     color: #fff;
+    padding: 5px;
+    border-radius: 25%
 }
+
+.menu-icon{
+    font-size: 30px;
+    margin: 0px 20px;
+    color: #fff;
+    padding: 5px 5px 0px 5px;
+    border-radius: 10%;
+}
+
 .social-icons .nav-icons:hover{
     transform: scale(1.2);
     transition: .3s;
+    background-color: white;
+    color: var(--selected-color);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.menu-icon:hover{
+    transition: .3s;
+    background-color: white;
+    color: var(--selected-color);
+    border-radius: 25%;
+    cursor: pointer;
 }
 
 .n-logo h1{
@@ -168,10 +191,6 @@ nav{
 @media screen and (max-width:768px){
 
     .search-bar{
-        display: none;
-    }
-
-    .group-navigation{
         display: none;
     }
 
