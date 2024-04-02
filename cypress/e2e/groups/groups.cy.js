@@ -8,7 +8,7 @@ context("Groups", () => {
 
   it("Creating a public group", () => {
     cy.visit("/groups");
-    cy.wait(1000);
+    cy.wait(500);
     cy.contains("Public group Ensimag").should("not.exist");
     cy.get("[data-cy='createGroupButton']").click();
     cy.fillGroupForm("Public group Ensimag", "New group description", "Public", "ensimag");

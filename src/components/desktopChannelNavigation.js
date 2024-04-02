@@ -59,7 +59,7 @@ class ChannelNavigation extends React.Component {
     console.log(this.state.groups);
 
     return (
-      <div className={`group-navigation ${open ? 'open' : ''}`}>
+      <div className={`group-navigation ${open ? 'open' : ''}`} data-cy="navGroup">
         {this.state.groups &&
           groups.map((group) => (
             <div key={group.id} className="group-header">
@@ -81,7 +81,7 @@ class ChannelNavigation extends React.Component {
                 <>
                   {this.props.canModify && (
                   <Link to={`/group/${group.id}/createSaloon`} activeClassName="active">
-                    <div className="group-nav-item">
+                    <div className="group-nav-item" >
                       <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_SALOON}
                     </div>
                   </Link>
