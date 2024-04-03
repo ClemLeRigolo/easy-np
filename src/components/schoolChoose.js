@@ -43,7 +43,7 @@ export function changeColor(selectedImage) {
 }
 
 export default function SchoolChoose({selectedImage, handleImageChange}) {
-  return <div className="schoolChoose">
+  return <div className="schoolChoose" data-cy="schoolChoose">
                 <label className={`image-button-label ${selectedImage === "ensimag" ? "active" : ""}`}>
                   <input
                     type="radio"

@@ -6,7 +6,17 @@ context('Signup page', () => {
 
   it("Create an account", () => {
     const password = "Password!";
+    cy.signup("Another", "User", "another.user@grenoble-inp.org", password, password);
+    cy.intercept("POST", "*signupNewUser?*", req => {
+      req.destroy();
+    }).as("New User");
+    cy.get("form").submit();
+  });
+
+  it("Create an account from an another school", () => {
+    const password = "Password!";
     cy.signup("Firstname", "FamillyName", "Firstname.FamillyName@grenoble-inp.org", password, password);
+    cy.get('form div[data-cy="schoolChoose"] input[value="phelma"]').parent.click();
     cy.intercept("POST", "*signupNewUser?*", req => {
       req.destroy();
     }).as("New User");
@@ -34,6 +44,9 @@ context('Signup page', () => {
     cy.intercept("POST", "**").as("New User");
     cy.get("form").submit();
     cy.get("form").contains("Erreur");
+  });
+
+  it("Missing fields", () => {
   });
 });
 
