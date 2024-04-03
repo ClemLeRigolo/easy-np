@@ -26,6 +26,7 @@ class Post extends React.Component {
       pollAnswers: [],
       pollSetted: false,
       vote: null,
+      expandedImage: null,
     };
   }
 
@@ -133,6 +134,12 @@ class Post extends React.Component {
     // Logique de suppression du post
     const { handleDeletePost } = this.props;
     handleDeletePost(this.state.post.id);
+  }
+
+  handleImageClick = (image) => {
+    this.setState({
+      expandedImage: image
+    })
   }
 
   componentDidMount() {
@@ -289,6 +296,18 @@ class Post extends React.Component {
 
     return (
       <div className="post" data-cy="post">
+        {this.state.expandedImage && (
+          <div 
+          className="overlay"
+          onClick={() => this.setState({ expandedImage: null })}
+          >
+            <img 
+            src={this.state.expandedImage}
+            className="expanded-image"
+            alt="Expanded"
+          />
+          </div>
+        )}
         <div className="post-header">
           <Link to={`/profile/${post.user}`} className="post-username">
           <ProfileImage uid={post.user} post={true} />
@@ -315,7 +334,7 @@ class Post extends React.Component {
           <div className="post-photos">
             {Object.values(post.images).map((image, index) => (
               <div key={index} className="post-photo">
-                <img src={image} alt="Post" />
+                <img src={image} alt="Post" onClick={() => this.handleImageClick(image)} />
               </div>
             ))}
           </div>

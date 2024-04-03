@@ -289,15 +289,15 @@ class Event extends React.Component {
     return (
       <div className="post">
         <div className="post-header">
-          <Link to={`/profile/${post.user}`} className="post-username">
-          <ProfileImage uid={post.user} post={true} />
+          <Link to={`/profile/${post.creator}`} className="post-username">
+          <ProfileImage uid={post.creator} post={true} />
             <div>
               {post.username}
               <div className="post-date">{formatPostTimestamp(post.timestamp)}</div>
             </div>
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
-          {(getCurrentUser().uid === post.user || this.props.canModify) && (
+          {(getCurrentUser().uid === post.creator || this.props.canModify) && (
           <div className="post-menu">
           <ContextMenuTrigger id={post.id}>
             <FaEllipsisH className="post-options" />
