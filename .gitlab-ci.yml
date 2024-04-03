@@ -1,7 +1,8 @@
 stages:
   - linter
   - test
-  - badges
+  - badgesDoc
+  - badgesDoc
 
 
 
@@ -37,6 +38,7 @@ testing:
     - sleep 45        # wait for firebase to init emulators
     - npm run cypress:ci > cypress_report.txt || echo $?
     - npx nyc report > coverage_report.txt || echo $?
+    - rm serviceAccount.json
   cache:
     paths:
       - node_modules/
@@ -48,7 +50,7 @@ testing:
       - cypress_report.txt
 
 badges:
-  stage: badges
+  stage: badgesDoc
   tags:
     - docker
   image: python
@@ -66,3 +68,13 @@ badges:
       - "coverage.svg"
   when: always
 
+doc:
+  stage: badgesDoc
+  tags:
+    - docker
+  image: python
+  script:
+    - pip install mkdocs
+    - mkdocs build
+    - mv site public
+  when: always
