@@ -31,6 +31,7 @@ testing:
   script:
     - yarn install --cache-folder .yarn
     - npm run startLocal &
+    - echo "$GOOGLE_SERVICE_ACCOUNT" | base64 -d > serviceAccount.json
     - sleep 15
     - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN &
     - sleep 45        # wait for firebase to init emulators
