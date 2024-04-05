@@ -179,7 +179,12 @@ class Post extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
-      this.setState({ post: this.props.post });
+      this.setState({ 
+        post: this.props.post,
+        pollSetted: false,
+        pollAnswers: [],
+        vote: null,
+      });
       getImagesFromPost(this.props.post.id)
       .then((images) => {
         console.log(images)
@@ -279,20 +284,23 @@ class Post extends React.Component {
 
     if (post.voters) {
       console.log("voters", post.voters);
-      Object.values(post.voters).forEach((voter, index) => {
-        if (voter.includes(getCurrentUser().uid)) {
-          //this.setState({ vote: post.pool[index] });
-          console.log("vote", post.pool[index]);
-          this.state.vote = post.pool[index];
+      for (let i = 0; i < post.pool.length; i++) {
+        if (post.voters[i] && post.voters[i].includes(getCurrentUser().uid)) {
+          //this.setState({ vote: post.pool[i] });
+          console.log("vote", post.pool[i]);
+          console.log("index", i);
+          this.state.vote = post.pool[i];
         }
       }
-      );
     }
 
     const pollStyles1 = {
       align: 'center',
       theme: 'blue'
     }
+
+    console.log("pollAnswers", this.state.pollAnswers);
+    console.log("vote", this.state.vote);
 
     return (
       <div className="post" data-cy="post">
@@ -347,7 +355,7 @@ class Post extends React.Component {
         {post.pool && (
           <div className="post-pool">
             {/*loop on post.pool*/}
-            {this.state.vote ? 
+            {this.state.vote !== null ? 
               <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} vote={this.state.vote} customStyles={pollStyles1} />
               : <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} customStyles={pollStyles1} />}
           </div>
