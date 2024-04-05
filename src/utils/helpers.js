@@ -38,7 +38,7 @@ export function validatePassword(password,login) {
 
   //teste la longueur du mot de passe
   if (password.length < 8) {
-    return 'Le mot de passe doit contenir au moins 6 caractères';
+    return 'Le mot de passe doit contenir au moins 8 caractères';
   }
 
   //teste la présence d'une minuscule

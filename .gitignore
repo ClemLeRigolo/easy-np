@@ -33,4 +33,8 @@ coverage/
 *.svg
 *_report.txt
 
+# Removing secret files
 serviceAccount.json
+
+# Removing mkdocs build folder
+site/

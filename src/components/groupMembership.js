@@ -84,19 +84,19 @@ const GroupMembership = ({ group, userSchool, fromGroup }) => {
   if (group.isPublic || group.school === userSchool) {
     if (isTransitioning) {
       return (
-            <button className="disabled-group-button" onClick={handleLeaveGroup}>
+            <button className="disabled-group-button" onClick={handleLeaveGroup} data-cy="joiningGroupButton">
                 {isInGroup ? "Rejoint" : "Quitté"}
             </button>
             );
     } else if (isInGroup) {
       return (
-        <button className="leave-group-button" onClick={handleLeaveGroup}>
+        <button className="leave-group-button" onClick={handleLeaveGroup} data-cy="joiningGroupButton">
           Quitter le groupe
         </button>
       );
     } else {
       return (
-        <button className="join-group-button" onClick={handleJoinGroup}>
+        <button className="join-group-button" onClick={handleJoinGroup} data-cy="joiningGroupButton">
           Rejoindre
         </button>
       );
@@ -104,19 +104,19 @@ const GroupMembership = ({ group, userSchool, fromGroup }) => {
   } else {
     if (isTransitioning) {
       return (
-            <button className="disabled-group-button" onClick={handleLeaveGroup}>
+            <button className="disabled-group-button" onClick={handleLeaveGroup} data-cy="joiningGroupButton">
                 {isInW ? "Envoi de la demande" : "Quitté"}
             </button>
             );
     } else if (isInGroup) {
       return (
-        <button className="leave-group-button" onClick={handleLeaveGroup}>
+        <button className="leave-group-button" onClick={handleLeaveGroup} data-cy="joiningGroupButton">
           Quitter le groupe
         </button>
       );
     } else if (isInW) {
       return (
-        <button className="disabled-group-button" onClick={handleJoinGroup}>
+        <button className="disabled-group-button" onClick={handleJoinGroup} data-cy="joiningGroupButton">
           Demande envoyée 
         </button>
       );

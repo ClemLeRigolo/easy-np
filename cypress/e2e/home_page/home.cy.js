@@ -12,6 +12,7 @@ context('Home', () => {
   it("Connection to an account", () => {
     cy.fillLogin("user.username@grenoble-inp.org", "Password!");
     cy.get("form").submit();
+    cy.wait(100);
     cy.get("nav").find("#signout").click();
   });
 

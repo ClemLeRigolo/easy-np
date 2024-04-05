@@ -1,17 +1,17 @@
 import React, { useState } from 'react'
 
-import {LiaEdit} from "react-icons/lia"
-import { MdOutlineManageAccounts } from "react-icons/md";
-import {IoCameraOutline} from "react-icons/io5"
+import {LiaEdit} from 'react-icons/lia'
+import { MdOutlineManageAccounts } from 'react-icons/md';
+import {IoCameraOutline} from 'react-icons/io5'
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
 import { postGroupImg, postCoverGroupImg, changeRole, removeMemberFromId, acceptMemberFromId, refuseMemberFromId } from '../utils/firebase'
 import fr from '../utils/i18n'
 import '../styles/infoGroup.css'
 import { Link } from 'react-router-dom';
-import { IoPersonRemoveOutline } from "react-icons/io5";
-import { FaCheck } from "react-icons/fa6";
-import { ImCross } from "react-icons/im";
+import { IoPersonRemoveOutline } from 'react-icons/io5';
+import { FaCheck } from 'react-icons/fa6';
+import { ImCross } from 'react-icons/im';
 import GroupMembership from './groupMembership';
 import { compressImage, cropImage } from '../utils/helpers';
 
@@ -59,7 +59,7 @@ const InfoGroup = ({userPostData,
   };
 
   const openManageWindow = () => {
-    console.log("on ouvre")
+    console.log('on ouvre')
     setShowManageWindow(true);
   };
   
@@ -144,9 +144,9 @@ const InfoGroup = ({userPostData,
 
 
     <div className='info'>
-        <div className="info-cover">
-            <img src={coverImg} alt="" />
-            <img src={profileImg} alt="" />
+        <div className='info-cover'>
+            <img src={coverImg} alt='' />
+            <img src={profileImg} alt='' />
             {canModify && 
             <div className='coverDiv'><IoCameraOutline className='coverSvg' onClick={()=>importCover.current.click()}/></div>
             }
@@ -157,30 +157,30 @@ const InfoGroup = ({userPostData,
       
 
         
-        <input type="file" 
+        <input type='file' 
         ref={importProfile}
         onChange={handleFile1}
-        style={{display:"none"}}
+        style={{display:'none'}}
         />
         
-        <input type="file" 
+        <input type='file' 
         ref={importCover}
         onChange={handleFile2}
-        style={{display:"none"}}
+        style={{display:'none'}}
         />
         
 
 
 
-        <div className="info-follow">
+        <div className='info-follow'>
             <h1>{modelDetails.ModelName}</h1>
             {/*<p>{modelDetails.ModelUserName}</p>*/}
 
-            {/* <Link to="/" className='logout'>
+            {/* <Link to='/' className='logout'>
               <BiLogOut />Logout
             </Link> */}
 
-            {canModify && <button onClick={() => openManageWindow()} className='edit-btn2'><MdOutlineManageAccounts />{fr.GROUPS.MANAGE}</button>}
+            {canModify && <button onClick={() => openManageWindow()} className='edit-btn2' data-cy='manageGroup'><MdOutlineManageAccounts />{fr.GROUPS.MANAGE}</button>}
             {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.GROUPS.EDIT}</button>}
             <GroupMembership group={group} userSchool={null} fromGroup={true} />
             {/* <ModelProfile 
@@ -198,9 +198,9 @@ const InfoGroup = ({userPostData,
             /> */}
           
 
-          <div className="info-details">
+          <div className='info-details'>
 
-            <div className="info-col-2">
+            <div className='info-col-2'>
               <div>
                 <h2>{nbMembers}</h2>
                 <span>{fr.GROUPS.MEMBERS_COUNT}</span>
@@ -217,17 +217,17 @@ const InfoGroup = ({userPostData,
         </div>
 
         {showManageWindow && (
-          <div className="manage-window">
-            <div className="manage-window-buttons">
+          <div className='manage-window' data-cy='manageGroup'>
+            <div className='manage-window-buttons'>
               <button
                 className={windowManageMember === 'membres' ? 'active' : ''}
-                onClick={() => changeManageWindow('membres')}
+                onClick={() => changeManageWindow('membres')} data-cy='member'
               >
                 {fr.GROUPS.MEMBERS}
               </button>
               <button
                 className={windowManageMember === 'waitingList' ? 'active' : ''}
-                onClick={() => changeManageWindow('waitingList')}
+                onClick={() => changeManageWindow('waitingList')} data-cy='waitingList'
               >
                 {fr.GROUPS.WAITING_LIST}
               </button>
@@ -240,9 +240,9 @@ const InfoGroup = ({userPostData,
                 <li key={member.uid} className='row-member'>
                   <Link to={`/profile/${member.uid}`} className='member-name'>
                   {member.profileImg ? (
-                    <img src={member.profileImg} alt="" className='post-avatar' />
+                    <img src={member.profileImg} alt='' className='post-avatar' />
                   ) : (
-                    <img src={require(`../images/Profile-pictures/${member.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                    <img src={require(`../images/Profile-pictures/${member.school}-default-profile-picture.png`)} alt='' className='post-avatar' />
                   )}
                   <span>{member.name} {member.surname}</span>
                   </Link>
@@ -250,20 +250,20 @@ const InfoGroup = ({userPostData,
                     <select
                     value='creator'
                   >
-                    <option value="creator">{fr.GROUPS.CREATOR}</option>
+                    <option value='creator'>{fr.GROUPS.CREATOR}</option>
                   </select>
                     ) : admins.includes(member.uid.toString()) && !isCreator ? (
                     <select
                     value='admin'
                   >
-                    <option value="admin">{fr.GROUPS.ADMIN}</option>
+                    <option value='admin'>{fr.GROUPS.ADMIN}</option>
                   </select>) : (
                     <select
                     value={admins.includes(member.uid.toString()) ? 'admin' : 'member'}
                     onChange={(e) => handleRoleChange(member.uid, e.target.value)}
                   >
-                    <option value="member">{fr.GROUPS.MEMBER}</option>
-                    <option value="admin">{fr.GROUPS.ADMIN}</option>
+                    <option value='member'>{fr.GROUPS.MEMBER}</option>
+                    <option value='admin'>{fr.GROUPS.ADMIN}</option>
                   </select>
                   )}
                   {member.uid !== uid && (isCreator || !admins.includes(member.uid.toString())) && (
@@ -281,9 +281,9 @@ const InfoGroup = ({userPostData,
                   <li key={member.uid} className='row-member'>
                     <Link to={`/profile/${member.uid}`} className='member-name'>
                     {member.profileImg ? (
-                      <img src={member.profileImg} alt="" className='post-avatar' />
+                      <img src={member.profileImg} alt='' className='post-avatar' />
                     ) : (
-                      <img src={require(`../images/Profile-pictures/${member.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
+                      <img src={require(`../images/Profile-pictures/${member.school}-default-profile-picture.png`)} alt='' className='post-avatar' />
                     )}
                     <span>{member.name} {member.surname}</span>
                     </Link>
@@ -294,7 +294,7 @@ const InfoGroup = ({userPostData,
               </ul>
               </div>
             )}
-            <button onClick={closeManageWindow}>{fr.GROUPS.CLOSE}</button>
+            <button onClick={closeManageWindow} data-cy='closeManageWindow'>{fr.GROUPS.CLOSE}</button>
           </div>
         )}
     </div>
