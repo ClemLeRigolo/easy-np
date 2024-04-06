@@ -74,7 +74,11 @@ doc:
     - docker
   image: python
   script:
-    - pip install mkdocs
+    - pip install mkdocs mkdocs-material
     - mkdocs build
     - mv site public
   when: always
+  only:
+    changes:
+      - docs/**/*
+      - mkdocs.yml
