@@ -2,7 +2,6 @@ import React from "react";
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
 import { likePost, getUserDataById, getPostBySaloon, newPost, getSaloonById, getGroupById, deletePost, newPostWithImages, newPostWithPool, newPostWithGif } from "../utils/firebase";
-//import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";

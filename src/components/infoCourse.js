@@ -5,7 +5,7 @@ import {LiaEdit} from "react-icons/lia"
 import {IoCameraOutline} from "react-icons/io5"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postProfileImg, postCoverImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
+import { postCourseImg, postCoverCourseImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
 import fr from '../utils/i18n'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { compressImage, cropImage } from '../utils/helpers';
@@ -27,7 +27,8 @@ const Info = ({userPostData,
               subscriptionsData,
               nbPosts,
               coverImg,
-              setCoverImg
+              setCoverImg,
+              cid
             }) => {
 
   const [isSubscribed,setIsSubscribed] =useState(isSubscribedProps)
@@ -44,7 +45,7 @@ const Info = ({userPostData,
       let img = e.target.files[0];
       try {
         const croppedImg = await cropImage(img);
-        const url = await postProfileImg(croppedImg);
+        const url = await postCourseImg(cid,croppedImg);
         setProfileImg(url);
       } catch (error) {
         console.log(error);
@@ -58,7 +59,7 @@ const Info = ({userPostData,
       try {
         console.log(img);
         const compressedImg = await compressImage(img);
-        const url = await postCoverImg(compressedImg);
+        const url = await postCoverCourseImg(cid,compressedImg);
         setCoverImg(url);
       } catch (error) {
         console.log(error);

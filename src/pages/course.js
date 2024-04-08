@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/course.css"
 import { authStates, withAuth } from "../components/auth";
-import { getUserDataById, getCourseById } from "../utils/firebase";
+import { getUserDataById, getCourseById, getCoursePosts, likePost, newPost, newPostWithImages, newPostWithPool, newPostWithGif, deletePost } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -20,11 +20,13 @@ class Course extends React.Component {
     this.state = {
         cid: null,
         dataCollected: false,
-        groupImg: Info2,
-        groupBanner: Info3,
+        courseImg: Info2,
+        courseCover: Info3,
         school: "",
         course: null,
         window: "discussion",
+        posts: [],
+        admin: false,
     };
   }
 
@@ -60,7 +62,7 @@ class Course extends React.Component {
   }
 
   setProfileImg = (value) => {
-    this.setState({ groupImg: value });
+    this.setState({ courseImg: value });
   }
 
   setModelDetails = (value) => {
@@ -68,12 +70,163 @@ class Course extends React.Component {
   }
 
   setCoverImg = (value) => {
-    this.setState({ groupBanner: value });
+    this.setState({ courseCover: value });
   }
 
   handleWindow = (value) => {
     this.setState({ window: value });
   }
+
+  handleLikeClick = (postIndex) => {
+    const { posts } = this.state;
+    const post = posts[postIndex];
+
+    console.log("posts", posts);
+    console.log("post", post);
+
+    likePost(post.id)
+      .then((data) => {
+        console.log("Liked post");
+        // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
+        post.likeCount += data.status;
+        post.likes = data.likes;
+      
+        // Mettez à jour l'état avec le post modifié
+        this.setState({
+          posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
+        });
+      })
+      .catch((error) => {
+        console.error("Erreur lors du like du post :", error);
+      });
+  };
+
+  handleCommentClick = (postIndex) => {
+    const { posts } = this.state;
+    const post = posts[postIndex];
+
+    // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le commentCount
+    post.commentCount += 1;
+  
+    // Mettez à jour l'état avec le post modifié
+    this.setState({
+      posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
+    });
+  };
+
+  handleDeletePost = (id) => {
+    // Supprimez le post de la base de données Firebase
+    deletePost(id)
+      .then(() => {
+        console.log("Post deleted");
+        this.updatePosts();
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
+  }
+
+
+  handlePostContentChange = event => {
+    if (event === undefined) {
+      this.setState({ postContent: "" });
+      return;
+    }
+    this.setState({ postContent: event.target.value });
+  };
+
+  handlePostSubmit = (postContent, postImages, pool, gif) => {
+
+    console.log("postImages", postImages);
+    console.log("postContent", postContent);
+
+    // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
+    if (postImages.length > 0) {
+      newPostWithImages(postContent, this.state.cid + 1, postImages)
+        .then((finito) => {
+          if (finito) {
+            console.log("Post enregistré avec succès");
+          }
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else if (pool.length > 0) {
+      newPostWithPool(postContent, this.state.cid + 1, pool)
+        .then((finito) => {
+          if (finito) {
+            console.log("Post enregistré avec succès");
+          }
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else if (gif) {
+      newPostWithGif(postContent, this.state.cid + 1, gif)
+        .then((finito) => {
+          if (finito) {
+            console.log("Post enregistré avec succès");
+          }
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    } else {
+      // Enregistrez le post dans la base de données Firebase
+      newPost(postContent, this.state.cid + 1)
+        .then(() => {
+          this.setState({ postContent: "" });
+          this.handlePostContentChange(); // Réinitialisez le champ de texte du post
+          this.updatePosts();
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'enregistrement du post :", error);
+        });
+    }
+  };
+
+  updatePosts = () => {
+    getCoursePosts(this.state.cid + 1).then(
+      (querySnapshot) => {
+        const posts = [];
+        const promises = [];
+
+        Object.values(querySnapshot).forEach((doc) => {
+          const promise = getUserDataById(doc.user).then((data) => {
+            doc.username = data.name + " " + data.surname;
+            doc.school = data.school;
+            doc.profileImg = data.profileImg;
+            posts.push(doc);
+          });
+          promises.push(promise);
+        });
+
+        // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
+        Promise.all(promises).then(() => {
+            // Inverser la liste pour avoir les derniers posts en premier
+            console.log("posts", posts);
+            console.log("querySnapshot.size", querySnapshot);
+            // Trie les posts selon leur ordre d'arrivée
+            posts.sort((a, b) => a.timestamp - b.timestamp);
+            posts.reverse();
+            console.log("posts", posts);
+            this.setState({ posts });
+          });
+      });
+  }
+
+  componentDidMount() {
+    this.updatePosts();
+    }
 
   render() {
     const { authState, user } = this.props;
@@ -100,6 +253,7 @@ class Course extends React.Component {
         this.setState({
           dataCollected: true,
           school: userData.school,
+          admin: userData.admin ? userData.admin : false,
         });
         changeColor(userData.school);
       }
@@ -112,7 +266,36 @@ class Course extends React.Component {
       //this.setState({ cid: this.props.match.params.cid });
       this.state.cid = this.props.match.params.cid;
       getCourseById(this.props.match.params.cid).then((course) => {
-        this.setState({ course: Object.values(course)[0] });
+        this.setState({ 
+          course: Object.values(course)[0],
+          courseImg: course.courseImg ? course.courseImg : Info2,
+          courseCover: course.coverImg ? course.coverImg : Info3,
+          cid: this.props.match.params.cid
+        });
+        getCoursePosts(this.props.match.params.cid + 1).then(
+          (querySnapshot) => {
+            const posts = [];
+            const promises = [];
+  
+            Object.values(querySnapshot).forEach((doc) => {
+              const promise = getUserDataById(doc.user).then((data) => {
+                  doc.username = data.name + " " + data.surname;
+                  doc.school = data.school;
+                  doc.profileImg = data.profileImg;
+                  posts.push(doc);
+              });
+              promises.push(promise);
+            });
+  
+            // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
+              Promise.all(promises).then(() => {
+                  // Inverser la liste pour avoir les derniers posts en premier
+                  // Trie les posts selon leur ordre d'arrivée
+                  posts.sort((a, b) => a.timestamp - b.timestamp);
+                  posts.reverse();
+                  this.setState({ posts });
+              });
+          });
       });
       return <Loader />;
     }
@@ -140,14 +323,15 @@ class Course extends React.Component {
             setName={this.setName}
             userName={this.state.userName}
             setUserName={this.setUserName}
-            profileImg={this.state.groupImg}
+            profileImg={this.state.courseImg}
             setProfileImg={this.setProfileImg}
             modelDetails={modelDetails}
             setModelDetails={this.setModelDetails}
-            canModify={this.state.canModify}
+            canModify={this.state.admin}
             uid={user.uid}
-            coverImg={this.state.groupBanner}
+            coverImg={this.state.courseCover}
             setCoverImg={this.setCoverImg}
+            cid={this.state.cid}
             />
         <p dangerouslySetInnerHTML={{ __html: this.state.course.description }}></p>
         </div>
@@ -157,6 +341,26 @@ class Course extends React.Component {
           <button className={this.state.window === 'tps' ? 'active' : ""} onClick={() => this.handleWindow('tps')}>TPs</button>
           <button className={this.state.window === 'exams' ? 'active' : ""} onClick={() => this.handleWindow('exams')}>Exams</button>
           <button className={this.state.window === 'fiches' ? 'active' : ""} onClick={() => this.handleWindow('fiches')}>Fiches</button>
+        </div>
+        <div className="course-content">
+        {this.state.window === 'discussion' && (
+          <>
+        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+          <div className="home">
+
+
+        {this.state.posts && this.state.posts.map((post, index) => (
+                    <Post 
+                    key={index} 
+                    post={post} 
+                    handleLikeClick={() => this.handleLikeClick(index)}
+                    handleCommentClick={() => this.handleCommentClick(index)} 
+                    handleDeletePost={() => this.handleDeletePost(post.id)}
+                    likeCount={post.likeCount} 
+                    commentCount={post.commentCount} 
+                    />
+        ))} 
+        </div></>)}
         </div>
       </div>
     )

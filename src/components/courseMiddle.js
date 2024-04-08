@@ -15,7 +15,8 @@ const CourseMiddle = ({following,
                         canModify,
                         uid,
                         coverImg,
-                        setCoverImg
+                        setCoverImg,
+                        cid
                       }) => {
     
 
@@ -35,6 +36,7 @@ const CourseMiddle = ({following,
         uid={uid}
         coverImg={coverImg}
         setCoverImg={setCoverImg}
+        cid={cid}
         />
 
     </div>
