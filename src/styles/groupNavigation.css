@@ -78,7 +78,7 @@ h1.group-nav-link.active, .group-header h1:focus{
         width: 40%;
         height: 100%;
         background-color: #2a2e49;
-        z-index: 1000;
+        z-index: 6;
     }
 
     .group-navigation.active{

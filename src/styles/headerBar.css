@@ -6,7 +6,7 @@ nav{
     padding: 0vh 1vw;
     position: sticky;
     top: 0;
-    z-index: 1000;    
+    z-index: 7;    
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
 }
@@ -85,7 +85,7 @@ nav{
 }
 .search-icon{
     position: absolute;
-    z-index: 100;
+    z-index: 5;
     top: 50%;
     left: 10px;
     transform: translateY(-50%);

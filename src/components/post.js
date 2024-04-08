@@ -137,9 +137,31 @@ class Post extends React.Component {
   }
 
   handleImageClick = (image) => {
+    console.log("image", image)
     this.setState({
       expandedImage: image
     })
+    if (image !== null) {
+      //bloquer le scroll
+      // Get the current page scroll position
+      console.log("stop scroll")
+      let scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop;
+      let scrollLeft =
+        window.pageXOffset ||
+        document.documentElement.scrollLeft;
+
+        // if any scroll is attempted,
+        // set this to the previous value
+        window.onscroll = function () {
+            window.scrollTo(scrollLeft, scrollTop);
+        };
+    } else {
+      //débloquer le scroll
+      console.log("start scroll")
+      window.onscroll = function () { };
+    }
   }
 
   componentDidMount() {
@@ -307,7 +329,7 @@ class Post extends React.Component {
         {this.state.expandedImage && (
           <div 
           className="overlay"
-          onClick={() => this.setState({ expandedImage: null })}
+          onClick={() => this.handleImageClick(null)}
           >
             <img 
             src={this.state.expandedImage}
