@@ -164,6 +164,10 @@ class Courses extends React.Component {
               onClick={() =>
                 this.setState((prevState) => ({
                   showSecondYearCourses: !prevState.showSecondYearCourses,
+                  showSecondYearCommonCourses: false,
+                  showSecondYearISICourses: false,
+                  showSecondYearIFCourses: false,
+                  showSecondYearMMISCourses: false,
                 }))
               }
             >
@@ -227,6 +231,10 @@ class Courses extends React.Component {
               onClick={() =>
                 this.setState((prevState) => ({
                   showThirdYearCourses: !prevState.showThirdYearCourses,
+                  showThirdYearCommonCourses: false,
+                  showThirdYearISICourses: false,
+                  showThirdYearIFCourses: false,
+                  showThirdYearMMISCourses: false,
                 }))
               }
             >

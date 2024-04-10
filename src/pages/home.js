@@ -5,7 +5,6 @@ import { authStates, withAuth } from "../components/auth";
 import { getUserData, newPost, newPostWithImages, newPostWithPool, newPostWithGif, listenForPostChanges, getUserDataById, likePost, likeEvent, getCurrentUser, deletePost, getForUserPosts, getEvents } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
-import GroupNavigation from "../components/groupNavigation";
 import PostInput from "../components/postInput";
 import Post from "../components/post";
 import { IoMdRefresh } from 'react-icons/io';

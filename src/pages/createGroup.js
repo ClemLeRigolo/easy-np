@@ -2,7 +2,8 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
-import { createGroup } from "../utils/firebase";
+import { createGroup, getUserData } from "../utils/firebase";
+import { changeColor } from "../components/schoolChoose";
 
 import fr from "../utils/i18n";
 import "../styles/createGroup.css";
@@ -16,6 +17,7 @@ class CreateGroup extends React.Component {
       description: "",
       visibility: "public",
       school: "",
+      userSchool: "",
       redirect: false,
       hasHTMLerror: false,
     };
@@ -49,7 +51,7 @@ class CreateGroup extends React.Component {
   };
 
   render() {
-    const { authState } = this.props;
+    const { authState, user } = this.props;
     const { groupName, visibility, school, redirect, description } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {
@@ -59,6 +61,20 @@ class CreateGroup extends React.Component {
 
     if (redirect) {
       return <Redirect to="/groups" />;
+    }
+
+    if (authState === authStates.LOGGED_IN && this.state.userSchool === "") {
+      if(user.emailVerified === false){
+        return <Redirect to="/verify"></Redirect>;
+      }
+        getUserData(user.email).then(data => {
+          this.setState({
+            userSchool: data.school,
+          });
+          changeColor(data.school);
+        }
+        );
+      return <Loader />;
     }
 
     return (
@@ -102,12 +118,7 @@ class CreateGroup extends React.Component {
                 <select id="school" name="school" value={school} onChange={this.handleInputChange} required>
                   <option value="">{fr.FORM_FIELDS.SELECT_SCHOOL}</option>
                   <option value="all">Toutes les écoles</option>
-                  <option value="ensimag">Ensimag</option>
-                  <option value="phelma">Phelma</option>
-                  <option value="ense3">Ense3</option>
-                  <option value="gi">Gi</option>
-                  <option value="pagora">Pagora</option>
-                  <option value="esisar">Esisar</option>
+                  <option value={this.state.userSchool} >{this.state.userSchool}</option>
                 </select>
               </div>
             <button type="submit">{fr.FORM_FIELDS.CREATE_GROUP}</button>
