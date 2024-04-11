@@ -12,6 +12,9 @@ import { changeColor } from "../components/schoolChoose";
 import CourseMiddle from "../components/courseMiddle";
 import Info3 from "../images/course-banner-default.jpg"
 import Info2 from "../images/course-profile-default.png"
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import fr from "../utils/i18n";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 class Course extends React.Component {
 
@@ -361,6 +364,32 @@ class Course extends React.Component {
                     />
         ))} 
         </div></>)}
+        {this.state.window === 'tds' && (
+          <div className="course-home">
+            {this.state.admin && (
+              <Link to={`/course/${this.state.cid}/createRessource/td`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TD}</button></Link>
+            )}
+          </div>
+        )}
+        {this.state.window === 'tps' && (
+          <div className="course-home">
+            {this.state.admin && (
+              <Link to={`/course/${this.state.cid}/createRessource/tp`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TP}</button></Link>
+            )}
+          </div>
+        )}
+        {this.state.window === 'exams' && (
+          <div className="course-home">
+            {this.state.admin && (
+              <Link to={`/course/${this.state.cid}/createRessource/exam`} className="add-button"><button><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EXAM}</button></Link>
+            )}
+          </div>
+        )}
+        {this.state.window === 'fiches' && (
+          <div className="course-home">
+            <Link to={`/course/${this.state.cid}/createRessource/fiche`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_FICHE}</button></Link>
+          </div>
+        )}
         </div>
       </div>
     )
