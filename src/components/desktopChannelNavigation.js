@@ -53,7 +53,7 @@ class ChannelNavigation extends React.Component {
     const { groups } = this.state;
 
     if (!this.state.saloonsCollected) {
-      return <Loader />;
+      return <div />;
     }
     if(!open) return null;
     console.log(this.state.groups);
