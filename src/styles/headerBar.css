@@ -176,6 +176,7 @@ nav{
     .social-icons .nav-icons{
         width: 25px;
         height: 25px;
+        box-sizing: content-box !important;
     }
 
     .social-icons .nav-icons:hover{

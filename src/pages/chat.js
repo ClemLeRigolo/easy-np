@@ -197,7 +197,7 @@ class Chat extends React.Component {
     return (
         <React.Fragment>
         <CssBaseline />
-        <div>
+        <div className='chat-container'>
         <Grid container component={Paper} className={'chat-section'}>
             <Grid item xs={3} className={'borderRight500'}>
                 {this.renderChattingWith()}
