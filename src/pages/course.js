@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/course.css"
 import { authStates, withAuth } from "../components/auth";
-import { getUserDataById, getCourseById, getCoursePosts, likePost, newPost, newPostWithImages, newPostWithPool, newPostWithGif, deletePost } from "../utils/firebase";
+import { getUserDataById, getCourseById, getCoursePosts, likePost, newPost, newPostWithImages, newPostWithPool, newPostWithGif, deletePost, getRessourceByGroup } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -15,6 +15,7 @@ import Info2 from "../images/course-profile-default.png"
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import fr from "../utils/i18n";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import Ressource from "../components/ressource";
 
 class Course extends React.Component {
 
@@ -30,6 +31,12 @@ class Course extends React.Component {
         window: "discussion",
         posts: [],
         admin: false,
+        tds: [],
+        tps: [],
+        exams: [],
+        fiches: [],
+        ressourcesSetted: false,
+        ressourceStartSetted: false,
     };
   }
 
@@ -227,6 +234,30 @@ class Course extends React.Component {
       });
   }
 
+  updateResources = () => {
+    getRessourceByGroup(this.state.cid, "td").then((ressources) => {
+      console.log("ressources", ressources);
+      ressources = Object.values(ressources);
+      console.log("ressources", ressources);
+      ressources.forEach((ressource) => {
+        console.log("ressource", ressource);
+        if (ressource.type === "td") {
+          console.log("ressource", ressource);
+          this.state.tds.push(ressource);
+        } else if (ressource.type === "tp") {
+          this.state.tps.push(ressource);
+        } else if (ressource.type === "exam") {
+          this.state.exams.push(ressource);
+        } else if (ressource.type === "fiche") {
+          this.state.fiches.push(ressource);
+        } else {
+          console.error("Unknown ressource type");
+        }
+      });
+      this.setState({ ressourcesSetted: true });
+    });
+  }
+
   componentDidMount() {
     this.updatePosts();
     }
@@ -265,7 +296,7 @@ class Course extends React.Component {
     }
 
     if ((this.props.match.params.cid !== this.state.cid)) {
-        console.log("this.props.match.params.cid", this.props.match.params.cid)
+      console.log("this.props.match.params.cid", this.props.match.params.cid)
       //this.setState({ cid: this.props.match.params.cid });
       this.state.cid = this.props.match.params.cid;
       getCourseById(this.props.match.params.cid).then((course) => {
@@ -302,6 +333,14 @@ class Course extends React.Component {
       });
       return <Loader />;
     }
+
+    if (!this.state.ressourcesSetted && !this.state.ressourceStartSetted) {
+      this.setState({ ressourceStartSetted: true });
+      this.updateResources();
+      return <Loader />;
+    }
+
+    console.log("this.state.course", this.state.tds);
 
     if (this.state.course === null) {
         return <Loader />;
@@ -369,6 +408,11 @@ class Course extends React.Component {
             {this.state.admin && (
               <Link to={`/course/${this.state.cid}/createRessource/td`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TD}</button></Link>
             )}
+            <div className="ressource-container">
+            {this.state.tds && this.state.tds.map((ressource, index) => (
+              <Ressource key={index} ressource={ressource} canModify={this.state.admin} />
+            ))}
+            </div>
           </div>
         )}
         {this.state.window === 'tps' && (
