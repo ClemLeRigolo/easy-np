@@ -1,17 +1,7 @@
 stages:
-  - testClef
   - linter
   - test
   - badgesDoc
-
-stage1t:
-  stage: testClef
-  tags:
-    - docker
-  image: lxsnsn/gitlab-ci-easynp
-  script:
-    - echo "$FAKE_ID" | base64 -d
-  when: always
 
 eslint:
   stage: linter
@@ -39,10 +29,9 @@ testing:
   script:
     - echo "$GOOGLE_SERVICE_ACCOUNT" | base64 -d > serviceAccount.json
     - yarn install --cache-folder .yarn
+    - npx firebase emulators:start --import bdd --token "$FIREBASE_LOGIN" &
     - npm run startLocal &
-    - sleep 15
-    - npx firebase emulators:start --import bdd --token $FIREBASE_LOGIN &
-    - sleep 45        # wait for firebase to init emulators
+    - sleep 75
     - npm run cypress:ci > cypress_report.txt || echo $?
     - npx nyc report > coverage_report.txt || echo $?
     - rm serviceAccount.json

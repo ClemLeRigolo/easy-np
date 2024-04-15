@@ -1,5 +1,3 @@
-/// <reference types="cypress" />
-
 context('Home', () => {
   before(() => {
     cy.logout();

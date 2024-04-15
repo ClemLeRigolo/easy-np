@@ -295,7 +295,7 @@ class Comment extends React.Component {
             </button>
             </div>
             {answers && answers.length > 0 && (
-              <button className="comment-show-replies" onClick={this.handleShowReplies}>
+              <button className="comment-show-replies" onClick={this.handleShowReplies} data-cy='commentReplyResponse'>
                 {showReplies ? "Masquer les réponses" : "Voir les réponses"}
               </button>
             )}
@@ -307,9 +307,10 @@ class Comment extends React.Component {
                   className="comment-reply-input"
                   value={replyContent}
                   onChange={this.handleInputChange}
+                  data-cy="commentReply"
                   placeholder="Répondre..."
                 />
-                <button className="comment-publish-reply" onClick={this.handlePublishReply}>
+                <button className="comment-publish-reply" onClick={this.handlePublishReply} data-cy="commentReplyPost">
                   {fr.POSTS.PUBLISH}
                 </button>
               </div>
