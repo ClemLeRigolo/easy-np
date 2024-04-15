@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
 import { AiOutlinePlusCircle  } from "react-icons/ai";
 import { MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
-import { getSaloonByGroup, getGroupsByUser } from "../utils/firebase";
+import { getSaloonByGroup, getGroupsByUser, isUserAdminOfGroup } from "../utils/firebase";
 import firebase from "firebase/app";
-import Loader from "./loader";
 // import "../styles/test.css";
 
 class ChannelNavigation extends React.Component {
@@ -16,6 +15,8 @@ class ChannelNavigation extends React.Component {
       saloons: [],
       saloonsCollected: false,
       activeGroup: null,
+      canModify: false,
+      adminCollected: false,
     };
   }
 
@@ -25,6 +26,13 @@ class ChannelNavigation extends React.Component {
       activeGroup: prevState.activeGroup === groupId ? null : groupId,
     }));
   };
+
+  handleSaloonClick = (saloonId) => {
+    console.log("AAAAAAAAAAAAAAAAH saloonId", saloonId);
+    this.setState((prevState) => ({
+      adminCollected: false,
+    }));
+  }
 
   componentDidMount() {
     const user = firebase.auth().currentUser;
@@ -48,15 +56,35 @@ class ChannelNavigation extends React.Component {
       });
   }
 
+  componentDidUpdate(prevProps) {
+    console.log("prevProps", prevProps);
+  }
+
   render() {
     const { open, gid } = this.props;
     const { groups } = this.state;
+    const urlGroup = window.location.pathname.split("/")[2];
 
     if (!this.state.saloonsCollected) {
       return <div />;
     }
     if(!open) return null;
-    console.log(this.state.groups);
+
+    //check if /group is in the url
+    if (window.location.pathname.split("/")[1] === "group" && !this.state.adminCollected) {
+      //get the group id from the url
+      isUserAdminOfGroup(urlGroup, firebase.auth().currentUser.uid).then((isAdmin) => {
+        console.log("isAdmin", isAdmin);
+        this.setState({ 
+          canModify: isAdmin,
+          adminCollected: true,
+        });
+      }
+      );
+    }
+
+    console.log(urlGroup)
+    console.log(this.state.activeGroup)
 
     return (
       <div className={`group-navigation ${open ? 'open' : ''}`} data-cy="navGroup">
@@ -79,7 +107,7 @@ class ChannelNavigation extends React.Component {
 
               {this.state.activeGroup === group.id && (
                 <>
-                  {this.props.canModify && (
+                  {this.state.canModify && this.state.activeGroup == urlGroup && (
                   <Link to={`/group/${group.id}/createSaloon`} activeClassName="active">
                     <div className="group-nav-item" >
                       <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_SALOON}
@@ -87,11 +115,11 @@ class ChannelNavigation extends React.Component {
                   </Link>
                 )}
 
-                  <Link to={`/group/${group.id}`} activeClassName="active">
+                  <Link to={`/group/${group.id}`} activeClassName="active" onClick={() => this.handleSaloonClick("général")}>
                     <div className="group-nav-item">Général</div>
                   </Link>
 
-                  <Link to={`/group/${group.id}/events`} activeClassName="active">
+                  <Link to={`/group/${group.id}/events`} activeClassName="active" onClick={() => this.handleSaloonClick("évènements")}>
                     <div className="group-nav-item">Événements</div>
                   </Link>
 
@@ -101,6 +129,7 @@ class ChannelNavigation extends React.Component {
                         to={`/group/${group.id}/saloon/${saloon.id}`}
                         key={saloon.id}
                         activeClassName="active"
+                        onClick={() => this.handleSaloonClick(saloon.id)}
                       >
                         <div className="group-nav-item">{saloon.name}</div>
                       </Link>

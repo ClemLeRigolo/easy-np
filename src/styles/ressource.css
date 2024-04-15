@@ -1,0 +1,18 @@
+.ressource-list {
+    display: flex;
+    flex-direction: rows;
+    margin-top: 16px;
+  }
+  
+  .ressource {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: var(--selected-color);
+    text-decoration: none;
+  }
+
+  .ressource svg {
+    font-size: 50px;
+  }
