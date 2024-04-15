@@ -1,12 +1,12 @@
 stages:
-  - test
+  - testClef
   - linter
   - test
   - badgesDoc
   - badgesDoc
 
 variables:
-  stage: test
+  stage: testClef
   tags:
     - docker
   image: lxsnsn/gitlab-ci-easynp
