@@ -78,6 +78,8 @@ class Chat extends React.Component {
             console.error('Erreur lors de la récupération des données utilisateur :', error);
             this.setState({ loading: false });
         }
+
+        this.getChatData();
     }
 
     componentDidUpdate(prevProps) {
@@ -89,12 +91,11 @@ class Chat extends React.Component {
 
     async getChatData() {
         const { user} = this.props;
-        
+        console.log("ON PARLE AVEC : ", this.props.match.params.cid);
         //Retrieve the user data of the person we are chatting with
         getUserDataById(this.props.match.params.cid).then(data => {
             this.setState({ chattingWith: data });
         });
-
         //Retrieve the users we have chat with
         getUsersChattedWith(user.uid).then(data => {
             this.setState({ chattingUsers: data });
@@ -252,7 +253,7 @@ class Chat extends React.Component {
                     <Grid item xs={11}>
                         <TextField id="message-input" onKeyPress={this.handleKeyPress} label="Ecrire" fullWidth />
                     </Grid>
-                    <Grid xs={1} align="right">
+                    <Grid align="right">
                         <Fab color="primary" onClick={this.handleSendClick} aria-label="add"><IoSend  /></Fab>
                     </Grid>
                 </Grid>

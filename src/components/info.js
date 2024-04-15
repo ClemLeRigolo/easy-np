@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import {LiaEdit} from "react-icons/lia"
 
 import {IoCameraOutline} from "react-icons/io5"
+import { IoChatboxEllipsesOutline } from "react-icons/io5";
+
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
 import { postProfileImg, postCoverImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
@@ -167,6 +169,28 @@ const Info = ({userPostData,
 
 
         <div className="info-follow">
+          <div style={{position: 'absolute', top: '50%', right: '40%'}}>
+
+              {!canModify &&
+              <Link 
+              to={`/chat/${uid}`} 
+              style={{ 
+                color: 'black', 
+                textDecoration: 'none',
+                display: 'inline-block',
+                backgroundColor: 'white',
+                borderRadius: '50%',
+                padding: '5px',
+              }}
+            >
+              <IoChatboxEllipsesOutline 
+                className="header-svg" 
+                header={true} 
+                size={32}
+              />
+            </Link>}
+
+            </div>
             <h1>{modelDetails.ModelName}</h1>
             <p>{modelDetails.ModelUserName}</p>
 
