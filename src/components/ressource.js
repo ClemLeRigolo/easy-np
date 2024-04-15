@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/post.css";
+import "../styles/ressource.css";
 import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById, voteFor, addEventComment, getEventComments } from "../utils/firebase";
 import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
@@ -65,7 +65,7 @@ class Ressource extends React.Component {
           <div className="post-username">
             <div>
               {ressource.name}
-              <div className="post-date">{formatPostTimestamp(ressource.date)}</div>
+              {/* <div className="post-date">{formatPostTimestamp(ressource.date)}</div> */}
             </div>
           </div>
           {(getCurrentUser().uid === ressource.creator || this.props.canModify) && (
@@ -81,17 +81,19 @@ class Ressource extends React.Component {
         </div>
         {ressource.title && <Link to={`/group/${ressource.groupId}/event/${ressource.id}`} className="post-title"><h1>{ressource.title}</h1></Link>}
         <div className="post-body" dangerouslySetInnerHTML={{ __html: ressource.description }}></div>
-        {ressource.urls && ressource.urls.map((url, index) => {
-          let url2 = url.split("%2F").pop();
-          url2 = url2.split("?")[0];
-          return (
-            <a href={url} key={index} className="post-url" target="_blank" rel="noopener noreferrer">
-              {url.includes(".pdf") ? <FaFilePdf /> : url.includes(".zip") ? <FaFileArchive /> : <FaFileCode />}
-              {url2}
-            </a>
-          );
-        }
-        )}
+        <div className="ressource-list">
+          {ressource.urls && ressource.urls.map((url, index) => {
+            let fileName = url.split("%2F").pop();
+            fileName = fileName.split("?")[0];
+            return (
+              <a href={url} key={index} className="ressource" target="_blank" rel="noopener noreferrer">
+                {url.includes(".pdf") ? <FaFilePdf /> : url.includes(".zip") ? <FaFileArchive /> : <FaFileCode />}
+                <p className="ressource-name">{fileName}</p>
+              </a>
+            );
+          }
+          )}
+        </div>
         <div className="post-footer">
           <button className="post-share-btn" data-cy="share" onClick={this.handleShareClick}>
             <FaShareSquare /> {fr.POSTS.SHARE}
