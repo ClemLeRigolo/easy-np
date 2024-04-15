@@ -250,7 +250,7 @@ class Chat extends React.Component {
                 // ref={this.messagesListRef}
                 className={"message-area"}>
                 {this.state.messages && Object.values(this.state.messages).map(message => (
-                  <ListItem key={message.id}>
+                  <ListItem key={message.date} style={{ paddingBottom: '3% !important' }}>
                     <Grid container>
                       <Grid item xs={12}>
                         <ListItemText
