@@ -2,8 +2,16 @@
     background-color: #2a2e49;
     width: 200px;
     top: 84px;
+    position:fixed;
+    height: 100%;
+}
+
+.group-navigation-ghost {
+    background-color: none;
+    width: 235px;
+    top: 84px;
     position:sticky;
-    position:-webkit-sticky;
+    z-index: 5;
 }
 
 .nav-container {
@@ -82,6 +90,10 @@ h1.group-nav-link.active, .group-header h1:focus{
         z-index: 6;
     }
 
+    .group-navigation-ghost{
+        display: none;
+    }
+
     .group-navigation.active{
         display: block;
     }
@@ -101,6 +113,10 @@ h1.group-nav-link.active, .group-header h1:focus{
 @media screen and (max-width:768px){
     .group-navigation{
         top: 72.19px;
+    }
+
+    group-navigation-ghost{
+        display: none;
     }
 
     .group-navigation.active{

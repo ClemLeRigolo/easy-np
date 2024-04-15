@@ -87,6 +87,7 @@ class ChannelNavigation extends React.Component {
     console.log(this.state.activeGroup)
 
     return (
+      <>
       <div className={`group-navigation ${open ? 'open' : ''}`} data-cy="navGroup">
         {this.state.groups &&
           groups.map((group) => (
@@ -141,6 +142,8 @@ class ChannelNavigation extends React.Component {
           <div className="bg">
             </div>
       </div>
+      <div className="group-navigation-ghost" />
+      </>
     );
   }
   

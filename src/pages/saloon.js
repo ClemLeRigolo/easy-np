@@ -277,7 +277,7 @@ class Saloon extends React.Component {
         {this.state.canWrite && (
           <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
         )}
-          <div className="home">
+          <div className="post-list-saloon">
 
 
         {this.state.posts && this.state.posts.map((post, index) => (
