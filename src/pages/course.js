@@ -237,6 +237,10 @@ class Course extends React.Component {
   updateResources = () => {
     getRessourceByGroup(this.state.cid, "td").then((ressources) => {
       console.log("ressources", ressources);
+      if (ressources === null) {
+        this.setState({ ressourcesSetted: true });
+        return;
+      }
       ressources = Object.values(ressources);
       console.log("ressources", ressources);
       ressources.forEach((ressource) => {

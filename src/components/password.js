@@ -12,6 +12,7 @@ function Password({onPasswordTextChanged, ...props}){
       <input 
         type={(passwordShown) ? "text" : "password"}
         onChange={(event) => onPasswordTextChanged(event.target.value)} 
+        className="easy-nput"
         {...props}
       />
       <span className="id" onClick={(_) => setPasswordShown(!passwordShown)}>

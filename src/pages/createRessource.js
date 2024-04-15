@@ -113,6 +113,7 @@ class CreateRessource extends React.Component {
                 name="ressourceName"
                 value={ressourceName}
                 onChange={this.handleInputChange}
+                className="ressource-input"
                 required
               />
             </div>
@@ -128,6 +129,7 @@ class CreateRessource extends React.Component {
                 onChange={this.handleInputChange}
                 required
                 style={{ whiteSpace: "pre-wrap" }}
+                className="ressource-input"
               ></textarea>
             </div>
             <div className="form-group">

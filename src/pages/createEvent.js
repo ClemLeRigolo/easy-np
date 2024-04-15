@@ -86,6 +86,7 @@ class CreateEvent extends React.Component {
                 name="title"
                 value={title}
                 onChange={this.handleInputChange}
+                className="event-input"
                 required
               />
             </div>
@@ -98,6 +99,7 @@ class CreateEvent extends React.Component {
                 onChange={this.handleInputChange}
                 required
                 style={{ whiteSpace: "pre-wrap" }}
+                className="event-input"
               ></textarea>
               {this.state.hasHtmlError && <div className="error-message">{fr.FORM_FIELDS.NO_HTML}</div>}
             </div>
@@ -146,7 +148,7 @@ class CreateEvent extends React.Component {
             </div>
             <div className="form-group">
               <label htmlFor="event-theme">{fr.FORM_FIELDS.EVENT_THEME}:</label>
-              <select id="event-theme" name="theme" value={theme} onChange={this.handleInputChange} required>
+              <select id="event-theme" name="theme" value={theme} onChange={this.handleInputChange} required className="event-input">
                 <option value="">{fr.FORM_FIELDS.SELECT_THEME}</option>
                 <option value="MINP">MINP</option>
                 <option value="Kfet">Kfet</option>

@@ -21,9 +21,7 @@
     margin-bottom: 5px;
   }
   
-  input[type="text"],
-  textarea,
-  select {
+  .event-input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;

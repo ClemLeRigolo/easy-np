@@ -135,6 +135,7 @@ class Login extends React.Component {
             placeholder={fr.FORM_FIELDS.EMAIL}
             name="email"
             onChange={this.handleInputChange}
+            className="easy-nput"
             required
           />
 

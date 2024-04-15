@@ -321,11 +321,7 @@ class Comment extends React.Component {
               <div className="comment-thread">
               <div className="comment-reply" key={reply.id}>
                 <Link to={`/profile/${reply.user}`} className="comment-author">
-                  {reply.profileImg ? (
-                      <img src={reply.profileImg} alt="Profile" className="post-avatar"/>
-                    ) : (
-                      <img src={require(`../images/Profile-pictures/${reply.school}-default-profile-picture.png`)} alt="Profile" className="post-avatar" />
-                    )}
+                  <ProfileImage uid={reply.user} post={true}/>
                   <div>
                   <div className="comment-author">{reply.author}</div>
                   <div className="comment-timestamp">{formatPostTimestamp(reply.timestamp)}</div>
