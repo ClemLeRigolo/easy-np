@@ -91,7 +91,6 @@ class Chat extends React.Component {
 
     async getChatData() {
         const { user} = this.props;
-        console.log("ON PARLE AVEC : ", this.props.match.params.cid);
         //Retrieve the user data of the person we are chatting with
         getUserDataById(this.props.match.params.cid).then(data => {
             this.setState({ chattingWith: data });
@@ -231,21 +230,35 @@ class Chat extends React.Component {
                 className={"message-area"}>
                     {this.state.messages && Object.values(this.state.messages).map(message => (
                         <ListItem key={message.id}>
-                            <Grid container>
-                                <Grid item xs={12}>
-                                    <ListItemText 
-                                        align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")} 
-                                        primary={message.content}
-                                    ></ListItemText>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <ListItemText 
-                                        align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")} 
-                                        secondary={formatPostTimestamp(message.date)}
-                                    ></ListItemText> 
-                                </Grid>
-                            </Grid>
-                        </ListItem>
+                        <Grid container>
+                          <Grid item xs={12}>
+                            <ListItemText
+                              className={`message ${
+                                message.user === 'system'
+                                  ? 'system-message'
+                                  : message.user === user.uid
+                                    ? 'user-message'
+                                    : 'other-user-message'
+                              }`}
+                              align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
+                              primary={message.content}
+                            ></ListItemText>
+                          </Grid>
+                          <Grid item xs={12}>
+                            <ListItemText
+                              className={` ${
+                                message.user === 'system'
+                                  ? 'system-timestamp'
+                                  : message.user === user.uid
+                                    ? 'user-timestamp'
+                                    : 'other-user-timestamp'
+                              }`}
+                              align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
+                              secondary={formatPostTimestamp(message.date)}
+                            ></ListItemText>
+                          </Grid>
+                        </Grid>
+                      </ListItem>
                     ))}
                 </List>
                 <Divider />

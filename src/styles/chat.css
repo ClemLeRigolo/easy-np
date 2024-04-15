@@ -9,10 +9,30 @@
     border: 1px solid #ccc;
 }
 
-
-
 .message-area{
     width: 80%;
     height: 70vh;
     overflow-y: auto;
+}
+
+.message span{
+    width: auto;
+    max-width: 60%;
+    border-radius: 20px;
+    padding: 8px 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+    text-align: left;
+}
+
+.other-user-message span{
+    background-color: #f1f0f0;
+
+}
+
+.user-message span{
+    background-color: var(--selected-color);
+    color: #f1f0f0;
+
 }
