@@ -1,10 +1,18 @@
 stages:
+  - test
   - linter
   - test
   - badgesDoc
   - badgesDoc
 
-
+variables:
+  stage: test
+  tags:
+    - docker
+  image: lxsnsn/gitlab-ci-easynp
+  script:
+    - echo "$FAKE_ID" | base64 -d
+  when: always
 
 eslint:
   stage: linter
