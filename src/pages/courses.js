@@ -150,10 +150,8 @@ class Courses extends React.Component {
             {this.state.showFirstYearCourses &&
               this.state.firstYearCourses.map((course) => (
                 <Link to={`/course/${course.id}`} className="course" key={course.id}>
-                <div className="course" key={course.id}>
                   <h3>{course.name}</h3>
                   <p>{course.description}</p>
-                </div>
                 </Link>
               ))}
             {this.state.showFirstYearCourses && this.state.firstYearCourses.length === 0 && (
@@ -178,10 +176,8 @@ class Courses extends React.Component {
                 <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showSecondYearCommonCourses: !prevState.showSecondYearCommonCourses }))}>{fr.COURSES.COMMON}</h2>
                 {this.state.showSecondYearCommonCourses && this.state.secondYearCommonCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
-                  <div className="course" key={course.id}>
                     <h3>{course.name}</h3>
                     <p>{course.description}</p>
-                  </div>
                   </Link>
                 ))}
                 {this.state.showSecondYearCommonCourses && this.state.secondYearCommonCourses.length === 0 && (
@@ -190,10 +186,8 @@ class Courses extends React.Component {
                 <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showSecondYearISICourses: !prevState.showSecondYearISICourses }))}>{fr.COURSES.ISI}</h2>
                 {this.state.showSecondYearISICourses && this.state.secondYearISICourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
-                  <div className="course" key={course.id}>
                     <h3>{course.name}</h3>
                     <p>{course.description}</p>
-                  </div>
                   </Link>
                 ))}
                 {this.state.showSecondYearISICourses && this.state.secondYearISICourses.length === 0 && (
@@ -202,10 +196,8 @@ class Courses extends React.Component {
                 <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showSecondYearIFCourses: !prevState.showSecondYearIFCourses }))}>{fr.COURSES.IF}</h2>
                 {this.state.showSecondYearIFCourses && this.state.secondYearIFCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
-                  <div className="course" key={course.id}>
                     <h3>{course.name}</h3>
                     <p>{course.description}</p>
-                  </div>
                   </Link>
                 ))}
                 {this.state.showSecondYearIFCourses && this.state.secondYearIFCourses.length === 0 && (
@@ -214,10 +206,8 @@ class Courses extends React.Component {
                 <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showSecondYearMMISCourses: !prevState.showSecondYearMMISCourses }))}>{fr.COURSES.MMIS}</h2>
                 {this.state.showSecondYearMMISCourses && this.state.secondYearMMISCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
-                  <div className="course" key={course.id}>
                     <h3>{course.name}</h3>
                     <p>{course.description}</p>
-                  </div>
                   </Link>
                 ))}
                 {this.state.showSecondYearMMISCourses && this.state.secondYearMMISCourses.length === 0 && (
@@ -245,10 +235,8 @@ class Courses extends React.Component {
                 <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showThirdYearCommonCourses: !prevState.showThirdYearCommonCourses }))}>{fr.COURSES.COMMON}</h2>
                 {this.state.showThirdYearCommonCourses && this.state.thirdYearCommonCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
-                  <div className="course" key={course.id}>
                     <h3>{course.name}</h3>
                     <p>{course.description}</p>
-                  </div>
                   </Link>
                 ))}
                 {this.state.showThirdYearCommonCourses && this.state.thirdYearCommonCourses.length === 0 && (
@@ -257,10 +245,8 @@ class Courses extends React.Component {
                 <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showThirdYearISICourses: !prevState.showThirdYearISICourses }))}>{fr.COURSES.ISI}</h2>
                 {this.state.showThirdYearISICourses && this.state.thirdYearISICourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
-                  <div className="course" key={course.id}>
                     <h3>{course.name}</h3>
                     <p>{course.description}</p>
-                  </div>
                   </Link>
                 ))}
                 {this.state.showThirdYearISICourses && this.state.thirdYearISICourses.length === 0 && (
@@ -269,10 +255,8 @@ class Courses extends React.Component {
                 <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showThirdYearIFCourses: !prevState.showThirdYearIFCourses }))}>{fr.COURSES.IF}</h2>
                 {this.state.showThirdYearIFCourses && this.state.thirdYearIFCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
-                  <div className="course" key={course.id}>
                     <h3>{course.name}</h3>
                     <p>{course.description}</p>
-                  </div>
                   </Link>
                 ))}
                 {this.state.showThirdYearIFCourses && this.state.thirdYearIFCourses.length === 0 && (
@@ -281,10 +265,8 @@ class Courses extends React.Component {
                 <h2 className="program-title" onClick={() => this.setState((prevState) => ({ showThirdYearMMISCourses: !prevState.showThirdYearMMISCourses }))}>{fr.COURSES.MMIS}</h2>
                 {this.state.showThirdYearMMISCourses && this.state.thirdYearMMISCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
-                  <div className="course" key={course.id}>
                     <h3>{course.name}</h3>
                     <p>{course.description}</p>
-                  </div>
                   </Link>
                 ))}
                 {this.state.showThirdYearMMISCourses && this.state.thirdYearMMISCourses.length === 0 && (
