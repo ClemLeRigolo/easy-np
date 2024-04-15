@@ -70,7 +70,7 @@ class eventCalendar extends React.Component {
         const { selectedEvent, showDetails, clickPosition } = this.state;
 
         return (
-          <div>
+          <div className='interface'>
             <div>{this.state.view}</div>
             <Calendar
               localizer={localizer}

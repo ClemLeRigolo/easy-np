@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/group.css"
+import "../styles/saloon.css"
 import { authStates, withAuth } from "../components/auth";
 import { likePost, getUserDataById, getPostBySaloon, newPost, getSaloonById, getGroupById, deletePost, newPostWithImages, newPostWithPool, newPostWithGif } from "../utils/firebase";
 import { Redirect } from "react-router-dom";
@@ -21,6 +21,7 @@ class Saloon extends React.Component {
         saloon: null,
         profileImg: null,
         dataCollected: false,
+        canWrite: false,
     };
   }
 
@@ -243,28 +244,39 @@ class Saloon extends React.Component {
             });
         });
         getSaloonById(this.props.match.params.sid).then((saloon) => {
+          console.log("saloon", saloon);
             this.setState({ saloon: Object.values(saloon)[0] });
             }
         );
         getGroupById(this.props.match.params.gid).then((group) => {
-            this.setState({ group: Object.values(group)[0] });
+          console.log("group", group);
+            this.setState({ 
+              group: Object.values(group)[0],
+              canWrite: group.admins.includes(user.uid)
+            });
             }
         );
       return <Loader />;
     }
 
-    if (this.state.group === null) {
+    if (this.state.group === null || this.state.saloon === null) {
         return <Loader />;
     }
 
     console.log(this.state.group);
+    console.log(this.state.saloon);
+    console.log(this.state.canWrite);
 
     return (
       <div className='interface'>
-        <div className="group-content">
-        <h1>{this.state.saloon.name}</h1>
-        <p dangerouslySetInnerHTML={{ __html: this.state.saloon.description }}></p>
-        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+        <div className="saloon-content">
+          <div className="saloon-header">
+            <h1>{this.state.saloon.name}</h1>
+            <p dangerouslySetInnerHTML={{ __html: this.state.saloon.description }}></p>
+          </div>
+        {this.state.canWrite && (
+          <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+        )}
           <div className="home">
 
 
