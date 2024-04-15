@@ -109,6 +109,8 @@ class ChannelNavigation extends React.Component {
               )}
             </div>
           ))}
+          <div className="bg">
+            </div>
       </div>
     );
   }

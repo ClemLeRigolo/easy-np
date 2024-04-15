@@ -48,13 +48,13 @@ const HeaderBar = ({search,setSearch,toggleMenu,profileImg,uid}) => {
       </div>
 
       <div className="social-icons">
-        <Link to="/home" style={{textDecoration:"none",display:"flex",alignItems:"center",color:"white",marginTop:"8px"}}>
+        {/* <Link to="/home" style={{textDecoration:"none",display:"flex",alignItems:"center",color:"white",marginTop:"8px"}}>
           <AiOutlineHome className='nav-icons'/>
-        </Link>
+        </Link> */}
 
         <Link to="/eventCalendar" id='calendar' style={{marginTop:"10px"}}><IoCalendarOutline className='nav-icons'/></Link>
            
-        <Link to="/chats" style={{marginTop:"8px"}}>
+        <Link to="/chat" style={{marginTop:"2px"}}>
           <TbMessage className='nav-icons' style={{marginTop:"8px"}}/>
         </Link>
 

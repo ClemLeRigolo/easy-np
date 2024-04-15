@@ -2,7 +2,8 @@
     background-color: #2a2e49;
     width: 200px;
     top: 84px;
-    position: sticky;
+    position:sticky;
+    position:-webkit-sticky;
 }
 
 .nav-container {
