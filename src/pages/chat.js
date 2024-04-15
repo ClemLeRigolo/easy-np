@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 
 import { withAuth, authStates } from '../components/auth';
-import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, getUserDataById, getUsersChattedWith } from '../utils/firebase';
+import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, listenForUserChats, getUserDataById, getUsersChattedWith } from '../utils/firebase';
 import Loader from '../components/loader';
 import { changeColor } from '../components/schoolChoose';
 import Paper from '@material-ui/core/Paper';
@@ -43,12 +43,22 @@ class Chat extends React.Component {
       activeStep: 0,
       chattingWith: null,
       chattingUsers: [],
+      messagesList: null
     };
   }
 
+  autoScrollMessages() {
+    if(!this.state.messagesList) return;
+    console.log("SCROLLING");
+
+    this.state.messagesList.scrollTop = 
+      this.state.messagesList.scrollHeight;
+  
+  }
+
   handleKeyPress = (e) => {
-    if(e.key === 'Enter') {
-      this.handleSendClick(); 
+    if (e.key === 'Enter') {
+      this.handleSendClick();
     }
   }
 
@@ -65,98 +75,109 @@ class Chat extends React.Component {
 
 
 
-    async  componentDidMount() {
+  async componentDidMount() {
 
-        try {
-            const user = await getCurrentUser();
-            this.setState({
-            user: user,
-            loading: false
-            });
-            
-        } catch (error) {
-            console.error('Erreur lors de la récupération des données utilisateur :', error);
-            this.setState({ loading: false });
-        }
+    try {
+      const user = await getCurrentUser();
+      this.setState({
+        user: user,
+        loading: false
+      });
 
-        this.getChatData();
+    } catch (error) {
+      console.error('Erreur lors de la récupération des données utilisateur :', error);
+      this.setState({ loading: false });
     }
 
-    componentDidUpdate(prevProps) {
-        // Vérifier si l'identifiant de chat a changé
-        if (prevProps.match.params.cid !== this.props.match.params.cid) {
-          this.getChatData();
-        }
+    this.getChatData();
+    listenForUserChats((chats) => {
+      console.log("QUELQU'UN M'ENVOIE UN MESSAGE");
+      // this.setState({ chattingUsers: chats });
+    });
+
+    this.setState({
+      messagesList: document.querySelector('.message-area')  
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    // Vérifier si l'identifiant de chat a changé
+    if (prevProps.match.params.cid !== this.props.match.params.cid) {
+      this.getChatData();
+    }
+  }
+
+  async getChatData() {
+    const { user } = this.props;
+    //Retrieve the user data of the person we are chatting with
+    getUserDataById(this.props.match.params.cid).then(data => {
+      this.setState({ chattingWith: data });
+    });
+    //Retrieve the users we have chat with
+    getUsersChattedWith(user.uid).then(data => {
+      this.setState({ chattingUsers: data });
+    });
+
+
+    if (!user || !this.props.match.params.cid) {
+      return;
+    }
+    getChatByUsers(user.uid, this.props.match.params.cid).then(data => {
+
+      if (data) {
+        this.setState({ cid: data });
+      } else {
+        createChatChannel(user.uid, this.props.match.params.cid).then(cid => {
+          this.setState({ cid: cid });
+          getChat(data).then(data => {
+            if (data.messages) {
+              this.setState({ messages: data.messages });
+              listenForChatMessages(this.state.cid, (messages) => {
+                this.setState({ messages: messages });
+                console.log("MESSAGE!");
+                this.autoScrollMessages();
+              });
+            }
+          });
+        });
       }
 
-    async getChatData() {
-        const { user} = this.props;
-        //Retrieve the user data of the person we are chatting with
-        getUserDataById(this.props.match.params.cid).then(data => {
-            this.setState({ chattingWith: data });
-        });
-        //Retrieve the users we have chat with
-        getUsersChattedWith(user.uid).then(data => {
-            this.setState({ chattingUsers: data });
-        });
-
-
-        if(!user || !this.props.match.params.cid){
-            return;
+      getChat(data).then(data => {
+        if (data.messages) {
+          this.setState({ messages: data.messages });
+          listenForChatMessages(this.state.cid, (messages) => {
+            this.setState({ messages: messages });
+            this.autoScrollMessages();
+          });
         }
-        getChatByUsers(user.uid, this.props.match.params.cid).then(data => {
+      });
+    });
+  }
 
-            if(data){
-                this.setState({ cid: data });
-            }else{
-                createChatChannel(user.uid, this.props.match.params.cid).then(cid => {
-                    this.setState({ cid: cid });
-                    getChat(data).then(data => {
-                        if(data.messages){
-                            this.setState({ messages: data.messages });
-                            listenForChatMessages(this.state.cid, (messages) => {
-                                this.setState({ messages: messages });
-                            });
-                        }
-                    });
-                });    
-            }
-
-            getChat(data).then(data => {
-                if(data.messages){
-                    this.setState({ messages: data.messages });
-                    listenForChatMessages(this.state.cid, (messages) => {
-                        this.setState({ messages: messages });
-                    });
-                }
-            });
-        });
-    }
-
-    getUserProfileData() {
+  getUserProfileData() {
     const { user, authState } = this.props;
 
     if (
-        authState === authStates.LOGGED_IN &&
-        !this.state.firstName
+      authState === authStates.LOGGED_IN &&
+      !this.state.firstName
     ) {
-        getUserData(user.email).then(data => {
+      getUserData(user.email).then(data => {
         this.setState({
-            firstName: data.name,
-            lastName: data.surname,
-            school: data.school,
-            id: data.id,
+          firstName: data.name,
+          lastName: data.surname,
+          school: data.school,
+          id: data.id,
         });
         changeColor(data.school);
-        });
+      });
     }
-    }
+  }
 
   handleSendClick = () => {
     const message = document.getElementById('message-input').value;
 
-    if(!message) {
-        return;
+    if (!message) {
+      return;
     }
     //Get text from input
     this.setState({ comment: message });
@@ -195,84 +216,82 @@ class Chat extends React.Component {
       return <Loader />;
     }
     return (
-        <React.Fragment>
-        <CssBaseline />
+      <React.Fragment>
+  
         <div className='chat-container'>
-        <Grid container component={Paper} className={'chat-section'}>
-            <Grid item xs={3} className={'borderRight500'}>
-                {this.renderChattingWith()}
-                <Divider />
-                <Grid item xs={12} style={{padding: '10px'}}>
-                    <TextField id="outlined-basic-email" label="Chercher" variant="outlined" fullWidth />
-                </Grid>
-                <Divider />
-                <List>
+          <Grid container component={Paper} className={'chat-section'}>
+            <Grid item xs={3} className={'chatting-with-nav'}>
+              {this.renderChattingWith()}
+              <Divider />
+              <Grid item xs={12} style={{ padding: '10px' }}>
+                <TextField id="outlined-basic-email" label="Chercher" variant="outlined" fullWidth />
+              </Grid>
+              <Divider />
+              <List>
                 {/* Add a ListItem for each element in chattingUsers */}
                 {this.state.chattingUsers &&
-                    Object.values(this.state.chattingUsers).map(
-                        (user) =>
-                        user.userData !== null && (
-                            <Link to={`/chat/${user.userId}`} key={user.userId}>
-                            <ListItem button>
-                                <ListItemIcon>
-                                <Avatar alt={user.userData.name} src={user.userData.profileImg} />
-                                </ListItemIcon>
-                                <ListItemText primary={user.userData.name}>{user.userData.name}</ListItemText>
-                            </ListItem>
-                            </Link>
-                        )
-                    )}
-                </List>
+                  Object.values(this.state.chattingUsers).map(
+                    (user) =>
+                      user.userData !== null && (
+                        <Link to={`/chat/${user.userId}`} key={user.userId}>
+                          <ListItem button>
+                            <ListItemIcon>
+                              <Avatar alt={user.userData.name} src={user.userData.profileImg} />
+                            </ListItemIcon>
+                            <ListItemText primary={user.userData.name}>{user.userData.name}</ListItemText>
+                          </ListItem>
+                        </Link>
+                      )
+                  )}
+              </List>
             </Grid>
             <Grid item xs={9}>
-                <List 
+              <List
                 // ref={this.messagesListRef}
                 className={"message-area"}>
-                    {this.state.messages && Object.values(this.state.messages).map(message => (
-                        <ListItem key={message.id}>
-                        <Grid container>
-                          <Grid item xs={12}>
-                            <ListItemText
-                              className={`message ${
-                                message.user === 'system'
-                                  ? 'system-message'
-                                  : message.user === user.uid
-                                    ? 'user-message'
-                                    : 'other-user-message'
-                              }`}
-                              align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
-                              primary={message.content}
-                            ></ListItemText>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <ListItemText
-                              className={` ${
-                                message.user === 'system'
-                                  ? 'system-timestamp'
-                                  : message.user === user.uid
-                                    ? 'user-timestamp'
-                                    : 'other-user-timestamp'
-                              }`}
-                              align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
-                              secondary={formatPostTimestamp(message.date)}
-                            ></ListItemText>
-                          </Grid>
-                        </Grid>
-                      </ListItem>
-                    ))}
-                </List>
-                <Divider />
-                <Grid container style={{padding: '20px'}}>
-                    <Grid item xs={11}>
-                        <TextField id="message-input" onKeyPress={this.handleKeyPress} label="Ecrire" fullWidth />
+                {this.state.messages && Object.values(this.state.messages).map(message => (
+                  <ListItem key={message.date} style={{ paddingBottom: '3% !important' }}>
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <ListItemText
+                          className={`message ${message.user === 'system'
+                              ? 'system-message'
+                              : message.user === user.uid
+                                ? 'user-message'
+                                : 'other-user-message'
+                            }`}
+                          align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
+                          primary={message.content}
+                        ></ListItemText>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <ListItemText
+                          className={` ${message.user === 'system'
+                              ? 'system-timestamp'
+                              : message.user === user.uid
+                                ? 'user-timestamp'
+                                : 'other-user-timestamp'
+                            }`}
+                          align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
+                          secondary={formatPostTimestamp(message.date)}
+                        ></ListItemText>
+                      </Grid>
                     </Grid>
-                    <Grid align="right">
-                        <Fab color="primary" onClick={this.handleSendClick} aria-label="add"><IoSend  /></Fab>
-                    </Grid>
+                  </ListItem>
+                ))}
+              </List>
+
+              <Grid container id="message-container" >
+                <Grid item xs={11} >
+                  <TextField id="message-input" onKeyPress={this.handleKeyPress} label="Ecrire" fullWidth />
                 </Grid>
+                <Grid align="right">
+                  <Fab id="send-message-button" onClick={this.handleSendClick} aria-label="add"><IoSend /></Fab>
+                </Grid>
+              </Grid>
             </Grid>
-        </Grid>
-      </div>
+          </Grid>
+        </div>
       </React.Fragment>
     );
   }
