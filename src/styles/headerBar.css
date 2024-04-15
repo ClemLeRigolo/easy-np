@@ -82,6 +82,8 @@ nav{
     padding: 5px 45px;
     border-radius: 30px;
     border: none;
+    box-sizing: border-box;
+
 }
 .search-icon{
     position: absolute;
