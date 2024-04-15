@@ -223,3 +223,12 @@
   .post-scroll {
     overflow: hidden
   }
+
+  .comment-input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 8px;
+    box-sizing: border-box;
+  }

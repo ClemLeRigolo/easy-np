@@ -345,6 +345,7 @@ class Event extends React.Component {
               placeholder="Ajouter un commentaire"
               value={commentInputValue}
               onChange={this.handleCommentInputChange}
+              className="comment-input-field"
             />
             <button className="comment-btn" onClick={this.handleCommentSubmit}>{fr.POSTS.PUBLISH}</button>
           </div>

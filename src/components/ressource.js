@@ -1,10 +1,10 @@
 import React from "react";
 import "../styles/ressource.css";
-import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById, voteFor, addEventComment, getEventComments } from "../utils/firebase";
+import { getCurrentUser } from "../utils/firebase";
 import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaShareSquare } from "react-icons/fa";
-import { FaAngleDown, FaAngleUp, FaFileArchive, FaFileCode, FaFilePdf } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaFileArchive, FaFileCode, FaFilePdf, FaFileImage } from "react-icons/fa";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
 import fr from "../utils/i18n";
@@ -87,7 +87,7 @@ class Ressource extends React.Component {
             fileName = fileName.split("?")[0];
             return (
               <a href={url} key={index} className="ressource" target="_blank" rel="noopener noreferrer">
-                {url.includes(".pdf") ? <FaFilePdf /> : url.includes(".zip") ? <FaFileArchive /> : <FaFileCode />}
+                {url.includes(".pdf") ? <FaFilePdf /> : url.includes(".zip") ? <FaFileArchive /> : url.includes(".jpg") || url.includes(".png") || url.includes(".jpeg") ? <FaFileImage /> : <FaFileCode />}
                 <p className="ressource-name">{fileName}</p>
               </a>
             );

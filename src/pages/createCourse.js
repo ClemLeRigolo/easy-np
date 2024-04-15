@@ -5,7 +5,7 @@ import Loader from "../components/loader";
 import { createCourse, getUserDataById } from "../utils/firebase";
 
 import fr from "../utils/i18n";
-import "../styles/createGroup.css";
+import "../styles/createCourse.css";
 
 class CreateCourse extends React.Component {
   constructor(props) {
@@ -73,6 +73,7 @@ class CreateCourse extends React.Component {
                 name="courseTitle"
                 value={courseTitle}
                 onChange={this.handleInputChange}
+                className="course-input"
                 required
               />
             </div>
@@ -83,6 +84,7 @@ class CreateCourse extends React.Component {
                 name="courseDescription"
                 value={courseDescription}
                 onChange={this.handleInputChange}
+                className="course-input"
                 required
                 style={{ whiteSpace: "pre-wrap" }}
               ></textarea>
