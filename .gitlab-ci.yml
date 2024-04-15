@@ -3,7 +3,6 @@ stages:
   - linter
   - test
   - badgesDoc
-  - badgesDoc
 
 variables:
   stage: testClef
