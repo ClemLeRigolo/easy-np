@@ -48,12 +48,8 @@ class Chat extends React.Component {
   }
 
   autoScrollMessages() {
-    if(!this.state.messagesList) return;
-    console.log("SCROLLING");
-
-    this.state.messagesList.scrollTop = 
-      this.state.messagesList.scrollHeight;
-  
+    const messageArea = document.querySelector('.message-area');
+    messageArea.scrollTop = messageArea.scrollHeight;
   }
 
   handleKeyPress = (e) => {
