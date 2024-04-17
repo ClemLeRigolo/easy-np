@@ -24,6 +24,7 @@ class GroupEvent extends React.Component {
         group: null,
         profileImg: null,
         dataCollected: false,
+        canModify: false,
     };
   }
 
@@ -193,7 +194,10 @@ class GroupEvent extends React.Component {
             });
         });
         getGroupById(this.props.match.params.gid).then((group) => {
-            this.setState({ group: Object.values(group)[0] });
+            this.setState({ 
+              group: Object.values(group)[0],
+              canModify: group.admins.includes(user.uid),
+            });
             }
         );
       return <Loader />;
@@ -208,11 +212,13 @@ class GroupEvent extends React.Component {
     return (
       <div className='interface'>
         <div className="group-content">
-        <h1>{this.state.group.name}</h1>
+        <h1>{fr.GROUPS.EVENTS_OF} {this.state.group.name}</h1>
         <p>{this.state.group.description}</p>
-        <Link to={`/group/${this.state.gid}/createEvent`} className="create-group-button">
+        {this.state.canModify && (
+          <Link to={`/group/${this.state.gid}/createEvent`} className="create-group-button">
             <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EVENT}
           </Link>
+        )}
           <div className="home">
           
           {this.state.posts && this.state.posts.map((post, index) => (

@@ -7,10 +7,12 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postProfileImg, postCoverImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
+import { postProfileImg, postCoverImg, subscribeToUser, unsubscribeFromUser, updateUserData } from '../utils/firebase'
 import fr from '../utils/i18n'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { compressImage, cropImage } from '../utils/helpers';
+import ModelProfile from './modelProfile';
+import { Modal, useMantineTheme } from '@mantine/core';
 
 const Info = ({userPostData,
               following,
@@ -29,7 +31,8 @@ const Info = ({userPostData,
               subscriptionsData,
               nbPosts,
               coverImg,
-              setCoverImg
+              setCoverImg,
+              userData
             }) => {
 
   const [isSubscribed,setIsSubscribed] =useState(isSubscribedProps)
@@ -39,6 +42,8 @@ const Info = ({userPostData,
 
   const importProfile=useRef()
   const importCover =useRef()
+
+  const theme = useMantineTheme();
 
   
   const handleFile1 = async (e) => {
@@ -66,10 +71,6 @@ const Info = ({userPostData,
         console.log(error);
       }
     }
-  }
-
-  const setOpenEdit=(value)=>{
-    console.log(value)
   }
 
   const handleSubscription=()=>{
@@ -110,29 +111,22 @@ const Info = ({userPostData,
     setShowSubscriptions(false)
   }
 
-  /*const [openEdit,setOpenEdit] =useState(false)
+  const [openEdit,setOpenEdit] =useState(false)
 
   const [countryName,setCountryName]= useState("")
   const [jobName,setJobName]= useState("")
   
-  const handleModel=(e)=>{
-    e.preventDefault()
+  const handleModel = (data) => {
+    console.log(data);
+    const { name, surname, username, school, year, major, bio } = data;
+    setName(name+" "+surname);
+    setUserName(username);
 
-    const ModelName =name
-    const ModelUserName=userName
-    const ModelCountryName=countryName
-    const ModelJobName = jobName
-
-    let obj={
-          ModelName:ModelName,
-          ModelUserName:ModelUserName,
-          ModelCountryName:ModelCountryName,
-          ModelJobName:ModelJobName,
-    }
-
-    setModelDetails(obj)
-    setOpenEdit(false)
-  }*/
+    updateUserData(surname,name,username,school,year,major,bio).then(()=>{
+      setModelDetails({...modelDetails,ModelName:name+" "+surname,ModelUserName:username})
+      setOpenEdit(false)
+    })
+  }
 
 
 
@@ -206,22 +200,41 @@ const Info = ({userPostData,
             {!canModify && isSubscribed && !isHovered && <button className='sub-btn' onClick={()=>handleSubscription()} onMouseEnter={changeHover} >{fr.PROFILE.SUBSCRIBED}</button>}
             
 
-            {/* <ModelProfile 
-            name={name}
-            setName={setName}
-            userName={userName}
-            setUserName={setUserName}
-            countryName={countryName}
-            setCountryName={setCountryName}
-            jobName={jobName}
-            setJobName={setJobName}
+            <ModelProfile 
+            name={userData.name}
+            surname={userData.surname}
+            userName={userData.tag}
+            school={userData.school}
+            year={userData.year}
+            major={userData.major}
+            bio={userData.bio}
             handleModel={handleModel}
             openEdit={openEdit}
             setOpenEdit={setOpenEdit}
-            /> */}
+            />
+
+          {userData.bio && (
+            <div className='bio'>
+            <p>{userData.bio}</p>
+          </div>
+          )}
+          
           
 
           <div className="info-details">
+
+            {/* <div className="info-col-1">
+              {userData.year && (
+              <div>
+                <h2>{userData.year}</h2>
+                <span>{fr.PROFILE.YEAR}</span>
+              </div>)}
+              {userData.major && (
+              <div>
+                <h2>{userData.major}</h2>
+                <span>{fr.PROFILE.MAJOR}</span>
+              </div>)}
+            </div> */}
 
             <div className="info-col-2">
               <div onClick={() => openSubscribers()}>
@@ -240,9 +253,18 @@ const Info = ({userPostData,
 
           </div>
 
-          {showSubscribers && (
-            <div className="manage-window">
-              <h2>{fr.PROFILE.FOLLOWERS}</h2>
+            <Modal
+            radius="8px"
+            zIndex="1001"
+            size="lg"
+            opened={showSubscribers}
+            title={fr.PROFILE.FOLLOWERS}
+            onClose={() => closeSubscribers()}
+            overlayProps={{
+              color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
+            }}
+          >
+            <div className='manage-window'>
               <div className="subscribers-list">
                 {subscribersData.map((subscriber,index) => (
                   <div key={subscriber.uid} className="subscriber">
@@ -257,13 +279,23 @@ const Info = ({userPostData,
                   </div>
                 ))}
               </div>
-              <button onClick={() => closeSubscribers()}>{fr.PROFILE.CLOSE}</button>
+              <button className='closeSubscribers' onClick={() => closeSubscribers()}>{fr.PROFILE.CLOSE}</button>
             </div>
-          )}
+          </Modal>
 
-          {showSubscriptions && (
+
+          <Modal
+            radius="8px"
+            zIndex="1001"
+            size="lg"
+            opened={showSubscriptions}
+            title={fr.PROFILE.FOLLOWINGS}
+            onClose={() => closeSubscriptions()}
+            overlayProps={{
+              color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
+            }}
+          >
             <div className="manage-window">
-              <h2>{fr.PROFILE.FOLLOWINGS}</h2>
               <div className="subscribers-list">
                 {subscriptionsData.map((subscription,index) => (
                   <div key={subscription.uid} className="subscriber">
@@ -280,7 +312,7 @@ const Info = ({userPostData,
               </div>
               <button onClick={() => closeSubscriptions()}>{fr.PROFILE.CLOSE}</button>
             </div>
-          )}
+          </Modal>
 
 
         </div>

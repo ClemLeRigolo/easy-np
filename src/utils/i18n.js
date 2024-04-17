@@ -115,6 +115,7 @@ export const fr = {
     CLOSE: "Fermer",
     CREATOR: "Créateur",
     WAITING_LIST: "Liste d'attente",
+    EVENTS_OF: "Événements de",
   },
 
   PROFILE: {
@@ -126,6 +127,8 @@ export const fr = {
     SUBSCRIBED: "Abonné",
     UNSUBSCRIBE: "Se désabonner",
     CLOSE: "Fermer",
+    YEAR: "Année",
+    MAJOR: "Filière",
   },
 
   COURSES: {

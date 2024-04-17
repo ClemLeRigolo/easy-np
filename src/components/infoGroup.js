@@ -14,6 +14,7 @@ import { FaCheck } from 'react-icons/fa6';
 import { ImCross } from 'react-icons/im';
 import GroupMembership from './groupMembership';
 import { compressImage, cropImage } from '../utils/helpers';
+import { Modal, useMantineTheme } from '@mantine/core';
 
 const InfoGroup = ({userPostData,
               following,
@@ -53,6 +54,8 @@ const InfoGroup = ({userPostData,
 
   const importProfile=useRef()
   const importCover =useRef()
+
+  const theme = useMantineTheme();
 
   const changeManageWindow = (window) => {
     setWindowManageMember(window);
@@ -216,7 +219,17 @@ const InfoGroup = ({userPostData,
 
         </div>
 
-        {showManageWindow && (
+        <Modal
+            radius="8px"
+            zIndex="1001"
+            size="lg"
+            opened={showManageWindow}
+            title={fr.GROUPS.MANAGE}
+            onClose={() => closeManageWindow()}
+            overlayProps={{
+              color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
+            }}
+          >
           <div className='manage-window' data-cy='manageGroup'>
             <div className='manage-window-buttons'>
               <button
@@ -296,7 +309,7 @@ const InfoGroup = ({userPostData,
             )}
             <button onClick={closeManageWindow} data-cy='closeManageWindow'>{fr.GROUPS.CLOSE}</button>
           </div>
-        )}
+        </Modal>
     </div>
   )
 }

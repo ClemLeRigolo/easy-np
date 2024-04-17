@@ -51,7 +51,7 @@ class Profile extends React.Component {
       userName: data.name + "_" + data.surname,
       modelDetails: {
         ModelName: data.name + " " + data.surname,
-        ModelUserName: "@" + data.name + "_" + data.surname,
+        ModelUserName: data.tag ? "@" + data.tag : "@" + data.name + "_" + data.surname,
       },
     });
   }
@@ -340,6 +340,7 @@ class Profile extends React.Component {
             nbPosts={this.state.nbPosts}
             coverImg={this.state.coverImg}
             setCoverImg={this.setCoverImg}
+            userData={this.state.userData}
             />
             
             {/* <Right 

@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, newPostWithImages, newPostWithPool, newPostWithGif } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, newPostWithImages, newPostWithPool, newPostWithGif, isUserAdminOfGroup } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -23,6 +23,7 @@ class Event extends React.Component {
         event: null,
         profileImg: null,
         dataCollected: false,
+        canModify: false,
     };
   }
 
@@ -228,7 +229,10 @@ class Event extends React.Component {
             });
         });
         getGroupById(this.props.match.params.gid).then((group) => {
-            this.setState({ group: Object.values(group)[0] });
+            this.setState({ 
+              group: Object.values(group)[0],
+              canModify: group.admins.includes(user.uid)
+            });
             }
         );
         getEventById(this.props.match.params.eid).then((event) => {

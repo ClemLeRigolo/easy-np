@@ -3,8 +3,10 @@
 }
 
 .home{
-    width:80%;
-    margin: 4vh;
+    width: 90%;
+    margin: 5%;
+    justify-content: center;
+    align-items: center;
 }
 
 .modelForm{
@@ -37,10 +39,11 @@
     font-size: 16px;
     padding: 10px 20px;
     text-transform: capitalize;
-    background: linear-gradient(107deg, var(--selected-color) 11.1%, rgb(255, 255, 255) 95.3%);
+    background: linear-gradient(107deg, var(--selected-color) 11.1%, #2a2e49 95.3%);
     color: #fff;
     border: none;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .info{
@@ -129,6 +132,23 @@
     color: grey;
     font-size: 16px;
 }
+
+.bio p {
+    font-size: 18px;
+    color: black;
+    text-align: center;
+    padding: 0px 20px;
+}
+
+.bio {
+    width: 90%;
+    margin-left: 5%;
+    border: solid 1px #e0e0e0;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 10px 0px #0000001f;
+}
+
 .info-follow{
     min-height: 50%;
     padding: 0px 20px 0px;
