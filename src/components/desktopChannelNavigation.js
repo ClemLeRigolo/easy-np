@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from 'react-router-dom';
 import fr from "../utils/i18n";
 import { AiOutlinePlusCircle  } from "react-icons/ai";
 import { MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
@@ -17,6 +17,7 @@ class ChannelNavigation extends React.Component {
       activeGroup: null,
       canModify: false,
       adminCollected: false,
+      url: ''
     };
   }
 
@@ -54,6 +55,22 @@ class ChannelNavigation extends React.Component {
       .catch((error) => {
         console.error("Error:", error);
       });
+
+      const { history } = this.props;
+      this.updateUrl(history.location);
+  
+      this.unlisten = history.listen((location) => {
+        this.updateUrl(location);
+      });
+  }
+
+  componentWillUnmount() {
+    this.unlisten();
+  }
+
+  updateUrl(location) {
+    const url = location.pathname.split('/')[1];
+    this.setState({ url });
   }
 
   componentDidUpdate(prevProps) {
@@ -62,8 +79,12 @@ class ChannelNavigation extends React.Component {
 
   render() {
     const { open, gid } = this.props;
-    const { groups } = this.state;
+    const { groups, url } = this.state;
     const urlGroup = window.location.pathname.split("/")[2];
+
+    if (url === 'login' || url === 'signup' || url === 'verify' || url === 'reset') {
+      return null;
+    }
 
     if (!this.state.saloonsCollected) {
       return <div />;
@@ -149,4 +170,4 @@ class ChannelNavigation extends React.Component {
   
 }
 
-export default ChannelNavigation;
+export default withRouter(ChannelNavigation);

@@ -342,7 +342,7 @@ class Post extends React.Component {
           <Link to={`/profile/${post.user}`} className="post-username">
           <ProfileImage uid={post.user} post={true} />
             <div>
-              {post.username}
+              <p>{post.username}</p>
               <div className="post-date">{formatPostTimestamp(post.timestamp)}</div>
             </div>
           </Link>

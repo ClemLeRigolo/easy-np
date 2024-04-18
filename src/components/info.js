@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { compressImage, cropImage } from '../utils/helpers';
 import ModelProfile from './modelProfile';
 import { Modal, useMantineTheme } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 
 const Info = ({userPostData,
               following,
@@ -128,6 +129,7 @@ const Info = ({userPostData,
     })
   }
 
+  const isMobile = useMediaQuery('(max-width: 50em)');
 
 
   return (
@@ -211,6 +213,7 @@ const Info = ({userPostData,
             handleModel={handleModel}
             openEdit={openEdit}
             setOpenEdit={setOpenEdit}
+            isMobile={isMobile}
             />
 
           {userData.bio && (
@@ -263,6 +266,8 @@ const Info = ({userPostData,
             overlayProps={{
               color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
             }}
+            centered
+            fullScreen={isMobile}
           >
             <div className='manage-window'>
               <div className="subscribers-list">
@@ -294,6 +299,8 @@ const Info = ({userPostData,
             overlayProps={{
               color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
             }}
+            centered
+            fullScreen={isMobile}
           >
             <div className="manage-window">
               <div className="subscribers-list">

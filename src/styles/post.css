@@ -11,10 +11,6 @@
     align-items: center;
 }
 
-.post-header a {
-    display: flex;
-    align-items: center;
-}
 .post-avatar {
     width: 40px;
     height: 40px;
@@ -23,9 +19,15 @@
 }
 
 .post-username {
-    font-weight: bold;
     text-decoration: none;
     color: black;
+    display: flex;
+    align-items: center;
+}
+
+.post-username p {
+    margin: 0;
+    font-weight: bold;
 }
 
 .post-body {

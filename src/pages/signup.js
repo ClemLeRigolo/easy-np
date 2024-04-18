@@ -148,7 +148,7 @@ class SignUp extends React.Component {
                 name="name"
                 onChange={this.handleInputChange}
                 required
-                className='name'
+                className="easy-nput name"
               />
 
               <input
@@ -156,8 +156,8 @@ class SignUp extends React.Component {
                 placeholder="Nom"
                 name="surname"
                 onChange={this.handleInputChange}
+                className="easy-nput name"
                 required
-                className='name'
               />
 
               <input
@@ -165,6 +165,7 @@ class SignUp extends React.Component {
                 placeholder="Email"
                 name="email"
                 onChange={this.handleInputChange}
+                className="easy-nput"
                 required
               />
 

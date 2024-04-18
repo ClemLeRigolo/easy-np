@@ -2,6 +2,8 @@ import React from 'react';
 import { getCurrentUserData, getUserDataById } from '../utils/firebase';
 import '../styles/headerBar.css';
 import { Link } from 'react-router-dom';
+import { HoverCard, Avatar, Text, Group, Anchor, Stack } from '@mantine/core';
+import fr from '../utils/i18n';
 
 class ProfileImage extends React.Component {
   state = {
@@ -80,8 +82,46 @@ class ProfileImage extends React.Component {
         } else if (this.props.post) {
         if (user && user.profileImg) {
             return (
-                
-                    <img src={user.profileImg} alt="Profile" className="post-avatar" />
+              <Group justify="center">
+              <HoverCard width={320} shadow="md" withArrow openDelay={200} closeDelay={200}>
+                <HoverCard.Target>
+                  <Avatar src={user.profileImg} radius="xl" className="post-avatar" />
+                </HoverCard.Target>
+                <HoverCard.Dropdown>
+                  <Group>
+                    <Avatar src={user.profileImg} radius="xl"/>
+                    <Stack>
+                      <Text size="sm" fw={700} style={{ lineHeight: 1 }}>
+                        {user.name + ' ' + user.surname}
+                      </Text>
+                      <Anchor
+                        href={`/profile/${user.uid}`}
+                        c="dimmed"
+                        size="xs"
+                        style={{ lineHeight: 1 }}
+                      >
+                        @{user.tag}
+                      </Anchor>
+                    </Stack>
+                  </Group>
+        
+                  {user.bio && (
+                  <Text size="sm" mt="md">
+                    {user.bio}
+                  </Text>
+                  )}
+        
+                  <Group mt="md" gap="xl">
+                    <Text size="sm">
+                      <b>{user.subscriptions ? user.subscriptions.length : 0}</b> {fr.PROFILE.FOLLOWINGS}
+                    </Text>
+                    <Text size="sm">
+                      <b>{user.followers ? user.followers.length : 0}</b> {fr.PROFILE.FOLLOWERS}
+                    </Text>
+                  </Group>
+                </HoverCard.Dropdown>
+              </HoverCard>
+            </Group>
                     );
             }
     

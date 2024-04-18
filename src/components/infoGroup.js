@@ -15,6 +15,7 @@ import { ImCross } from 'react-icons/im';
 import GroupMembership from './groupMembership';
 import { compressImage, cropImage } from '../utils/helpers';
 import { Modal, useMantineTheme } from '@mantine/core';
+import { useMediaQuery } from '@mantine/hooks';
 
 const InfoGroup = ({userPostData,
               following,
@@ -142,6 +143,7 @@ const InfoGroup = ({userPostData,
   }
 
   const isCreator = uid === group.creator;
+  const isMobile = useMediaQuery('(max-width: 50em)');
 
   return (
 
@@ -229,6 +231,8 @@ const InfoGroup = ({userPostData,
             overlayProps={{
               color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
             }}
+            fullScreen={isMobile}
+            centered
           >
           <div className='manage-window' data-cy='manageGroup'>
             <div className='manage-window-buttons'>

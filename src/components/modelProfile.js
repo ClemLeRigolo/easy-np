@@ -17,6 +17,7 @@ function ModelProfile({
   year,
   major,
   bio,
+  isMobile
 }) {
   const theme = useMantineTheme();
   const [nameModel, setName] = useState(name);
@@ -60,6 +61,7 @@ function ModelProfile({
         overlayProps={{
           color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
         }}
+        centered
       >
         <Loader />
       </Modal>
@@ -73,11 +75,12 @@ function ModelProfile({
         zIndex="1001"
         size="lg"
         opened={openEdit}
-        title="Edit Info"
+        title="Éditer votre profil"
         onClose={() => setOpenEdit(false)}
         overlayProps={{
           color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
         }}
+        fullScreen={isMobile}
       >
         <form className='modelForm' onSubmit={handleModel}>
           <div className="inputBox1">
