@@ -9,6 +9,7 @@ import PostInput from "../components/postInput";
 import Post from "../components/post";
 import { IoMdRefresh } from 'react-icons/io';
 import Event from "../components/event";
+import HomeNotification from "../components/homeNotification";
 
 
 import "../styles/home.css";
@@ -30,6 +31,7 @@ class Home extends React.Component {
       gid: 1710178386585,
       window: "posts",
       events: [],
+      completeProfile: false,
     };
   }
 
@@ -298,6 +300,9 @@ class Home extends React.Component {
             this.setState({ profileImg: require(`../images/Profile-pictures/${data.school}-default-profile-picture.png`) });
           }
           changeColor(data.school);
+          if (!data.name || !data.surname || !data.school || !data.bio || !data.year || !data.major) {
+            this.setState({ completeProfile: true });
+          }
         }
         );
       return <Loader />;
@@ -314,13 +319,16 @@ class Home extends React.Component {
         </button>
       )}
           <div className="post-list">
+            {this.state.completeProfile && (
+          <HomeNotification message={"Veuillez finaliser la création de votre profil !"} url={"/profile/" + user.uid} arrow={true} canClosed={true} />
+        )}
           <div className="post-list-header">
             <button className={this.state.window === 'posts' ? 'active' : ''} onClick={() => this.handleWindowChange("posts")}>Posts</button>
             <button className={this.state.window === 'events' ? 'active' : ''} onClick={() => this.handleWindowChange("events")}>Événements</button>
           </div>
           {this.state.window === 'posts' ? (
             <>
-          <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+          <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent} posts={this.state.posts} />
           {this.state.posts && this.state.posts.map((post, index) => (
             <Post 
               key={index} 

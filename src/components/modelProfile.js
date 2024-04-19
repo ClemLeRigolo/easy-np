@@ -133,7 +133,7 @@ function ModelProfile({
             />
           </div>
 
-          <div className="inputBox1">
+          <div className="inputBox2">
             <label htmlFor="school">Ecole:</label>
             <SchoolChoose selectedImage={schoolModel} handleImageChange={handleImageChange}/>
           </div>

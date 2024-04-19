@@ -1,0 +1,37 @@
+.banner {
+    width: 100%;
+    background-color: var(--selected-color);
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin-top: 20px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.banner:hover {
+    opacity: 0.8;
+}
+
+.banner span {
+    font-size: 18px;
+    font-style: italic;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.banner svg {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.banner svg:first-child {
+    color: red;
+}

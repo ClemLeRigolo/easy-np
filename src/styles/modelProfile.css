@@ -12,6 +12,9 @@
     margin-bottom: 30px;
     height: 50px;
 }
+.modelForm .inputBox2 {
+    width: 100%;
+}
 .modelForm .inputBox1 input{
     width: 90%;
     height: 100%;
@@ -33,6 +36,7 @@
     border: none;
     border-radius: 5px;
 }
+
 @media screen and (max-width:430px){
     .modelForm{
         margin-top: 10px;

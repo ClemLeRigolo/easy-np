@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AiOutlineCloseCircle, AiOutlineArrowRight, AiOutlineCamera, AiOutlineBarChart, AiOutlineGif, AiOutlineVideoCamera } from "react-icons/ai";
 import "../styles/postInput.css";
 import DOMPurify from "dompurify";
@@ -22,7 +22,7 @@ export const replaceLinksAndTags = (content) => {
   return contentWithLinks;
 };
 
-export default function PostInput({ handlePostSubmit }) {
+export default function PostInput({ handlePostSubmit, posts }) {
   const [postContent, setPostContent] = useState("");
   const [validationError, setValidationError] = useState("");
   const [photos, setPhotos] = useState([]);
@@ -31,6 +31,11 @@ export default function PostInput({ handlePostSubmit }) {
   const [selectedOption, setSelectedOption] = useState(null);
   const [showGifSearch, setShowGifSearch] = useState(false);
   const [selectedGif, setSelectedGif] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(false)
+  }, [posts]);
 
   const toggleGifSearch = () => {
     if (selectedOption === "gif") {
@@ -111,6 +116,7 @@ export default function PostInput({ handlePostSubmit }) {
           setValidationError("Veuillez saisir au moins une option de sondage.");
           return;
         }
+        setLoading(true);
         const compressedImagesPromises = photos.map((photo) => compressImage(photo.file));
         
         Promise.all(compressedImagesPromises)
@@ -194,7 +200,7 @@ export default function PostInput({ handlePostSubmit }) {
     setSelectedGif(null);
     setSelectedOption(null);
     setShowGifSearch(false);
-  }
+  };
 
   console.log(selectedGif);
 
@@ -249,9 +255,14 @@ export default function PostInput({ handlePostSubmit }) {
           </div>
         </div>
       </div>
+      {!loading ? (
       <button className="post-submit-btn" data-cy="postInput" onClick={handleSubmit}>
         <AiOutlineArrowRight />
+      </button>) : (
+        <button className="post-submit-btn" data-cy="postInput" disabled>
+        <div className="mini-loader"></div>
       </button>
+      )}
       </div>
       <div className="photos-preview">
       {photos.map((photo, index) => (

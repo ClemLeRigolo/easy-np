@@ -1,14 +1,19 @@
+.schoolChoose {
+  width: 100%;
+}
+
 .image-button {
     display: none;
   }
   .image-button-label {
     display: inline-block;
     cursor: pointer;
+    width: 10%;
+    min-width: 50px;
   }
   
   .image-button-label img {
-    width: 4.5vw;
-    height: 4.5vw;
+    width: 100%;
     min-width: 50px;
     min-height: 50px;
     border: 0px solid #ccc;

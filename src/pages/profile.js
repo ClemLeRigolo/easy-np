@@ -239,6 +239,7 @@ class Profile extends React.Component {
               this.setState({ 
                 posts : posts,
                 nbPosts: posts.length,
+                isSubscribed: undefined,
               });
               this.render();
             });
@@ -264,11 +265,7 @@ class Profile extends React.Component {
           }
           //check if this.props.match.params.uid is in this.state.currentUserData.subscriptions
           console.log(userData.subscriptions);
-          if (userData.subscriptions && userData.subscriptions.includes(this.props.match.params.uid)) {
-            this.setState({ isSubscribed: true });
-          } else {
-            this.setState({ isSubscribed: false });
-          }
+          
           changeColor(userData.school);
         });
       return <Loader />;
@@ -298,6 +295,15 @@ class Profile extends React.Component {
           });
       });
       this.setState({ subscriptionsSet: true });
+    }
+
+    if (this.state.isSubscribed === undefined) {
+      if (this.state.currentUserData.subscriptions && this.state.currentUserData.subscriptions.includes(this.props.match.params.uid)) {
+        this.setState({ isSubscribed: true });
+      } else {
+        this.setState({ isSubscribed: false });
+      }
+      return <Loader />;
     }
 
     if (this.state.isSubscribed === undefined || this.state.nbPosts === null || this.state.posts === undefined || this.state.userData === null || this.state.currentUserData === null) {

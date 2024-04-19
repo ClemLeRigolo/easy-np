@@ -80,11 +80,23 @@ const Info = ({userPostData,
     });
   }
 
+  const handleSubscriptionToUser=(uid)=>{
+    subscribeToUser(uid).then(()=>{
+      setIsSubscribed(true)
+    });
+  }
+
   const handleUnsubscription=()=>{
     unsubscribeFromUser(uid).then(()=>{
       setIsSubscribed(false)
     });
     setIsHovered(false);
+  }
+
+  const handleUnsubscriptionToUser=(uid)=>{
+    unsubscribeFromUser(uid).then(()=>{
+      setIsSubscribed(false)
+    });
   }
 
   const changeHover=()=>{
@@ -130,6 +142,13 @@ const Info = ({userPostData,
   }
 
   const isMobile = useMediaQuery('(max-width: 50em)');
+
+  //get all the subscriptionsData uid and put it into a list
+  let subscriptions = []
+  subscriptionsData.map((subscription)=>{
+    subscriptions.push(subscription.uid)
+  }
+  )
 
 
   return (
@@ -280,6 +299,7 @@ const Info = ({userPostData,
                       <img src={require(`../images/Profile-pictures/${subscriber.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
                     )}
                     <span>{subscriber.name} {subscriber.surname}</span>
+                    {subscriptions.includes(subscriber.uid) ? <button className='follow-btn' onClick={()=>handleUnsubscriptionToUser(subscriber.uid)}>{fr.PROFILE.UNSUBSCRIBE}</button> : <button className='follow-btn' onClick={()=>handleSubscriptionToUser(subscriber.uid)}>{fr.PROFILE.SUBSCRIBE}</button>}
                     </Link>
                   </div>
                 ))}
@@ -313,6 +333,7 @@ const Info = ({userPostData,
                       <img src={require(`../images/Profile-pictures/${subscription.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
                     )}
                     <span>{subscription.name} {subscription.surname}</span>
+                    {subscriptions.includes(subscription.uid) ? <button className='follow-btn' onClick={()=>handleUnsubscriptionToUser(subscription.uid)}>{fr.PROFILE.UNSUBSCRIBE}</button> : <button className='follow-btn' onClick={()=>handleSubscriptionToUser(subscription.uid)}>{fr.PROFILE.SUBSCRIBE}</button>}
                     </Link>
                   </div>
                 ))}

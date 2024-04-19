@@ -13,6 +13,7 @@ import ProfileImage from "./profileImage";
 import { FaEllipsisH } from "react-icons/fa";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import Poll from 'react-polls';
+import { Modal } from '@mantine/core';
 
 class Post extends React.Component {
   constructor(props) {
@@ -326,7 +327,7 @@ class Post extends React.Component {
 
     return (
       <div className="post" data-cy="post">
-        {this.state.expandedImage && (
+        {/* {this.state.expandedImage && (
           <div 
           className="overlay"
           onClick={() => this.handleImageClick(null)}
@@ -337,7 +338,22 @@ class Post extends React.Component {
             alt="Expanded"
           />
           </div>
-        )}
+        )} */}
+        <Modal
+            radius="8px"
+            zIndex="1001"
+            size="auto"
+            opened={this.state.expandedImage}
+            onClose={() => this.handleImageClick(null)}
+            withCloseButton={false}
+            centered
+            padding="0"
+          >
+            <img 
+            src={this.state.expandedImage}
+            alt=""
+          />
+          </Modal>
         <div className="post-header">
           <Link to={`/profile/${post.user}`} className="post-username">
           <ProfileImage uid={post.user} post={true} />

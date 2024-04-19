@@ -36,13 +36,28 @@
   .post-submit-btn {
     background-color: var(--selected-color);
     color: white;
-    padding: 14px 16px;
+    padding: 14px 14px;
     margin-left: 30px;
     border: 2px solid #ccc;
     cursor: pointer;
     border-radius: 100%;
     font-size: 24px;
     transition: opacity 0.3s ease;
+  }
+
+  .post-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .post-submit-btn:disabled:hover {
+    opacity: 0.5;
+  }
+
+  .post-submit-btn svg {
+    width: 24px;
+    height: 24px;
+    margin-left: 2px;
   }
 
   .post-submit-btn:hover {
