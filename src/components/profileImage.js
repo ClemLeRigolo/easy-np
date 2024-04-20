@@ -183,6 +183,18 @@ class ProfileImage extends React.Component {
                               </div>
                               </Link>);
                   }
+                } else {
+                  if (user && user.profileImg) {
+                    return (
+                      <Link to={`/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
+                        <img src={user.profileImg} alt="Profile" className='post-avatar' />
+                            </Link>);
+                    } else {
+                        return (
+                            <Link to={`/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
+                            <img src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} alt="Profile" className='post-avatar' />
+                                </Link>);
+                    }
                 }
 
         }

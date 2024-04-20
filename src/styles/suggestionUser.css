@@ -49,6 +49,7 @@
     margin: 0 !important;
   }
 
-  .suggested-user a div {
+  .link-to-profile div {
+    width: auto !important;
     color: #000;
   }

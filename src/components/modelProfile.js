@@ -135,6 +135,7 @@ function ModelProfile({
               placeholder='Enter Bio'
               onChange={(e) => setBio(e.target.value)}
               value={bioModel}
+              style={{ whiteSpace: "pre-wrap" }}
             />
           </div>
 

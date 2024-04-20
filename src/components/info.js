@@ -121,6 +121,7 @@ const Info = ({userPostData,
   const handleModel = (data) => {
     console.log(data);
     const { name, surname, username, school, year, major, bio } = data;
+    userData.bio = bio;
     setName(name+" "+surname);
     setUserName(username);
 
