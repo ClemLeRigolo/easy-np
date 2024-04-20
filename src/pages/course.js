@@ -429,7 +429,7 @@ class Course extends React.Component {
         {this.state.window === 'exams' && (
           <div className="course-home">
             {this.state.admin && (
-              <Link to={`/course/${this.state.cid}/createRessource/exam`} className="add-button"><button><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EXAM}</button></Link>
+              <Link to={`/course/${this.state.cid}/createRessource/exam`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EXAM}</button></Link>
             )}
           </div>
         )}
