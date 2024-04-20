@@ -12,6 +12,18 @@
     margin-bottom: 30px;
     height: 50px;
 }
+
+.inputBox2 textarea{
+    width: 90%;
+    height: 100px;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 1px solid grey;
+    outline: none;
+    resize: none;
+}
+
 .modelForm .inputBox2 {
     width: 100%;
 }

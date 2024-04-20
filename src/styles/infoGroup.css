@@ -64,9 +64,29 @@
   .member-name {
     display: flex;
     align-items: center;
+    justify-content: space-around;
+    font-size: 16px;
+    font-weight: bold;
+    width: 100%;
+  }
+
+  .member-name-displayed {
+    display: flex;
+    align-items: center;
     font-size: 16px;
     font-weight: bold;
     width: 70%;
+  }
+
+  .follow-btn {
+    background: var(--selected-color);
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    transition: opacity ease 0.3s;
+    width: 30%;
+    margin-bottom: 5px;
   }
 
   .row-member {

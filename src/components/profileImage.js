@@ -59,7 +59,7 @@ class ProfileImage extends React.Component {
     const { user, loading } = this.state;
     
 
-    if (loading) {
+    if (loading || user === null) {
       // Afficher un indicateur de chargement pendant la récupération des données
       return (<div className="n-profile" >
       <img src="none" alt="Profile" className='n-img' />
@@ -126,7 +126,46 @@ class ProfileImage extends React.Component {
             }
     
             return (
-                    <img src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} alt="Profile" className="post-avatar" />
+              <Group justify="center">
+              <HoverCard width={320} shadow="md" withArrow openDelay={200} closeDelay={200}>
+                <HoverCard.Target>
+                  <Avatar src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} radius="xl" className="post-avatar" />
+                </HoverCard.Target>
+                <HoverCard.Dropdown>
+                  <Group>
+                    <Avatar src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} radius="xl"/>
+                    <Stack>
+                      <Text size="sm" fw={700} style={{ lineHeight: 1 }}>
+                        {user.name + ' ' + user.surname}
+                      </Text>
+                      <Anchor
+                        href={`/profile/${user.uid}`}
+                        c="dimmed"
+                        size="xs"
+                        style={{ lineHeight: 1 }}
+                      >
+                        @{user.tag}
+                      </Anchor>
+                    </Stack>
+                  </Group>
+        
+                  {user.bio && (
+                  <Text size="sm" mt="md">
+                    {user.bio}
+                  </Text>
+                  )}
+        
+                  <Group mt="md" gap="xl">
+                    <Text size="sm">
+                      <b>{user.subscriptions ? user.subscriptions.length : 0}</b> {fr.PROFILE.FOLLOWINGS}
+                    </Text>
+                    <Text size="sm">
+                      <b>{user.followers ? user.followers.length : 0}</b> {fr.PROFILE.FOLLOWERS}
+                    </Text>
+                  </Group>
+                </HoverCard.Dropdown>
+              </HoverCard>
+            </Group>
                     );
             } else if (this.props.footer) {
               if (user && user.profileImg) {

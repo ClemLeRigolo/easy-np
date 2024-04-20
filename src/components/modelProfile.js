@@ -47,6 +47,10 @@ function ModelProfile({
       bio: bioModel,
     });
     setLoading(true);
+    //delay to show the loader
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   };
 
   if (loading) {
@@ -61,6 +65,7 @@ function ModelProfile({
         overlayProps={{
           color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
         }}
+        fullScreen={isMobile}
         centered
       >
         <Loader />
@@ -122,7 +127,7 @@ function ModelProfile({
             />
           </div>
 
-          <div className='inputBox1'>
+          <div className='inputBox2'>
             <label htmlFor="bio">Biographie:</label>
             <textarea
               name="bio"

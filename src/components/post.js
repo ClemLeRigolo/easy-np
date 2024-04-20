@@ -28,6 +28,7 @@ class Post extends React.Component {
       pollSetted: false,
       vote: null,
       expandedImage: null,
+      contextTrigger: null,
     };
   }
 
@@ -110,7 +111,6 @@ class Post extends React.Component {
         return Promise.all(promises);
       })
       .then((updatedComments) => {
-        console.log("updatedComments", updatedComments);
         this.setState((prevState) => ({
           post: {
             ...prevState.post,
@@ -138,14 +138,12 @@ class Post extends React.Component {
   }
 
   handleImageClick = (image) => {
-    console.log("image", image)
     this.setState({
       expandedImage: image
     })
     if (image !== null) {
       //bloquer le scroll
       // Get the current page scroll position
-      console.log("stop scroll")
       let scrollTop =
         window.pageYOffset ||
         document.documentElement.scrollTop;
@@ -160,7 +158,6 @@ class Post extends React.Component {
         };
     } else {
       //débloquer le scroll
-      console.log("start scroll")
       window.onscroll = function () { };
     }
   }
@@ -210,7 +207,6 @@ class Post extends React.Component {
       });
       getImagesFromPost(this.props.post.id)
       .then((images) => {
-        console.log(images)
         this.setState((prevState) => ({
           post: {
             ...prevState.post,
@@ -222,7 +218,6 @@ class Post extends React.Component {
   }
 
   handleVote = (answer) => {
-    console.log("answer", answer);
     const { pollAnswers } = this.state;
     const newPollAnswers = pollAnswers.map((pollAnswer,index) => {
       if (pollAnswer.option === answer) {
@@ -232,6 +227,12 @@ class Post extends React.Component {
       return pollAnswer;
     });
   }
+
+  handleContextMenu = (e) => {
+    if(this.state.contextTrigger) {
+      this.state.contextTrigger.handleContextClick(e);
+    }
+  };
 
   render() {
     const { likeCount } = this.props;
@@ -306,12 +307,9 @@ class Post extends React.Component {
     }
 
     if (post.voters) {
-      console.log("voters", post.voters);
       for (let i = 0; i < post.pool.length; i++) {
         if (post.voters[i] && post.voters[i].includes(getCurrentUser().uid)) {
           //this.setState({ vote: post.pool[i] });
-          console.log("vote", post.pool[i]);
-          console.log("index", i);
           this.state.vote = post.pool[i];
         }
       }
@@ -322,12 +320,9 @@ class Post extends React.Component {
       theme: 'blue'
     }
 
-    console.log("pollAnswers", this.state.pollAnswers);
-    console.log("vote", this.state.vote);
-
     return (
       <div className="post" data-cy="post">
-        {/* {this.state.expandedImage && (
+        {this.state.expandedImage && (
           <div 
           className="overlay"
           onClick={() => this.handleImageClick(null)}
@@ -338,8 +333,8 @@ class Post extends React.Component {
             alt="Expanded"
           />
           </div>
-        )} */}
-        <Modal
+        )}
+        {/* <Modal
             radius="8px"
             zIndex="1001"
             size="auto"
@@ -351,9 +346,10 @@ class Post extends React.Component {
           >
             <img 
             src={this.state.expandedImage}
+            onClick={() => this.handleImageClick(null)}
             alt=""
           />
-          </Modal>
+          </Modal> */}
         <div className="post-header">
           <Link to={`/profile/${post.user}`} className="post-username">
           <ProfileImage uid={post.user} post={true} />
@@ -365,11 +361,14 @@ class Post extends React.Component {
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
           {(getCurrentUser().uid === post.user || this.props.canModify) && (
           <div className="post-menu">
-          <ContextMenuTrigger id={post.id}>
-            <FaEllipsisH className="post-options" />
+          <ContextMenuTrigger
+            id={post.id.toString()}
+            ref={c => this.state.contextTrigger = c}
+          >
+            <FaEllipsisH className="post-options" onClick={(e) => this.handleContextMenu(e, post)} />
           </ContextMenuTrigger>
 
-          <ContextMenu id={post.id}>
+          <ContextMenu id={post.id.toString()}>
             <MenuItem onClick={this.handleDeletePost}>{fr.POSTS.DELETE}</MenuItem>
           </ContextMenu>
           </div>)}
@@ -394,8 +393,8 @@ class Post extends React.Component {
           <div className="post-pool">
             {/*loop on post.pool*/}
             {this.state.vote !== null ? 
-              <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} vote={this.state.vote} customStyles={pollStyles1} />
-              : <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} customStyles={pollStyles1} />}
+              <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} vote={this.state.vote} customStyles={pollStyles1} question={''} />
+              : <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} customStyles={pollStyles1} question={''} />}
           </div>
         )}
         <div className="post-footer">

@@ -22,14 +22,12 @@ class ChannelNavigation extends React.Component {
   }
 
   handleGroupClick = (groupId) => {
-    console.log("AAAAAAAAAAAAAAAAH groupId", groupId);
     this.setState((prevState) => ({
       activeGroup: prevState.activeGroup === groupId ? null : groupId,
     }));
   };
 
   handleSaloonClick = (saloonId) => {
-    console.log("AAAAAAAAAAAAAAAAH saloonId", saloonId);
     this.setState((prevState) => ({
       adminCollected: false,
     }));
@@ -73,10 +71,6 @@ class ChannelNavigation extends React.Component {
     this.setState({ url });
   }
 
-  componentDidUpdate(prevProps) {
-    console.log("prevProps", prevProps);
-  }
-
   render() {
     const { open, gid } = this.props;
     const { groups, url } = this.state;
@@ -103,9 +97,6 @@ class ChannelNavigation extends React.Component {
       }
       );
     }
-
-    console.log(urlGroup)
-    console.log(this.state.activeGroup)
 
     return (
       <>

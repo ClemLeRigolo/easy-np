@@ -22,6 +22,27 @@ export const replaceLinksAndTags = (content) => {
   return contentWithLinks;
 };
 
+export const isYoutubeVideoPresent = (content) => {
+  const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)/;
+  return youtubeRegex.test(content);
+}
+
+export const getYoutubeVideoId = (content) => {
+  const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)/;
+  const match = content.match(youtubeRegex);
+  return match[1];
+}
+
+export const generateYoutubeEmbedUrl = (videoId) => {
+  return `https://www.youtube.com/embed/${videoId}`;
+}
+
+export const generateIframe = (content) => {
+  const youtubeVideoId = getYoutubeVideoId(content);
+  const youtubeEmbedUrl = generateYoutubeEmbedUrl(youtubeVideoId);
+  return `<iframe width="560" height="315" src="${youtubeEmbedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+}
+
 export default function PostInput({ handlePostSubmit, posts }) {
   const [postContent, setPostContent] = useState("");
   const [validationError, setValidationError] = useState("");
@@ -111,11 +132,16 @@ export default function PostInput({ handlePostSubmit, posts }) {
       if (containsHtml(postContent)) {
         setValidationError("Le contenu du post ne peut pas contenir de code HTML.");
       } else {
-        const finalContent = replaceLinksAndTags(postContent);
+        let finalContent = replaceLinksAndTags(postContent);
         if (validatePollOption()) {
           setValidationError("Veuillez saisir au moins une option de sondage.");
           return;
         }
+        if (isYoutubeVideoPresent(finalContent)) {
+          const iframe = generateIframe(finalContent);
+          finalContent = finalContent + iframe;
+        }
+
         setLoading(true);
         const compressedImagesPromises = photos.map((photo) => compressImage(photo.file));
         
@@ -201,8 +227,6 @@ export default function PostInput({ handlePostSubmit, posts }) {
     setSelectedOption(null);
     setShowGifSearch(false);
   };
-
-  console.log(selectedGif);
 
   return (
     <div className="post-wrapper">

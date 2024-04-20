@@ -43,7 +43,6 @@ class HeaderBar extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('prevProps', prevProps);
     if (this.props.location !== prevProps.location) {
       this.updateUrl();
     }
@@ -57,8 +56,6 @@ class HeaderBar extends Component {
   render() {
     const { search, setSearch, toggleMenu, profileImg, uid } = this.props;
     const { url } = this.state;
-
-    console.log('url', url);
 
     if (url === 'login' || url === 'signup' || url === 'verify' || url === 'reset') {
       return null;

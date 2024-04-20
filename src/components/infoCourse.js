@@ -31,11 +31,6 @@ const Info = ({userPostData,
               cid
             }) => {
 
-  const [isSubscribed,setIsSubscribed] =useState(isSubscribedProps)
-  const [isHovered, setIsHovered] = useState(false);
-  const [showSubscribers, setShowSubscribers] = useState(false);
-  const [showSubscriptions, setShowSubscriptions] = useState(false);
-
   const importProfile=useRef()
   const importCover =useRef()
 
@@ -69,44 +64,6 @@ const Info = ({userPostData,
 
   const setOpenEdit=(value)=>{
     console.log(value)
-  }
-
-  const handleSubscription=()=>{
-    subscribeToUser(uid).then(()=>{
-      setIsSubscribed(true)
-    });
-  }
-
-  const handleUnsubscription=()=>{
-    unsubscribeFromUser(uid).then(()=>{
-      setIsSubscribed(false)
-    });
-    setIsHovered(false);
-  }
-
-  const changeHover=()=>{
-    setIsHovered(true)
-  }
-
-  const changeHoverOut=()=>{
-    setIsHovered(false)
-  }
-
-  const openSubscribers=()=>{
-    console.log("openSubscribers")
-    setShowSubscribers(true)
-  }
-
-  const closeSubscribers=()=>{
-    setShowSubscribers(false)
-  }
-
-  const openSubscriptions=()=>{
-    setShowSubscriptions(true)
-  }
-
-  const closeSubscriptions=()=>{
-    setShowSubscriptions(false)
   }
 
   /*const [openEdit,setOpenEdit] =useState(false)

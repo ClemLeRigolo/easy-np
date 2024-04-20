@@ -1,0 +1,54 @@
+.suggested-users {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    margin-right: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff;
+    border: solid 1px #e6e6e6;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .suggested-users h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 0;
+  }
+  
+  .suggested-users-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .suggested-user {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .suggested-user a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 65%;
+  }
+
+  .suggested-user .follow-btn {
+    width: 35%;
+    padding: 5px 5px;
+  }
+  
+  .suggested-user h2 {
+    text-align: left;
+    font-size: 16px;
+    margin: 0 !important;
+  }
+
+  .suggested-user a div {
+    color: #000;
+  }

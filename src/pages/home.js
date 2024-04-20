@@ -10,6 +10,7 @@ import Post from "../components/post";
 import { IoMdRefresh } from 'react-icons/io';
 import Event from "../components/event";
 import HomeNotification from "../components/homeNotification";
+import SuggestionUser from "../components/suggestionUser";
 
 
 import "../styles/home.css";
@@ -32,14 +33,11 @@ class Home extends React.Component {
       window: "posts",
       events: [],
       completeProfile: false,
+      currentUser: {},
     };
   }
 
   handlePostSubmit = (postContent, postImages, pool, gif) => {
-
-    console.log("postImages", postImages);
-    console.log("postContent", postContent);
-    console.log("pool", pool);
 
     // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
     if (postImages.length > 0) {
@@ -103,16 +101,12 @@ class Home extends React.Component {
     const { posts } = this.state;
     const post = posts[postIndex];
 
-    console.log("posts", posts);
-    console.log("post", post);
-
     likePost(post.id)
       .then((data) => {
         console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
-        console.log(post);
       
         // Mettez à jour l'état avec le post modifié
         this.setState({
@@ -128,17 +122,12 @@ class Home extends React.Component {
     const { events } = this.state;
     const post = events[postIndex];
 
-    console.log("post", post);
-
     likeEvent(post.id)
       .then((data) => {
         console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
-
-        console.log("post.likeCount", post.likeCount);
-        console.log("post.likes", post.likes);
       
         // Mettez à jour l'état avec le post modifié
         this.setState({
@@ -191,7 +180,6 @@ class Home extends React.Component {
   updatePosts = () => {
     getForUserPosts()
       .then((querySnapshot) => {
-        console.log("querySnapshot", querySnapshot);
         if (!querySnapshot) {
           return;
         }
@@ -239,8 +227,6 @@ class Home extends React.Component {
   componentDidMount() {
     // rafraichit les posts quand la base de données change
     this.updatePosts();
-    console.log("mounted ");
-    console.log(this.state.showRefreshButton);
     listenForPostChanges((posts) => {
       //on récupère l'id du dernier post
       if (!posts) {
@@ -253,10 +239,8 @@ class Home extends React.Component {
       if (this.state.firstLoad) {
         this.setState({firstLoad: false});
       }
-      console.log(this.state.showRefreshButton);
     });
     getEvents().then((events) => {
-      console.log("events", events);
       if (!events) {
         return;
       }
@@ -295,6 +279,7 @@ class Home extends React.Component {
             lastName: data.surname,
             school: data.school,
             profileImg: data.profileImg,
+            currentUser: data
           });
           if (!this.state.profileImg) {
             this.setState({ profileImg: require(`../images/Profile-pictures/${data.school}-default-profile-picture.png`) });
@@ -308,11 +293,9 @@ class Home extends React.Component {
       return <Loader />;
     }
 
-    console.log(this.state.window);
-    console.log(this.state.events);
-
     return (
       <div className="interface">
+        <div className="home-content">
         {this.state.showRefreshButton && (
         <button className="refresh-button" onClick={this.handleRefreshClick}>
           <IoMdRefresh />
@@ -355,6 +338,11 @@ class Home extends React.Component {
             ))}
             </>
           )}
+          </div>
+          <div className="right-column-ghost"/>
+          <div className="right-column">
+            <SuggestionUser userData={this.state.currentUser} />
+          </div>
           </div>
         </div>
     );

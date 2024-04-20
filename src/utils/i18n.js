@@ -140,7 +140,15 @@ export const fr = {
     MMIS: "Modélisation Mathématique, Image, Simulation",
     COMMON: "Tronc Commun",
     NO_COURSES: "Aucun cours pour l'instant",
-  }
+  },
+
+  HOME: {
+    SUGGESTED_GROUPS: "Groupes suggérés",
+    SUGGESTED_USERS: "Utilisateurs suggérés",
+    NO_GROUPS: "Aucun groupe pour l'instant",
+    NO_USERS: "Aucun utilisateur pour l'instant",
+    YOU_MAY_KNOW: "Vous pourriez connaître",
+  },
 
 };
 

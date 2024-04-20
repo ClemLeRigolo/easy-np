@@ -14,6 +14,7 @@ import { compressImage, cropImage } from '../utils/helpers';
 import ModelProfile from './modelProfile';
 import { Modal, useMantineTheme } from '@mantine/core';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import UserList from './userList';
 
 const Info = ({userPostData,
               following,
@@ -80,23 +81,11 @@ const Info = ({userPostData,
     });
   }
 
-  const handleSubscriptionToUser=(uid)=>{
-    subscribeToUser(uid).then(()=>{
-      setIsSubscribed(true)
-    });
-  }
-
   const handleUnsubscription=()=>{
     unsubscribeFromUser(uid).then(()=>{
       setIsSubscribed(false)
     });
     setIsHovered(false);
-  }
-
-  const handleUnsubscriptionToUser=(uid)=>{
-    unsubscribeFromUser(uid).then(()=>{
-      setIsSubscribed(false)
-    });
   }
 
   const changeHover=()=>{
@@ -289,21 +278,7 @@ const Info = ({userPostData,
             fullScreen={isMobile}
           >
             <div className='manage-window'>
-              <div className="subscribers-list">
-                {subscribersData.map((subscriber,index) => (
-                  <div key={subscriber.uid} className="subscriber">
-                    <Link to={`/profile/${subscriber.uid}`} className='member-name'>
-                    {subscriber.profileImg ? (
-                      <img src={subscriber.profileImg} alt="" className='post-avatar' />
-                    ) : (
-                      <img src={require(`../images/Profile-pictures/${subscriber.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
-                    )}
-                    <span>{subscriber.name} {subscriber.surname}</span>
-                    {subscriptions.includes(subscriber.uid) ? <button className='follow-btn' onClick={()=>handleUnsubscriptionToUser(subscriber.uid)}>{fr.PROFILE.UNSUBSCRIBE}</button> : <button className='follow-btn' onClick={()=>handleSubscriptionToUser(subscriber.uid)}>{fr.PROFILE.SUBSCRIBE}</button>}
-                    </Link>
-                  </div>
-                ))}
-              </div>
+              <UserList users={subscribersData} subscriptions={subscriptions} />
               <button className='closeSubscribers' onClick={() => closeSubscribers()}>{fr.PROFILE.CLOSE}</button>
             </div>
           </Modal>
@@ -323,21 +298,7 @@ const Info = ({userPostData,
             fullScreen={isMobile}
           >
             <div className="manage-window">
-              <div className="subscribers-list">
-                {subscriptionsData.map((subscription,index) => (
-                  <div key={subscription.uid} className="subscriber">
-                    <Link to={`/profile/${subscription.uid}`} className='member-name'>
-                    {subscription.profileImg ? (
-                      <img src={subscription.profileImg} alt="" className='post-avatar' />
-                    ) : (
-                      <img src={require(`../images/Profile-pictures/${subscription.school}-default-profile-picture.png`)} alt="" className='post-avatar' />
-                    )}
-                    <span>{subscription.name} {subscription.surname}</span>
-                    {subscriptions.includes(subscription.uid) ? <button className='follow-btn' onClick={()=>handleUnsubscriptionToUser(subscription.uid)}>{fr.PROFILE.UNSUBSCRIBE}</button> : <button className='follow-btn' onClick={()=>handleSubscriptionToUser(subscription.uid)}>{fr.PROFILE.SUBSCRIBE}</button>}
-                    </Link>
-                  </div>
-                ))}
-              </div>
+              <UserList users={subscriptionsData} subscriptions={subscriptions} />
               <button onClick={() => closeSubscriptions()}>{fr.PROFILE.CLOSE}</button>
             </div>
           </Modal>
