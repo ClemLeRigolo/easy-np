@@ -16,6 +16,7 @@ import GroupMembership from './groupMembership';
 import { compressImage, cropImage } from '../utils/helpers';
 import { Modal, useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
+import UserList from './userList';
 
 const InfoGroup = ({userPostData,
               following,
@@ -46,12 +47,14 @@ const InfoGroup = ({userPostData,
               acceptMember,
               refuseMember,
               showManage,
+              userData
             }) => {
 
 
 
   const [showManageWindow, setShowManageWindow] = useState(showManage);
   const [windowManageMember, setWindowManageMember] = useState('membres');
+  const [showMembers, setShowMembers] = useState(false);
 
   const importProfile=useRef()
   const importCover =useRef()
@@ -69,6 +72,14 @@ const InfoGroup = ({userPostData,
   
   const closeManageWindow = () => {
     setShowManageWindow(false);
+  };
+
+  const openMembers = () => {
+    setShowMembers(true);
+  };
+
+  const closeMembers = () => {
+    setShowMembers(false);
   };
 
   const handleRoleChange = (memberId, role, index) => {
@@ -206,7 +217,7 @@ const InfoGroup = ({userPostData,
           <div className='info-details'>
 
             <div className='info-col-2'>
-              <div>
+              <div onClick={() => openMembers()}>
                 <h2>{nbMembers}</h2>
                 <span>{fr.GROUPS.MEMBERS_COUNT}</span>
               </div>
@@ -220,6 +231,25 @@ const InfoGroup = ({userPostData,
 
 
         </div>
+
+        <Modal
+            radius="8px"
+            zIndex="1001"
+            size="lg"
+            opened={showMembers}
+            withCloseButton={false}
+            onClose={() => closeMembers()}
+            overlayProps={{
+              color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
+            }}
+            centered
+            fullScreen={isMobile}
+          >
+            <div className='manage-window'>
+              <UserList users={membersData} subscriptions={userData.subscriptions} title={fr.GROUPS.MEMBERS} />
+              <button className='closeSubscribers' onClick={() => closeMembers()}>{fr.PROFILE.CLOSE}</button>
+            </div>
+          </Modal>
 
         <Modal
             radius="8px"
@@ -263,6 +293,7 @@ const InfoGroup = ({userPostData,
                   )}
                   <span>{member.name} {member.surname}</span>
                   </Link>
+                  <div className='member-role'>
                   {member.uid === group.creator ? (
                     <select
                     value='creator'
@@ -286,6 +317,7 @@ const InfoGroup = ({userPostData,
                   {member.uid !== uid && (isCreator || !admins.includes(member.uid.toString())) && (
                     <button onClick={() => removeMember(member.uid)}><IoPersonRemoveOutline /></button>
                   )}
+                  </div>
                 </li>
               ))}
             </ul>

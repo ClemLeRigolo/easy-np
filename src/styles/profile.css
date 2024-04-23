@@ -201,21 +201,21 @@
 
 .info-follow .edit-btn:hover{
     border: none;
-    background: linear-gradient(107deg, var(--selected-color) 11.1%, #2a2e49 95.3%);
+    background: var(--selected-color);
     color: #fff;
   
 }
 
 .info-follow .edit-btn2:hover{
     border: none;
-    background: linear-gradient(107deg, var(--selected-color) 11.1%, #2a2e49 95.3%);
+    background: var(--selected-color);
     color: #fff;
   
 }
 
 .info-follow .sub-btn:hover{
     border: none;
-    background: linear-gradient(107deg, var(--selected-color) 11.1%, #2a2e49 95.3%);
+    background: var(--selected-color);
     color: #fff;
   
 }
@@ -300,8 +300,19 @@
 }
 
 @media screen and (max-width:430px){
+
+    .home {
+        width: 100%;
+        margin: 0px;
+    }
+
+    .profile-post-list {
+        width: 90%;
+        margin: 5%;
+    }
+
    .info{
-        margin:5px 0px;
+        margin: 0px;
         border-radius: 0px;
         min-height:100px ;
     }
@@ -358,16 +369,28 @@
     }
     .info-follow button{
         position: absolute;
-        top: 145px;
-        right: 5px;
-        padding: 8px 5px;
-        font-size: 11px;
-        border-radius: 10px;
+        padding: 8px 5px !important;
+        font-size: 13px !important;
         cursor: pointer;
         border: none;
         display: flex;
         gap: 8px;
-    
+    }
+    .info-follow .edit-btn {
+        top: 150px !important;
+        right: 5px !important;
+    }
+    .info-follow .edit-btn2 {
+        top: 200px !important;
+        right: 5px !important;
+    }
+    .info-follow .leave-group-button {
+        top: 150px !important;
+        left: 5px !important;
+    }
+    .info-follow .sub-btn {
+        top: 150px !important;
+        left: 10px !important;
     }
     .info-follow button svg{
         font-size: 18px;

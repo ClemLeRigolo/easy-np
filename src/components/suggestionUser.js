@@ -101,6 +101,13 @@ class SuggestionUser extends React.Component {
         this.setState({ suggestedUsers });
     }
 
+    troncateName = (name) => {
+        if (name.length > 8) {
+            return name.substring(0, 8) + "...";
+        }
+        return name;
+    }
+
     render() {
 
         if (this.state.suggestedUsersSetted === false && this.props.userData !== undefined) {
@@ -122,7 +129,7 @@ class SuggestionUser extends React.Component {
                         <div className="suggested-user" key={user.id}>
                             <Link href={`/profile/${user.id}`} className="link-to-profile">
                             <ProfileImage uid={user.id} post={true} />
-                            <h2>{user.name + " " + user.surname}</h2>
+                            <h2>{user.name + " " + this.troncateName(user.surname)}</h2>
                             </Link>
                             <button className="follow-btn" onClick={() => this.handleSubscription(user.id)}>{this.state.subscribed.includes(user.id) ? fr.PROFILE.UNSUBSCRIBE : fr.PROFILE.SUBSCRIBE}</button>
                         </div>

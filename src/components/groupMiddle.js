@@ -34,6 +34,7 @@ const GroupMiddle = ({following,
                         acceptMember,
                         refuseMember,
                         showManage,
+                        userData
                       }) => {
 
   /*const [userPostData ,setUserPostData] =useState(
@@ -124,6 +125,7 @@ const GroupMiddle = ({following,
         acceptMember={acceptMember}
         refuseMember={refuseMember}
         showManage={showManage}
+        userData={userData}
         />
 
     </div>

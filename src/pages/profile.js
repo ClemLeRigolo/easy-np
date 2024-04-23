@@ -356,8 +356,8 @@ class Profile extends React.Component {
             setFollowing={setFollowing}
             /> */}
 
-
-  {this.state.posts && this.state.posts.map((post, index) => (
+          <div className="profile-post-list">
+            {this.state.posts && this.state.posts.map((post, index) => (
             <Post 
               key={index} 
               post={post} 
@@ -368,7 +368,7 @@ class Profile extends React.Component {
               commentCount={post.commentCount} 
             />
           ))} 
-
+          </div>
           </div>
         </div>
     )

@@ -359,7 +359,7 @@ class Course extends React.Component {
 
     return (
       <div className='interface'>
-        <div className="course-container">
+        <div className="home">
         <CourseMiddle 
             following={this.state.following}
             search={this.state.search}
@@ -390,9 +390,9 @@ class Course extends React.Component {
         </div>
         <div className="course-content">
         {this.state.window === 'discussion' && (
-          <>
+          <div className="ressource-container">
         <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
-          <div className="home">
+          
 
 
         {this.state.posts && this.state.posts.map((post, index) => (
@@ -406,7 +406,7 @@ class Course extends React.Component {
                     commentCount={post.commentCount} 
                     />
         ))} 
-        </div></>)}
+        </div>)}
         {this.state.window === 'tds' && (
           <div className="course-home">
             {this.state.admin && (

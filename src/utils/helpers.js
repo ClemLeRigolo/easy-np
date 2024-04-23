@@ -79,7 +79,9 @@ export function formatPostTimestamp(timestamp) {
   const diffMilliseconds = currentDate - new Date(timestamp);
   const diffMinutes = Math.floor(diffMilliseconds / 60000);
 
-  if (diffMinutes < 60) {
+  if (diffMinutes < 1) {
+    return "À l'instant";
+  } else if (diffMinutes < 60) {
     return `Il y a ${diffMinutes} minutes`;
   } else if (diffMinutes < 1440) {
     return `Il y a ${Math.floor(diffMinutes / 60)} heures`;

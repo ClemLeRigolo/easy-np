@@ -60,7 +60,7 @@ function ModelProfile({
         zIndex="1001"
         size="lg"
         opened={openEdit}
-        title="Edit Info"
+        withCloseButton={false}
         onClose={() => setOpenEdit(false)}
         overlayProps={{
           color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
@@ -80,7 +80,7 @@ function ModelProfile({
         zIndex="1001"
         size="lg"
         opened={openEdit}
-        title="Éditer votre profil"
+        withCloseButton={false}
         onClose={() => setOpenEdit(false)}
         overlayProps={{
           color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],

@@ -154,6 +154,20 @@ const Info = ({userPostData,
             {canModify && 
             <div className='profileDiv'><IoCameraOutline className='profileSvg' onClick={()=>importProfile.current.click()}/></div>
             }
+            {!canModify &&
+              <Link 
+              to={`/chat/${uid}`} 
+              className="profileDiv"
+              style={{ 
+                color: 'black', 
+                textDecoration: 'none',
+              }}
+            >
+              <IoChatboxEllipsesOutline 
+                className="profileSvg" 
+                header={true} 
+              />
+            </Link>}
         </div>
       
 
@@ -175,25 +189,6 @@ const Info = ({userPostData,
 
         <div className="info-follow">
           <div style={{position: 'absolute', top: '50%', right: '40%'}}>
-
-              {!canModify &&
-              <Link 
-              to={`/chat/${uid}`} 
-              style={{ 
-                color: 'black', 
-                textDecoration: 'none',
-                display: 'inline-block',
-                backgroundColor: 'white',
-                borderRadius: '50%',
-                padding: '5px',
-              }}
-            >
-              <IoChatboxEllipsesOutline 
-                className="header-svg" 
-                header={true} 
-                size={32}
-              />
-            </Link>}
 
             </div>
             <h1>{modelDetails.ModelName}</h1>
@@ -270,7 +265,7 @@ const Info = ({userPostData,
             zIndex="1001"
             size="lg"
             opened={showSubscribers}
-            title={fr.PROFILE.FOLLOWERS}
+            withCloseButton={false}
             onClose={() => closeSubscribers()}
             overlayProps={{
               color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
@@ -279,7 +274,7 @@ const Info = ({userPostData,
             fullScreen={isMobile}
           >
             <div className='manage-window'>
-              <UserList users={subscribersData} subscriptions={subscriptions} />
+              <UserList users={subscribersData} subscriptions={subscriptions} title={fr.PROFILE.FOLLOWERS} />
               <button className='closeSubscribers' onClick={() => closeSubscribers()}>{fr.PROFILE.CLOSE}</button>
             </div>
           </Modal>
@@ -290,7 +285,7 @@ const Info = ({userPostData,
             zIndex="1001"
             size="lg"
             opened={showSubscriptions}
-            title={fr.PROFILE.FOLLOWINGS}
+            withCloseButton={false}
             onClose={() => closeSubscriptions()}
             overlayProps={{
               color: theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[10],
@@ -299,7 +294,7 @@ const Info = ({userPostData,
             fullScreen={isMobile}
           >
             <div className="manage-window">
-              <UserList users={subscriptionsData} subscriptions={subscriptions} />
+              <UserList users={subscriptionsData} subscriptions={subscriptions} title={fr.PROFILE.FOLLOWINGS} />
               <button onClick={() => closeSubscriptions()}>{fr.PROFILE.CLOSE}</button>
             </div>
           </Modal>

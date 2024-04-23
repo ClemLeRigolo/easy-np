@@ -211,7 +211,7 @@ class GroupEvent extends React.Component {
 
     return (
       <div className='interface'>
-        <div className="group-content">
+        <div className="home">
         <h1>{fr.GROUPS.EVENTS_OF} {this.state.group.name}</h1>
         <p>{this.state.group.description}</p>
         {this.state.canModify && (
@@ -219,7 +219,7 @@ class GroupEvent extends React.Component {
             <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EVENT}
           </Link>
         )}
-          <div className="home">
+          <div className="profile-post-list">
           
           {this.state.posts && this.state.posts.map((post, index) => (
                     <Event 

@@ -81,7 +81,7 @@ class HeaderBar extends Component {
           <form className='n-form' onSubmit={(e) => e.preventDefault()} >
             <HiMagnifyingGlass className='search-icon' />
             <input type="text"
-              placeholder='Search post'
+              placeholder='Rechercher quelque chose ...'
               id='n-search'
               value={search}
               onChange={(e) => setSearch(e.target.value)}

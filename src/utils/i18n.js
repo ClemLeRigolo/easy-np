@@ -69,6 +69,7 @@ export const fr = {
     FICHE_DESCRIPTION: "Description de la fiche",
     RESSOURCE_FILES: "Fichiers",
     CREATE_RESSOURCE: "Créer une ressource",
+    SELECT_THEME: "Sélectionnez un thème",
   },
 
   ERRORS: {

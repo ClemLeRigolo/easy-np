@@ -173,16 +173,6 @@ class Event extends React.Component {
   componentDidUpdate(prevProps) {
     if (prevProps.post !== this.props.post) {
       this.setState({ post: this.props.post });
-      getImagesFromPost(this.props.post.id)
-      .then((images) => {
-        console.log(images)
-        this.setState((prevState) => ({
-          post: {
-            ...prevState.post,
-            images: images || undefined,
-          },
-        }));
-      })
     }
   }
 

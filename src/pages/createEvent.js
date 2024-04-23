@@ -154,6 +154,7 @@ class CreateEvent extends React.Component {
                 <option value="Kfet">Kfet</option>
                 <option value="Soirée">Soirée</option>
                 <option value="Hackaton">Hackaton</option>
+                <option value="Autre">Autre</option>
               </select>
             </div>
             <button type="submit">{fr.FORM_FIELDS.CREATE_EVENT}</button>

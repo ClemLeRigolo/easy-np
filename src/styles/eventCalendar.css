@@ -1,12 +1,24 @@
 .event-details {
     position: absolute;
-    top: 20px;
-    left: 20px;
     width: 300px;
     padding: 10px;
     background-color: white;
-    border: 1px solid var(--selected-color);
-    border-radius: 5px;
     z-index: 9999;;
-    opacity: 0.8;
+    margin-bottom: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: black;
+    cursor: pointer;
+  }
+
+  .event-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-top: 0;
   }

@@ -36,7 +36,8 @@ class Group extends React.Component {
         canModify: false,
         showManage: false,
         firstMemberSet: true,
-        firstWaitingSet: true
+        firstWaitingSet: true,
+        userData: null
     };
   }
 
@@ -280,6 +281,7 @@ class Group extends React.Component {
         this.setState({
           profileImg: userData.profileImg,
           dataCollected: true,
+          userData: userData,
         });
         if (!this.state.profileImg) {
           this.setState({ profileImg: require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`) });
@@ -413,7 +415,7 @@ class Group extends React.Component {
 
     return (
       <div className='interface'>
-        <div className="post-list">
+        <div className="home">
         <GroupMiddle 
             following={this.state.following}
             search={this.state.search}
@@ -449,9 +451,11 @@ class Group extends React.Component {
             acceptMember={this.acceptMember}
             refuseMember={this.refuseMember}
             showManage={this.state.showManage}
+            userData={this.state.userData}
             />
         {/*<h1>{this.state.group.name}</h1>*/}
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>
+        <div className="profile-post-list">
         {this.state.membres.includes(user.uid) && (
           <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
         )}
@@ -468,6 +472,7 @@ class Group extends React.Component {
                     canModify={this.state.canModify}
                     />
         ))} 
+        </div>
 
           </div>
         </div>

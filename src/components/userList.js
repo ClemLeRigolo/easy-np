@@ -48,6 +48,7 @@ class UserList extends React.Component {
   render() {
     return (
         <div className="subscribers-list">
+        {this.props.title && <h1>{this.props.title}</h1>}
         {this.state.users.map((subscription,index) => (
           <div key={subscription.uid} className="member-name">
             <Link to={`/profile/${subscription.uid}`} className='member-name-displayed link-to-profile'>
