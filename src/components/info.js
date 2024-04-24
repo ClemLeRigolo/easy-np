@@ -222,7 +222,7 @@ const Info = ({userPostData,
 
           {userData.bio && (
             <div className='bio'>
-            <p>{userData.bio}</p>
+            <p dangerouslySetInnerHTML={{ __html: userData.bio }}></p>
           </div>
           )}
           

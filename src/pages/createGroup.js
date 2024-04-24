@@ -7,7 +7,7 @@ import { changeColor } from "../components/schoolChoose";
 
 import fr from "../utils/i18n";
 import "../styles/createGroup.css";
-import { replaceLinksAndTags, containsHtml } from "../components/postInput";
+import { replaceLinksAndTags, containsHtml } from "../utils/helpers";
 
 class CreateGroup extends React.Component {
   constructor(props) {

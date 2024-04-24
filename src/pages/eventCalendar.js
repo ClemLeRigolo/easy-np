@@ -6,10 +6,11 @@ import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
 import { withRouter } from 'react-router-dom';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { getEvents } from "../utils/firebase";
+import { getEvents, getUserDataById } from "../utils/firebase";
 import '../styles/eventCalendar.css';
 import { Link } from 'react-router-dom';
 import { MdClose } from "react-icons/md";
+import { changeColor } from "../components/schoolChoose";
 
 const localizer = momentLocalizer(moment);
 
@@ -96,10 +97,27 @@ class eventCalendar extends React.Component {
     };
 
     render() {
-        const { authState } = this.props;
+        const { authState,user } = this.props;
 
         if (authState === authStates.INITIAL_VALUE) {
           console.log("initial value");
+          return <Loader />;
+        }
+
+        if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
+          getUserDataById(user.uid).then((userData) => {
+            console.log("userData", userData);
+            this.setState({
+              profileImg: userData.profileImg,
+              dataCollected: true,
+              userData: userData,
+            });
+            if (!this.state.profileImg) {
+              this.setState({ profileImg: require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`) });
+            }
+            changeColor(userData.school);
+          }
+          );
           return <Loader />;
         }
 

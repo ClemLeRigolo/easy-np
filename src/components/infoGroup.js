@@ -212,6 +212,12 @@ const InfoGroup = ({userPostData,
             openEdit={openEdit}
             setOpenEdit={setOpenEdit}
             /> */}
+
+          {group.description && (
+            <div className='bio'>
+            <p dangerouslySetInnerHTML={{ __html: group.description }}></p>
+          </div>
+          )}
           
 
           <div className='info-details'>

@@ -5,6 +5,7 @@ import SchoolChoose from './schoolChoose';
 import {changeColor} from "../components/schoolChoose";
 import "../styles/modelProfile.css";
 import Loader from './loader';
+import { replaceLinksAndTags, containsHtml, reverseLinksAndTags } from '../utils/helpers';
 
 function ModelProfile({
   openEdit,
@@ -26,17 +27,38 @@ function ModelProfile({
   const [schoolModel, setSchool] = useState(school);
   const [yearModel, setYear] = useState(year);
   const [majorModel, setMajor] = useState(major);
-  const [bioModel, setBio] = useState(bio);
+  const [bioModel, setBio] = useState(reverseLinksAndTags(bio));
   const [loading, setLoading] = useState(false);
+  const [warning, setWarning] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleImageChange = (event) => {
     const selectedImage = event.target.value;
+    if (selectedImage !== school) {
+      setWarning(true);
+    } else {
+      setWarning(false);
+    }
     changeColor(selectedImage);
     setSchool(selectedImage);
-  }
+  };
+
+  const handleExit = () => {
+    changeColor(school);
+    setOpenEdit(false);
+    setLoading(true);
+    //delay to show the loader
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  };
 
   const handleUpdate = (e) => {
     e.preventDefault();
+    if (containsHtml(bioModel)) {
+      setError(true);
+      return;
+    }
     handleModel({
       name: nameModel,
       surname: surnameModel,
@@ -44,7 +66,7 @@ function ModelProfile({
       school: schoolModel,
       year: yearModel,
       major: majorModel,
-      bio: bioModel,
+      bio: replaceLinksAndTags(bioModel),
     });
     setLoading(true);
     //delay to show the loader
@@ -87,6 +109,7 @@ function ModelProfile({
         }}
         fullScreen={isMobile}
       >
+        <h1 className='modelTitle'>Modifier le profil</h1>
         <form className='modelForm' onSubmit={handleModel}>
           <div className="inputBox1">
           <label htmlFor="name">Prénom:</label>
@@ -142,6 +165,7 @@ function ModelProfile({
           <div className="inputBox2">
             <label htmlFor="school">Ecole:</label>
             <SchoolChoose selectedImage={schoolModel} handleImageChange={handleImageChange}/>
+            {warning && <div className="warning">Le changement d'école prendra effet lorsqu'un administrateur l'aura validé. Des pièces justificatives vous seront demandées par mail</div>}
           </div>
 
           <div className="inputBox1">
@@ -173,7 +197,12 @@ function ModelProfile({
             />
           </div>
 
-          <button className='modelBtn' onClick={handleUpdate} >Update</button>
+          {error && <div className="error">Les balises HTML ne sont pas autorisés dans la description</div>}
+
+          <div className='btn-container'>
+          <button className='modelBtn' onClick={handleUpdate}>Modifier</button>
+          <button className='cancelBtn' onClick={handleExit}>Annuler</button>
+          </div>
         </form>
       </Modal>
     </>

@@ -55,7 +55,7 @@ class UserList extends React.Component {
             <ProfileImage uid={subscription.uid} />
             <span>{subscription.name} {subscription.surname}</span>
             </Link>
-            {this.state.subscriptions.includes(subscription.uid) ? <button className='follow-btn' onClick={()=> this.handleUnsubscriptionToUser(subscription.uid)}>{fr.PROFILE.UNSUBSCRIBE}</button> : <button className='follow-btn' onClick={()=> this.handleSubscriptionToUser(subscription.uid)}>{fr.PROFILE.SUBSCRIBE}</button>}
+            {this.state.subscriptions.includes(subscription.uid) ? <button className='unfollow-btn' onClick={()=> this.handleUnsubscriptionToUser(subscription.uid)}>{fr.PROFILE.UNSUBSCRIBE}</button> : <button className='follow-btn' onClick={()=> this.handleSubscriptionToUser(subscription.uid)}>{fr.PROFILE.SUBSCRIBE}</button>}
           </div>
         ))}
       </div>

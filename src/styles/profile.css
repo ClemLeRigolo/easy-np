@@ -35,16 +35,6 @@
 .modelForm .inputBox1 input:focus{
     border: 1px solid var(--selected-color);
 }
-.modelBtn{
-    font-size: 16px;
-    padding: 10px 20px;
-    text-transform: capitalize;
-    background: linear-gradient(107deg, var(--selected-color) 11.1%, #2a2e49 95.3%);
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
 .info{
     width: 100%;
@@ -177,14 +167,20 @@
 }
 
 .info-follow .sub-btn {
+    position: absolute;
+    top: 250px;
+    right: 10px;
     padding: 8px 13px;
-    font-size: 15px;
+    font-size: 20px;
+    width: 16%;
+    justify-content: center;
     border-radius: 10px;
     cursor: pointer;
     border: none;
     display: flex;
     gap: 8px;
     background-color: #dedede;
+    transition: all ease 0.3s;
 }
 
 .info-follow .edit-btn {
@@ -390,7 +386,7 @@
     }
     .info-follow .sub-btn {
         top: 150px !important;
-        left: 10px !important;
+        right: 10px !important;
     }
     .info-follow button svg{
         font-size: 18px;

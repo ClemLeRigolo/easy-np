@@ -8,7 +8,7 @@ import "../styles/createEvent.css";
 import moment from "moment";
 import "moment/locale/fr";
 import { withRouter } from "react-router-dom";
-import { replaceLinksAndTags, containsHtml } from "../components/postInput";
+import { replaceLinksAndTags, containsHtml } from "../utils/helpers";
 
 class CreateSaloon extends React.Component {
   constructor(props) {

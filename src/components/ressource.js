@@ -63,7 +63,7 @@ class Ressource extends React.Component {
       <div className="post">
         <div className="post-header">
           <div className="post-username">
-            <div>
+            <div className="ressource-title">
               {ressource.name}
               {/* <div className="post-date">{formatPostTimestamp(ressource.date)}</div> */}
             </div>
@@ -87,7 +87,7 @@ class Ressource extends React.Component {
             fileName = fileName.split("?")[0];
             return (
               <a href={url} key={index} className="ressource" target="_blank" rel="noopener noreferrer">
-                {url.includes(".pdf") ? <FaFilePdf /> : url.includes(".zip") ? <FaFileArchive /> : url.includes(".jpg") || url.includes(".png") || url.includes(".jpeg") ? <FaFileImage /> : <FaFileCode />}
+                {url.includes(".pdf") ? <FaFilePdf /> : url.includes(".zip") || url.includes(".tar") || url.includes(".gz") ? <FaFileArchive /> : url.includes(".jpg") || url.includes(".png") || url.includes(".jpeg") ? <FaFileImage /> : <FaFileCode />}
                 <p className="ressource-name">{fileName}</p>
               </a>
             );

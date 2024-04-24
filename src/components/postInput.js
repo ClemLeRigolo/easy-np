@@ -1,26 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { AiOutlineCloseCircle, AiOutlineArrowRight, AiOutlineCamera, AiOutlineBarChart, AiOutlineGif, AiOutlineVideoCamera } from "react-icons/ai";
 import "../styles/postInput.css";
-import DOMPurify from "dompurify";
 import { compressImage } from "../utils/helpers";
 import { SearchExperience } from "./gif";
-
-export const containsHtml = (content) => {
-  const sanitizedContent = DOMPurify.sanitize(content, { ALLOWED_TAGS: [] });
-  return sanitizedContent !== content;
-};
-
-export const replaceLinksAndTags = (content) => {
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
-
-  const contentWithLineBreaks = content.replace(/\n/g, "<br>");
-
-  const contentWithLinks = contentWithLineBreaks.replace(urlRegex, (url) => {
-    return `<a href="${url}" target="_blank">${url}</a>`;
-  });
-
-  return contentWithLinks;
-};
+import { replaceLinksAndTags, containsHtml } from "../utils/helpers";
 
 export const isYoutubeVideoPresent = (content) => {
   const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=)?(.+)/;

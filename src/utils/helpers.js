@@ -1,4 +1,5 @@
 import en from "./i18n";
+import DOMPurify from "dompurify";
 
 export function validateEmail(email,login) {
   if (!email) {
@@ -199,3 +200,33 @@ export const cropImage = (img) => {
     reader.readAsDataURL(img);
   });
 };
+
+export const containsHtml = (content) => {
+  const sanitizedContent = DOMPurify.sanitize(content, { ALLOWED_TAGS: [] });
+  return sanitizedContent !== content;
+};
+
+export const replaceLinksAndTags = (content) => {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+  const contentWithLineBreaks = content.replace(/\n/g, "<br>");
+
+  const contentWithLinks = contentWithLineBreaks.replace(urlRegex, (url) => {
+    return `<a href="${url}" target="_blank">${url}</a>`;
+  });
+
+  return contentWithLinks;
+};
+
+export const reverseLinksAndTags = (content) => {
+  const urlRegex = /<a href="(https?:\/\/[^\s]+)" target="_blank">[^<]+<\/a>/g;
+
+  const contentWithoutLinks = content.replace(urlRegex, (match, url) => {
+    return url;
+  });
+
+  //replace br tags with new line
+  const contentWithoutLineBreaks = contentWithoutLinks.replace(/<br>/g, "\n");
+
+  return contentWithoutLineBreaks;
+}

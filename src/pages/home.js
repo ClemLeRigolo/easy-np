@@ -285,7 +285,7 @@ class Home extends React.Component {
             this.setState({ profileImg: require(`../images/Profile-pictures/${data.school}-default-profile-picture.png`) });
           }
           changeColor(data.school);
-          if (!data.name || !data.surname || !data.school || !data.bio || !data.year || !data.major) {
+          if (!data.name || !data.surname || !data.school || !data.bio || !data.year) {
             this.setState({ completeProfile: true });
           }
         }

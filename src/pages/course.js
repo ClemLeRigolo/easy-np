@@ -235,7 +235,7 @@ class Course extends React.Component {
   }
 
   updateResources = () => {
-    getRessourceByGroup(this.state.cid, "td").then((ressources) => {
+    getRessourceByGroup(this.state.cid).then((ressources) => {
       console.log("ressources", ressources);
       if (ressources === null) {
         this.setState({ ressourcesSetted: true });
@@ -345,6 +345,9 @@ class Course extends React.Component {
     }
 
     console.log("this.state.course", this.state.tds);
+    console.log("this.state.course", this.state.tps);
+    console.log("this.state.course", this.state.exams);
+    console.log("this.state.course", this.state.fiches);
 
     if (this.state.course === null) {
         return <Loader />;
@@ -424,6 +427,11 @@ class Course extends React.Component {
             {this.state.admin && (
               <Link to={`/course/${this.state.cid}/createRessource/tp`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TP}</button></Link>
             )}
+            <div className="ressource-container">
+            {this.state.tps && this.state.tps.map((ressource, index) => (
+              <Ressource key={index} ressource={ressource} canModify={this.state.admin} />
+            ))}
+            </div>
           </div>
         )}
         {this.state.window === 'exams' && (
@@ -431,11 +439,21 @@ class Course extends React.Component {
             {this.state.admin && (
               <Link to={`/course/${this.state.cid}/createRessource/exam`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EXAM}</button></Link>
             )}
+            <div className="ressource-container">
+            {this.state.exams && this.state.exams.map((ressource, index) => (
+              <Ressource key={index} ressource={ressource} canModify={this.state.admin} />
+            ))}
+            </div>
           </div>
         )}
         {this.state.window === 'fiches' && (
           <div className="course-home">
             <Link to={`/course/${this.state.cid}/createRessource/fiche`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_FICHE}</button></Link>
+            <div className="ressource-container">
+            {this.state.fiches && this.state.fiches.map((ressource, index) => (
+              <Ressource key={index} ressource={ressource} canModify={this.state.admin} />
+            ))}
+            </div>
           </div>
         )}
         </div>
