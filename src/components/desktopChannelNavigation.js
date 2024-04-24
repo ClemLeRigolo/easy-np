@@ -83,7 +83,7 @@ class ChannelNavigation extends React.Component {
     if (!this.state.saloonsCollected) {
       return <div />;
     }
-    if(!open) return null;
+    //if(!open) return null;
 
     //check if /group is in the url
     if (window.location.pathname.split("/")[1] === "group" && !this.state.adminCollected) {
@@ -102,8 +102,8 @@ class ChannelNavigation extends React.Component {
       <>
       <div className={`group-navigation ${open ? 'open' : ''}`} data-cy="navGroup">
         {this.state.groups &&
-          groups.map((group) => (
-            <div key={group.id} className="group-header">
+          groups.map((group,index) => (
+            <div key={group.id} className="group-header" style={{ animationDelay: `${(index+1)/10}s` }}>
               {/* <Link to={`/group/${group.id}`}> */}
                 <h1
                   className={`group-nav-link ${group.id === gid ? 'active' : ''}`}

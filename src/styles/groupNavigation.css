@@ -84,11 +84,39 @@ h1.group-nav-link.active, .group-header h1:focus{
         position: fixed;
         top: 102.47px;
         left: 0;
-        width: 90%;
+        width: 0%;
         height: 100%;
         background-color: #2a2e49;
         z-index: 6;
+        transition: width ease-in-out 0.3s;
     }
+
+    .group-navigation > *{
+        display: none;
+        visibility: hidden;
+        animation: slideInFromLeft 0.2s forwards;
+    }
+
+    /* if an element have the class group-navigation and open */
+    .group-navigation.open{
+        width: 90%;
+        display: block;
+    }
+
+    .group-navigation.open > * {
+        display: block;
+    }
+
+    @keyframes slideInFromLeft {
+        0% {
+          visibility: visible;
+          transform: translateX(-100%);
+        }
+        100% {
+          visibility: visible;
+          transform: translateX(0);
+        }
+      }
 
     .group-navigation-ghost{
         display: none;

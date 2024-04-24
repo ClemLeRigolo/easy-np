@@ -97,6 +97,7 @@ export const fr = {
     ANSWER: "Répondre",
     SHARE: "Partager",
     DELETE: "Supprimer",
+    REPORT: "Signaler"
   },
 
   GROUPS: {

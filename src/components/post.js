@@ -13,7 +13,9 @@ import ProfileImage from "./profileImage";
 import { FaEllipsisH } from "react-icons/fa";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import Poll from 'react-polls';
-import { Modal } from '@mantine/core';
+import { MdDelete } from "react-icons/md";
+import { FaShareAlt } from "react-icons/fa";
+import { FaFlag } from "react-icons/fa";
 
 class Post extends React.Component {
   constructor(props) {
@@ -359,7 +361,7 @@ class Post extends React.Component {
             </div>
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
-          {(getCurrentUser().uid === post.user || this.props.canModify) && (
+          
           <div className="post-menu">
           <ContextMenuTrigger
             id={post.id.toString()}
@@ -368,10 +370,14 @@ class Post extends React.Component {
             <FaEllipsisH className="post-options" onClick={(e) => this.handleContextMenu(e, post)} />
           </ContextMenuTrigger>
 
-          <ContextMenu id={post.id.toString()}>
-            <MenuItem onClick={this.handleDeletePost}>{fr.POSTS.DELETE}</MenuItem>
+          <ContextMenu id={post.id.toString()} className="context-menu">
+          {(getCurrentUser().uid === post.user || this.props.canModify) && (
+            <MenuItem onClick={this.handleDeletePost} className="menu-delete">{fr.POSTS.DELETE} <MdDelete /></MenuItem>
+            )}
+            <MenuItem onClick={this.handleShareClick} className="menu-item">{fr.POSTS.SHARE} <FaShareAlt /></MenuItem>
+            <MenuItem style={{color: 'black'}} className="menu-item">{fr.POSTS.REPORT} <FaFlag /></MenuItem>
           </ContextMenu>
-          </div>)}
+          </div>
         </div>
         {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>
@@ -405,7 +411,7 @@ class Post extends React.Component {
             <AiOutlineComment /> {post.commentCount} {post.commentCount > 1 ? fr.POSTS.COMMENTS : fr.POSTS.COMMENT}
           </button>
           <button className="post-share-btn" data-cy="share" onClick={this.handleShareClick}>
-            <FaShareSquare /> {fr.POSTS.SHARE}
+            <FaShareAlt /> {fr.POSTS.SHARE}
           </button>
         </div>
         {showCommentInput && (
@@ -421,7 +427,7 @@ class Post extends React.Component {
           </div>
         )}
         {comments.length > 0 && (
-          <div className={`comments ${expandedComments ? "expanded" : ""}`} data-cy="comments">
+          <div className={`comments`} data-cy="comments">
             <div className="comments-toggle" data-cy="openComments" onClick={this.toggleCommentVisibility}>
               {expandedComments ? "" : "Voir les commentaires"}
               {expandedComments ? "" : <FaAngleDown className="icon" />}

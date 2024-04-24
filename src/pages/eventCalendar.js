@@ -153,7 +153,7 @@ class eventCalendar extends React.Component {
           today: `Aujourd'hui`,
           agenda: 'Agenda',
       
-          showMore: (total) => `+${total} supplémentaires`,
+          showMore: (total) => `+${total} autre`,
         }
        
         const { selectedEvent, showDetails, clickPosition } = this.state;

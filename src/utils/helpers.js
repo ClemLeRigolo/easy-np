@@ -1,5 +1,6 @@
 import en from "./i18n";
 import DOMPurify from "dompurify";
+import { isUserInGroup, isGroupPrivate, isUserSubscribed, getUserDataById } from "./firebase";
 
 export function validateEmail(email,login) {
   if (!email) {
@@ -232,4 +233,79 @@ export const reverseLinksAndTags = (content) => {
   const contentWithoutLineBreaks = contentWithoutLinks.replace(/<br>/g, "\n");
 
   return contentWithoutLineBreaks;
+}
+
+export async function filterpost(posts,uid) {
+  const userData = await getUserDataById(uid);
+  const filteredPosts = await Promise.all(Object.values(posts).map(async (post) => {
+    post = Object.values(post)[0];
+
+    //console.log(post.groupId.toString().length)
+
+    if (post.groupId > 9999999999999) {
+      return false;
+    }
+
+    // Vérifier si l'utilisateur appartient au groupe du post
+    const isInGroup = await isUserInGroup(post.groupId);
+    const cantAccess = await isGroupPrivate(post.groupId, userData.school);
+
+    //console.log(isInGroup, cantAccess)
+
+    if (!isInGroup && cantAccess) {
+      return false;
+    }
+
+    // Vérifier si l'utilisateur est abonné à l'auteur du post
+    const isSubscribed = isUserSubscribed(uid, post.authorId);
+
+    // Calculer les points du post en fonction des critères
+    let points = 0;
+
+    // Donner des points supplémentaires aux posts récents
+    const postTimestamp = post.timestamp; // Modifier avec la propriété appropriée du post
+    const currentTimestamp = Date.now(); // Modifier avec le timestamp actuel
+    const timeDifference = currentTimestamp - postTimestamp;
+    const MAX_TIME_DIFFERENCE = 24 * 60 * 60 * 1000; // Limite de 24 heures
+    const TIME_POINTS_SCALE = 10; // Échelle pour les points de temps
+
+    if (true || timeDifference <= MAX_TIME_DIFFERENCE) {
+      const timePoints = Math.round((1 - timeDifference / MAX_TIME_DIFFERENCE) * TIME_POINTS_SCALE);
+      points += timePoints;
+      //console.log(timePoints)
+    }
+
+    // Donner des points supplémentaires aux posts des personnes auxquelles l'utilisateur est abonné
+    if (isSubscribed) {
+      points += 5; // Modifier le nombre de points selon votre préférence
+    }
+
+    // Donner des points supplémentaires aux posts des groupes auxquels l'utilisateur appartient
+    if (isInGroup) {
+      points += 3; // Modifier le nombre de points selon votre préférence
+    }
+
+    // Donner des points supplémentaires en fonction du nombre de likes et de commentaires
+    let numLikes = 0; // Modifier avec la propriété appropriée du post
+    let numComments = 0; // Modifier avec la propriété appropriée du post
+
+    if (post.likes) {
+      numLikes = post.likes.length || 0; // Modifier selon votre préférence
+    }
+
+    if (post.comments) {
+      numComments = post.comments.length || 0; // Modifier selon votre préférence
+    }
+
+    points += numLikes + numComments; // Modifier selon votre préférence
+
+    //console.log(post.content, points)
+
+    post.points = points
+
+    // Retourner true pour inclure le post, false pour l'exclure
+    return post; // Modifier selon votre préférence pour définir le seuil de points
+  }));
+
+  return filteredPosts.filter(Boolean);
 }

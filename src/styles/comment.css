@@ -64,6 +64,26 @@
   color: blue;
 }
 
+.comment-replies {
+  overflow: hidden;
+}
+
+.comment-replies > * {
+  visibility: hidden;
+  animation: slideInFromTop 0.3s forwards;
+}
+
+@keyframes slideInFromTop {
+  0% {
+    visibility: visible;
+    transform: translateY(-100%);
+  }
+  100% {
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
 .comment-reply-input {
   width: 100%;
   padding: 5px;

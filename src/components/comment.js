@@ -241,7 +241,7 @@ class Comment extends React.Component {
           author: userData.name + " " + userData.surname 
         });
       });
-      return <Loader />;
+      return null;
     }
 
     let isLiked = this.state.liked;
