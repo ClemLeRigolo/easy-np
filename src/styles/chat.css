@@ -33,7 +33,7 @@
 
 .user-message span{
     background-color: var(--selected-color);
-    color: #f1f0f0;
+    color: #ffffff;
 }
 
 #message-container div{

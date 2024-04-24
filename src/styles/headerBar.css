@@ -37,13 +37,6 @@ nav{
     cursor: pointer;
 }
 
-.menu-icon:hover{
-    transition: .3s;
-    background-color: white;
-    color: var(--selected-color);
-    border-radius: 25%;
-    cursor: pointer;
-}
 
 .n-logo h1{
     font-size: 30px;
@@ -198,13 +191,7 @@ nav{
         border-radius: 10%;
     }
 
-    .menu-icon:hover{
-        font-size: 30px;
-        margin: 0px 20px;
-        color: #fff;
-        padding: 5px;
-        border-radius: 25%
-    }
+
 
     .search-bar{
         display: none;

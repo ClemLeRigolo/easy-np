@@ -84,7 +84,7 @@ h1.group-nav-link.active, .group-header h1:focus{
         position: fixed;
         top: 102.47px;
         left: 0;
-        width: 40%;
+        width: 90%;
         height: 100%;
         background-color: #2a2e49;
         z-index: 6;
@@ -99,7 +99,7 @@ h1.group-nav-link.active, .group-header h1:focus{
     }
 
     .group-nav-item{
-        background-color: #2a2e49;
+        background-color: var(--selected-color);
         color: white;
         padding: 10px 20px;
     }
@@ -124,7 +124,7 @@ h1.group-nav-link.active, .group-header h1:focus{
     }
 
     .group-nav-item{
-        background-color: #2a2e49;
+        background-color: var(--selected-color);
         color: white;
         padding: 10px 20px;
     }

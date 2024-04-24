@@ -43,7 +43,8 @@ class Chat extends React.Component {
       activeStep: 0,
       chattingWith: null,
       chattingUsers: [],
-      messagesList: null
+      messagesList: null,
+      selectedMessageIndex: null,
     };
   }
 
@@ -183,6 +184,14 @@ class Chat extends React.Component {
     document.getElementById('message-input').value = '';
   }
 
+  handleMessageClick = (index) => {
+    if (this.state.selectedMessageIndex === index) {
+      this.setState({selectedMessageIndex: null});
+    } else {
+      this.setState({selectedMessageIndex: index})
+    }
+  }
+
   renderChattingWith() {
     if (this.state.chattingWith) {
       return (
@@ -245,8 +254,12 @@ class Chat extends React.Component {
               <List
                 // ref={this.messagesListRef}
                 className={"message-area"}>
-                {this.state.messages && Object.values(this.state.messages).map(message => (
-                  <ListItem key={message.date} style={{ paddingBottom: '3% !important' }}>
+                {this.state.messages && Object.values(this.state.messages).map((message, index) => (
+                  <ListItem 
+                    key={message.date}
+                    style={{ paddingBottom: '3% !important' }}
+                    onClick={() => this.handleMessageClick(index)}
+                  >
                     <Grid container>
                       <Grid item xs={12}>
                         <ListItemText
@@ -260,18 +273,24 @@ class Chat extends React.Component {
                           primary={message.content}
                         ></ListItemText>
                       </Grid>
-                      <Grid item xs={12}>
-                        <ListItemText
-                          className={` ${message.user === 'system'
-                              ? 'system-timestamp'
-                              : message.user === user.uid
-                                ? 'user-timestamp'
-                                : 'other-user-timestamp'
-                            }`}
-                          align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
-                          secondary={formatPostTimestamp(message.date)}
-                        ></ListItemText>
-                      </Grid>
+
+
+                      {(index === Object.values(this.state.messages).length - 1 || this.state.selectedMessageIndex === index) && (
+                        
+                        <Grid item xs={12}>
+                          <ListItemText
+                            className={` ${message.user === 'system'
+                                ? 'system-timestamp'
+                                : message.user === user.uid
+                                  ? 'user-timestamp'
+                                  : 'other-user-timestamp'
+                              }`}
+                            align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
+                            secondary={formatPostTimestamp(message.date)}
+                          ></ListItemText>
+                        </Grid>
+
+                      )}
                     </Grid>
                   </ListItem>
                 ))}
