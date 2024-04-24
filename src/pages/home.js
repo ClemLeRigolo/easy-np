@@ -41,7 +41,7 @@ class Home extends React.Component {
 
     // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
     if (postImages.length > 0) {
-      newPostWithImages(postContent, "général", postImages)
+      newPostWithImages(postContent, "1709162579034", postImages)
         .then((finito) => {
           if (finito) {
             console.log("Post enregistré avec succès");
@@ -55,7 +55,7 @@ class Home extends React.Component {
         });
     } else if (pool.length > 0) {
       // Enregistrez le post dans la base de données Firebase
-      newPostWithPool(postContent,"général", pool)
+      newPostWithPool(postContent,"1709162579034", pool)
         .then(() => {
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post
@@ -66,7 +66,7 @@ class Home extends React.Component {
         });
     } else if (gif) {
       // Enregistrez le post dans la base de données Firebase
-      newPostWithGif(postContent,"général", gif)
+      newPostWithGif(postContent,"1709162579034", gif)
         .then(() => {
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post
@@ -77,7 +77,7 @@ class Home extends React.Component {
         });
     } else {
       // Enregistrez le post dans la base de données Firebase
-      newPost(postContent,"général")
+      newPost(postContent,"1709162579034")
         .then(() => {
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post

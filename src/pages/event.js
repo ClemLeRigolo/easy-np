@@ -253,7 +253,7 @@ class Event extends React.Component {
         <div className="group-content">
         <h1>{this.state.event.title}</h1>
         <p dangerouslySetInnerHTML={{ __html: this.state.event.description }}></p>
-        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent} posts={this.state.posts} />
           <div className="home">
 
 

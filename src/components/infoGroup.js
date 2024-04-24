@@ -252,7 +252,7 @@ const InfoGroup = ({userPostData,
             fullScreen={isMobile}
           >
             <div className='manage-window'>
-              <UserList users={membersData} subscriptions={userData.subscriptions} title={fr.GROUPS.MEMBERS} />
+              <UserList users={membersData} subscriptions={userData.subscriptions} title={fr.GROUPS.MEMBERS} uid={userData.id} />
               <button className='closeSubscribers' onClick={() => closeMembers()}>{fr.PROFILE.CLOSE}</button>
             </div>
           </Modal>

@@ -35,6 +35,12 @@ export function changeColor(selectedImage) {
     case "esisar":
       selectedColor = "#862c86";
       break;
+    case "polytech":
+      selectedColor = "#004a75";
+      break;
+    case "iae":
+      selectedColor = "#e62b2c";
+      break;
     default:
       selectedColor = ""; // Couleur par défaut en cas de correspondance non trouvée
   }
@@ -109,6 +115,28 @@ export default function SchoolChoose({selectedImage, handleImageChange}) {
                     className="image-button"
                   />
                   <img src={require("../images/écoles/esisar.png")} alt="Esisar" />
+                </label>
+                <label className={`image-button-label ${selectedImage === "polytech" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="image"
+                    value="polytech"
+                    checked={selectedImage === "polytech"}
+                    onChange={handleImageChange}
+                    className="image-button"
+                  />
+                  <img src={require("../images/écoles/polytech.png")} alt="Polytech" />
+                </label>
+                <label className={`image-button-label ${selectedImage === "iae" ? "active" : ""}`}>
+                  <input
+                    type="radio"
+                    name="image"
+                    value="iae"
+                    checked={selectedImage === "iae"}
+                    onChange={handleImageChange}
+                    className="image-button"
+                  />
+                  <img src={require("../images/écoles/iae.png")} alt="Iae" />
                 </label>
   </div>;
 }

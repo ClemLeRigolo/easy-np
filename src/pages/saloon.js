@@ -275,7 +275,7 @@ class Saloon extends React.Component {
             <p dangerouslySetInnerHTML={{ __html: this.state.saloon.description }}></p>
           </div>
         {this.state.canWrite && (
-          <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+          <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent} posts={this.state.posts} />
         )}
           <div className="post-list-saloon">
 

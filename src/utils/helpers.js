@@ -219,6 +219,9 @@ export const replaceLinksAndTags = (content) => {
 };
 
 export const reverseLinksAndTags = (content) => {
+  if (!content) {
+    return content;
+  }
   const urlRegex = /<a href="(https?:\/\/[^\s]+)" target="_blank">[^<]+<\/a>/g;
 
   const contentWithoutLinks = content.replace(urlRegex, (match, url) => {

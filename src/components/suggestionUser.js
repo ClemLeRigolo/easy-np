@@ -125,9 +125,9 @@ class SuggestionUser extends React.Component {
                 <h1>{fr.HOME.YOU_MAY_KNOW}</h1>
                 <div className="suggested-users-container">
                     {this.state.suggestedUsers.map((user) => (
-                        console.log(user.id),
+                        console.log(`/profile/${user.id}`),
                         <div className="suggested-user" key={user.id}>
-                            <Link href={`/profile/${user.id}`} className="link-to-profile">
+                            <Link to={`/profile/${user.id}`} className="link-to-profile">
                             <ProfileImage uid={user.id} post={true} />
                             <h2>{user.name + " " + this.troncateName(user.surname)}</h2>
                             </Link>

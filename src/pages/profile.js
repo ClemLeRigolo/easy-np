@@ -347,6 +347,7 @@ class Profile extends React.Component {
             coverImg={this.state.coverImg}
             setCoverImg={this.setCoverImg}
             userData={this.state.userData}
+            currentUserData={this.state.currentUserData}
             />
             
             {/* <Right 

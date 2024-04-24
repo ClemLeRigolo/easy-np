@@ -20,7 +20,8 @@ class HeaderBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: ''
+      url: '',
+      search: '',
     };
   }
 
@@ -48,13 +49,19 @@ class HeaderBar extends Component {
     }
   }
 
+  setSearch = (value) => {
+    console.log(value);
+    this.setState({ search: value });
+  }
+
+
   updateUrl() {
     const url = window.location.href.split('/')[3];
     this.setState({ url });
   }
 
   render() {
-    const { search, setSearch, toggleMenu, profileImg, uid } = this.props;
+    const { search, toggleMenu, uid } = this.props;
     const { url } = this.state;
 
     if (url === 'login' || url === 'signup' || url === 'verify' || url === 'reset') {
@@ -83,8 +90,8 @@ class HeaderBar extends Component {
             <input type="text"
               placeholder='Rechercher quelque chose ...'
               id='n-search'
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={this.state.search}
+              onChange={(e) => this.setSearch(e.target.value)}
             />
           </form>
         </div>

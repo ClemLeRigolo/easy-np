@@ -68,6 +68,7 @@ function ModelProfile({
       major: majorModel,
       bio: replaceLinksAndTags(bioModel),
     });
+    changeColor(school);
     setLoading(true);
     //delay to show the loader
     setTimeout(() => {

@@ -23,7 +23,8 @@ const ProfileMiddle = ({following,
                         nbPosts,
                         coverImg,
                         setCoverImg,
-                        userData
+                        userData,
+                        currentUserData,
                       }) => {
 
   /*const [userPostData ,setUserPostData] =useState(
@@ -104,6 +105,7 @@ const ProfileMiddle = ({following,
         coverImg={coverImg}
         setCoverImg={setCoverImg}
         userData={userData}
+        currentUserData={currentUserData}
         />
 
     </div>

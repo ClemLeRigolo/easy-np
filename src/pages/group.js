@@ -457,7 +457,7 @@ class Group extends React.Component {
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>
         <div className="profile-post-list">
         {this.state.membres.includes(user.uid) && (
-          <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+          <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent} posts={this.state.posts}/>
         )}
 
         {this.state.membres.includes(user.uid) && this.state.posts && this.state.posts.map((post, index) => (

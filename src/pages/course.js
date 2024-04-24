@@ -394,7 +394,7 @@ class Course extends React.Component {
         <div className="course-content">
         {this.state.window === 'discussion' && (
           <div className="ressource-container">
-        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent}/>
+        <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent} posts={this.state.posts} />
           
 
 

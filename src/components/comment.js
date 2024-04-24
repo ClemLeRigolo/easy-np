@@ -106,10 +106,9 @@ class Comment extends React.Component {
   };
 
   handleLike = () => {
-    const { commentKey, postId } = this.props;
-    likeComment(postId, commentKey).then(() => {
-      if (!this.props.event) {
-        getComment(postId, commentKey).then((comment) => {
+    const { commentKey, postId, event } = this.props;
+    likeComment(postId, commentKey, event).then(() => {
+        getComment(postId, commentKey, event).then((comment) => {
           console.log("Commentaire liké :", comment);
           if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid)) {
             //this.state.liked = true;
@@ -129,28 +128,7 @@ class Comment extends React.Component {
           this.setState({ comment })
           console.log(this.state.comment);
         });
-      } else {
-        getEventComment(postId, commentKey).then((comment) => {
-          console.log("Commentaire liké :", comment);
-          if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid)) {
-            //this.state.liked = true;
-            this.setState({ liked: true })
-            this.setState({ likeCount: this.state.likeCount + 1})
-          } else {
-            this.setState({ liked: false })
-            this.setState({ likeCount: this.state.likeCount - 1})
-          }
-          console.log(comment.likes)
-          if (comment.likes !== undefined) {
-            const likeCount = Object.keys(comment.likes).length;
-            this.setState({ likeCount });
-          } else {
-            this.setState({ likeCount: 0})
-          }
-          this.setState({ comment })
-          console.log(this.state.comment);
-        });
-      }
+      
     });
   };
 

@@ -34,7 +34,8 @@ const Info = ({userPostData,
               nbPosts,
               coverImg,
               setCoverImg,
-              userData
+              userData,
+              currentUserData,
             }) => {
 
   const [isSubscribed,setIsSubscribed] =useState(isSubscribedProps)
@@ -274,7 +275,7 @@ const Info = ({userPostData,
             fullScreen={isMobile}
           >
             <div className='manage-window'>
-              <UserList users={subscribersData} subscriptions={subscriptions} title={fr.PROFILE.FOLLOWERS} />
+              <UserList users={subscribersData} subscriptions={currentUserData.subscriptions} title={fr.PROFILE.FOLLOWERS} uid={currentUserData.id} />
               <button className='closeSubscribers' onClick={() => closeSubscribers()}>{fr.PROFILE.CLOSE}</button>
             </div>
           </Modal>
@@ -294,7 +295,7 @@ const Info = ({userPostData,
             fullScreen={isMobile}
           >
             <div className="manage-window">
-              <UserList users={subscriptionsData} subscriptions={subscriptions} title={fr.PROFILE.FOLLOWINGS} />
+              <UserList users={subscriptionsData} subscriptions={currentUserData.subscriptions} title={fr.PROFILE.FOLLOWINGS} uid={currentUserData.id} />
               <button onClick={() => closeSubscriptions()}>{fr.PROFILE.CLOSE}</button>
             </div>
           </Modal>
