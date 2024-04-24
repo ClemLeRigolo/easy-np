@@ -101,7 +101,7 @@
   }
 
   @media screen and (max-width:768px){
-    .post-list, .group-content {
+    .post-list, .profile-post-list, .group-content {
       padding-bottom: 5vh !important;
     }
 
