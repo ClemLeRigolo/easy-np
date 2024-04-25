@@ -16,6 +16,7 @@ import Poll from 'react-polls';
 import { MdDelete } from "react-icons/md";
 import { FaShareAlt } from "react-icons/fa";
 import { FaFlag } from "react-icons/fa";
+import { IoMdArrowBack } from "react-icons/io";
 
 class Post extends React.Component {
   constructor(props) {
@@ -324,18 +325,25 @@ class Post extends React.Component {
 
     return (
       <div className="post" data-cy="post">
-        {this.state.expandedImage && (
           <div 
-          className="overlay"
+          className={`overlay ${this.state.expandedImage ? 'visible' : ''}`}
           onClick={() => this.handleImageClick(null)}
           >
             <img 
             src={this.state.expandedImage}
-            className="expanded-image"
+            className={`expanded-image ${this.state.expandedImage ? 'visible' : ''}`}
             alt="Expanded"
           />
+          <div 
+          className="back-arrow"
+          onClick={(e) => {
+            e.stopPropagation();
+            this.handleImageClick(null);
+          }}
+        >
+          <IoMdArrowBack />
+        </div>
           </div>
-        )}
         {/* <Modal
             radius="8px"
             zIndex="1001"

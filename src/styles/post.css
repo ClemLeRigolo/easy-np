@@ -165,7 +165,7 @@
   
   .react-contextmenu-item.react-contextmenu-submenu::after {
     content: "▶";
-    position: absolute;
+    position: relative;
     top: 50%;
     right: 12px;
     transform: translateY(-50%);
@@ -219,13 +219,13 @@
   .post-gif {
     margin-top: 20px;
     border-radius: 10px;
-    overflow: hidden;
     position: relative;
   }
 
   .post-gif img {
     position: relative;
     overflow: hidden;
+    max-width: 100%;
     border-radius: 10px;
   }
 
@@ -237,6 +237,15 @@
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+  }
+  
+  .overlay.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease;
   }
   
   .expanded-image {
@@ -244,9 +253,31 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 80vw;
+    transform: translate(-50%, -50%) scale(0);
+    max-width: 90%;
+    max-height: 90%;
     margin: auto;  
+    transition: transform 0.3s ease;
+  }
+  
+  .expanded-image.visible {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  .back-arrow {
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    cursor: pointer;
+    color: white;
+    width: 10%;
+    height: 10%;
+    z-index: 10;
+  }
+
+  .back-arrow svg {
+    width: 100%;
+    height: 100%;
   }
 
   .post-scroll {
@@ -274,7 +305,7 @@
     display: flex;
     flex-direction: column;
     width: auto;
-    transition: all ease-in-out 0.3s;
+    transition: opacity ease-in-out 0.3s;
   }
 
   .menu-delete {
