@@ -29,10 +29,7 @@ context('Groups', () => {
     })
     cy.goToSalon('Public').click()
     cy.wait(100)
-    const newPost = 'New post'
-    cy.contains(newPost).should('not.exist')
-    cy.addPost(newPost)
-    cy.contains(newPost)
+    cy.get("div[data-cy='postInput']").should('not.exist')
   })
 
   it('Posting a message on an admin saloon', () => {

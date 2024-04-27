@@ -97,6 +97,7 @@ class ChannelNavigation extends React.Component {
       }
       );
     }
+    console.log("groups", groups);
 
     return (
       <>

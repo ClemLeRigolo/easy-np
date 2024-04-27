@@ -35,4 +35,12 @@ context('Groups', () => {
     cy.goToSalon('Événements').click()
     cy.url().should('contain', 'events')
   })
+
+  it('Going to a private group ici c imag', () => {
+    cy.visit('/');
+    cy.get('[data-cy="navGroup"]').within(() => {
+      cy.contains('ici c imag').click()
+    })
+    cy.contains('Salon Privé : post 1')
+  })
 })

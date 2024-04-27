@@ -331,7 +331,7 @@ const InfoGroup = ({userPostData,
             ) : (
               <div>
               <h3>{fr.GROUPS.WAITING_LIST}</h3>
-              <ul>
+              <ul data-cy='waitingList'>
                 {waitingListData.map((member,index) => (
                   <li key={member.uid} className='row-member'>
                     <Link to={`/profile/${member.uid}`} className='member-name'>
@@ -342,8 +342,8 @@ const InfoGroup = ({userPostData,
                     )}
                     <span>{member.name} {member.surname}</span>
                     </Link>
-                    <button onClick={() => handleAcceptMember(member.uid)}> <FaCheck /> </button>
-                    <button onClick={() => handleRefuseMember(member.uid)}> <ImCross /> </button>
+                    <button onClick={() => handleAcceptMember(member.uid)} data-cy="accept"> <FaCheck /> </button>
+                    <button onClick={() => handleRefuseMember(member.uid)} data-cy="refuse"> <ImCross /> </button>
                   </li>
                 ))}
               </ul>
