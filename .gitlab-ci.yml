@@ -31,7 +31,7 @@ testing:
     - yarn install --cache-folder .yarn
     - npx firebase emulators:start --import bdd --token "$FIREBASE_LOGIN" &
     - npm run startLocal &
-    - sleep 75
+    - while ! curl -s http://localhost:3000 || ! curl -s http://localhost:4000 ; do sleep 5; done # wait for the server to start
     - npm run cypress:ci > cypress_report.txt || echo $?
     - npx nyc report > coverage_report.txt || echo $?
     - rm serviceAccount.json
