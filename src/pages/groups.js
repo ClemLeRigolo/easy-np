@@ -37,13 +37,11 @@ class Groups extends React.Component {
     //const userSchool = user.school; // Récupérez l'école de l'utilisateur depuis les props ou l'objet user
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 
     if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
       getUserDataById(user.uid).then((userData) => {
-        console.log("userData", userData);
         this.setState({
           profileImg: userData.profileImg,
           dataCollected: true,
@@ -55,7 +53,6 @@ class Groups extends React.Component {
         //filter groups by school
         getGroupsBySchool(userData.school).then(
           (groups) => {
-            console.log("groups", groups);
             if (!groups) {
               return;
             }

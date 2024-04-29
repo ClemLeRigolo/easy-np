@@ -116,12 +116,8 @@ class Group extends React.Component {
     const { posts } = this.state;
     const post = posts[postIndex];
 
-    console.log("posts", posts);
-    console.log("post", post);
-
     likePost(post.id)
       .then((data) => {
-        console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
@@ -158,17 +154,11 @@ class Group extends React.Component {
   };
 
   handlePostSubmit = (postContent, postImages, pool, gif) => {
-
-    console.log("postImages", postImages);
-    console.log("postContent", postContent);
-
+    
     // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
     if (postImages.length > 0) {
       newPostWithImages(postContent, this.state.gid, postImages)
         .then((finito) => {
-          if (finito) {
-            console.log("Post enregistré avec succès");
-          }
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post
           this.updatePosts();
@@ -216,7 +206,6 @@ class Group extends React.Component {
     // Supprimez le post de la base de données Firebase
     deletePost(id)
       .then(() => {
-        console.log("Post deleted");
         this.updatePosts();
       })
       .catch((error) => {
@@ -260,7 +249,6 @@ class Group extends React.Component {
     const { authState, user } = this.props;
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 
@@ -277,7 +265,6 @@ class Group extends React.Component {
 
     if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
       getUserDataById(user.uid).then((userData) => {
-        console.log("userData", userData);
         this.setState({
           profileImg: userData.profileImg,
           dataCollected: true,
@@ -320,12 +307,9 @@ class Group extends React.Component {
           // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
             Promise.all(promises).then(() => {
                 // Inverser la liste pour avoir les derniers posts en premier
-                console.log("posts", posts);
-                console.log("querySnapshot.size", querySnapshot);
                 // Trie les posts selon leur ordre d'arrivée
                 posts.sort((a, b) => a.timestamp - b.timestamp);
                 posts.reverse();
-                console.log("posts", posts);
                 this.setState({ posts });
             });
         });
@@ -369,8 +353,6 @@ class Group extends React.Component {
     if (this.state.group === null) {
         return <Loader />;
     }
-
-    console.log(this.state.group);
 
     const modelDetails = {
       ModelName: this.state.group.name,

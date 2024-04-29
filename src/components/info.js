@@ -66,7 +66,6 @@ const Info = ({userPostData,
     if (e.target.files && e.target.files[0]) {
       let img = e.target.files[0];
       try {
-        console.log(img);
         const compressedImg = await compressImage(img);
         const url = await postCoverImg(compressedImg);
         setCoverImg(url);
@@ -98,7 +97,6 @@ const Info = ({userPostData,
   }
 
   const openSubscribers=()=>{
-    console.log("openSubscribers")
     setShowSubscribers(true)
   }
 
@@ -120,7 +118,6 @@ const Info = ({userPostData,
   const [jobName,setJobName]= useState("")
   
   const handleModel = (data) => {
-    console.log(data);
     const { name, surname, username, school, year, major, bio } = data;
     userData.bio = bio;
     setName(name+" "+surname);

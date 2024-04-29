@@ -60,14 +60,10 @@ class Login extends React.Component {
 
     signIn(this.state.email, this.state.password)
       .then(() => {
-        console.log("Signed In");
         getUserData(this.state.email)
         .then((userData) => {
           // Récupérer le nom et le prénom de l'utilisateur
           const { firstName, lastName, school } = userData;
-
-          console.log(firstName + lastName + school);
-          console.log(userData);
 
           let selectedColor = "";
 

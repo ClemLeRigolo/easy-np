@@ -66,7 +66,6 @@ const InfoGroup = ({userPostData,
   };
 
   const openManageWindow = () => {
-    console.log('on ouvre')
     setShowManageWindow(true);
   };
   
@@ -123,11 +122,8 @@ const InfoGroup = ({userPostData,
     if (e.target.files && e.target.files[0]) {
       let img = e.target.files[0];
       try {
-        console.log(img);
         const croppedImg = await cropImage(img);
-        console.log(croppedImg);
         const url = await postGroupImg(groupId, croppedImg);
-        console.log(url);
         setProfileImg(url);
       } catch (error) {
         console.log(error);
@@ -139,7 +135,6 @@ const InfoGroup = ({userPostData,
     if (e.target.files && e.target.files[0]) {
       let img = e.target.files[0];
       try {
-        console.log(img);
         const compressedImg = await compressImage(img);
         const url = await postCoverGroupImg(groupId, compressedImg);
         setCoverImg(url);

@@ -16,8 +16,6 @@ const HomeNotification = ({ message, url, arrow, canClosed }) => {
         return <Redirect to={url} />;
     }
 
-    console.log('HomeNotification', message, url, arrow, canClosed);
-
     return (
         <div className='banner'>
             {canClosed && (<AiOutlineClose onClick={() => setIsOpened(false)} />)}

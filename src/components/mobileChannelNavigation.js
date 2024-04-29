@@ -21,7 +21,6 @@ class ChannelNavigation extends React.Component {
   }
 
   handleGroupClick = (groupId) => {
-    console.log("AAAAAAAAAAAAAAAAH groupId", groupId);
     this.setState((prevState) => ({
       activeGroup: prevState.activeGroup === groupId ? null : groupId,
     }));
@@ -56,8 +55,6 @@ class ChannelNavigation extends React.Component {
     if (!this.state.saloonsCollected) {
       return <Loader />;
     }
-
-    console.log(this.state.groups);
 
     return (
       <div className="group-navigation">

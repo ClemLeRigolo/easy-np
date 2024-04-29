@@ -102,12 +102,8 @@ class Profile extends React.Component {
     const { posts } = this.state;
     const post = posts[postIndex];
 
-    console.log("posts", posts);
-    console.log("post", post);
-
     likePost(post.id)
       .then((data) => {
-        console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
@@ -139,7 +135,6 @@ class Profile extends React.Component {
     // Supprimez le post de la base de données Firebase
     deletePost(id)
       .then(() => {
-        console.log("Post deleted");
         this.updatePosts();
       })
       .catch((error) => {
@@ -153,9 +148,6 @@ class Profile extends React.Component {
         const posts = [];
   
         Object.values(querySnapshot).forEach((doc) => {
-          console.log("Doc:", doc);
-          console.log(Object.values(doc)[0]);
-          console.log(this.state.userData);
           doc.username = this.state.userData.name + " " + this.state.userData.surname;
           doc.school = this.state.userData.school;
           doc.profileImg = this.state.userData.profileImg;
@@ -163,12 +155,9 @@ class Profile extends React.Component {
         });
 
         // Inverser la liste pour avoir les derniers posts en premier
-        console.log("posts", posts);
-        console.log("querySnapshot.size", querySnapshot);
         // Trie les posts selon leur ordre d'arrivée
         posts.sort((a, b) => a.timestamp - b.timestamp);
         posts.reverse();
-        console.log("posts", posts);
         this.setState({ posts });
         this.setState({ nbPosts: posts.length });
         this.render();
@@ -183,7 +172,6 @@ class Profile extends React.Component {
     const { authState, user } = this.props;
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 
@@ -196,7 +184,6 @@ class Profile extends React.Component {
         //this.setState({uid: this.props.match.params.uid});
         getUserDataById(this.props.match.params.uid)
         .then((userData) => {
-          console.log("userData", userData);
           this.setState({
             userData: userData,
             uid: this.props.match.params.uid,
@@ -230,12 +217,9 @@ class Profile extends React.Component {
               });
 
               // Inverser la liste pour avoir les derniers posts en premier
-              console.log("posts", posts);
-              console.log("querySnapshot.size", querySnapshot);
               // Trie les posts selon leur ordre d'arrivée
               posts.sort((a, b) => a.timestamp - b.timestamp);
               posts.reverse();
-              console.log("posts", posts);
               this.setState({ 
                 posts : posts,
                 nbPosts: posts.length,
@@ -248,7 +232,6 @@ class Profile extends React.Component {
     }
 
     if (authState === authStates.LOGGED_IN && !this.state.currentUserData) {
-      console.log(user);
       getUserDataById(user.uid)
         .then((userData) => {
           this.setState({
@@ -264,7 +247,6 @@ class Profile extends React.Component {
             });
           }
           //check if this.props.match.params.uid is in this.state.currentUserData.subscriptions
-          console.log(userData.subscriptions);
           
           changeColor(userData.school);
         });
@@ -309,10 +291,6 @@ class Profile extends React.Component {
     if (this.state.isSubscribed === undefined || this.state.nbPosts === null || this.state.posts === undefined || this.state.userData === null || this.state.currentUserData === null) {
       return <Loader />;
     }
-
-    console.log("this.state", this.state.userData);
-    console.log(this.state.subscriptions)
-    console.log(this.state.subscriptionsData);
 
     return (
       <div className='interface'>

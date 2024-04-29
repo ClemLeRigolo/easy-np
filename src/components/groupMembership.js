@@ -17,7 +17,6 @@ const GroupMembership = ({ group, userSchool, fromGroup }) => {
         const inGroup = await isUserInGroup(group.id);
         setIsInGroup(inGroup);
         if (!inGroup) {
-          console.log("Pas dans le groupe")
           const inWaitingList = await isUserInWaitingList(group.id);
           setIsInW(inWaitingList);
           setIsLoading(false);
@@ -36,8 +35,6 @@ const GroupMembership = ({ group, userSchool, fromGroup }) => {
     setIsTransitioning(true);
     joinGroup(group.id)
       .then((status) => {
-        console.log("Vous avez rejoint le groupe avec succès !");
-        console.log(status)
         if (status === 2) {
           setIsInW(true)
         } else {
@@ -58,7 +55,6 @@ const GroupMembership = ({ group, userSchool, fromGroup }) => {
     setIsTransitioning(true);
     leaveGroup(group.id)
       .then(() => {
-        console.log("Vous avez quitté le groupe avec succès !");
         setIsInGroup(false);
         setIsInW(false);  
         // Délai de 2 secondes (2000 millisecondes) avant de désactiver l'état de transition

@@ -45,7 +45,6 @@ class CreateSaloon extends React.Component {
     
     addSaloon(saloonName, description, writePermission, gid)
         .then(() => {
-            console.log("Saloon created successfully");
             this.setState({ redirect: true });
         })
         .catch((error) => {
@@ -53,7 +52,6 @@ class CreateSaloon extends React.Component {
         });
     /*createEvent(title, startDatetime, endDatetime, description, theme, gid)
       .then(() => {
-        console.log("Event created successfully");
         this.setState({ redirect: true });
       })
       .catch((error) => {
@@ -67,7 +65,6 @@ class CreateSaloon extends React.Component {
     const { saloonName, description, writePermission, redirect } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 

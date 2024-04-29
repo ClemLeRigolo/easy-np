@@ -108,7 +108,6 @@ class Event extends React.Component {
         return Promise.all(promises);
       })
       .then((updatedComments) => {
-        console.log("updatedComments", updatedComments);
         this.setState((prevState) => ({
           post: {
             ...prevState.post,
@@ -177,7 +176,6 @@ class Event extends React.Component {
   }
 
   handleVote = (answer) => {
-    console.log("answer", answer);
     const { pollAnswers } = this.state;
     const newPollAnswers = pollAnswers.map((pollAnswer,index) => {
       if (pollAnswer.option === answer) {
@@ -264,7 +262,6 @@ class Event extends React.Component {
       post.voters.forEach((voter, index) => {
         if (voter.includes(getCurrentUser().uid)) {
           //this.setState({ vote: post.pool[index] });
-          console.log("vote", post.pool[index]);
           this.state.vote = post.pool[index];
         }
       }

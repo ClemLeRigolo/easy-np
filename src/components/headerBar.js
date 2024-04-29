@@ -50,7 +50,6 @@ class HeaderBar extends Component {
   }
 
   setSearch = (value) => {
-    console.log(value);
     this.setState({ search: value });
   }
 

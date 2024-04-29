@@ -52,7 +52,6 @@ const Info = ({userPostData,
     if (e.target.files && e.target.files[0]) {
       let img = e.target.files[0];
       try {
-        console.log(img);
         const compressedImg = await compressImage(img);
         const url = await postCoverCourseImg(cid,compressedImg);
         setCoverImg(url);

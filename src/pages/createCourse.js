@@ -31,7 +31,6 @@ class CreateCourse extends React.Component {
 
     createCourse(courseTitle, courseDescription, courseYear, this.state.school, program)
         .then(() => {
-            console.log("Course created successfully");
             this.setState({ redirect: true });
         })
         .catch((error) => {
@@ -44,7 +43,6 @@ class CreateCourse extends React.Component {
     const { courseTitle, courseDescription, courseYear, program, redirect } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 

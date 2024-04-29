@@ -45,10 +45,7 @@ class Verify extends React.Component {
       return <Loader />;
     }
 
-    console.log("props", this.props);
-
     if (this.state.return) {
-      console.log("return");
       return <Redirect to="/login"></Redirect>;
     }
 

@@ -89,7 +89,6 @@ class ChannelNavigation extends React.Component {
     if (window.location.pathname.split("/")[1] === "group" && !this.state.adminCollected) {
       //get the group id from the url
       isUserAdminOfGroup(urlGroup, firebase.auth().currentUser.uid).then((isAdmin) => {
-        console.log("isAdmin", isAdmin);
         this.setState({ 
           canModify: isAdmin,
           adminCollected: true,
@@ -97,7 +96,6 @@ class ChannelNavigation extends React.Component {
       }
       );
     }
-    console.log("groups", groups);
 
     return (
       <>

@@ -42,13 +42,11 @@ class Comment extends React.Component {
   handlePublishReply = () => {
     const { replyContent } = this.state;
     const { commentKey, postId } = this.props;
-    console.log(commentKey)
     // Vous pouvez implémenter ici la logique pour publier la réponse
     answerToComment(postId, commentKey, replyContent, this.props.event)
       .then(() => {
         if (!this.props.event) {
           getComment(postId, commentKey).then((comment) => {
-            console.log("Réponse publiée :", comment);
             // Actualiser l'état des réponses
             this.setState((prevState) => ({
               comment: {
@@ -56,12 +54,9 @@ class Comment extends React.Component {
                 answers: comment.answers,
               },
             }));
-            console.log(this.state.comment);
             const promises = [];
-            console.log(this.state.comment.answers)
             this.state.comment.answers.forEach(answer => {
               getUserDataById(answer.user).then((userData) => {
-                console.log("userData", userData);
                 answer.author = userData.name + " " + userData.surname;
                 answer.profileImg = userData.profileImg;
                 answer.school = userData.school;
@@ -75,7 +70,6 @@ class Comment extends React.Component {
           });
         } else {
           getEventComment(postId, commentKey).then((comment) => {
-            console.log("Réponse publiée :", comment);
             // Actualiser l'état des réponses
             this.setState((prevState) => ({
               comment: {
@@ -83,12 +77,9 @@ class Comment extends React.Component {
                 answers: comment.answers,
               },
             }));
-            console.log(this.state.comment);
             const promises = [];
-            console.log(this.state.comment.answers)
             this.state.comment.answers.forEach(answer => {
               getUserDataById(answer.user).then((userData) => {
-                console.log("userData", userData);
                 answer.author = userData.name + " " + userData.surname;
                 answer.profileImg = userData.profileImg;
                 answer.school = userData.school;
@@ -111,7 +102,6 @@ class Comment extends React.Component {
     const { commentKey, postId, event } = this.props;
     likeComment(postId, commentKey, event).then(() => {
         getComment(postId, commentKey, event).then((comment) => {
-          console.log("Commentaire liké :", comment);
           if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid)) {
             //this.state.liked = true;
             this.setState({ liked: true })
@@ -120,7 +110,6 @@ class Comment extends React.Component {
             this.setState({ liked: false })
             this.setState({ likeCount: this.state.likeCount - 1})
           }
-          console.log(comment.likes)
           if (comment.likes !== undefined) {
             const likeCount = Object.keys(comment.likes).length;
             this.setState({ likeCount });
@@ -128,7 +117,6 @@ class Comment extends React.Component {
             this.setState({ likeCount: 0})
           }
           this.setState({ comment })
-          console.log(this.state.comment);
         });
       
     });
@@ -140,11 +128,9 @@ class Comment extends React.Component {
 
   componentDidMount() {
     const { commentKey, postId } = this.props;
-    console.log(commentKey)
     // Vous pouvez implémenter ici la logique pour publier la réponse
       if (!this.props.event) {
         getComment(postId, commentKey).then((comment) => {
-          console.log("Réponse publiée :", comment);
           // Actualiser l'état des réponses
           this.setState((prevState) => ({
             comment: {
@@ -163,15 +149,12 @@ class Comment extends React.Component {
           } else {
             this.setState({ likeCount: 0})
           }
-          console.log(this.state.comment);
           const promises = [];
-          console.log(this.state.comment.answers)
           if (this.state.comment.answers === undefined) {
             return;
           }
           this.state.comment.answers.forEach(answer => {
             getUserDataById(answer.user).then((userData) => {
-              console.log("userData", userData);
               answer.author = userData.name + " " + userData.surname;
               answer.profileImg = userData.profileImg;
               answer.school = userData.school;
@@ -185,7 +168,6 @@ class Comment extends React.Component {
         });
       } else {
         getEventComment(postId, commentKey).then((comment) => {
-          console.log("Réponse publiée :", comment);
           // Actualiser l'état des réponses
           this.setState((prevState) => ({
             comment: {
@@ -204,15 +186,12 @@ class Comment extends React.Component {
           } else {
             this.setState({ likeCount: 0})
           }
-          console.log(this.state.comment);
           const promises = [];
-          console.log(this.state.comment.answers)
           if (this.state.comment.answers === undefined) {
             return;
           }
           this.state.comment.answers.forEach(answer => {
             getUserDataById(answer.user).then((userData) => {
-              console.log("userData", userData);
               answer.author = userData.name + " " + userData.surname;
               answer.profileImg = userData.profileImg;
               answer.school = userData.school;
@@ -233,10 +212,6 @@ class Comment extends React.Component {
 
     const answers = this.state.comment.answers;
 
-    console.log("comment", comment);
-
-    console.log(answers);
-
     if (this.state.author === "bug") {
       getUserDataById(comment.user).then((userData) => {
         this.setState({ 
@@ -250,8 +225,6 @@ class Comment extends React.Component {
     if (comment.likes && comment.likes.hasOwnProperty(getCurrentUser().uid) && !isLiked) {
       isLiked = true;
     }
-
-    console.log("likeCount", this.state.likeCount);
 
     return (
       <div className="comment" data-cy="comment">

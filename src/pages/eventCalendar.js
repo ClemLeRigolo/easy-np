@@ -47,8 +47,6 @@ class eventCalendar extends React.Component {
 
     getEventStyle = (event) => {
       let color;
-      console.log(event.type);
-      console.log(event);
       if (event.type === "Hackaton") {
         color = 'red';
       } else if (event.type === "Soirée") {
@@ -60,7 +58,6 @@ class eventCalendar extends React.Component {
       } else {
         color = "steelBlue";
       }
-      console.log(color);
     
       return {
         style: {
@@ -100,13 +97,11 @@ class eventCalendar extends React.Component {
         const { authState,user } = this.props;
 
         if (authState === authStates.INITIAL_VALUE) {
-          console.log("initial value");
           return <Loader />;
         }
 
         if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
           getUserDataById(user.uid).then((userData) => {
-            console.log("userData", userData);
             this.setState({
               profileImg: userData.profileImg,
               dataCollected: true,

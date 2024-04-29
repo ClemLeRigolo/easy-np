@@ -42,7 +42,6 @@ class CreateEvent extends React.Component {
     const endDatetime = new Date(`${endDate}T${endTime}`);
     const gid = this.props.match.params.gid;
     const finalDescription = replaceLinksAndTags(description);
-    console.log("finalDescription", finalDescription);
 
     if (containsHtml(finalDescription)) {
       this.setState({ hasHtmlError: true });
@@ -51,7 +50,6 @@ class CreateEvent extends React.Component {
 
     createEvent(title, startDatetime, endDatetime, finalDescription, theme, gid)
       .then(() => {
-        console.log("Event created successfully");
         this.setState({ redirect: true });
       })
       .catch((error) => {
@@ -65,7 +63,6 @@ class CreateEvent extends React.Component {
     const { title, description, startDate, endDate, theme, redirect, formattedStartTime, formattedEndTime } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 

@@ -36,7 +36,6 @@ class SuggestionUser extends React.Component {
 
     componentDidMount() {
         getAllUsers().then((usersData) => {
-            console.log(usersData);
             this.setState({ usersData: Object.values(usersData) });
             Object.values(usersData).forEach((user) => {
                 this.setState((prevState) => ({
@@ -52,7 +51,6 @@ class SuggestionUser extends React.Component {
         const { usersData, usersId } = this.state;
         const { userData: user } = this.props;
         const suggestedUsers = [];
-        console.log(user);
         if (user === undefined) {
             return;
         }
@@ -74,7 +72,6 @@ class SuggestionUser extends React.Component {
                 userDataMajor = userData.major;
             }
             if (user.subscriptions && user.subscriptions.includes(userData.id)) {
-                console.log("User is following himself");
                 return;
             }
             if (user.subscriptions) {
@@ -88,7 +85,6 @@ class SuggestionUser extends React.Component {
                     }
                 });
             }
-            console.log(mutualFollowers, userFollowers, userDataSchool, userDataMajor);
             const sameSchool = userDataSchool === user.school;
             const sameMajor = userDataMajor === user.major;
             userData.score = mutualFollowers * 10 + userFollowers * 5 + (sameSchool ? 5 : 0) + (sameMajor ? 5 : 0);
@@ -111,21 +107,16 @@ class SuggestionUser extends React.Component {
     render() {
 
         if (this.state.suggestedUsersSetted === false && this.props.userData !== undefined) {
-            console.log(this.props.userData);
             this.getSuggestedUsers();
             this.setState({ suggestedUsersSetted: true });
             return <Loader />;
         }
-
-        console.log(this.state.usersData);
-        console.log(this.state.suggestedUsers);
 
         return (
             <div className="suggested-users">
                 <h1>{fr.HOME.YOU_MAY_KNOW}</h1>
                 <div className="suggested-users-container">
                     {this.state.suggestedUsers.map((user) => (
-                        console.log(`/profile/${user.id}`),
                         <div className="suggested-user" key={user.id}>
                             <Link to={`/profile/${user.id}`} className="link-to-profile">
                             <ProfileImage uid={user.id} post={true} />

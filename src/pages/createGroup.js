@@ -33,7 +33,6 @@ class CreateGroup extends React.Component {
     const { groupName, visibility, school, description } = this.state;
     // Logique de création du groupe
     const finalDescription = replaceLinksAndTags(description);
-    console.log("finalDescription", finalDescription);
 
     if (containsHtml(finalDescription)) {
       this.setState({ hasHtmlError: true });
@@ -42,7 +41,6 @@ class CreateGroup extends React.Component {
 
     createGroup(groupName, visibility, school, description)
       .then(() => {
-        console.log("Group created successfully");
         this.setState({ redirect: true });
       })
       .catch((error) => {
@@ -55,7 +53,6 @@ class CreateGroup extends React.Component {
     const { groupName, visibility, school, redirect, description } = this.state;
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 

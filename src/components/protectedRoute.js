@@ -9,7 +9,6 @@ const ProtectedRoute = ({ component: Component, authState, user, ...rest }) => {
   }
 
   if (authState === authStates.LOGGED_OUT) {
-    console.log("redirect to login");
     return <Redirect to="/login" />;
   }
 

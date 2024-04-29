@@ -39,7 +39,6 @@ class CreateRessource extends React.Component {
 
     createRessource(ressourceName, ressourceDescription, files, this.state.type, this.state.cid)
       .then(() => {
-        console.log("Ressource created successfully");
         this.setState({ redirect: true });
       })
       .catch((error) => {
@@ -51,10 +50,7 @@ class CreateRessource extends React.Component {
     const { authState, user } = this.props;
     const { ressourceName, ressourceDescription, redirect } = this.state;
 
-    console.log("currentCourse", this.props.currentCourse);
-
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 
@@ -86,7 +82,6 @@ class CreateRessource extends React.Component {
 
     //si le type n'est ni td ni tp ni fiche ni exam, on redirige vers la page des cours
     if (this.state.type !== "td" && this.state.type !== "tp" && this.state.type !== "exam" && this.state.type !== "fiche") {
-        console.log("type", this.state.type);
         return <Redirect to="/courses/" />;
     }
 

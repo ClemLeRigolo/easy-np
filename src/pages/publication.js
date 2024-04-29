@@ -24,11 +24,8 @@ class Publication extends React.Component {
   handleLikeClick = () => {
     const { post } = this.state;
 
-    console.log("post", post);
-
     likePost(post.id)
       .then((data) => {
-        console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
@@ -59,7 +56,6 @@ class Publication extends React.Component {
     const { authState, user } = this.props;
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 
@@ -76,7 +72,6 @@ class Publication extends React.Component {
 
     if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
       getUserDataById(user.uid).then((userData) => {
-        console.log("userData", userData);
         this.setState({
           profileImg: userData.profileImg,
           dataCollected: true,
@@ -98,7 +93,6 @@ class Publication extends React.Component {
       //this.state.pid = this.props.match.params.pid;
       this.setState({ pid: this.props.match.params.pid });
       getPostById(this.props.match.params.pid).then((post) => {
-        console.log("post", post);
         post = Object.values(post)[0];
           getUserDataById(post.user).then((userData) => {
             post.username = userData.name + " " + userData.surname;

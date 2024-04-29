@@ -57,8 +57,6 @@ class Ressource extends React.Component {
   render() {
     const ressource = this.state.ressource;
 
-    console.log(ressource)
-
     return (
       <div className="post">
         <div className="post-header">

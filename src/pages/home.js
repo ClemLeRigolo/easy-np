@@ -43,9 +43,6 @@ class Home extends React.Component {
     if (postImages.length > 0) {
       newPostWithImages(postContent, "1709162579034", postImages)
         .then((finito) => {
-          if (finito) {
-            console.log("Post enregistré avec succès");
-          }
           this.setState({ postContent: "" });
           this.handlePostContentChange(); // Réinitialisez le champ de texte du post
           this.updatePosts();
@@ -103,7 +100,6 @@ class Home extends React.Component {
 
     likePost(post.id)
       .then((data) => {
-        console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
@@ -124,7 +120,6 @@ class Home extends React.Component {
 
     likeEvent(post.id)
       .then((data) => {
-        console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
@@ -169,7 +164,6 @@ class Home extends React.Component {
     // Supprimez le post de la base de données Firebase
     deletePost(id)
       .then(() => {
-        console.log("Post deleted");
         this.updatePosts();
       })
       .catch((error) => {
@@ -186,8 +180,6 @@ class Home extends React.Component {
         const posts = [];
         const promises = []; // Tableau pour stocker les promesses des requêtes getUserDataById
         querySnapshot.forEach((doc) => {
-          //console.log("doc", doc);
-          //doc = Object.values(doc)[0];
           if (doc !== undefined) {
             const promise = getUserDataById(doc.user).then((data) => {
               doc.username = data.name + " " + data.surname;

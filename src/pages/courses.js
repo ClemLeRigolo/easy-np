@@ -44,13 +44,11 @@ class Courses extends React.Component {
     const { authState, user } = this.props;
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 
     if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
       getUserDataById(user.uid).then((userData) => {
-        console.log("userData", userData);
         this.setState({
           profileImg: userData.profileImg,
           dataCollected: true,
@@ -69,7 +67,6 @@ class Courses extends React.Component {
 
     if (!this.state.coursesSetted) {
       getCoursesBySchool(this.state.school).then((courses) => {
-        console.log("courses", courses);
         if (!courses) {
           return;
         }
@@ -85,7 +82,6 @@ class Courses extends React.Component {
         const thirdYearMMISCourses = [];
 
         Object.values(courses).forEach((course) => {
-          console.log("course", course);
           if (course.year === "1") {
             firstYearCourses.push(course);
           } else if (course.year === "2") {
@@ -125,8 +121,6 @@ class Courses extends React.Component {
         });
       });
     }
-
-    console.log(this.state.firstYearCourses);
 
     return (
       <div className="interface">

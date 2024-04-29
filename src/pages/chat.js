@@ -88,7 +88,6 @@ class Chat extends React.Component {
 
     this.getChatData();
     listenForUserChats((chats) => {
-      console.log("QUELQU'UN M'ENVOIE UN MESSAGE");
       // this.setState({ chattingUsers: chats });
     });
 
@@ -131,7 +130,6 @@ class Chat extends React.Component {
               this.setState({ messages: data.messages });
               listenForChatMessages(this.state.cid, (messages) => {
                 this.setState({ messages: messages });
-                console.log("MESSAGE!");
                 this.autoScrollMessages();
               });
             }

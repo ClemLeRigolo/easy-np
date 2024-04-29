@@ -32,18 +32,11 @@ class GroupEvent extends React.Component {
     const { posts } = this.state;
     const post = posts[postIndex];
 
-    console.log("posts", posts);
-    console.log("post", post);
-
     likeEvent(post.id)
       .then((data) => {
-        console.log("Liked post");
         // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
         post.likeCount += data.status;
         post.likes = data.likes;
-
-        console.log("post.likeCount", post.likeCount);
-        console.log("post.likes", post.likes);
       
         // Mettez à jour l'état avec le post modifié
         this.setState({
@@ -72,7 +65,6 @@ class GroupEvent extends React.Component {
     // Supprimez le post de la base de données Firebase
     deletePost(id)
       .then(() => {
-        console.log("Post deleted");
         this.updatePosts();
       })
       .catch((error) => {
@@ -108,12 +100,9 @@ class GroupEvent extends React.Component {
         // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
         Promise.all(promises).then(() => {
             // Inverser la liste pour avoir les derniers posts en premier
-            console.log("posts", posts);
-            console.log("querySnapshot.size", querySnapshot);
             // Trie les posts selon leur ordre d'arrivée
             posts.sort((a, b) => a.timestamp - b.timestamp);
             posts.reverse();
-            console.log("posts", posts);
             this.setState({ posts });
           });
       });
@@ -127,7 +116,6 @@ class GroupEvent extends React.Component {
     const { authState, user } = this.props;
 
     if (authState === authStates.INITIAL_VALUE) {
-      console.log("initial value");
       return <Loader />;
     }
 
@@ -144,7 +132,6 @@ class GroupEvent extends React.Component {
 
     if (authState === authStates.LOGGED_IN && !this.state.dataCollected) {
       getUserDataById(user.uid).then((userData) => {
-        console.log("userData", userData);
         this.setState({
           profileImg: userData.profileImg,
           dataCollected: true,
@@ -162,8 +149,6 @@ class GroupEvent extends React.Component {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
-      ;
-      console.log("this.state.gid", this.state.gid,)
       //this.state.gid = this.props.match.params.gid;
       this.setState({ gid: this.props.match.params.gid })
       getEventsByGroup(this.props.match.params.gid).then(
@@ -184,12 +169,9 @@ class GroupEvent extends React.Component {
           // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
             Promise.all(promises).then(() => {
                 // Inverser la liste pour avoir les derniers posts en premier
-                console.log("posts", posts);
-                console.log("querySnapshot.size", querySnapshot);
                 // Trie les posts selon leur ordre d'arrivée
                 posts.sort((a, b) => a.timestamp - b.timestamp);
                 posts.reverse();
-                console.log("posts", posts);
                 this.setState({ posts });
             });
         });
@@ -206,8 +188,6 @@ class GroupEvent extends React.Component {
     if (this.state.group === null) {
         return <Loader />;
     }
-
-    console.log(this.state.group);
 
     return (
       <div className='interface'>
