@@ -84,7 +84,6 @@ context("Groups", () => {
       cy.get('button[data-cy="manageGroup"]').click()
     })
 
-
     it("Changing value of a member", () => {
       cy.get('div[data-cy="manageGroup"]').within(() => {
         cy.get('li').first().within(() => {
@@ -112,10 +111,31 @@ context("Groups", () => {
       cy.get('div[data-cy="manageGroup"]').should('not.exist')
     })
 
-    it("Checking the waiting list", () => {
+    it("Accepting someone from the waiting list", () => {
+      cy.visit("/groups")
+      cy.contains("Privee").click()
+      cy.goToSalon("Général").click()
+      cy.get('button[data-cy="manageGroup"]').click()
       cy.get('div[data-cy="manageGroup"]').within(() => {
         cy.get('button[data-cy="waitingList"]').click()
         cy.get("h3").should('have.text', 'Liste d\'attente')
+        cy.get('ul[data-cy="waitingList"]').within(() => {
+          cy.get('li > button[data-cy="accept"]').click()
+        })
+      })
+    })
+
+    it("Refusing someone from the waiting list", () => {
+      cy.visit("/groups")
+      cy.contains("Refuser").click()
+      cy.goToSalon("Général").click()
+      cy.get('button[data-cy="manageGroup"]').click()
+      cy.get('div[data-cy="manageGroup"]').within(() => {
+        cy.get('button[data-cy="waitingList"]').click()
+        cy.get("h3").should('have.text', 'Liste d\'attente')
+        cy.get('ul[data-cy="waitingList"]').within(() => {
+          cy.get('li > button[data-cy="refuse"]').click()
+        })
       })
     })
   })

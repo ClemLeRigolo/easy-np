@@ -18,15 +18,20 @@ context("Testing comments", () => {
         cy.get('button[data-cy="comment"]').click();
         cy.get('.comment-input').find('input').type("Comment1");
         cy.get('.comment-input').find('button').click();
+      });
+      post.within(() => {
         cy.openComments();
         // commenting the first comment
         cy.get('button[data-cy="commentReply"]').first().click();
-        cy.get('button[data-cy="commentReplyResponse"]').click();
         cy.contains("Response").should("not.exist");
         cy.get('input[data-cy="commentReply"]').first().type("Response");
         cy.get('button[data-cy="commentReplyPost"]').click();
         cy.get('button[data-cy="commentReplyResponse"]').click();
         cy.contains("Response");
+      });
+      post.within(() => {
+        // liking the first comment
+        cy.get('button[data-cy="commentLikes"]').first().click();
       });
     });
   });
