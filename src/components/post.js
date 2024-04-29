@@ -17,6 +17,10 @@ import { MdDelete } from "react-icons/md";
 import { FaShareAlt } from "react-icons/fa";
 import { FaFlag } from "react-icons/fa";
 import { IoMdArrowBack } from "react-icons/io";
+import PinchZoomPan from 'react-responsive-pinch-zoom-pan';
+import { AiOutlineCamera, AiOutlineBarChart, AiOutlineGif, AiOutlineVideoCamera, AiOutlineCloseCircle } from "react-icons/ai";
+import { SearchExperience } from "./gif";
+import { compressImage } from "../utils/helpers";
 
 class Post extends React.Component {
   constructor(props) {
@@ -32,6 +36,12 @@ class Post extends React.Component {
       vote: null,
       expandedImage: null,
       contextTrigger: null,
+      scale: 1,
+      photos: [],
+      selectedGif: null,
+      showGifSearch: false,
+      validationError: false,
+      selectedOption: null,
     };
   }
 
@@ -78,53 +88,57 @@ class Post extends React.Component {
   handleCommentSubmit = () => {
     // Logique de soumission du commentaire
     const { post } = this.props;
-    const { commentInputValue } = this.state;
-  
-    addComment(post.id, commentInputValue)
-      .then(() => {
-        console.log("Commentaire ajouté avec succès");
-        // Réinitialiser la zone de texte des commentaires
-        this.setState({
-          showCommentInput: false,
-          commentInputValue: "",
+    const { commentInputValue, photos, selectedGif } = this.state;
+
+    const compressedImagesPromises = photos.map((photo) => compressImage(photo.file));
+        
+    Promise.all(compressedImagesPromises).then((compressedImagesPromises) => {    
+      addComment(post.id, commentInputValue, compressedImagesPromises, selectedGif ? selectedGif.images.original.url : null)
+        .then(() => {
+          // Réinitialiser la zone de texte des commentaires
+          this.setState({
+            showCommentInput: false,
+            commentInputValue: "",
+          });
+    
+          // Attendre un court délai avant de récupérer les commentaires
+          const delay = 2000; // Délai en millisecondes
+          return new Promise((resolve) => setTimeout(resolve, delay));
+        })
+        .then(() => {
+          // Actualiser les commentaires après un court délai
+          return getComments(post.id);
+        })
+        .then((comments) => {
+          const promises = comments.map((comment) => {
+            // On boucle sur les commentaires pour rajouter le nom d'utilisateur
+            if (comment) {
+              return getUserDataById(comment.user).then((user) => {
+                comment.author = user.name + " " + user.surname;
+                comment.profileImg = user.profileImg;
+                comment.school = user.school;
+                return comment;
+              });
+            } else {
+              return null;
+            }
+          });
+          return Promise.all(promises);
+        })
+        .then((updatedComments) => {
+          this.setState((prevState) => ({
+            post: {
+              ...prevState.post,
+              comments: updatedComments,
+              commentCount: updatedComments.length,
+            },
+          }));
+        })
+        .catch((error) => {
+          console.error("Erreur lors de l'ajout ou de la récupération des commentaires :", error);
         });
-  
-        // Attendre un court délai avant de récupérer les commentaires
-        const delay = 50; // Délai en millisecondes
-        return new Promise((resolve) => setTimeout(resolve, delay));
-      })
-      .then(() => {
-        // Actualiser les commentaires après un court délai
-        return getComments(post.id);
-      })
-      .then((comments) => {
-        const promises = comments.map((comment) => {
-          // On boucle sur les commentaires pour rajouter le nom d'utilisateur
-          if (comment) {
-            return getUserDataById(comment.user).then((user) => {
-              comment.author = user.name + " " + user.surname;
-              comment.profileImg = user.profileImg;
-              comment.school = user.school;
-              return comment;
-            });
-          } else {
-            return null;
-          }
-        });
-        return Promise.all(promises);
-      })
-      .then((updatedComments) => {
-        this.setState((prevState) => ({
-          post: {
-            ...prevState.post,
-            comments: updatedComments,
-            commentCount: updatedComments.length,
-          },
-        }));
-      })
-      .catch((error) => {
-        console.error("Erreur lors de l'ajout ou de la récupération des commentaires :", error);
-      });
+    }
+    );
   };
 
   toggleCommentVisibility = () => {
@@ -140,10 +154,9 @@ class Post extends React.Component {
     handleDeletePost(this.state.post.id);
   }
 
-  handleImageClick = (image) => {
-    this.setState({
-      expandedImage: image
-    })
+  handleImageClick = (images, index) => {
+    const image = images ? images[index] : null;
+    this.setState({ expandedImage: image });
     if (image !== null) {
       //bloquer le scroll
       // Get the current page scroll position
@@ -237,6 +250,58 @@ class Post extends React.Component {
     }
   };
 
+  handleCameraIconClick = () => {
+    this.setState({ 
+      selectedOption: "images",
+      showGifSearch: false,
+      selectedGif: null,
+    });
+    document.getElementById("photo-input-" + this.props.post.id).click();
+  }
+
+  handleDeletePhoto = (index) => {
+    const { photos } = this.state;
+    photos.splice(index, 1);
+    this.setState({ photos });
+  }
+
+  handlePhotoImport = (e) => {
+    const { photos } = this.state;
+    const files = e.target.files;
+    const promises = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const promise = new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          resolve({ dataURL: e.target.result, name: file.name, file: file});
+        };
+        reader.readAsDataURL(file);
+      });
+      promises.push(promise);
+    }
+    Promise.all(promises)
+      .then((photos) => {
+        this.setState({ photos });
+      });
+  }
+
+  toggleGifSearch = () => {
+    this.setState((prevState) => ({
+      showGifSearch: !prevState.showGifSearch,
+      selectedOption: "gif",
+      photos: [],
+    }));
+  }
+
+  setSelectedGif = (gif) => {
+    this.setState({ selectedGif: gif });
+  }
+
+  handleDeleteGif = () => {
+    this.setState({ selectedGif: null });
+  }
+
   render() {
     const { likeCount } = this.props;
     const { showCommentInput, commentInputValue, expandedComments } = this.state;
@@ -329,11 +394,24 @@ class Post extends React.Component {
           className={`overlay ${this.state.expandedImage ? 'visible' : ''}`}
           onClick={() => this.handleImageClick(null)}
           >
-            <img 
-            src={this.state.expandedImage}
-            className={`expanded-image ${this.state.expandedImage ? 'visible' : ''}`}
-            alt="Expanded"
-          />
+            <div className="expanded-image-header">
+            <Link to={`/profile/${post.user}`} className="expanded-username">
+              <ProfileImage uid={post.user} post={true} />
+              <div>
+                <p>{post.username}</p>
+              </div>
+            </Link>
+            <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
+            </div>
+            <div className={`expanded-image-content ${this.state.expandedImage ? 'visible' : ''}`}>
+            <PinchZoomPan position={'center'} initialScale={'auto'} maxScale={4} >
+              <img 
+                src={this.state.expandedImage}
+                className={`expanded-image ${this.state.expandedImage ? 'visible' : ''}`}
+                alt="Expanded"
+              />
+          </PinchZoomPan>
+          </div>
           <div 
           className="back-arrow"
           onClick={(e) => {
@@ -393,7 +471,7 @@ class Post extends React.Component {
           <div className="post-photos">
             {Object.values(post.images).map((image, index) => (
               <div key={index} className="post-photo">
-                <img src={image} alt="Post" onClick={() => this.handleImageClick(image)} />
+                <img src={image} alt="Post" onClick={() => this.handleImageClick(Object.values(post.images),index)} />
               </div>
             ))}
           </div>
@@ -423,6 +501,7 @@ class Post extends React.Component {
           </button>
         </div>
         {showCommentInput && (
+          <>
           <div className="comment-input">
             <input
               type="text"
@@ -433,6 +512,66 @@ class Post extends React.Component {
             />
             <button className="comment-btn" onClick={this.handleCommentSubmit}>{fr.POSTS.PUBLISH}</button>
           </div>
+          <div className="comment-input-icons">
+            <div className="post-input-icon" onClick={this.handleCameraIconClick}>
+              <AiOutlineCamera />
+            </div>
+            <div className="post-input-icon" onClick={this.toggleGifSearch}>
+              <AiOutlineGif />
+            </div>
+          </div>
+          <div className="photos-preview">
+            {this.state.photos.map((photo, index) => (
+              <div key={index} style={{ marginBottom: '10px', position: 'relative' }}>
+                <img
+                  src={photo.dataURL}
+                  alt={photo.name}
+                  style={{ maxWidth: '100%', maxHeight: '10vh', borderRadius: '5px', objectFit: 'cover'}}
+                />
+                <div
+                  className="delete-icon"
+                  onClick={() => this.handleDeletePhoto(index)}
+                  style={{
+                    position: 'absolute',
+                    top: '5px',
+                    right: '5px',
+                    borderRadius: '50%',
+                    padding: '5px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <AiOutlineCloseCircle style={{ color: 'red', fontSize: '18px' }} />
+                </div>
+              </div>
+            ))}
+            </div>
+          {this.state.selectedGif && (
+            <div className="selected-gif-container">
+              <div style={{ marginBottom: '10px', position: 'relative' }}>
+              <img src={this.state.selectedGif.images.original.url} alt="Selected GIF" />
+              <div
+                className="delete-icon"
+                onClick={() => this.handleDeleteGif()}
+                style={{
+                  position: 'absolute',
+                  top: '5px',
+                  right: '5px',
+                  borderRadius: '50%',
+                  padding: '5px',
+                  cursor: 'pointer',
+                }}
+              >
+              <AiOutlineCloseCircle style={{ color: 'red', fontSize: '18px' }} />
+            </div>
+            </div>
+            </div>
+          )}
+          {this.state.showGifSearch && !this.state.selectedGif && (<div className="gif-search">
+            <SearchExperience setSelectedGif={this.setSelectedGif} />
+          </div>)}
+          {this.state.validationError && <div className="error-message">{this.state.validationError}</div>}
+          <input type="file" id={`photo-input-${this.props.post.id}`} multiple accept="image/*" onChange={this.handlePhotoImport} style={{ display: "none" }} />
+          </>
         )}
         {comments.length > 0 && (
           <div className={`comments`} data-cy="comments">
@@ -441,7 +580,7 @@ class Post extends React.Component {
               {expandedComments ? "" : <FaAngleDown className="icon" />}
             </div>
             {expandedComments && comments.map((comment, index) => (
-              <Comment key={comment.id} comment={comment} commentKey={index} postId={post.id}/>
+              <Comment key={comment.id} comment={comment} commentKey={index} postId={post.id} handleImageClick={this.handleImageClick}/>
             ))}
             <div className="comments-toggle" onClick={this.toggleCommentVisibility} data-cy="closeComments">
               {expandedComments ? "Réduire les commentaires" : ""}

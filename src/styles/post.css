@@ -236,7 +236,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.98);
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease;
@@ -247,21 +247,55 @@
     opacity: 1;
     transition: opacity 0.3s ease;
   }
+
+  .expanded-image-content {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+  }
+
+  .expanded-image-content.visible {
+    transform: scale(1);
+  }
+
+  .expanded-image-content div div:first-child {
+    display: none;
+  }
   
   .expanded-image {
     z-index: 9;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    max-width: 90%;
-    max-height: 90%;
-    margin: auto;  
-    transition: transform 0.3s ease;
   }
-  
-  .expanded-image.visible {
-    transform: translate(-50%, -50%) scale(1);
+
+  .expanded-image-header {
+    z-index: 10;
+    position: absolute;
+    opacity: 0.9;
+    width: 100%;
+    top: 0px;
+    left: 0;
+    display: flex;
+    padding-top: 30px;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    background-color: black;
+  }
+
+  .expanded-image-header p {
+    margin: 0;
+    font-weight: bold;
+    color: white;
+  }
+
+  .expanded-image-header a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 
   .back-arrow {
@@ -271,7 +305,7 @@
     cursor: pointer;
     color: white;
     width: 10%;
-    height: 10%;
+    height: auto;
     z-index: 10;
   }
 
@@ -284,12 +318,23 @@
     overflow: hidden
   }
 
-  .comment-input-field {
+  .comment-input {
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .comment-input-icons {
+    display: flex;
+    align-items: center;
+  }
+
+  .comment-input-field {
+    width:100%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    margin-top: 8px;
     box-sizing: border-box;
   }
 
@@ -323,6 +368,15 @@
 @media screen and (max-width: 768px) {
     .post-share-btn {
       display: none;
+    }
+
+    .expanded-image {
+      width: 100%;
+      margin: 0;
+    }
+
+    .expanded-image-content {
+      margin-top: 30%;
     }
   
 }

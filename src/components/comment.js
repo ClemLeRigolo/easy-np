@@ -3,13 +3,14 @@ import { FaReply } from "react-icons/fa";
 import { AiOutlineHeart } from "react-icons/ai";
 import { AiFillHeart } from "react-icons/ai";
 import { formatPostTimestamp } from "../utils/helpers";
-
 import "../styles/comment.css";
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { getUserDataById, answerToComment, getComment, likeComment, getCurrentUser, getEventComment } from "../utils/firebase";
 import Loader from "./loader";
 import fr from "../utils/i18n";
 import ProfileImage from "./profileImage";
+import { IoMdArrowBack } from "react-icons/io";
+import PinchZoomPan from "react-responsive-pinch-zoom-pan";
 
 class Comment extends React.Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class Comment extends React.Component {
       comment: this.props.comment,
       liked: false,
       likeCount: 0,
+      expandedImage: null,
     };
   }
 
@@ -262,6 +264,20 @@ class Comment extends React.Component {
           </div>
         </Link>
         <div className="comment-content" data-cy="commentContent">{comment.content}</div>
+        {comment.photos && (
+          <div className="comment-photos">
+            {comment.photos.map((photo, index) => (
+              <div className="comment-photo">
+                <img key={index} src={photo} alt="comment" onClick={() => this.props.handleImageClick(comment.photos, index)} />
+              </div>
+            ))}
+          </div>
+        )}
+        {comment.gif && (
+          <div className="comment-gif">
+            <img src={comment.gif} alt="gif" />
+          </div>
+        )}
         <div className="comment-actions">
           <div className="classics-buttons"> {/* Nouveau div pour regrouper les éléments bouton répondre et texte pour afficher/masquer les réponses */}
               <button className="reply" data-cy="commentReply" onClick={this.handleReply}>
@@ -295,7 +311,7 @@ class Comment extends React.Component {
             )}
         </div>
         {showReplies && answers && (
-          <div className="comment-replies">
+          <div className={'comment-replies '}>
             {answers.map((reply, index) => (
               <div className="comment-thread">
               <div className="comment-reply" key={reply.id}>

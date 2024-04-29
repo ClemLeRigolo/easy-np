@@ -106,8 +106,8 @@ class ProfileImage extends React.Component {
                   </Group>
         
                   {user.bio && (
-                  <Text size="sm" mt="md">
-                    {user.bio}
+                  <Text size="sm" mt="md" dangerouslySetInnerHTML={{ __html: user.bio }} >
+
                   </Text>
                   )}
         
@@ -150,8 +150,8 @@ class ProfileImage extends React.Component {
                   </Group>
         
                   {user.bio && (
-                  <Text size="sm" mt="md">
-                    {user.bio}
+                  <Text size="sm" mt="md" dangerouslySetInnerHTML={{ __html: user.bio }} >
+
                   </Text>
                   )}
         

@@ -32,7 +32,7 @@ class UserList extends React.Component {
   componentDidMount() {
     this.setState({
         users: this.props.users,
-        subscriptions: this.props.subscriptions
+        subscriptions: this.props.subscriptions !== undefined ? this.props.subscriptions : []
     })
   }
 
@@ -40,7 +40,7 @@ class UserList extends React.Component {
     if (prevProps.users !== this.props.users) {
       this.setState({
         users: this.props.users,
-        subscriptions: this.props.subscriptions
+        subscriptions: this.props.subscriptions !== undefined ? this.props.subscriptions : []
       })
     }
   }

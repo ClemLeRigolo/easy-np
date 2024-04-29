@@ -6,7 +6,6 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 20%;
     padding-bottom: 15px;
     transition: opacity 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -20,7 +19,6 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    width: 20%;
     padding-bottom: 15px;
     transition: opacity 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -34,7 +32,6 @@
     border: none;
     border-radius: 5px;
     cursor: not-allowed;
-    width: 20%;
     padding-bottom: 15px;
     transition: opacity 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
