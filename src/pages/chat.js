@@ -223,7 +223,7 @@ class Chat extends React.Component {
   
         <div className='chat-container'>
           <Grid container component={Paper} className={'chat-section'}>
-            <Grid item xs={3} className={'chatting-with-nav'}>
+            <Grid item xs={0} sm={3} className={'chatting-with-nav'}>
               {this.renderChattingWith()}
               <Divider />
               <Grid item xs={12} style={{ padding: '10px' }}>
@@ -248,7 +248,7 @@ class Chat extends React.Component {
                   )}
               </List>
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={12} sm={9}>
               <List
                 // ref={this.messagesListRef}
                 className={"message-area"}>
@@ -295,10 +295,10 @@ class Chat extends React.Component {
               </List>
 
               <Grid container id="message-container" >
-                <Grid item xs={11} >
+                <Grid item xs={9} align="center" >
                   <TextField id="message-input" onKeyPress={this.handleKeyPress} label="Ecrire" fullWidth />
                 </Grid>
-                <Grid align="right">
+                <Grid xs={1} align="right">
                   <Fab id="send-message-button" onClick={this.handleSendClick} aria-label="add"><IoSend /></Fab>
                 </Grid>
               </Grid>
