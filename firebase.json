@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "easy-np",
     "public": "build",
     "ignore": [
       "firebase.json",

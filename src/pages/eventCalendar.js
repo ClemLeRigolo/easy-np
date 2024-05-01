@@ -153,6 +153,9 @@ class eventCalendar extends React.Component {
        
         const { selectedEvent, showDetails, clickPosition } = this.state;
 
+        // get screen width
+        const screenWidth = window.innerWidth;
+
         return (
           <div className='interface'>
             <Calendar
@@ -174,7 +177,7 @@ class eventCalendar extends React.Component {
             {selectedEvent && showDetails && (
               <div
                 className="event-details"
-                style={{ top: clickPosition.y > 200 ? clickPosition.y - 200 : 0, left: clickPosition.x - 100 }}
+                style={{ top: clickPosition.y > 200 ? clickPosition.y - 200 : 0, left: clickPosition.x - 100 < 0 ? 0 : clickPosition.x - 100 > screenWidth - 325 ? screenWidth - 325 : clickPosition.x - 100}}
               >
                 <MdClose
                   className="close-button"

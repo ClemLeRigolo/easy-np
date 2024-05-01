@@ -1,9 +1,13 @@
 import React from 'react';
-import { getCurrentUserData, getUserDataById } from '../utils/firebase';
+import { getCurrentUserData, getUserDataById, signOut } from '../utils/firebase';
 import '../styles/headerBar.css';
 import { Link } from 'react-router-dom';
 import { HoverCard, Avatar, Text, Group, Anchor, Stack } from '@mantine/core';
 import fr from '../utils/i18n';
+import { Menu, Button, rem } from '@mantine/core';
+import { FaUser } from "react-icons/fa6";
+import { BiLogOut } from 'react-icons/bi';
+import { CiSearch } from 'react-icons/ci';
 
 class ProfileImage extends React.Component {
   state = {
@@ -70,15 +74,54 @@ class ProfileImage extends React.Component {
     if (this.props.header) {
         if (user && user.profileImg) {
         return (
-            <div className="n-profile" >
+          <Menu shadow="md" width={200} transitionProps={{ transition: 'rotate-right', duration: 150 }} withArrow>
+            <Menu.Target>
+              <Button style={{ background: 'none', border: 'none', padding: 0, margin: 0, width: 'auto', height: 'auto' }}>
                 <img src={user.profileImg} alt="Profile" className='n-img' />
-                </div>);
+              </Button>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Item>
+                <Link to={`/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }}>
+                <FaUser style={{ width: '15px', height: '15px' }}/> Mon Profil
+                </Link>
+              </Menu.Item>
+              <Menu.Item onClick={this.props.toggleSearch}>
+                <CiSearch style={{ width: '20px', height: '20px' }} /> Rechercher
+              </Menu.Item>
+              <Menu.Item 
+                style={{ color: 'red' }}
+                onClick={() => signOut()}
+              >
+                <BiLogOut style={{ width: '20px', height: '20px' }} /> Se déconnecter
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>);
         }
 
         return (
-            <div className="n-profile" >
-                <img src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} alt="Profile" className='n-img' />
-                </div>);
+          <Menu shadow="md" width={200} transitionProps={{ transition: 'rotate-right', duration: 150 }} withArrow>
+            <Menu.Target>
+              <Button style={{ background: 'none', border: 'none', padding: 0, margin: 0, width: 'auto', height: 'auto' }}>
+              <img src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} alt="Profile" className='n-img' />
+              </Button>
+            </Menu.Target>
+
+            <Menu.Dropdown>
+              <Menu.Item>
+                <Link to={`/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }}>
+                <FaUser style={{ width: '15px', height: '15px' }}/> Mon Profil
+                </Link>
+              </Menu.Item>
+              <Menu.Item 
+                style={{ color: 'red' }}
+                onClick={() => signOut()}
+              >
+                <BiLogOut style={{ width: '20px', height: '20px' }} /> Se déconnecter
+              </Menu.Item>
+            </Menu.Dropdown>
+          </Menu>);
         } else if (this.props.post) {
         if (user && user.profileImg) {
             return (

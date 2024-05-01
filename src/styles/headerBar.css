@@ -118,6 +118,33 @@ nav{
     align-items: center;
     font-size: 13px;
 }
+.search-bar {
+    display: flex;
+    flex-direction: column;
+}
+.search-history {
+    width: 85%;
+    position: absolute;
+    top: 100%;
+    left: 5%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
+  
+  .search-history div {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .search-history div:last-child {
+    border-bottom: none;
+  }
+  .logo-mobile {
+    display: none;
+  }
 @media screen and (max-width:1024px){
     nav{
         width: 100vw;
@@ -184,18 +211,85 @@ nav{
 
     .menu-icon{
         display: block;
+        display: flex;
+        flex-direction: row;
         font-size: 30px;
         margin: 0px 20px;
         color: #fff;
-        padding: 5px 5px 0px 5px;
         border-radius: 10%;
     }
 
-
-
-    .search-bar{
+    .logo {
         display: none;
     }
+
+    .logo-mobile {
+        display: none;
+    }
+
+    .logo-mobile.active {
+        display: block;
+        margin-top: 6px;
+        margin-bottom: 6px;
+    }
+
+    .logo-mobile img {
+        width: 40.3px;
+        height: 40.3px;
+    }
+
+    @keyframes expand {
+        0% {
+          width: 0;
+        }
+        100% {
+          width: 100%;
+        }
+      }
+      
+      @keyframes collapse {
+        0% {
+          width: 100%;
+        }
+        100% {
+          width: 0;
+        }
+      }
+
+    .n-form-button.search-bar {
+        display: none;
+        margin: 0;
+        width: 0%;
+        animation: collapse 0.3s ease-in-out forwards;
+    }
+      
+    .n-form-button.search-bar.active {
+        display: block;
+        margin-top: 8.7px;
+        margin-bottom: 8.6px;
+        animation: expand 0.3s ease-in-out forwards;
+    }
+
+    .search-history {
+        width: 85%;
+        position: absolute;
+        top: 100%;
+        left: 5%;
+        background-color: white;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+      }
+      
+      .search-history div {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+      }
+      
+      .search-history div:last-child {
+        border-bottom: none;
+      }
 
     nav{
         width: 100vw;
