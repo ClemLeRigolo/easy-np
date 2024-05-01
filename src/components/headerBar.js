@@ -11,10 +11,11 @@ import { BiLogOut} from "react-icons/bi"
 import { IoCalendarOutline } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
 
-import { signOut, getuserHistory, addHistory } from '../utils/firebase';
+import { getuserHistory, addHistory, addGlobalHistory, getGlobalHistory } from '../utils/firebase';
 import ProfileImage from './profileImage';
 import { Redirect } from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
+import { GiBackwardTime } from "react-icons/gi";
 
 import "../utils/responsiveScript.js";
 
@@ -25,23 +26,48 @@ class HeaderBar extends Component {
       url: '',
       search: '',
       history: [],
+      globalHistory: [],
       redirect: false,
       query: '',
       showHistory: false,
       searchBarPresent: false,
+      selectedHistoryIndex: -1,
+      searchFromhist: false,
     };
   }
 
+  handleKeyDown = (event) => {
+    if (event.key === 'ArrowDown') {
+      this.setState(prevState => ({
+        selectedHistoryIndex: Math.min(prevState.selectedHistoryIndex + 1, this.state.history.length - 1)
+      }));
+    } else if (event.key === 'ArrowUp') {
+      this.setState(prevState => ({
+        selectedHistoryIndex: Math.max(prevState.selectedHistoryIndex - 1, -1)
+      }));
+    }
+  };
+
   handleInputFocus = () => {
-    console.log("focus");
     this.setState({ showHistory: true });
   };
 
   handleInputBlur = () => {
-    this.setState({ showHistory: false });
-    if (this.state.searchBarPresent) {
-      this.setState({ searchBarPresent: false });
+    //On récupère l'événement de click sur l'élément
+    const clickEvent = (e) => {
+      //Si l'élément cliqué n'est pas l'élément de recherche
+      if (!e.target.closest('.n-form-button')) {
+        //On enlève l'écouteur d'événement
+        document.removeEventListener('click', clickEvent);
+        //On cache l'historique
+
+        this.setState({ showHistory: false });
+        if (this.state.searchBarPresent) {
+          this.setState({ searchBarPresent: false });
+        }
+      }
     }
+    document.addEventListener('click', clickEvent);
   };
 
   componentDidMount() {
@@ -49,6 +75,11 @@ class HeaderBar extends Component {
     this.unlisten = this.props.history.listen((location) => {
       this.updateUrl(location);
     });
+
+    getGlobalHistory()
+      .then((data) => {
+        this.setState({ globalHistory: data !== null ? data : []});
+      })
 
     getuserHistory()
       .then((data) => {
@@ -75,13 +106,32 @@ class HeaderBar extends Component {
   }
 
   setSearch = (value) => {
-    this.setState({ search: value });
+    this.setState({ 
+      search: value,
+      selectedHistoryIndex: -1,
+      searchFromhist: false,
+    });
   }
 
 
   updateUrl() {
     const url = window.location.href.split('/')[3];
     this.setState({ url });
+  }
+
+  searchFromHistory = (search) => {
+    addHistory(search).then((newHistory) => {
+      addGlobalHistory(search).then((newGlobalHistory) => {
+        this.setState({ 
+          redirect: true,
+          query: search,
+          search: '',
+          history: newHistory,
+          globalHistory: newGlobalHistory,
+          showHistory: false,
+        });
+      });
+    });
   }
 
   search = (e) => {
@@ -91,12 +141,15 @@ class HeaderBar extends Component {
       return;
     }
     addHistory(search).then((newHistory) => {
-      this.setState({ 
-        redirect: true,
-        query: search,
-        search: '',
-        history: newHistory,
-        showHistory: false,
+      addGlobalHistory(search).then((newGlobalHistory) => {
+        this.setState({ 
+          redirect: true,
+          query: search,
+          search: '',
+          history: newHistory,
+          globalHistory: newGlobalHistory,
+          showHistory: false,
+        });
       });
     }
     );
@@ -105,7 +158,11 @@ class HeaderBar extends Component {
   toggleSearch = () => {
     // set the visibility of the search bar and dont display the logo
     this.setState({ searchBarPresent: true });
-    document.getElementById('n-search').focus();
+
+    //add a delay to focus on the search bar
+    setTimeout(() => {
+      document.getElementById('n-search').focus();
+    }, 300);
   }
 
   render() {
@@ -122,11 +179,31 @@ class HeaderBar extends Component {
     }
 
     //garder uniquement les éléments de l'historique qui ont les mêmes premières lettres
-    const historyFromSearch = this.state.history.filter((item) => item.search.startsWith(search));
+    const historyFromSearch = this.state.searchFromhist ? this.state.history : this.state.history.filter((item) => item.search.startsWith(search));
 
     const history = historyFromSearch
       .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
+      .slice(0, 3);
+
+    const numberhistory = history.length;
+
+    //garder uniquement les item.search qui ne sont pas dans historyFromSearch
+    const globalHistoryWithoutHistory = this.state.globalHistory.filter((item) => !historyFromSearch.map((item) => item.search).includes(item.search));
+
+    const globalHistoryFromSearch = this.state.searchFromhist ? globalHistoryWithoutHistory : globalHistoryWithoutHistory.filter((item) => item.search.startsWith(search));
+
+    const globalHistory = globalHistoryFromSearch
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5 - numberhistory);
+
+    if (this.state.selectedHistoryIndex !== -1) {
+      if (this.state.selectedHistoryIndex < numberhistory) {
+        this.state.search = history[this.state.selectedHistoryIndex].search;
+      } else {
+        this.state.search = globalHistory[this.state.selectedHistoryIndex - numberhistory].search;
+      }
+      this.state.searchFromhist = true;
+    }
 
     return (
       <nav>
@@ -146,7 +223,7 @@ class HeaderBar extends Component {
         </Link>
         </div>
 
-        <div className={`n-form-button search-bar ${this.state.searchBarPresent ? 'active' : ''}`} id='search-bar' >
+        <div className={`n-form-button search-bar ${this.state.searchBarPresent ? 'active' : ''}`} id='search-bar' onKeyDown={this.handleKeyDown} >
           <form className='n-form' onSubmit={(e) => e.preventDefault()} >
             <HiMagnifyingGlass className='search-icon' />
             <input type="text"
@@ -158,10 +235,13 @@ class HeaderBar extends Component {
               onFocus={this.handleInputFocus}
               onBlur={this.handleInputBlur}
             />
-            {this.state.showHistory && history.length > 0 && (
+            {this.state.showHistory && (history.length > 0 || globalHistory.length > 0) && (
             <div className="search-history">
               {history.map((item, index) => (
-                <div key={index}>{item.search}</div>
+                <div className={this.state.selectedHistoryIndex === index ? 'active' : ''} onClick={() => this.searchFromHistory(item.search)} key={index}><GiBackwardTime />{item.search}</div>
+              ))}
+              {globalHistory.map((item, index) => (
+                <div className={this.state.selectedHistoryIndex === index + numberhistory ? 'active' : ''} onClick={() => this.searchFromHistory(item.search)} key={index}><CiSearch />{item.search}</div>
               ))}
             </div>
           )}
