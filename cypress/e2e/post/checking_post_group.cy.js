@@ -39,8 +39,9 @@ context('Groups', () => {
   it('Going to a private group ici c imag', () => {
     cy.visit('/');
     cy.get('[data-cy="navGroup"]').within(() => {
-      cy.contains('ici c imag').click()
+      cy.contains('Ici c\'est l\'Imag').click()
+      cy.contains('Général').click()
     })
-    cy.contains('Salon Privé : post 1')
+    cy.contains('Ici c\'est l\'imag : post 1')
   })
 })

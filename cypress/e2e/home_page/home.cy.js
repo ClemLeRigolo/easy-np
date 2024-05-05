@@ -1,9 +1,6 @@
 context('Home', () => {
-  before(() => {
-    cy.logout();
-  });
-
   beforeEach(() => {
+    cy.logout();
     cy.visit("/");
   });
 
@@ -11,7 +8,8 @@ context('Home', () => {
     cy.fillLogin("user.username@grenoble-inp.org", "Password!");
     cy.get("form").submit();
     cy.wait(100);
-    cy.get("nav").find("#signout").click();
+    cy.get('[data-cy="profileButton"]').click();
+    cy.get('[data-cy="logout"]').click();
   });
 
   it("Wrong password", () => {

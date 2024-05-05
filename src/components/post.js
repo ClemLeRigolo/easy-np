@@ -485,8 +485,8 @@ class Post extends React.Component {
           <div className="post-pool">
             {/*loop on post.pool*/}
             {this.state.vote !== null ? 
-              <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} vote={this.state.vote} customStyles={pollStyles1} question={''} />
-              : <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} customStyles={pollStyles1} question={''} />}
+              <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} vote={this.state.vote} customStyles={pollStyles1} question={''} data-cy='pollVote'/>
+              : <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} customStyles={pollStyles1} question={''} data-cy='pollResult'/>}
           </div>
         )}
         <div className="post-footer">

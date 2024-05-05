@@ -70,7 +70,7 @@ class Groups extends React.Component {
 
     return (
       <div className="interface">
-        <div className="group-list">
+        <div className="group-list" data-cy="groupList">
           <Link to="/createGroup" className="create-group-button" data-cy="createGroupButton">
             <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_GROUP}
           </Link>

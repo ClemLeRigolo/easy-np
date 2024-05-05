@@ -42,8 +42,8 @@ context('Testing urls', () => {
 
     it("going back to verify", () => {
       cy.visit("/verify");
-      cy.wait(100);
-      cy.url().should("eq", `${Cypress.config().baseUrl}/`);
+      cy.wait(500);
+      cy.url().should("eq", `${Cypress.config().baseUrl}/home`);
     });
   });
 
@@ -84,16 +84,18 @@ context('Testing urls', () => {
       cy.url().should("eq", `${Cypress.config().baseUrl}/login`);
     });
 
+    it("going back to verify", () => {
+      // TODO : fix bug
+      cy.visit("/verify");
+      cy.wait(100);
+      cy.url().should("eq", `${Cypress.config().baseUrl}/verify`);
+    });
+
     it("going to unknown link", () => {
       cy.visit("/unknown-link");
       cy.wait(100);
       cy.url().should("eq", `${Cypress.config().baseUrl}/login`);
     });
 
-    it("going back to verify", () => {
-      cy.visit("/verify");
-      cy.wait(100);
-      cy.url().should("eq", `${Cypress.config().baseUrl}/verify`);
-    });
   });
 });
