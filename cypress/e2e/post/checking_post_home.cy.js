@@ -52,4 +52,15 @@ context('Post from user from ensimag in the main thread', () => {
     cy.addPost("A new post");
     cy.contains("A new post").should("exist");
   })
+  
+  it('Checking photo upload', () => {
+    cy.getPostByText("Général: ensimag photo").within(() => {
+      // checking picture
+      cy.get('[data-cy="photo"] img').click()
+      cy.contains('Ensimag Ensimag')
+      // going back
+      cy.get('[data-cy="return"]').click()
+    })
+
+  })
 });

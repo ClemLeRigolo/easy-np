@@ -196,12 +196,12 @@ const Info = ({userPostData,
               <BiLogOut />Logout
             </Link> */}
 
-            {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.PROFILE.EDIT}</button>}
+            {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn' data-cy='editProfile'><LiaEdit />{fr.PROFILE.EDIT}</button>}
 
 
-            {!canModify && !isSubscribed && <button className='sub-btn' onClick={()=>handleSubscription()} >{fr.PROFILE.SUBSCRIBE}</button>}
-            {!canModify && isSubscribed && isHovered && <button className='sub-btn' onClick={()=>handleUnsubscription()} onMouseLeave={changeHoverOut} >{fr.PROFILE.UNSUBSCRIBE}</button>}
-            {!canModify && isSubscribed && !isHovered && <button className='sub-btn' onClick={()=>handleSubscription()} onMouseEnter={changeHover} >{fr.PROFILE.SUBSCRIBED}</button>}
+            {!canModify && !isSubscribed && <button className='sub-btn' onClick={()=>handleSubscription()} data-cy='follow'>{fr.PROFILE.SUBSCRIBE}</button>}
+            {!canModify && isSubscribed && isHovered && <button className='sub-btn' onClick={()=>handleUnsubscription()} onMouseLeave={changeHoverOut} data-cy='unfollow'>{fr.PROFILE.UNSUBSCRIBE}</button>}
+            {!canModify && isSubscribed && !isHovered && <button className='sub-btn' onClick={()=>handleSubscription()} onMouseEnter={changeHover} data-cy='unfollow'>{fr.PROFILE.SUBSCRIBED}</button>}
             
 
             <ModelProfile 
@@ -242,7 +242,7 @@ const Info = ({userPostData,
             </div> */}
 
             <div className="info-col-2">
-              <div onClick={() => openSubscribers()}>
+              <div onClick={() => openSubscribers()} data-cy='followers'>
                 <h2>{subscribersData.length}</h2>
                 <span>{fr.PROFILE.FOLLOWERS}</span>
               </div>
@@ -250,7 +250,7 @@ const Info = ({userPostData,
                 <h2>{nbPosts}</h2>
                 <span>{fr.PROFILE.POSTS}</span>
               </div>
-              <div onClick={() => openSubscriptions()}>
+              <div onClick={() => openSubscriptions()} data-cy='subscriptions'>
                 <h2>{subscriptionsData.length}</h2>
                 <span>{fr.PROFILE.FOLLOWINGS}</span>
               </div>
@@ -273,7 +273,7 @@ const Info = ({userPostData,
           >
             <div className='manage-window'>
               <UserList users={subscribersData} subscriptions={currentUserData.subscriptions} title={fr.PROFILE.FOLLOWERS} uid={currentUserData.id} />
-              <button className='closeSubscribers' onClick={() => closeSubscribers()}>{fr.PROFILE.CLOSE}</button>
+              <button className='closeSubscribers' onClick={() => closeSubscribers()} data-cy='closeFollowers' >{fr.PROFILE.CLOSE}</button>
             </div>
           </Modal>
 
@@ -293,7 +293,7 @@ const Info = ({userPostData,
           >
             <div className="manage-window">
               <UserList users={subscriptionsData} subscriptions={currentUserData.subscriptions} title={fr.PROFILE.FOLLOWINGS} uid={currentUserData.id} />
-              <button onClick={() => closeSubscriptions()}>{fr.PROFILE.CLOSE}</button>
+              <button onClick={() => closeSubscriptions()} data-cy='closeSubscriptions' >{fr.PROFILE.CLOSE}</button>
             </div>
           </Modal>
 

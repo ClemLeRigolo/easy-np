@@ -47,7 +47,7 @@ class UserList extends React.Component {
 
   render() {
     return (
-        <div className="subscribers-list">
+        <div className="subscribers-list" data-cy='followersList'>
         {this.props.title && <h1>{this.props.title}</h1>}
         {this.state.users.map((subscription,index) => (
           <div key={subscription.uid} className="member-name">
@@ -56,11 +56,11 @@ class UserList extends React.Component {
             <span>{subscription.name} {subscription.surname}</span>
             </Link>
             {this.state.subscriptions.includes(subscription.uid) || this.props.uid === subscription.uid ?
-            this.props.uid !== subscription.uid ? <button className='unfollow-btn' onClick={()=> this.handleUnsubscriptionToUser(subscription.uid)}>{fr.PROFILE.UNSUBSCRIBE}</button>
+            this.props.uid !== subscription.uid ? <button className='unfollow-btn' onClick={()=> this.handleUnsubscriptionToUser(subscription.uid)} data-cy='unfollow'>{fr.PROFILE.UNSUBSCRIBE}</button>
             :
             null
                : 
-               <button className='follow-btn' onClick={()=> this.handleSubscriptionToUser(subscription.uid)}>{fr.PROFILE.SUBSCRIBE}</button>
+               <button className='follow-btn' onClick={()=> this.handleSubscriptionToUser(subscription.uid)} data-cy='follow'>{fr.PROFILE.SUBSCRIBE}</button>
                }
           </div>
         ))}

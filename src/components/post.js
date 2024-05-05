@@ -418,6 +418,7 @@ class Post extends React.Component {
             e.stopPropagation();
             this.handleImageClick(null);
           }}
+          data-cy="return"
         >
           <IoMdArrowBack />
         </div>
@@ -439,7 +440,7 @@ class Post extends React.Component {
           />
           </Modal> */}
         <div className="post-header">
-          <Link to={`/profile/${post.user}`} className="post-username">
+          <Link to={`/profile/${post.user}`} className="post-username" data-cy='postHeader'>
           <ProfileImage uid={post.user} post={true} />
             <div>
               <p>{post.username}</p>
@@ -453,7 +454,7 @@ class Post extends React.Component {
             id={post.id.toString()}
             ref={c => this.state.contextTrigger = c}
           >
-            <FaEllipsisH className="post-options" onClick={(e) => this.handleContextMenu(e, post)} />
+            <FaEllipsisH className="post-options" onClick={(e) => this.handleContextMenu(e, post)} data-cy="postOptions"/>
           </ContextMenuTrigger>
 
           <ContextMenu id={post.id.toString()} className="context-menu">
@@ -468,7 +469,7 @@ class Post extends React.Component {
         {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.content }}></div>
         {post.images && (
-          <div className="post-photos">
+          <div className="post-photos" data-cy='photo'>
             {Object.values(post.images).map((image, index) => (
               <div key={index} className="post-photo">
                 <img src={image} alt="Post" onClick={() => this.handleImageClick(Object.values(post.images),index)} />

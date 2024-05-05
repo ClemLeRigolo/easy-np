@@ -74,7 +74,7 @@ class ProfileImage extends React.Component {
     if (this.props.header) {
         if (user && user.profileImg) {
         return (
-          <Menu shadow="md" width={200} transitionProps={{ transition: 'rotate-right', duration: 150 }} withArrow>
+          <Menu shadow="md" width={200} transitionProps={{ transition: 'rotate-right', duration: 150 }} withArrow data-cy='profileButton'>
             <Menu.Target>
               <Button style={{ background: 'none', border: 'none', padding: 0, margin: 0, width: 'auto', height: 'auto' }}>
                 <img src={user.profileImg} alt="Profile" className='n-img' />
@@ -83,7 +83,7 @@ class ProfileImage extends React.Component {
 
             <Menu.Dropdown>
               <Menu.Item>
-                <Link to={`/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }}>
+                <Link to={`/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }} data-cy='gotoProfile'>
                 <FaUser style={{ width: '15px', height: '15px' }}/> Mon Profil
                 </Link>
               </Menu.Item>
@@ -111,7 +111,7 @@ class ProfileImage extends React.Component {
 
             <Menu.Dropdown>
               <Menu.Item>
-                <Link to={`/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }}>
+                <Link to={`/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }} data-cy='gotoProfile'>
                 <FaUser style={{ width: '15px', height: '15px' }}/> Mon Profil
                 </Link>
               </Menu.Item>
