@@ -113,7 +113,7 @@ class SuggestionUser extends React.Component {
         }
 
         return (
-            <div className="suggested-users">
+            <div className="suggested-users" data-cy='suggestedUsers'>
                 <h1>{fr.HOME.YOU_MAY_KNOW}</h1>
                 <div className="suggested-users-container">
                     {this.state.suggestedUsers.map((user) => (
@@ -122,7 +122,7 @@ class SuggestionUser extends React.Component {
                             <ProfileImage uid={user.id} post={true} />
                             <h2>{user.name + " " + this.troncateName(user.surname)}</h2>
                             </Link>
-                            <button className="follow-btn" onClick={() => this.handleSubscription(user.id)}>{this.state.subscribed.includes(user.id) ? fr.PROFILE.UNSUBSCRIBE : fr.PROFILE.SUBSCRIBE}</button>
+                            <button className="follow-btn" onClick={() => this.handleSubscription(user.id)} data-cy='follow'>{this.state.subscribed.includes(user.id) ? fr.PROFILE.UNSUBSCRIBE : fr.PROFILE.SUBSCRIBE}</button>
                         </div>
                     ))}
                 </div>

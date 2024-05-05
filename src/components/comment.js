@@ -229,7 +229,7 @@ class Comment extends React.Component {
     return (
       <div className="comment" data-cy="comment">
         <div className="comment-thread">
-        <Link to={`/profile/${comment.user}`} className="comment-author">
+        <Link to={`/profile/${comment.user}`} className="comment-author" data-cy='gotoProfile'>
           <ProfileImage uid={comment.user} post={true} />
           <div>
             <div className="comment-author">{this.state.author}</div>

@@ -111,7 +111,7 @@ function ModelProfile({
         fullScreen={isMobile}
       >
         <h1 className='modelTitle'>Modifier le profil</h1>
-        <form className='modelForm' onSubmit={handleModel}>
+        <form className='modelForm' onSubmit={handleModel} data-cy='profil'>
           <div className="inputBox1">
           <label htmlFor="name">Prénom:</label>
             <input
@@ -201,8 +201,8 @@ function ModelProfile({
           {error && <div className="error">Les balises HTML ne sont pas autorisés dans la description</div>}
 
           <div className='btn-container'>
-          <button className='modelBtn' onClick={handleUpdate}>Modifier</button>
-          <button className='cancelBtn' onClick={handleExit}>Annuler</button>
+          <button className='modelBtn' onClick={handleUpdate} data-cy='apply'>Modifier</button>
+          <button className='cancelBtn' onClick={handleExit} data-cy='cancel'>Annuler</button>
           </div>
         </form>
       </Modal>

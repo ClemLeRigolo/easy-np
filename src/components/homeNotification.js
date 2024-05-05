@@ -17,10 +17,10 @@ const HomeNotification = ({ message, url, arrow, canClosed }) => {
     }
 
     return (
-        <div className='banner'>
+        <div className='banner' data-cy='notification'>
             {canClosed && (<AiOutlineClose onClick={() => setIsOpened(false)} />)}
             <span onClick={() => setRedirect(true)}>{message}</span>
-            {arrow && (<AiOutlineArrowRight className='arrow' onClick={() => setRedirect(true)} />)} 
+            {arrow && (<AiOutlineArrowRight className='arrow' onClick={() => setRedirect(true)}  data-cy='gotoUrl'/>)} 
         </div>);
 };
 
