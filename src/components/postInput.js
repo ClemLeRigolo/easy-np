@@ -225,7 +225,7 @@ export default function PostInput({ handlePostSubmit, posts }) {
           style={{ whiteSpace: "pre-wrap" }}
         />
         {showPoll && (
-          <div className="poll-options-wrapper">
+          <div className="poll-options-wrapper" data-cy='pollOptions'>
             {pollOptions.map((option, index) => (
               <div key={index} className="poll-option">
                 <input
@@ -233,15 +233,16 @@ export default function PostInput({ handlePostSubmit, posts }) {
                   className="poll-option-input"
                   placeholder={`Option ${index + 1}`}
                   value={option}
+                  data-cy={`pollOption${index + 1}`}
                   onChange={(event) => updatePollOption(index, event.target.value)}
                 />
-                <div className="delete-poll-option" onClick={() => deletePollOption(index)}>
+                <div className="delete-poll-option" onClick={() => deletePollOption(index)} data-cy={`deleteOption${index + 1}`}>
                   <AiOutlineCloseCircle />
                 </div>
               </div>
             ))}
             {pollOptions.length < 4 && (
-              <div className="add-poll-option" onClick={addPollOption}>
+              <div className="add-poll-option" onClick={addPollOption} data-cy={'addOption'}>
                 +
               </div>
             )}
@@ -251,7 +252,7 @@ export default function PostInput({ handlePostSubmit, posts }) {
           <div className="post-input-icon" onClick={handleCameraIconClick}>
             <AiOutlineCamera />
           </div>
-          <div className="post-input-icon" onClick={togglePoll}>
+          <div className="post-input-icon" onClick={togglePoll} data-cy='pollInputButton'>
             {showPoll ? <AiOutlineCloseCircle /> : <AiOutlineBarChart />}
           </div>
           <div className="post-input-icon" onClick={toggleGifSearch}>

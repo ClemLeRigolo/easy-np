@@ -43,29 +43,19 @@ context("Groups", () => {
       cy.get("[data-cy='createGroupButton']").click()
       cy.fillGroupForm("Private group Ensimag (duplicate)", "New group description", "Public", "ensimag")
       cy.get("[data-cy='createGroupForm']").submit()
-      // FIXME : I need to be fixed
       cy.contains("Private group Ensimag (duplicate)").should("have.length", 1)
       })
 
-    it("Create a group and delete it", () => {
-      // first group
+    it("Leaving a group", () => {
       cy.visit("/groups")
-      cy.get("[data-cy='createGroupButton']").click()
-      cy.fillGroupForm("Group to delete", "New group description", "Public", "ensimag")
-      cy.get("[data-cy='createGroupForm']").submit()
-
-      cy.visit("/groups")
-      cy.contains("Group to delete").click()
-    })
-
-    it("Leaving a group and joining it again", () => {
-      cy.visit("/groups")
-      cy.contains("Ici c'est l'Imag").click()
-      // joining ici c'est l'Imag
-      cy.get("[data-cy='joiningGroupButton']").click()
-      cy.contains("Rejoint")
-      cy.contains("Quitter le groupe").click()
-      cy.contains("Rejoindre")
+      cy.getGroupByName('Leave Group').within(() => {
+        const button = cy.get('[data-cy="joiningGroupButton"]')
+        button.contains('Quitter le groupe')
+        button.click()
+        button.contains('Rejoindre')
+        button.click()
+        button.contains('Quitter le groupe')
+      })
     })
   })
 

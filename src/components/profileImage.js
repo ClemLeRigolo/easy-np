@@ -90,7 +90,8 @@ class ProfileImage extends React.Component {
               <Menu.Item onClick={this.props.toggleSearch}>
                 <CiSearch style={{ width: '20px', height: '20px' }} /> Rechercher
               </Menu.Item>
-              <Menu.Item 
+              <Menu.Item
+                data-cy='logout'
                 style={{ color: 'red' }}
                 onClick={() => signOut()}
               >
@@ -101,7 +102,7 @@ class ProfileImage extends React.Component {
         }
 
         return (
-          <Menu shadow="md" width={200} transitionProps={{ transition: 'rotate-right', duration: 150 }} withArrow>
+          <Menu shadow="md" width={200} transitionProps={{ transition: 'rotate-right', duration: 150 }} withArrow data-cy='profileButton'>
             <Menu.Target>
               <Button style={{ background: 'none', border: 'none', padding: 0, margin: 0, width: 'auto', height: 'auto' }}>
               <img src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} alt="Profile" className='n-img' />
@@ -114,7 +115,8 @@ class ProfileImage extends React.Component {
                 <FaUser style={{ width: '15px', height: '15px' }}/> Mon Profil
                 </Link>
               </Menu.Item>
-              <Menu.Item 
+              <Menu.Item
+                data-cy='logout'
                 style={{ color: 'red' }}
                 onClick={() => signOut()}
               >
