@@ -78,7 +78,6 @@ class HeaderBar extends Component {
     });
 
     listenForNewUserMessages((chats) => {
-      console.log(chats.length+"NOUVEAU MESSAGE");
       this.setState({ newMessages: chats.length });
     });
 
