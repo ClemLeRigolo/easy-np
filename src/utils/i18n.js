@@ -152,6 +152,12 @@ export const fr = {
     YOU_MAY_KNOW: "Vous pourriez connaître",
   },
 
+  SEARCH: {
+    SEARCH: "Rechercher",
+    NO_RESULTS: "Aucun résultat",
+    RESULTS_FOR: "Résultats pour",
+  },
+
 };
 
 export const en = {
