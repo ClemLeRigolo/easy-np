@@ -17,6 +17,8 @@ import { Redirect } from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
 import { GiBackwardTime } from "react-icons/gi";
 
+import fr from "../utils/i18n";
+
 import "../utils/responsiveScript.js";
 
 class HeaderBar extends Component {
@@ -125,6 +127,7 @@ class HeaderBar extends Component {
   }
 
   searchFromHistory = (search) => {
+    this.setState({ searchBarPresent: false });
     addHistory(search).then((newHistory) => {
       addGlobalHistory(search).then((newGlobalHistory) => {
         this.setState({ 
@@ -145,6 +148,7 @@ class HeaderBar extends Component {
     if (search === '') {
       return;
     }
+    this.setState({ searchBarPresent: false });
     addHistory(search).then((newHistory) => {
       addGlobalHistory(search).then((newGlobalHistory) => {
         this.setState({ 
@@ -232,7 +236,7 @@ class HeaderBar extends Component {
           <form className='n-form' onSubmit={(e) => e.preventDefault()} >
             <HiMagnifyingGlass className='search-icon' />
             <input type="text"
-              placeholder='Rechercher quelque chose ...'
+              placeholder={fr.SEARCH.SEARCH_SOMETHING}
               id='n-search'
               value={this.state.search}
               onChange={(e) => this.setSearch(e.target.value)}

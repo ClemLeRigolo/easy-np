@@ -1,6 +1,6 @@
 import React from 'react';
 import { withAuth, authStates } from '../components/auth';
-import { getUserData, getUserDataById, searchPost, searchEvent, searchGroup, searchCourse, searchUser } from '../utils/firebase';
+import { getUserData, getUserDataById, searchPost, searchEvent, searchGroup, searchCourse, searchUser, likeEvent, likePost, deletePost, deleteEvent, subscribeToUser, unsubscribeFromUser } from '../utils/firebase';
 import { changeColor } from '../components/schoolChoose';
 import { Redirect } from 'react-router-dom';
 import Loader from '../components/loader';
@@ -10,6 +10,8 @@ import SuggestionUser from '../components/suggestionUser';
 import Event from '../components/event';
 import GroupMembership from '../components/groupMembership';
 import { Link } from 'react-router-dom';
+import ProfileImage from '../components/profileImage';
+import '../styles/search.css';
 
 class Search extends React.Component {
   constructor(props) {
@@ -37,8 +39,69 @@ class Search extends React.Component {
     };
   }
 
-  hasToLoad = () => {
-    return (this.window === "posts" && !this.state.postSetted) || (this.window === "events" && !this.state.eventsSetted) || (this.window === "users" && !this.state.usersSetted) || (this.window === "groups" && !this.state.groupsSetted) || (this.window === "courses" && !this.state.coursesSetted);
+  handleLikeClick = (postIndex) => {
+    const { posts } = this.state;
+    const post = posts[postIndex];
+
+    likePost(post.id)
+      .then((data) => {
+        // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
+        post.likeCount += data.status;
+        post.likes = data.likes;
+      
+        // Mettez à jour l'état avec le post modifié
+        this.setState({
+          posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
+        });
+      })
+      .catch((error) => {
+        console.error("Erreur lors du like du post :", error);
+      });
+  };
+
+  handleEventLikeClick = (postIndex) => {
+    const { events } = this.state;
+    const post = events[postIndex];
+
+    likeEvent(post.id)
+      .then((data) => {
+        // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le likeCount
+        post.likeCount += data.status;
+        post.likes = data.likes;
+      
+        // Mettez à jour l'état avec le post modifié
+        this.setState({
+          events: [...events.slice(0, postIndex), post, ...events.slice(postIndex + 1)]
+        });
+      })
+      .catch((error) => {
+        console.error("Erreur lors du like du post :", error);
+      });
+  };
+
+  handleDeletePost = (id) => {
+    // Supprimez le post de la base de données Firebase
+    deletePost(id)
+      .then(() => {
+        this.updatePosts();
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
+  }
+
+  handleSubscriptionToUser = (userId) => {
+    if (this.state.currentUser.subscriptions.includes(userId)) {
+      unsubscribeFromUser(userId)
+        .then(() => {
+          this.setState({ currentUser: { ...this.state.currentUser, subscriptions: this.state.currentUser.subscriptions.filter((sub) => sub !== userId) } });
+        });
+    } else {
+      subscribeToUser(userId)
+        .then(() => {
+          this.setState({ currentUser: { ...this.state.currentUser, subscriptions: [...this.state.currentUser.subscriptions, userId] } });
+        });
+    }
   }
 
   loadRessourceAsked = (window) => {
@@ -91,6 +154,30 @@ class Search extends React.Component {
     }
   }
 
+  loadPosts = () => {
+    const searchQuery = new URLSearchParams(this.props.location.search).get('s');
+    searchPost(searchQuery).then((querySnapshot) => {
+      const posts = [];
+      const promises = [];
+
+      Object.values(querySnapshot).forEach((doc) => {
+        const promise = getUserDataById(doc.user).then((data) => {
+          doc.username = data.name + ' ' + data.surname;
+          doc.school = data.school;
+          doc.profileImg = data.profileImg;
+          posts.push(doc);
+        });
+        promises.push(promise);
+      });
+
+      Promise.all(promises).then(() => {
+        posts.sort((a, b) => a.points - b.points);
+        this.setState({ posts });
+        this.setState({ isLoading: false, postSetted: true });
+      });
+    });
+  }
+
   componentDidMount() {
     const { user, authState } = this.props;
 
@@ -113,7 +200,6 @@ class Search extends React.Component {
       const promises = [];
 
       Object.values(querySnapshot).forEach((doc) => {
-        console.log(doc);
         const promise = getUserDataById(doc.user).then((data) => {
           doc.username = data.name + ' ' + data.surname;
           doc.school = data.school;
@@ -124,11 +210,36 @@ class Search extends React.Component {
       });
 
       Promise.all(promises).then(() => {
-        console.log(posts);
+        posts.sort((a, b) => a.points - b.points);
+        posts.reverse();
         this.setState({ posts });
         this.setState({ isLoading: false, postSetted: true });
       });
     });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      const searchQuery = new URLSearchParams(this.props.location.search).get('s');
+      if (searchQuery) {
+        this.setState({
+          search: searchQuery,
+          window: "posts",
+          postSetted: false,
+          eventsSetted: false,
+          usersSetted: false,
+          groupsSetted: false,
+          coursesSetted: false,
+          posts: [],
+          events: [],
+          users: [],
+          groups: [],
+          courses: [],
+        });
+      }
+
+      this.loadPosts();
+    }
   }
 
   handleWindow = (window) => {
@@ -140,7 +251,7 @@ class Search extends React.Component {
     const { search, isLoading } = this.state;
     const { authState, user } = this.props;
 
-    if (authState === authStates.INITIAL_VALUE || this.hasToLoad() || isLoading) {
+    if (authState === authStates.INITIAL_VALUE || isLoading) {
       return <Loader />;
     }
 
@@ -176,7 +287,7 @@ class Search extends React.Component {
     return (
         <div className="home-content">
           <div className="post-list">
-          <h1>{fr.SEARCH.RESULTS_FOR} : {this.state.search}</h1>
+          <h1>{fr.SEARCH.RESULTS_FOR} : "{this.state.search}"</h1>
           <div className="course-navigation">
             <button className={this.state.window === 'posts' ? 'active' : ""} onClick={() => this.handleWindow('posts')}>Posts</button>
             <button className={this.state.window === 'events' ? 'active' : ""} onClick={() => this.handleWindow('events')}>Evenements</button>
@@ -189,8 +300,16 @@ class Search extends React.Component {
                 {this.state.postSetted ? (
                   <>
                     {this.state.posts.length > 0 ? (
-                    this.state.posts.map((post) => (
-                      <Post key={post.id} post={post} />
+                    this.state.posts.map((post,index) => (
+                      <Post 
+                        key={post.id} 
+                        post={post} 
+                        handleLikeClick={() => this.handleLikeClick(index)}
+                        handleCommentClick={() => this.handleCommentClick(index)} 
+                        handleDeletePost={() => this.handleDeletePost(post.id)}
+                        likeCount={post.likeCount} 
+                        commentCount={post.commentCount} 
+                      />
                     ))
                   ) : (
                     <p>{fr.SEARCH.NO_RESULTS}</p>
@@ -206,8 +325,16 @@ class Search extends React.Component {
                 {this.state.eventsSetted ? (
                   <>
                     {this.state.events.length > 0 ? (
-                    this.state.events.map((event) => (
-                      <Event key={event.id} post={event} />
+                    this.state.events.map((event,index) => (
+                      <Event 
+                        key={event.id} 
+                        post={event} 
+                        handleLikeClick={() => this.handleEventLikeClick(index)}
+                        handleCommentClick={() => this.handleCommentClick(index)} 
+                        handleDeletePost={() => this.handleDeletePost(event.id)}
+                        likeCount={event.likeCount} 
+                        commentCount={event.commentCount}
+                      />
                     ))
                   ) : (
                     <p>{fr.SEARCH.NO_RESULTS}</p>
@@ -275,12 +402,20 @@ class Search extends React.Component {
                   <>
                     {this.state.users.length > 0 ? (
                     this.state.users.map((user) => (
-                      console.log(user),
                       <div className='user-searched'>
-                        <Link to={`/profile/${user.id}`}>
-                          <h3>{user.name} {user.surname}</h3>
-                          <p>{user.school}</p>
-                        </Link>
+                        <div className='profile-header'>
+                          <Link to={`/profile/${user.id}`} className="post-username">
+                            <ProfileImage uid={user.id} />
+                            <h3>{user.name} {user.surname}</h3>
+                            <img src={require(`../images/écoles/${user.school}.png`)} alt="School" className="post-school" />
+                          </Link>
+                          {this.state.currentUser.subscriptions.includes(user.id) ? (
+                            this.state.currentUser.id !== user.id ? <button className='unfollow-btn' onClick={()=> this.handleSubscriptionToUser(user.id)}>{fr.PROFILE.UNSUBSCRIBE}</button> : null
+                          ) : (
+                            <button className='follow-btn' onClick={()=> this.handleSubscriptionToUser(user.id)}>{fr.PROFILE.SUBSCRIBE}</button>
+                          )}
+                        </div>
+                        {user.bio && <p className='user-bio' dangerouslySetInnerHTML={{ __html: user.bio }}></p>}
                       </div>
                     ))
                   ) : (

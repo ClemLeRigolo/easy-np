@@ -1,0 +1,40 @@
+.user-searched {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 10px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-bio {
+    font-size: 14px;
+    color: #666;
+    width: 90%;
+    margin: 0 2%;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-header button {
+    padding: 5px 10px;
+    font-size: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .profile-header button {
+        font-size: 16px;
+    }
+    
+}

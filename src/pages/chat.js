@@ -113,7 +113,8 @@ class Chat extends React.Component {
       this.setState({ chattingWith: data });
     });
     //Retrieve the users we have chat with
-    getUsersChattedWith(user.uid).then(data => {
+    getUsersChattedWith().then(data => {
+      console.log(data)
       this.setState({ chattingUsers: data });
     });
 

@@ -156,6 +156,7 @@ export const fr = {
     SEARCH: "Rechercher",
     NO_RESULTS: "Aucun résultat",
     RESULTS_FOR: "Résultats pour",
+    SEARCH_SOMETHING: "Rechercher quelque chose ...",
   },
 
 };
