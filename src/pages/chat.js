@@ -25,6 +25,7 @@ import { TextField } from '@mui/material';
 
 import '../styles/chat.css';
 import { formatPostTimestamp } from '../utils/helpers';
+import ProfileImage from '../components/profileImage';
 
 
 
@@ -33,6 +34,7 @@ class Chat extends React.Component {
     super(props);
     this.state = {
       user: null,
+      userData: null,
       authState: null,
       id: null,
       firstName: null,
@@ -45,8 +47,27 @@ class Chat extends React.Component {
       chattingUsers: [],
       messagesList: null,
       selectedMessageIndex: null,
+      friendsData: [],
+      friendsDataSetted: false,
+      searchValue: "",
+      showSearchResults: false,
     };
   }
+
+  handleSearchChange = (event) => {
+    this.setState({ searchValue: event.target.value });
+  };
+
+  handleFocus = () => {
+    this.setState({ showSearchResults: true });
+  };
+
+  handleBlur = () => {
+    setTimeout(() => {
+      this.setState({ showSearchResults: false });
+    }
+    , 200);
+  };
 
   autoScrollMessages() {
     const messageArea = document.querySelector('.message-area');
@@ -70,7 +91,33 @@ class Chat extends React.Component {
     });
   }
 
-
+  getFriendsData = () => {
+    //keep only the users that are in followers and subscriptions
+    if (this.state.friendsDataSetted) {
+      return;
+    }
+    let friends = [];
+    let friendsData = [];
+    let followers = this.state.userData.followers;
+    let subscriptions = this.state.userData.subscriptions;
+    for (let i = 0; i < followers.length; i++) {
+      for (let j = 0; j < subscriptions.length; j++) {
+        if (followers[i] === subscriptions[j] && !friends.includes(subscriptions[j])) {
+          friends.push(subscriptions[j]);
+        }
+      }
+    }
+    let friendsPromises = [];
+    for (let i = 0; i < friends.length; i++) {
+      let promise = getUserDataById(friends[i]).then((data) => {
+        friendsData.push(data);
+      });
+      friendsPromises.push(promise);
+    }
+    Promise.all(friendsPromises).then(() => {
+      this.setState({ friendsData: friendsData, friendsDataSetted: true });
+    });
+}
 
   async componentDidMount() {
 
@@ -166,8 +213,11 @@ class Chat extends React.Component {
           lastName: data.surname,
           school: data.school,
           id: data.id,
+          userData: data,
         });
         changeColor(data.school);
+      }).then(() => {
+        this.getFriendsData();
       });
     }
   }
@@ -245,6 +295,15 @@ class Chat extends React.Component {
       this.getUserProfileData();
       return <Loader />;
     }
+
+    console.log(this.state.friendsData);
+
+    const filteredUsers = this.state.friendsData
+      .filter(user => user.name.includes(this.state.searchValue))
+      .slice(0, 5);
+
+    console.log(filteredUsers)
+
     return (
       <React.Fragment>
   
@@ -254,7 +313,32 @@ class Chat extends React.Component {
               {this.renderChattingWith()}
               <Divider />
               <Grid item xs={12} style={{ padding: '10px' }}>
-                <TextField id="outlined-basic-email" label="Chercher" variant="outlined" fullWidth />
+                <TextField
+                  id="outlined-basic-email"
+                  label="Chercher"
+                  variant="outlined"
+                  fullWidth
+                  value={this.state.searchValue}
+                  onChange={this.handleSearchChange}
+                  onFocus={this.handleFocus}
+                  onBlur={this.handleBlur}
+                />
+                {this.state.showSearchResults && (
+                  <>
+                  {this.state.friendsDataSetted ? (
+                  <List>
+                    {filteredUsers.map(user => (
+                      <ListItem key={user.id}>
+                        <ListItemIcon>
+                         <ProfileImage uid={user.id}/>
+                        </ListItemIcon>
+                        <ListItemText primary={user.name}>{user.name}</ListItemText>
+                      </ListItem>
+                    ))}
+                  </List>)
+                  : <Loader />}
+                  </>
+                )}
               </Grid>
               <Divider />
               <List>
