@@ -62,9 +62,9 @@ export function validatePassword(password,login) {
 export function validateEmailPassword(email, password, login) {
   const msg = validateEmail(email,login);
 
-  if (msg) {
-    return msg;
-  }
+  // if (msg) {
+  //   return msg;
+  // }
 
   return validatePassword(password,login);
 }
