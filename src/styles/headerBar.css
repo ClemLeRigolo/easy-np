@@ -10,6 +10,17 @@ nav{
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 
 }
+
+.badge{
+    position: relative; 
+    bottom: 30%;
+    right: 35%;
+    padding: 2px 5px;
+    border-radius: 50%;
+    color: var(--selected-color);
+    background-color: white;
+}
+
 .social-icons{
     display: flex;
     justify-content: space-between;

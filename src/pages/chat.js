@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 
 import { withAuth, authStates } from '../components/auth';
-import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, listenForUserChats, getUserDataById, getUsersChattedWith } from '../utils/firebase';
+import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, listenForUserChats, getUserDataById, getUsersChattedWith, listenForNewUserMessages, getUnreadMessagesNumber, markAllMessagesAsRead} from '../utils/firebase';
 import Loader from '../components/loader';
 import { changeColor } from '../components/schoolChoose';
 import Paper from '@material-ui/core/Paper';
@@ -87,7 +87,10 @@ class Chat extends React.Component {
     }
 
     this.getChatData();
-    listenForUserChats((chats) => {
+
+
+    listenForNewUserMessages((chats) => {
+      console.log(chats.length+"NOUVEAU MESSAGE");
       // this.setState({ chattingUsers: chats });
     });
 
@@ -114,10 +117,10 @@ class Chat extends React.Component {
       this.setState({ chattingUsers: data });
     });
 
-
     if (!user || !this.props.match.params.cid) {
       return;
     }
+
     getChatByUsers(user.uid, this.props.match.params.cid).then(data => {
 
       if (data) {
@@ -207,8 +210,31 @@ class Chat extends React.Component {
     }
   }
 
+  renderChatList() {
+    console.log("LISTE DES BOUGS AVEC QUI ON CAUSE:");
+
+    console.log(this.state.chattingUsers);
+    if(this.state.chattingUsers.length > 0) {
+      return (
+        <List>
+          {this.state.chattingUsers.map((user) => (
+            <Link to={`/chat/${user.userId}`} key={user.userId}>
+              <ListItem button>
+                <ListItemIcon>
+                  <Avatar alt={user.userData.name} src={user.userData.profileImg} />
+                </ListItemIcon>
+                <ListItemText primary={user.userData.name}>{user.userData.name}</ListItemText>
+              </ListItem>
+            </Link>
+          ))}
+        </List>
+      );
+    }
+  }
+
   render() {
     const { user, authState } = this.props;
+    markAllMessagesAsRead(this.state.cid);
 
     if (authState === authStates.INITIAL_VALUE) {
       return <Loader />;
@@ -232,20 +258,7 @@ class Chat extends React.Component {
               <Divider />
               <List>
                 {/* Add a ListItem for each element in chattingUsers */}
-                {this.state.chattingUsers &&
-                  Object.values(this.state.chattingUsers).map(
-                    (user) =>
-                      user.userData !== null && (
-                        <Link to={`/chat/${user.userId}`} key={user.userId}>
-                          <ListItem button>
-                            <ListItemIcon>
-                              <Avatar alt={user.userData.name} src={user.userData.profileImg} />
-                            </ListItemIcon>
-                            <ListItemText primary={user.userData.name}>{user.userData.name}</ListItemText>
-                          </ListItem>
-                        </Link>
-                      )
-                  )}
+                {this.renderChatList()}
               </List>
             </Grid>
             <Grid item xs={12} sm={9}>
@@ -284,7 +297,7 @@ class Chat extends React.Component {
                                   : 'other-user-timestamp'
                               }`}
                             align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
-                            secondary={formatPostTimestamp(message.date)}
+                            secondary={formatPostTimestamp(message.date)+(message.read ? ". Lu" : ". Reçu")}
                           ></ListItemText>
                         </Grid>
 
@@ -298,7 +311,7 @@ class Chat extends React.Component {
                 <Grid item xs={9} align="center" >
                   <TextField id="message-input" onKeyPress={this.handleKeyPress} label="Ecrire" fullWidth />
                 </Grid>
-                <Grid xs={1} align="right">
+                <Grid item xs={1} align="right">
                   <Fab id="send-message-button" onClick={this.handleSendClick} aria-label="add"><IoSend /></Fab>
                 </Grid>
               </Grid>

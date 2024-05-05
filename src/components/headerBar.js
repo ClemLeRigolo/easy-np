@@ -11,7 +11,7 @@ import { BiLogOut} from "react-icons/bi"
 import { IoCalendarOutline } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
 
-import { getuserHistory, addHistory, addGlobalHistory, getGlobalHistory } from '../utils/firebase';
+import { getuserHistory, addHistory, addGlobalHistory, getGlobalHistory, listenForNewUserMessages } from '../utils/firebase';
 import ProfileImage from './profileImage';
 import { Redirect } from 'react-router-dom';
 import { CiSearch } from "react-icons/ci";
@@ -33,6 +33,7 @@ class HeaderBar extends Component {
       searchBarPresent: false,
       selectedHistoryIndex: -1,
       searchFromhist: false,
+      newMessages: 0,
     };
   }
 
@@ -74,6 +75,11 @@ class HeaderBar extends Component {
     this.updateUrl();
     this.unlisten = this.props.history.listen((location) => {
       this.updateUrl(location);
+    });
+
+    listenForNewUserMessages((chats) => {
+      console.log(chats.length+"NOUVEAU MESSAGE");
+      this.setState({ newMessages: chats.length });
     });
 
     getGlobalHistory()
@@ -265,6 +271,9 @@ class HeaderBar extends Component {
 
           <Link to="/chat" style={{ marginTop: "2px" }}>
             <TbMessage className='nav-icons' style={{ marginTop: "8px" }} />
+            {this.state.newMessages > 0 && (
+              <span className="badge">{this.state.newMessages}</span>
+            )}
           </Link>
         </div>
 
