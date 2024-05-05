@@ -80,9 +80,14 @@ h1.group-nav-link.active, .group-header h1:focus{
     } */
 
     /* Mobile display of the menu */
+    
+}
+
+@media screen and (max-width:768px){
+
     .group-navigation{
         position: fixed;
-        top: 102.47px;
+        top: 72.19px;
         left: 0;
         width: 0%;
         height: 100%;
@@ -135,16 +140,6 @@ h1.group-nav-link.active, .group-header h1:focus{
     .group-nav-item:hover{
         background-color: #3D415A;
         color: white;
-    }
-}
-
-@media screen and (max-width:768px){
-    .group-navigation{
-        top: 72.19px;
-    }
-
-    group-navigation-ghost{
-        display: none;
     }
 
     .group-navigation.active{
