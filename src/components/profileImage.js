@@ -115,6 +115,9 @@ class ProfileImage extends React.Component {
                 <FaUser style={{ width: '15px', height: '15px' }}/> Mon Profil
                 </Link>
               </Menu.Item>
+              <Menu.Item onClick={this.props.toggleSearch}>
+                <CiSearch style={{ width: '20px', height: '20px' }} /> Rechercher
+              </Menu.Item>
               <Menu.Item
                 data-cy='logout'
                 style={{ color: 'red' }}

@@ -438,11 +438,11 @@ class Group extends React.Component {
         {/*<h1>{this.state.group.name}</h1>*/}
         <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>
         <div className="profile-post-list">
-        {this.state.membres.includes(user.uid) && (
+        {(this.state.membres.includes(user.uid) || this.state.group.isPublic) && (
           <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent} posts={this.state.posts}/>
         )}
 
-        {this.state.membres.includes(user.uid) && this.state.posts && this.state.posts.map((post, index) => (
+        {(this.state.membres.includes(user.uid) || this.state.group.isPublic) && this.state.posts && this.state.posts.map((post, index) => (
                     <Post 
                     key={index} 
                     post={post} 

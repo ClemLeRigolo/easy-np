@@ -45,12 +45,12 @@ class Verify extends React.Component {
       return <Loader />;
     }
 
-    if (this.state.return) {
+    if (this.state.return || !this.props.user) {
       return <Redirect to="/login"></Redirect>;
     }
 
     //If email verified
-    if (this.props.user.emailVerified) {
+    if (this.props.user && this.props.user.emailVerified) {
       return <Redirect to="/home"></Redirect>;
     }
 
