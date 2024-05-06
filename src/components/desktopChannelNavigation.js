@@ -107,6 +107,7 @@ class ChannelNavigation extends React.Component {
                 <h1
                   className={`group-nav-link ${group.id === gid ? 'active' : ''}`}
                   onClick={() => this.handleGroupClick(group.id)}
+                  data-cy="groupLink"
                 >
                   {group.name}
                   {this.state.activeGroup === group.id ? (
@@ -127,11 +128,11 @@ class ChannelNavigation extends React.Component {
                   </Link>
                 )}
 
-                  <Link to={`/group/${group.id}`} activeClassName="active" onClick={() => this.handleSaloonClick("général")}>
+                  <Link to={`/group/${group.id}`} activeClassName="active" onClick={() => this.handleSaloonClick("général")} data-cy='salonLink'>
                     <div className="group-nav-item">Général</div>
                   </Link>
 
-                  <Link to={`/group/${group.id}/events`} activeClassName="active" onClick={() => this.handleSaloonClick("évènements")}>
+                  <Link to={`/group/${group.id}/events`} activeClassName="active" onClick={() => this.handleSaloonClick("évènements")} data-cy='salonLink'>
                     <div className="group-nav-item">Événements</div>
                   </Link>
 
@@ -141,6 +142,7 @@ class ChannelNavigation extends React.Component {
                         to={`/group/${group.id}/saloon/${saloon.id}`}
                         key={saloon.id}
                         activeClassName="active"
+                        data-cy='salonLink'
                         onClick={() => this.handleSaloonClick(saloon.id)}
                       >
                         <div className="group-nav-item">{saloon.name}</div>

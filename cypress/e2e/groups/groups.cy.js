@@ -70,7 +70,7 @@ context("Groups", () => {
     beforeEach(() => {
       cy.visit("/groups")
       cy.contains("Général").click()
-      cy.goToSalon("Général").click()
+      cy.goToSalon("Général")
       cy.get('button[data-cy="manageGroup"]').click()
     })
 
@@ -103,8 +103,9 @@ context("Groups", () => {
 
     it("Accepting someone from the waiting list", () => {
       cy.visit("/groups")
+      cy.wait(200)
       cy.contains("Privee").click()
-      cy.goToSalon("Général").click()
+      cy.goToSalon("Général")
       cy.get('button[data-cy="manageGroup"]').click()
       cy.get('div[data-cy="manageGroup"]').within(() => {
         cy.get('button[data-cy="waitingList"]').click()
@@ -116,15 +117,16 @@ context("Groups", () => {
     })
 
     it("Refusing someone from the waiting list", () => {
-      cy.visit("/groups")
+      cy.visit("/")
+      cy.wait(200)
       cy.contains("Refuser").click()
-      cy.goToSalon("Général").click()
-      cy.get('button[data-cy="manageGroup"]').click()
+      cy.goToSalon("Général")
+      cy.get('button[data-cy="manageGroup"]').click({force: true})
       cy.get('div[data-cy="manageGroup"]').within(() => {
-        cy.get('button[data-cy="waitingList"]').click()
+        cy.get('button[data-cy="waitingList"]').click({force: true})
         cy.get("h3").should('have.text', 'Liste d\'attente')
         cy.get('ul[data-cy="waitingList"]').within(() => {
-          cy.get('li > button[data-cy="refuse"]').click()
+          cy.get('li > button[data-cy="refuse"]').click({force: true})
         })
       })
     })

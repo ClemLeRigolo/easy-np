@@ -15,7 +15,7 @@ context('Creating posts', () => {
       cy.get('[data-cy="navGroup"]').within(() => {
         cy.contains('Général').click()
       })
-      cy.goToSalon('Général').click()
+      cy.goToSalon('Général')
       cy.wait(500)
       const newPost = 'New post'
       cy.contains(newPost).should('not.exist')
@@ -27,7 +27,7 @@ context('Creating posts', () => {
       cy.get('[data-cy="navGroup"]').within(() => {
         cy.contains('Général').click()
       })
-      cy.goToSalon('Public').click()
+      cy.goToSalon('Public')
       cy.wait(100)
       cy.get("div[data-cy='postInput']").should('not.exist')
     })
@@ -36,7 +36,7 @@ context('Creating posts', () => {
       cy.get('[data-cy="navGroup"]').within(() => {
         cy.contains('Général').click()
       })
-      cy.goToSalon('Admin').click()
+      cy.goToSalon('Admin')
       cy.wait(100)
       cy.contains('New post').should('not.exist')
       cy.get('div[data-cy="postInput"]').should('not.exist')
@@ -81,7 +81,7 @@ context('Creating posts', () => {
       cy.get('[data-cy="navGroup"]').within(() => {
         cy.contains('Général').click()
       })
-      cy.goToSalon('Admin').click()
+      cy.goToSalon('Admin')
       cy.wait(100)
       cy.contains('New post').should('not.exist')
       cy.addPost('New post')

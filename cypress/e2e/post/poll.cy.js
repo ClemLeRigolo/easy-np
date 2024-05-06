@@ -7,7 +7,7 @@ context('Poll test', () => {
     cy.get('[data-cy="navGroup"]').within(() => {
       cy.contains('Général').click()
     })
-    cy.goToSalon('Général').click()
+    cy.goToSalon('Général')
     cy.wait(100)
   })
 
