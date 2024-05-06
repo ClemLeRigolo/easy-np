@@ -1,6 +1,6 @@
 .group-navigation {
     background-color: #2a2e49;
-    width: 200px;
+    width: 300px;
     top: 84px;
     position:fixed;
     height: 100%;
@@ -8,8 +8,8 @@
 }
 
 .group-navigation-ghost {
-    background-color: none;
-    width: 235px;
+    background-color: #3D415A;
+    width: 400px;
     top: 84px;
     position:sticky;
 }

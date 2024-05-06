@@ -23,7 +23,7 @@ context('Groups', () => {
     cy.get('[data-cy="navGroup"]').within(() => {
       cy.contains('Général').click()
     })
-    cy.goToSalon('Admin').click()
+    cy.goToSalon('Admin')
     cy.contains('Salon Admin : post 1')
   })
 
@@ -32,7 +32,7 @@ context('Groups', () => {
     cy.get('[data-cy="navGroup"]').within(() => {
       cy.contains('Général').click()
     })
-    cy.goToSalon('Événements').click()
+    cy.goToSalon('Événements')
     cy.url().should('contain', 'events')
   })
 
@@ -44,4 +44,5 @@ context('Groups', () => {
     })
     cy.contains('Ici c\'est l\'imag : post 1')
   })
+
 })

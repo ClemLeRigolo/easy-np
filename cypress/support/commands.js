@@ -77,7 +77,7 @@ Cypress.Commands.add("fillGroupForm", (name, desc, rights, school) => {
 })
 
 Cypress.Commands.add("goToSalon", (salonName) => {
-  cy.get("[data-cy='navGroup'] a div").contains(salonName).click()
+  cy.get("[data-cy='navGroup'] [data-cy='salonLink']").contains(salonName).click()
 })
 
 Cypress.Commands.add("getGroupByName", (name) => {
