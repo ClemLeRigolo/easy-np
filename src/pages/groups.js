@@ -8,6 +8,7 @@ import "../styles/groups.css";
 import GroupMembership from "../components/groupMembership";
 import { changeColor } from "../components/schoolChoose";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { reverseLinksAndTags } from "../utils/helpers";
 
 class Groups extends React.Component {
   constructor(props) {
@@ -86,7 +87,7 @@ class Groups extends React.Component {
                 />
               ) : null}
             </h3>
-            <p>{group.description}</p>
+            <p>{reverseLinksAndTags(group.description)}</p>
             </Link>
             <GroupMembership group={group} userSchool={null} fromGroup={false} />
           </div>
