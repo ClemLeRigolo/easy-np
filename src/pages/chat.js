@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 
 import { withAuth, authStates } from '../components/auth';
-import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, listenForUserChats, getUserDataById, getUsersChattedWith, listenForNewUserMessages, getUnreadMessagesNumber, markAllMessagesAsRead} from '../utils/firebase';
+import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, getMostRecentMessagedUser, getUserDataById, getUsersChattedWith, listenForNewUserMessages, getUnreadMessagesNumber, markAllMessagesAsRead} from '../utils/firebase';
 import Loader from '../components/loader';
 import { changeColor } from '../components/schoolChoose';
 import Paper from '@material-ui/core/Paper';
@@ -195,6 +195,11 @@ class Chat extends React.Component {
             this.setState({ messages: messages });
             this.autoScrollMessages();
           });
+          markAllMessagesAsRead(this.state.cid);
+          getMostRecentMessagedUser().then(data => {
+            console.log("Most recent messaged user");
+            console.log(data);
+          });
         }
       });
     });
@@ -247,7 +252,7 @@ class Chat extends React.Component {
   renderChattingWith() {
     if (this.state.chattingWith) {
       return (
-        <List>
+        <List style={{overflow:'scroll'}}>
           <ListItem button key="ChattingWith">
             <ListItemIcon>
               <Avatar alt="Chatting with" src={this.state.chattingWith.profileImg} />
@@ -267,6 +272,7 @@ class Chat extends React.Component {
     console.log(this.state.chattingUsers);
     if(this.state.chattingUsers.length > 0) {
       return (
+        <Paper style={{height:'58vh', overflow:'auto'}}> 
         <List>
           {this.state.chattingUsers.map((user) => (
             <Link to={`/chat/${user.userId}`} key={user.userId}>
@@ -279,13 +285,13 @@ class Chat extends React.Component {
             </Link>
           ))}
         </List>
+        </Paper>
       );
     }
   }
 
   render() {
     const { user, authState } = this.props;
-    markAllMessagesAsRead(this.state.cid);
 
     if (authState === authStates.INITIAL_VALUE) {
       return <Loader />;
