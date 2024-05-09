@@ -71,7 +71,8 @@ class Chat extends React.Component {
 
   autoScrollMessages() {
     const messageArea = document.querySelector('.message-area');
-    messageArea.scrollTop = messageArea.scrollHeight;
+    if (messageArea)
+      messageArea.scrollTop = messageArea.scrollHeight;
   }
 
   handleKeyPress = (e) => {
@@ -161,7 +162,13 @@ class Chat extends React.Component {
     });
     //Retrieve the users we have chat with
     getUsersChattedWith().then(data => {
-      console.log(data)
+      console.log(data);
+      console.log("Users chatted with")
+      //On trie les utilisateurs pour avoir les plus récents en premier
+      data.sort((a, b) => {
+        return b.lastMessageDate - a.lastMessageDate;
+      });
+      console.log(data);
       this.setState({ chattingUsers: data });
     });
 
@@ -170,38 +177,35 @@ class Chat extends React.Component {
     }
 
     getChatByUsers(user.uid, this.props.match.params.cid).then(data => {
-
       if (data) {
         this.setState({ cid: data });
+        getChat(data).then(data => {
+          if (data.messages) {
+            this.setState({ messages: data.messages });
+            listenForChatMessages(this.state.cid, (messages) => {
+              this.setState({ messages: messages });
+              this.autoScrollMessages();
+            });
+            markAllMessagesAsRead(this.state.cid);
+            getMostRecentMessagedUser().then(data => {
+              console.log("Most recent messaged user");
+              console.log(data);
+            });
+          }
+        });
       } else {
         createChatChannel(user.uid, this.props.match.params.cid).then(cid => {
           this.setState({ cid: cid });
-          getChat(data).then(data => {
-            if (data.messages) {
-              this.setState({ messages: data.messages });
-              listenForChatMessages(this.state.cid, (messages) => {
-                this.setState({ messages: messages });
-                this.autoScrollMessages();
-              });
-            }
+          getChat(cid).then(data => {
+            console.log(data);
+            this.setState({ messages: data.messages ? data.messages : []});
+            listenForChatMessages(this.state.cid, (messages) => {
+              this.setState({ messages: messages });
+              this.autoScrollMessages();
+            });
           });
         });
       }
-
-      getChat(data).then(data => {
-        if (data.messages) {
-          this.setState({ messages: data.messages });
-          listenForChatMessages(this.state.cid, (messages) => {
-            this.setState({ messages: messages });
-            this.autoScrollMessages();
-          });
-          markAllMessagesAsRead(this.state.cid);
-          getMostRecentMessagedUser().then(data => {
-            console.log("Most recent messaged user");
-            console.log(data);
-          });
-        }
-      });
     });
   }
 
