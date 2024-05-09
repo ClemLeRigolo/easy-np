@@ -86,14 +86,27 @@
     display: none !important;
   }
 
+  .chatting-nav-overlay {
+    display: none;
+  }
+
 @media (max-width: 767px) {
     .chatting-with-nav {
       display: none;
       position: absolute;
       max-width: none !important;
       z-index: 4;
-      height: 84.8%; 
+      height: 86%; 
       left: 0;
+    }
+
+    .chatting-nav-overlay {
+      display: block;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 3;
     }
 
     .chatting-with-nav.active {

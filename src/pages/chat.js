@@ -307,6 +307,8 @@ class Chat extends React.Component {
         <Paper style={{height:'58vh', overflow:'auto'}}> 
         <List>
           {this.state.chattingUsers.map((user) => (
+            <>
+            {!this.state.chattingWith || user.userId !== this.state.chattingWith.id ? (
             <Link to={`/chat/${user.userId}`} key={user.userId}>
               <ListItem button>
                 <ListItemIcon>
@@ -320,6 +322,20 @@ class Chat extends React.Component {
                 )}
               </ListItem>
             </Link>
+            ) : (
+              <ListItem button onClick={() => this.setState({ menuOpen: false })}>
+                <ListItemIcon>
+                  <Avatar alt={user.userData.name} src={user.userData.profileImg} />
+                </ListItemIcon>
+                <ListItemText primary={user.userData.name}>{user.userData.name}</ListItemText>
+                {user.unReadedMessages > 0 && (
+                  <ListItemSecondaryAction>
+                    <Badge badgeContent={user.unReadedMessages} className='badgeMessage' />
+                  </ListItemSecondaryAction>
+                )}
+              </ListItem>
+            )}
+            </>
           ))}
         </List>
         </Paper>
@@ -354,18 +370,16 @@ class Chat extends React.Component {
           <Grid container component={Paper} className={'chat-section'}>
             {this.state.chattingWith && (
             <div className='chat-header'>
-          {!this.state.menuOpen && (
             <IconButton className='back-to-users' onClick={() => this.setState({ menuOpen: true })}>
               <FaArrowLeft />
             </IconButton>
-          )}
             <ProfileImage uid={this.state.chattingWith.id}/>
             <Typography variant="h5" align="center" style={{ width: '100%' }}>
               {this.state.chattingWith.name + " " + this.state.chattingWith.surname}
             </Typography>
             </div>
             )}
-            <Grid item xs={0} sm={3} className={`chatting-with-nav ${this.state.menuOpen ? 'active' : ''}`}>
+            <Grid item xs={0} sm={3} className={`chatting-with-nav ${this.state.menuOpen || !this.state.chattingWith ? 'active' : ''}`}>
               <Grid item xs={12} style={{ padding: '10px' }}>
                 <TextField
                   id="outlined-basic-email"
@@ -382,6 +396,8 @@ class Chat extends React.Component {
                   {this.state.friendsDataSetted ? (
                   <List style={{ position: 'absolute', zIndex: 1, width: '100%', backgroundColor: "white", border: 'solid 1px #ccc', margin: '0', padding: '0' }}>
                     {filteredUsers.map(user => (
+                      <>
+                      {!this.state.chattingWith || this.state.chattingWith.id !== user.id ? (
                       <Link to={`/chat/${user.id}`} key={user.id}>
                       <ListItem key={user.id} style={{ borderBottom: 'solid 1px #ccc', cursor: 'pointer' }}>
                         <ListItemIcon>
@@ -390,6 +406,15 @@ class Chat extends React.Component {
                         <ListItemText primary={user.name}>{user.name}</ListItemText>
                       </ListItem>
                       </Link>
+                      ) : 
+                      <ListItem key={user.id} style={{ borderBottom: 'solid 1px #ccc', cursor: 'pointer' }} onClick={() => this.setState({ menuOpen: false })}>
+                        <ListItemIcon>
+                         <ProfileImage uid={user.id}/>
+                        </ListItemIcon>
+                        <ListItemText primary={user.name}>{user.name}</ListItemText>
+                      </ListItem>
+                      }
+                      </>
                     ))}
                   </List>)
                   : <Loader />}
@@ -402,6 +427,9 @@ class Chat extends React.Component {
                 {this.renderChatList()}
               </List>
             </Grid>
+            {this.state.menuOpen && (
+            <div className="chatting-nav-overlay" onClick={() => this.setState({ menuOpen: false })}></div>
+            )}
             <Grid item xs={12} sm={9}>
               <List
                 // ref={this.messagesListRef}
@@ -448,6 +476,7 @@ class Chat extends React.Component {
                 ))}
               </List>
 
+              {this.state.chattingWith && (
               <Grid container id="message-container" >
                 <Grid item xs={9} align="center" >
                   <TextField id="message-input" onKeyPress={this.handleKeyPress} label="Ecrire" fullWidth />
@@ -456,6 +485,7 @@ class Chat extends React.Component {
                   <Fab id="send-message-button" onClick={this.handleSendClick} aria-label="add"><IoSend /></Fab>
                 </Grid>
               </Grid>
+              )}
             </Grid>
           </Grid>
         </div>
