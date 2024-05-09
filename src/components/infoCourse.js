@@ -28,7 +28,8 @@ const Info = ({userPostData,
               nbPosts,
               coverImg,
               setCoverImg,
-              cid
+              cid,
+              course
             }) => {
 
   const importProfile=useRef()
@@ -125,7 +126,6 @@ const Info = ({userPostData,
 
         <div className="info-follow">
             <h1>{modelDetails.ModelName}</h1>
-            <p>{modelDetails.ModelUserName}</p>
 
             {/* <Link to="/" className='logout'>
               <BiLogOut />Logout
@@ -146,25 +146,13 @@ const Info = ({userPostData,
             openEdit={openEdit}
             setOpenEdit={setOpenEdit}
             /> */}
-          
 
-          <div className="info-details">
-
-            <div className="info-col-2">
-              <div>
-                <h2>0</h2>
-                <span>{fr.PROFILE.FOLLOWERS}</span>
-              </div>
-              <div>
-                <h2>0</h2>
-                <span>{fr.PROFILE.POSTS}</span>
-              </div>
-              <div>
-                <h2>0</h2>
-                <span>{fr.PROFILE.FOLLOWINGS}</span>
-              </div>
-            </div>
+          {course.description && (
+            <div className='bio'>
+            <p dangerouslySetInnerHTML={{ __html: course.description }}></p>
           </div>
+          )}
+          
         </div>
     </div>
   )

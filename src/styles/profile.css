@@ -273,6 +273,10 @@
     font-size:15px ;
     color: grey;
 }
+.info-follow .leave-group-button {
+    position: absolute;
+    top:50%;
+}
 @media screen and (max-width:1024px){
     .info{
         background-color: #ffffff;

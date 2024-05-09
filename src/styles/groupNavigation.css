@@ -5,6 +5,7 @@
     position:fixed;
     height: 100%;
     z-index: 5;
+    overflow-y: scroll;
 }
 
 .group-navigation-ghost {
@@ -42,6 +43,35 @@
     padding: 10px;
     font-size: 1.5em;
     transition: background-color 0.3s ease;
+}
+
+.your-groups {
+    cursor: inherit !important;
+}
+
+.your-groups:hover{
+    background-color: #2a2e49 !important;
+}
+
+.no-groups {
+    display: flex;
+    align-items: center;
+    background-color: #2a2e49;
+    transition: background-color 0.3s ease;
+}
+
+.no-groups h1 {
+    background-color: inherit;
+}
+
+.no-groups:hover{
+    background-color: #3D415A;
+}
+
+.no-groups svg {
+    font-size: 3em;
+    margin-right: 10px;
+    color: white;
 }
 
 .group-header h1:hover, h1.group-nav-link.active, .group-header h1:focus{

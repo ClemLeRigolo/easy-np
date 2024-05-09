@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/post.css";
-import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById, voteFor } from "../utils/firebase";
+import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById, voteFor, reportPost } from "../utils/firebase";
 import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaShareSquare } from "react-icons/fa";
@@ -21,6 +21,9 @@ import PinchZoomPan from 'react-responsive-pinch-zoom-pan';
 import { AiOutlineCamera, AiOutlineBarChart, AiOutlineGif, AiOutlineVideoCamera, AiOutlineCloseCircle } from "react-icons/ai";
 import { SearchExperience } from "./gif";
 import { compressImage } from "../utils/helpers";
+import { Modal } from '@mantine/core';
+import { NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 class Post extends React.Component {
   constructor(props) {
@@ -36,13 +39,48 @@ class Post extends React.Component {
       vote: null,
       expandedImage: null,
       contextTrigger: null,
-      scale: 1,
       photos: [],
       selectedGif: null,
       showGifSearch: false,
       validationError: false,
       selectedOption: null,
+      isReportModalOpen: false,
+      modalLoading: false,
+      reportReason: "spam",
+      reportDetails: "",
     };
+  }
+
+  reportPost = () => {
+    console.log("Reporting post...");
+    this.setState({ modalLoading: true })
+    console.log(this.state.post.id, this.state.reportReason, this.state.reportDetails);
+    reportPost(this.state.post.id, this.state.reportReason, this.state.reportDetails)
+      .then(() => {
+        console.log("Post reported successfully");
+        this.setState({ isReportModalOpen: false, modalLoading: false });
+      })
+      .catch((error) => {
+        console.error("Error while reporting post:", error);
+      });
+  }
+
+  handleReportDetailsChange = (e) => {
+    this.setState({ reportDetails: e.target.value });
+  }
+
+  handleReportReasonChange = (e) => {
+    this.setState({ reportReason: e.target.value });
+  }
+
+  openReportModal = () => {
+    this.setState({ isReportModalOpen: true });
+  }
+
+  closeReportModal = (event) => {
+    event.preventDefault();
+    this.setState({ modalLoading: false, reportReason: "spam", reportDetails: "" })
+    this.setState({ isReportModalOpen: false });
   }
 
   handleShareClick = () => {
@@ -57,11 +95,11 @@ class Post extends React.Component {
     navigator.clipboard.writeText(finalUrle)
       .then(() => {
         console.log("URL copiée avec succès :", finalUrle);
-        // Ajoutez ici une logique supplémentaire si nécessaire, par exemple, afficher un message de succès
+        NotificationManager.success("URL copiée avec succès !");
       })
       .catch((error) => {
         console.error("Erreur lors de la copie de l'URL :", error);
-        // Ajoutez ici une logique supplémentaire si nécessaire, par exemple, afficher un message d'erreur
+        NotificationManager.error("Erreur lors de la copie de l'URL.");
       });
   };
 
@@ -152,6 +190,7 @@ class Post extends React.Component {
     // Logique de suppression du post
     const { handleDeletePost } = this.props;
     handleDeletePost(this.state.post.id);
+    NotificationManager.error("Post supprimé avec succès !");
   }
 
   handleImageClick = (images, index) => {
@@ -388,6 +427,8 @@ class Post extends React.Component {
       theme: 'blue'
     }
 
+    const isMobile = window.innerWidth <= 768;
+
     return (
       <div className="post" data-cy="post">
           <div 
@@ -462,7 +503,40 @@ class Post extends React.Component {
             <MenuItem onClick={this.handleDeletePost} className="menu-delete">{fr.POSTS.DELETE} <MdDelete /></MenuItem>
             )}
             <MenuItem onClick={this.handleShareClick} className="menu-item">{fr.POSTS.SHARE} <FaShareAlt /></MenuItem>
-            <MenuItem style={{color: 'black'}} className="menu-item">{fr.POSTS.REPORT} <FaFlag /></MenuItem>
+            <MenuItem onClick={this.openReportModal} style={{color: 'black'}} className="menu-item">{fr.POSTS.REPORT} <FaFlag /></MenuItem>
+            <Modal
+              opened={this.state.isReportModalOpen}
+              onClose={this.closeReportModal}
+              withCloseButton={false}
+              className="modal"
+              centered
+              fullScreen={isMobile}
+            >
+              {this.state.modalLoading ? <Loader /> : 
+              <>
+              <h2 className="modal-title">Report Post</h2>
+              <form onSubmit={this.handleSubmitReport} className="modal-form">
+                <label className="modal-label">
+                  Raison du signalement :
+                  <select value={this.state.reportReason} onChange={this.handleReportReasonChange} className="modal-select">
+                    <option value="spam">Spam</option>
+                    <option value="harassment">Harcèlement</option>
+                    <option value="inappropriate">Contenu inapproprié</option>
+                    <option value="other">Autre</option>
+                  </select>
+                </label>
+                <label className="modal-label">
+                  Détails supplémentaires (facultatif) :
+                  <textarea value={this.state.reportDetails} onChange={this.handleReportDetailsChange} className="modal-textarea" />
+                </label>
+                <div className="modal-footer">
+                  <button onClick={this.reportPost} className="modal-submit" >Signaler</button>
+                  <button onClick={this.closeReportModal} className="modal-close-button">Close</button>
+                </div>
+              </form>
+              </>
+              }
+            </Modal>
           </ContextMenu>
           </div>
         </div>

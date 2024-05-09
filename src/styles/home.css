@@ -28,7 +28,8 @@
     padding: 10px 10px;
     border: none;
     cursor: pointer;
-    border-radius: 100%;
+    border-radius: 20px;
+    z-index: 100;
   }
 
   body {

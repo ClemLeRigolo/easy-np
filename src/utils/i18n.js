@@ -117,7 +117,10 @@ export const fr = {
     CLOSE: "Fermer",
     CREATOR: "Créateur",
     WAITING_LIST: "Liste d'attente",
+    NO_WAITING_LIST: "Aucune demande en attente",
     EVENTS_OF: "Événements de",
+    YOUR_GROUPS: "Vos groupes",
+    NO_GROUPS: "Aucun groupe, rejoignez-en un !",
   },
 
   PROFILE: {

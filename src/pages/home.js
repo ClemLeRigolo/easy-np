@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 import { authStates, withAuth } from "../components/auth";
-import { getUserData, newPost, newPostWithImages, newPostWithPool, newPostWithGif, listenForPostChanges, getUserDataById, likePost, likeEvent, getCurrentUser, deletePost, getForUserPosts, getEvents } from "../utils/firebase";
+import { getUserData, newPost, newPostWithImages, newPostWithPool, newPostWithGif, listenForPostChanges, getUserDataById, likePost, likeEvent, getCurrentUser, deletePost, deleteEvent, getForUserPosts, getEvents } from "../utils/firebase";
 import Loader from "../components/loader";
 import { changeColor } from "../components/schoolChoose";
 import PostInput from "../components/postInput";
@@ -34,6 +34,7 @@ class Home extends React.Component {
       events: [],
       completeProfile: false,
       currentUser: {},
+      newPostsAvailable: false
     };
   }
 
@@ -171,6 +172,17 @@ class Home extends React.Component {
       });
   }
 
+  handleDeleteEvent = (id) => {
+    // Supprimez le post de la base de données Firebase
+    deleteEvent(id)
+      .then(() => {
+        this.updateEvents();
+      })
+      .catch((error) => {
+        console.error("Error deleting event:", error);
+      });
+  }
+
   updatePosts = () => {
     getForUserPosts()
       .then((querySnapshot) => {
@@ -207,14 +219,52 @@ class Home extends React.Component {
       });
   }
 
+  updateEvents = () => {
+    getEvents().then((events) => {
+      if (!events) {
+        return;
+      }
+  
+      const promises = Object.values(events).map((event) => {
+        return getUserDataById(Object.values(event)[0].creator).then((data) => {
+          Object.values(event)[0].username = data.name + " " + data.surname;
+          Object.values(event)[0].school = data.school;
+          Object.values(event)[0].profileImg = data.profileImg;
+          return Object.values(event)[0];
+        });
+      });
+  
+      Promise.all(promises).then((events2) => {
+        events2.sort((a, b) => a.timestamp - b.timestamp);
+        events2.reverse();
+        this.setState({ events: events2 });
+      });
+    });
+  }
+
   handleRefreshClick = () => {
     this.setState({ showRefreshButton: false });
     this.updatePosts();
+    window.scrollTo(0, 0);
   };
 
   handleWindowChange = (window) => {
     this.setState({ window });
   }
+
+  startRefreshTimer = () => {
+    this.refreshTimeout = setTimeout(() => {
+      if (this.state.newPostsAvailable) {
+        this.setState({ 
+          showRefreshButton: true,
+          newPostsAvailable: false
+        });
+        this.startRefreshTimer();
+      } else {
+        this.startRefreshTimer();
+      }
+    }, 60000);
+  };
 
   componentDidMount() {
     // rafraichit les posts quand la base de données change
@@ -224,30 +274,18 @@ class Home extends React.Component {
       if (!posts) {
         return;
       }
-      const post = Object.values(Object.values(posts)[Object.values(posts).length-1])[0];
+      const post = Object.values(posts)[0];
       if (post.user !== getCurrentUser().W.X && !this.state.firstLoad) {
-        this.setState({showRefreshButton: true});
+        this.setState({ newPostsAvailable: true });
       }
       if (this.state.firstLoad) {
         this.setState({firstLoad: false});
       }
     });
-    getEvents().then((events) => {
-      if (!events) {
-        return;
-      }
-      const events2 = [];
-      Object.values(events).forEach((event) => {
-        getUserDataById(Object.values(event)[0].creator).then((data) => {
-          Object.values(event)[0].username = data.name + " " + data.surname;
-          Object.values(event)[0].school = data.school;
-          Object.values(event)[0].profileImg = data.profileImg;
-          events2.push(Object.values(event)[0]);
-        });
-      });
-      this.setState({ events: events2 });
-    }
-    );
+
+    this.startRefreshTimer();
+
+    this.updateEvents();
   }
 
   render() {
@@ -290,7 +328,7 @@ class Home extends React.Component {
         <div className="home-content">
         {this.state.showRefreshButton && (
         <button className="refresh-button" onClick={this.handleRefreshClick}>
-          <IoMdRefresh />
+          <IoMdRefresh /> Voir les nouveaux posts
         </button>
       )}
           <div className="post-list">
@@ -323,7 +361,7 @@ class Home extends React.Component {
                       post={event} 
                       handleLikeClick={() => this.handleEventLikeClick(index)}
                       handleCommentClick={() => this.handleCommentClick(index)} 
-                      handleDeletePost={() => this.handleDeletePost(event.id)}
+                      handleDeletePost={() => this.handleDeleteEvent(event.id)}
                       likeCount={event.likeCount} 
                       commentCount={event.commentCount} 
                     />

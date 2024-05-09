@@ -82,11 +82,11 @@ class ProfileImage extends React.Component {
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Item>
                 <Link to={`/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }} data-cy='gotoProfile'>
+              <Menu.Item>
                 <FaUser style={{ width: '15px', height: '15px' }}/> Mon Profil
-                </Link>
               </Menu.Item>
+              </Link>
               <Menu.Item onClick={this.props.toggleSearch}>
                 <CiSearch style={{ width: '20px', height: '20px' }} /> Rechercher
               </Menu.Item>
@@ -110,11 +110,11 @@ class ProfileImage extends React.Component {
             </Menu.Target>
 
             <Menu.Dropdown>
+              <Link to={`/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }} data-cy='gotoProfile'>
               <Menu.Item>
-                <Link to={`/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }} data-cy='gotoProfile'>
                 <FaUser style={{ width: '15px', height: '15px' }}/> Mon Profil
-                </Link>
               </Menu.Item>
+              </Link>
               <Menu.Item onClick={this.props.toggleSearch}>
                 <CiSearch style={{ width: '20px', height: '20px' }} /> Rechercher
               </Menu.Item>

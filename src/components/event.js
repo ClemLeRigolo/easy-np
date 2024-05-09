@@ -1,9 +1,9 @@
 import React from "react";
 import "../styles/post.css";
-import { getCurrentUser, addComment, getComments, getImagesFromPost, getUserDataById, voteFor, addEventComment, getEventComments } from "../utils/firebase";
+import { getCurrentUser, getUserDataById, addEventComment, getEventComments, reportEvent } from "../utils/firebase";
 import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
-import { FaShareSquare } from "react-icons/fa";
+import { FaShareAlt } from "react-icons/fa";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
@@ -12,7 +12,11 @@ import Loader from "./loader";
 import ProfileImage from "./profileImage";
 import { FaEllipsisH } from "react-icons/fa";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
-import Poll from 'react-polls';
+import { Modal } from '@mantine/core';
+import { NotificationManager } from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
+import { MdDelete } from "react-icons/md";
+import { FaFlag } from "react-icons/fa";
 
 class Event extends React.Component {
   constructor(props) {
@@ -23,11 +27,50 @@ class Event extends React.Component {
       expandedComments: false, // État pour gérer l'affichage des commentaires
       post: this.props.post,
       commentCollected: false,
-      pollAnswers: [],
-      pollSetted: false,
-      vote: null,
+      isReportModalOpen: false,
+      modalLoading: false,
+      reportReason: "spam",
+      reportDetails: "",
     };
   }
+
+  reportPost = () => {
+    console.log("Reporting post...");
+    this.setState({ modalLoading: true })
+    console.log(this.state.post.id, this.state.reportReason, this.state.reportDetails);
+    reportEvent(this.state.post.id, this.state.reportReason, this.state.reportDetails)
+      .then(() => {
+        console.log("Post reported successfully");
+        this.setState({ isReportModalOpen: false, modalLoading: false });
+      })
+      .catch((error) => {
+        console.error("Error while reporting post:", error);
+      });
+  }
+
+  handleReportDetailsChange = (e) => {
+    this.setState({ reportDetails: e.target.value });
+  }
+
+  handleReportReasonChange = (e) => {
+    this.setState({ reportReason: e.target.value });
+  }
+
+  openReportModal = () => {
+    this.setState({ isReportModalOpen: true });
+  }
+
+  closeReportModal = (event) => {
+    event.preventDefault();
+    this.setState({ modalLoading: false, reportReason: "spam", reportDetails: "" })
+    this.setState({ isReportModalOpen: false });
+  }
+
+  handleContextMenu = (e) => {
+    if(this.state.contextTrigger) {
+      this.state.contextTrigger.handleContextClick(e);
+    }
+  };
 
   handleShareClick = () => {
     const { post } = this.state;
@@ -41,11 +84,11 @@ class Event extends React.Component {
     navigator.clipboard.writeText(finalUrle)
       .then(() => {
         console.log("URL copiée avec succès :", finalUrle);
-        // Ajoutez ici une logique supplémentaire si nécessaire, par exemple, afficher un message de succès
+        NotificationManager.success("URL copiée avec succès !");
       })
       .catch((error) => {
         console.error("Erreur lors de la copie de l'URL :", error);
-        // Ajoutez ici une logique supplémentaire si nécessaire, par exemple, afficher un message d'erreur
+        NotificationManager.error("Erreur lors de la copie de l'URL !");
       });
   };
 
@@ -132,6 +175,7 @@ class Event extends React.Component {
     // Logique de suppression du post
     const { handleDeletePost } = this.props;
     handleDeletePost(this.state.post.id);
+    NotificationManager.error("Post supprimé avec succès !");
   }
 
   componentDidMount() {
@@ -173,17 +217,6 @@ class Event extends React.Component {
     if (prevProps.post !== this.props.post) {
       this.setState({ post: this.props.post });
     }
-  }
-
-  handleVote = (answer) => {
-    const { pollAnswers } = this.state;
-    const newPollAnswers = pollAnswers.map((pollAnswer,index) => {
-      if (pollAnswer.option === answer) {
-        pollAnswer.votes += 1;
-        voteFor(this.state.post.id, index);
-      }
-      return pollAnswer;
-    });
   }
 
   render() {
@@ -239,39 +272,10 @@ class Event extends React.Component {
       .catch((error) => {
         console.error("Erreur lors de la récupération des commentaires :", error);
       });
-      /*getImagesFromPost(post.id)
-      .then((images) => {
-        this.setState((prevState) => ({
-          post: {
-            ...prevState.post,
-            images: images || undefined,
-          },
-        }));
-      })*/
       return <Loader />;
     }
 
-    if (post.pool && !this.state.pollSetted) {
-      for (let i = 0; i < post.pool.length; i++) {
-        this.state.pollAnswers.push({ option: post.pool[i], votes: post.poolObj[i] });
-      }
-      this.setState({ pollSetted: true });
-    }
-
-    if (post.voters) {
-      post.voters.forEach((voter, index) => {
-        if (voter.includes(getCurrentUser().uid)) {
-          //this.setState({ vote: post.pool[index] });
-          this.state.vote = post.pool[index];
-        }
-      }
-      );
-    }
-
-    const pollStyles1 = {
-      align: 'center',
-      theme: 'blue'
-    }
+    const isMobile = window.innerWidth <= 768;
 
     return (
       <div className="post">
@@ -284,36 +288,58 @@ class Event extends React.Component {
             </div>
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
-          {(getCurrentUser().uid === post.creator || this.props.canModify) && (
           <div className="post-menu">
-          <ContextMenuTrigger id={post.id}>
-            <FaEllipsisH className="post-options" />
+          <ContextMenuTrigger
+            id={post.id.toString()}
+            ref={c => this.state.contextTrigger = c}
+          >
+            <FaEllipsisH className="post-options" onClick={(e) => this.handleContextMenu(e, post)} data-cy="postOptions"/>
           </ContextMenuTrigger>
 
-          <ContextMenu id={post.id}>
-            <MenuItem onClick={this.handleDeletePost}>{fr.POSTS.DELETE}</MenuItem>
+          <ContextMenu id={post.id.toString()} className="context-menu">
+          {(getCurrentUser().uid === post.creator || this.props.canModify) && (
+            <MenuItem onClick={this.handleDeletePost} className="menu-delete">{fr.POSTS.DELETE} <MdDelete /></MenuItem>
+            )}
+            <MenuItem onClick={this.handleShareClick} className="menu-item">{fr.POSTS.SHARE} <FaShareAlt /></MenuItem>
+            <MenuItem onClick={this.openReportModal} style={{color: 'black'}} className="menu-item">{fr.POSTS.REPORT} <FaFlag /></MenuItem>
+            <Modal
+              opened={this.state.isReportModalOpen}
+              onClose={this.closeReportModal}
+              withCloseButton={false}
+              className="modal"
+              centered
+              fullScreen={isMobile}
+            >
+              {this.state.modalLoading ? <Loader /> : 
+              <>
+              <h2 className="modal-title">Report Post</h2>
+              <form onSubmit={this.handleSubmitReport} className="modal-form">
+                <label className="modal-label">
+                  Raison du signalement :
+                  <select value={this.state.reportReason} onChange={this.handleReportReasonChange} className="modal-select">
+                    <option value="spam">Spam</option>
+                    <option value="harassment">Harcèlement</option>
+                    <option value="inappropriate">Contenu inapproprié</option>
+                    <option value="other">Autre</option>
+                  </select>
+                </label>
+                <label className="modal-label">
+                  Détails supplémentaires (facultatif) :
+                  <textarea value={this.state.reportDetails} onChange={this.handleReportDetailsChange} className="modal-textarea" />
+                </label>
+                <div className="modal-footer">
+                  <button onClick={this.reportPost} className="modal-submit" >Signaler</button>
+                  <button onClick={this.closeReportModal} className="modal-close-button">Close</button>
+                </div>
+              </form>
+              </>
+              }
+            </Modal>
           </ContextMenu>
-          </div>)}
+          </div>
         </div>
         {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.description }}></div>
-        {post.images && (
-          <div className="post-photos">
-            {Object.values(post.images).map((image, index) => (
-              <div key={index} className="post-photo">
-                <img src={image} alt="Post" />
-              </div>
-            ))}
-          </div>
-        )}
-        {post.pool && (
-          <div className="post-pool">
-            {/*loop on post.pool*/}
-            {this.state.vote ? 
-              <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} vote={this.state.vote} customStyles={pollStyles1} />
-              : <Poll answers={this.state.pollAnswers} onVote={this.handleVote} noStorage={true} customStyles={pollStyles1} />}
-          </div>
-        )}
         <div className="post-footer">
           <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>
             {isLiked ? <AiFillHeart /> : <AiOutlineHeart />} {likeCount} {likeCount > 1 ? fr.POSTS.LIKES : fr.POSTS.LIKE}
@@ -322,7 +348,7 @@ class Event extends React.Component {
             <AiOutlineComment /> {post.commentCount} {post.commentCount > 1 ? fr.POSTS.COMMENTS : fr.POSTS.COMMENT}
           </button>
           <button className="post-share-btn" onClick={this.handleShareClick}>
-            <FaShareSquare /> {fr.POSTS.SHARE}
+            <FaShareAlt /> {fr.POSTS.SHARE}
           </button>
         </div>
         {showCommentInput && (

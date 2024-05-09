@@ -6,6 +6,8 @@ import { MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
 import { getSaloonByGroup, getGroupsByUser, isUserAdminOfGroup } from "../utils/firebase";
 import firebase from "firebase/app";
 // import "../styles/test.css";
+import { FaUserGroup } from "react-icons/fa6";
+import { FaArrowRight } from "react-icons/fa";
 
 class ChannelNavigation extends React.Component {
   constructor(props) {
@@ -100,6 +102,11 @@ class ChannelNavigation extends React.Component {
     return (
       <>
       <div className={`group-navigation ${open ? 'open' : ''}`} data-cy="navGroup">
+        <div className="group-header" style={{ animationDelay: `0.2s` }}>
+          <h1 className="your-groups">
+            <FaUserGroup /> {fr.GROUPS.YOUR_GROUPS} :
+          </h1>
+        </div>
         {this.state.groups &&
           groups.map((group,index) => (
             <div key={group.id} className="group-header" style={{ animationDelay: `${(index+1)/10}s` }}>
@@ -152,6 +159,16 @@ class ChannelNavigation extends React.Component {
               )}
             </div>
           ))}
+          {(!this.state.groups || this.state.groups.length === 0) && (
+            <div className="group-header" style={{ animationDelay: `0.3s` }}>
+              <Link to="/groups" className='no-groups'>
+              <h1 className="group-nav-link">
+                {fr.GROUPS.NO_GROUPS}
+              </h1>
+              <FaArrowRight />
+              </Link>
+            </div>
+          )}
           <div className="bg">
             </div>
       </div>

@@ -366,6 +366,66 @@
     transition: all ease 0.3s;
   }
 
+  .modal {
+    /* Styles pour le modal lui-même */
+  }
+  
+  .modal-title {
+    /* Styles pour le titre "Report Post" */
+  }
+  
+  .modal-form {
+    /* Styles pour le formulaire */
+  }
+  
+  .modal-label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+  }
+  
+  .modal-select {
+    /* Styles pour la liste déroulante */
+    padding: 8px;
+  }
+  
+  .modal-textarea {
+    /* Styles pour le champ de texte multiligne */
+    resize: none;
+  }
+  
+  .modal-submit {
+    /* Styles pour le bouton de soumission */
+    background-color: var(--selected-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-submit:hover {
+    opacity: 0.8;
+  }
+  
+  .modal-close-button {
+    /* Styles pour le bouton "Close" */
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-footer {
+    /* Styles pour le pied de page du modal */
+    display: flex;
+    justify-content: space-between;
+  }
+
 @media screen and (max-width: 768px) {
     .post-share-btn {
       display: none;

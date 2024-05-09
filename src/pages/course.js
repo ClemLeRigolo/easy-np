@@ -347,8 +347,8 @@ class Course extends React.Component {
             coverImg={this.state.courseCover}
             setCoverImg={this.setCoverImg}
             cid={this.state.cid}
+            course={this.state.course}
             />
-        <p dangerouslySetInnerHTML={{ __html: this.state.course.description }}></p>
         </div>
         <div className="course-navigation">
           <button className={this.state.window === 'discussion' ? 'active' : ""} onClick={() => this.handleWindow('discussion')}>Discussion</button>

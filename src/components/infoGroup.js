@@ -341,6 +341,7 @@ const InfoGroup = ({userPostData,
                     <button onClick={() => handleRefuseMember(member.uid)} data-cy="refuse"> <ImCross /> </button>
                   </li>
                 ))}
+                {waitingListData.length === 0 && fr.GROUPS.NO_WAITING_LIST}
               </ul>
               </div>
             )}
