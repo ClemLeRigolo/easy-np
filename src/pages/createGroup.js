@@ -34,12 +34,12 @@ class CreateGroup extends React.Component {
     // Logique de création du groupe
     const finalDescription = replaceLinksAndTags(description);
 
-    if (containsHtml(finalDescription)) {
+    if (containsHtml(description)) {
       this.setState({ hasHtmlError: true });
       return; // Arrêter le traitement si du HTML est détecté
     }
 
-    createGroup(groupName, visibility, school, description)
+    createGroup(groupName, visibility, school, finalDescription)
       .then(() => {
         this.setState({ redirect: true });
       })

@@ -5,7 +5,7 @@ import { MdOutlineManageAccounts } from 'react-icons/md';
 import {IoCameraOutline} from 'react-icons/io5'
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postGroupImg, postCoverGroupImg, changeRole, removeMemberFromId, acceptMemberFromId, refuseMemberFromId } from '../utils/firebase'
+import { postGroupImg, postCoverGroupImg, changeRole, removeMemberFromId, acceptMemberFromId, refuseMemberFromId, updateGroup } from '../utils/firebase'
 import fr from '../utils/i18n'
 import '../styles/infoGroup.css'
 import { Link } from 'react-router-dom';
@@ -17,8 +17,9 @@ import { compressImage, cropImage } from '../utils/helpers';
 import { Modal, useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import UserList from './userList';
+import ModelGroup from './modelGroup';
 
-const InfoGroup = ({userPostData,
+const InfoGroup = ({
               following,
               modelDetails,
               setModelDetails,
@@ -144,8 +145,18 @@ const InfoGroup = ({userPostData,
     }
   }
 
-  const setOpenEdit=(value)=>{
-    console.log(value)
+  const [openEdit,setOpenEdit] =useState(false)
+
+  const handleModel = (data) => {
+    const { name, description, school, isPublic } = data;
+    group.description = description;
+    setModelDetails({ ...modelDetails, ModelName: name });
+
+    updateGroup(groupId, name, isPublic, school, description).then(() => {
+      setOpenEdit(false);
+    }
+    );
+
   }
 
   const isCreator = uid === group.creator;
@@ -194,19 +205,17 @@ const InfoGroup = ({userPostData,
             {canModify && <button onClick={() => openManageWindow()} className='edit-btn2' data-cy='manageGroup'><MdOutlineManageAccounts />{fr.GROUPS.MANAGE}</button>}
             {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.GROUPS.EDIT}</button>}
             <GroupMembership group={group} userSchool={null} fromGroup={true} />
-            {/* <ModelProfile 
-            name={name}
-            setName={setName}
-            userName={userName}
-            setUserName={setUserName}
-            countryName={countryName}
-            setCountryName={setCountryName}
-            jobName={jobName}
-            setJobName={setJobName}
-            handleModel={handleModel}
-            openEdit={openEdit}
-            setOpenEdit={setOpenEdit}
-            /> */}
+            <ModelGroup
+              name={group.name}
+              description={group.description}
+              school={group.school}
+              userSchool={userData.school}
+              isPublic={group.isPublic}
+              handleModel={handleModel}
+              openEdit={openEdit}
+              setOpenEdit={setOpenEdit}
+              isMobile={isMobile}
+            />
 
           {group.description && (
             <div className='bio'>

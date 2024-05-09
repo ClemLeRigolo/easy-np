@@ -435,8 +435,6 @@ class Group extends React.Component {
             showManage={this.state.showManage}
             userData={this.state.userData}
             />
-        {/*<h1>{this.state.group.name}</h1>*/}
-        <p dangerouslySetInnerHTML={{ __html: this.state.group.description }}></p>
         <div className="profile-post-list">
         {(this.state.membres.includes(user.uid) || this.state.group.isPublic) && (
           <PostInput handlePostContentChange={this.handlePostContentChange} handlePostSubmit={this.handlePostSubmit} postContent={this.state.postContent} posts={this.state.posts}/>
