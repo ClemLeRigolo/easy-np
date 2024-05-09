@@ -12,6 +12,7 @@ class Courses extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      userData: null,
       profileImg: null,
       dataCollected: false,
       admin: false,
@@ -120,6 +121,14 @@ class Courses extends React.Component {
           coursesSetted: true,
         });
       });
+    }
+
+    if (this.state.school !== "ensimag") {
+      return (
+        <div className="interface">
+          <h1>{fr.COURSES.NO_COURSES_ATM}</h1>
+        </div>
+      );
     }
 
     return (

@@ -145,6 +145,7 @@ export const fr = {
     MMIS: "Modélisation Mathématique, Image, Simulation",
     COMMON: "Tronc Commun",
     NO_COURSES: "Aucun cours pour l'instant",
+    NO_COURSES_ATM: "Aucun cours pour le moment",
   },
 
   HOME: {

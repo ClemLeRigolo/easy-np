@@ -5,10 +5,12 @@ import {LiaEdit} from "react-icons/lia"
 import {IoCameraOutline} from "react-icons/io5"
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postCourseImg, postCoverCourseImg, subscribeToUser, unsubscribeFromUser } from '../utils/firebase'
+import { postCourseImg, postCoverCourseImg, updateCourse } from '../utils/firebase'
 import fr from '../utils/i18n'
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 import { compressImage, cropImage } from '../utils/helpers';
+import ModelCourse from './modelCourse';
+import { useMediaQuery } from '@mantine/hooks';
 
 const Info = ({userPostData,
               following,
@@ -62,35 +64,21 @@ const Info = ({userPostData,
     }
   }
 
-  const setOpenEdit=(value)=>{
-    console.log(value)
+  const [openEdit,setOpenEdit] =useState(false)
+
+  const handleModel = (data) => {
+    const { name, description, school, year, program } = data;
+    course.description = description;
+    setModelDetails({ ...modelDetails, ModelName: name });
+
+    updateCourse(cid, name, description, year, school, program).then(() => {
+      setOpenEdit(false);
+    }
+    );
+
   }
 
-  /*const [openEdit,setOpenEdit] =useState(false)
-
-  const [countryName,setCountryName]= useState("")
-  const [jobName,setJobName]= useState("")
-  
-  const handleModel=(e)=>{
-    e.preventDefault()
-
-    const ModelName =name
-    const ModelUserName=userName
-    const ModelCountryName=countryName
-    const ModelJobName = jobName
-
-    let obj={
-          ModelName:ModelName,
-          ModelUserName:ModelUserName,
-          ModelCountryName:ModelCountryName,
-          ModelJobName:ModelJobName,
-    }
-
-    setModelDetails(obj)
-    setOpenEdit(false)
-  }*/
-
-
+  const isMobile = useMediaQuery('(max-width: 50em)');
 
   return (
 
@@ -127,25 +115,19 @@ const Info = ({userPostData,
         <div className="info-follow">
             <h1>{modelDetails.ModelName}</h1>
 
-            {/* <Link to="/" className='logout'>
-              <BiLogOut />Logout
-            </Link> */}
-
             {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.PROFILE.EDIT}</button>}
 
-            {/* <ModelProfile 
-            name={name}
-            setName={setName}
-            userName={userName}
-            setUserName={setUserName}
-            countryName={countryName}
-            setCountryName={setCountryName}
-            jobName={jobName}
-            setJobName={setJobName}
-            handleModel={handleModel}
-            openEdit={openEdit}
-            setOpenEdit={setOpenEdit}
-            /> */}
+            <ModelCourse 
+              name={course.name}
+              school={course.school}
+              year={course.year}
+              program={course.program}
+              description={course.description}
+              handleModel={handleModel}
+              openEdit={openEdit}
+              setOpenEdit={setOpenEdit}
+              isMobile={isMobile}
+            />
 
           {course.description && (
             <div className='bio'>

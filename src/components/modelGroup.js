@@ -72,8 +72,6 @@ function ModelProfile({
     );
   }
 
-  console.log(nameModel, schoolModel, descriptionModel, is)
-
   return (
     <>
       <Modal
