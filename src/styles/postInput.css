@@ -161,3 +161,14 @@
     max-width: 100%;
     max-height: 100px;
   }
+
+  @media screen and (max-width: 768px){
+    .post-submit-btn {
+      margin-left: 10px;
+    }
+
+    .post-input {
+      height: 80px;
+      width: auto;
+    }
+  }

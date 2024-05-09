@@ -41,9 +41,11 @@ class Event extends React.Component {
     reportEvent(this.state.post.id, this.state.reportReason, this.state.reportDetails)
       .then(() => {
         console.log("Post reported successfully");
+        NotificationManager.success("Post signalé avec succès !");
         this.setState({ isReportModalOpen: false, modalLoading: false });
       })
       .catch((error) => {
+        NotificationManager.error("Erreur lors du signalement du post !");
         console.error("Error while reporting post:", error);
       });
   }

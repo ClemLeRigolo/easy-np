@@ -217,10 +217,12 @@ class HeaderBar extends Component {
     return (
       <nav>
         <div className="menu-icon" style={{ marginTop: "8px" }}>
-          <RxHamburgerMenu
-            className='nav-icons'
-            onClick={() => toggleMenu()}
-          />
+          <input className="checkbox nav-icons" type="checkbox" name="" id="" onClick={() => toggleMenu()} />
+          <div className="hamburger-lines">
+              <span className="line line1"></span>
+              <span className="line line2"></span>
+              <span className="line line3"></span>
+          </div>
         </div>
 
         <div className="n-logo">

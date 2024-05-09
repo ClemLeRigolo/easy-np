@@ -102,7 +102,7 @@ class ChannelNavigation extends React.Component {
     return (
       <>
       <div className={`group-navigation ${open ? 'open' : ''}`} data-cy="navGroup">
-        <div className="group-header" style={{ animationDelay: `0.2s` }}>
+        <div className="group-header" style={{ animationDelay: `0.1s` }}>
           <h1 className="your-groups">
             <FaUserGroup /> {fr.GROUPS.YOUR_GROUPS} :
           </h1>
