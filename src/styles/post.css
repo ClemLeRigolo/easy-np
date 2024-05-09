@@ -365,18 +365,6 @@
     text-align: center;
     transition: all ease 0.3s;
   }
-
-  .modal {
-    /* Styles pour le modal lui-même */
-  }
-  
-  .modal-title {
-    /* Styles pour le titre "Report Post" */
-  }
-  
-  .modal-form {
-    /* Styles pour le formulaire */
-  }
   
   .modal-label {
     display: flex;

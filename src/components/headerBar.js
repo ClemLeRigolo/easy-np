@@ -10,6 +10,7 @@ import { TbMessage} from "react-icons/tb"
 import { BiLogOut} from "react-icons/bi"
 import { IoCalendarOutline } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { FaSearch } from "react-icons/fa";
 
 import { getuserHistory, addHistory, addGlobalHistory, getGlobalHistory, listenForNewUserMessages } from '../utils/firebase';
 import ProfileImage from './profileImage';
@@ -283,8 +284,9 @@ class HeaderBar extends Component {
         </div>
 
 
-        <div className="n-profile" >
-          <ProfileImage header={true} toggleSearch={this.toggleSearch} />
+        <div className={`n-profile ${!this.state.searchBarPresent ? 'active' : ''}`} >
+          <FaSearch className='nav-icons' onClick={this.toggleSearch} />
+          <ProfileImage header={true} />
         </div>
 
       </nav>
