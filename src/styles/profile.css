@@ -277,6 +277,14 @@
     position: absolute;
     top:50%;
 }
+.info-follow .join-group-button {
+    position: absolute;
+    top:50%;
+}
+.info-follow .disabled-group-button {
+    position: absolute;
+    top:50%;
+}
 @media screen and (max-width:1024px){
     .info{
         background-color: #ffffff;

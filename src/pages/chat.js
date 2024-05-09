@@ -22,6 +22,10 @@ import { IoSend } from "react-icons/io5";
 import { Link } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import { TextField } from '@mui/material';
+import Badge from '@material-ui/core/Badge';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
+import { FaArrowLeft } from "react-icons/fa";
 
 import '../styles/chat.css';
 import { formatPostTimestamp } from '../utils/helpers';
@@ -51,6 +55,7 @@ class Chat extends React.Component {
       friendsDataSetted: false,
       searchValue: "",
       showSearchResults: false,
+      menuOpen: false,
     };
   }
 
@@ -70,9 +75,11 @@ class Chat extends React.Component {
   };
 
   autoScrollMessages() {
-    const messageArea = document.querySelector('.message-area');
-    if (messageArea)
-      messageArea.scrollTop = messageArea.scrollHeight;
+    setTimeout(() => {
+      const messageArea = document.querySelector('.message-area');
+      if (messageArea)
+        messageArea.scrollTop = messageArea.scrollHeight;
+    }, 10);
   }
 
   handleKeyPress = (e) => {
@@ -138,8 +145,19 @@ class Chat extends React.Component {
 
 
     listenForNewUserMessages((chats) => {
+      console.log(chats)
       console.log(chats.length+"NOUVEAU MESSAGE");
       // this.setState({ chattingUsers: chats });
+      getUsersChattedWith().then(data => {
+        console.log(data);
+        console.log("Users chatted with")
+        //On trie les utilisateurs pour avoir les plus récents en premier
+        data.sort((a, b) => {
+          return b.lastMessageDate - a.lastMessageDate;
+        });
+        console.log(data);
+        this.setState({ chattingUsers: data });
+      });
     });
 
     this.setState({
@@ -150,6 +168,10 @@ class Chat extends React.Component {
   componentDidUpdate(prevProps) {
     // Vérifier si l'identifiant de chat a changé
     if (prevProps.match.params.cid !== this.props.match.params.cid) {
+      this.setState({ 
+        cid: this.props.match.params.cid,
+        menuOpen: false,
+      });
       this.getChatData();
     }
   }
@@ -182,15 +204,21 @@ class Chat extends React.Component {
         getChat(data).then(data => {
           if (data.messages) {
             this.setState({ messages: data.messages });
-            listenForChatMessages(this.state.cid, (messages) => {
-              this.setState({ messages: messages });
-              this.autoScrollMessages();
+            listenForChatMessages(this.state.cid, (messages,chatId) => {
+              console.log("Messages",chatId);
+              console.log(this.state.cid);
+              if (chatId === this.state.cid) {
+                this.setState({ messages: messages });
+                this.autoScrollMessages();
+              }
             });
             markAllMessagesAsRead(this.state.cid);
             getMostRecentMessagedUser().then(data => {
               console.log("Most recent messaged user");
               console.log(data);
             });
+          } else {
+            this.setState({ messages: [] });
           }
         });
       } else {
@@ -285,6 +313,11 @@ class Chat extends React.Component {
                   <Avatar alt={user.userData.name} src={user.userData.profileImg} />
                 </ListItemIcon>
                 <ListItemText primary={user.userData.name}>{user.userData.name}</ListItemText>
+                {user.unReadedMessages > 0 && (
+                  <ListItemSecondaryAction>
+                    <Badge badgeContent={user.unReadedMessages} className='badgeMessage' />
+                  </ListItemSecondaryAction>
+                )}
               </ListItem>
             </Link>
           ))}
@@ -319,9 +352,20 @@ class Chat extends React.Component {
   
         <div className='chat-container'>
           <Grid container component={Paper} className={'chat-section'}>
-            <Grid item xs={0} sm={3} className={'chatting-with-nav'}>
-              {this.renderChattingWith()}
-              <Divider />
+            {this.state.chattingWith && (
+            <div className='chat-header'>
+          {!this.state.menuOpen && (
+            <IconButton className='back-to-users' onClick={() => this.setState({ menuOpen: true })}>
+              <FaArrowLeft />
+            </IconButton>
+          )}
+            <ProfileImage uid={this.state.chattingWith.id}/>
+            <Typography variant="h5" align="center" style={{ width: '100%' }}>
+              {this.state.chattingWith.name + " " + this.state.chattingWith.surname}
+            </Typography>
+            </div>
+            )}
+            <Grid item xs={0} sm={3} className={`chatting-with-nav ${this.state.menuOpen ? 'active' : ''}`}>
               <Grid item xs={12} style={{ padding: '10px' }}>
                 <TextField
                   id="outlined-basic-email"
@@ -334,20 +378,22 @@ class Chat extends React.Component {
                   onBlur={this.handleBlur}
                 />
                 {this.state.showSearchResults && (
-                  <>
+                  <div className='search-list'>
                   {this.state.friendsDataSetted ? (
-                  <List>
+                  <List style={{ position: 'absolute', zIndex: 1, width: '100%', backgroundColor: "white", border: 'solid 1px #ccc', margin: '0', padding: '0' }}>
                     {filteredUsers.map(user => (
-                      <ListItem key={user.id}>
+                      <Link to={`/chat/${user.id}`} key={user.id}>
+                      <ListItem key={user.id} style={{ borderBottom: 'solid 1px #ccc', cursor: 'pointer' }}>
                         <ListItemIcon>
                          <ProfileImage uid={user.id}/>
                         </ListItemIcon>
                         <ListItemText primary={user.name}>{user.name}</ListItemText>
                       </ListItem>
+                      </Link>
                     ))}
                   </List>)
                   : <Loader />}
-                  </>
+                  </div>
                 )}
               </Grid>
               <Divider />

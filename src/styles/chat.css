@@ -41,11 +41,15 @@
 }
 
 #message-container{
-
+    width: 100%;
+    justify-content: space-evenly;
 }
 
 #message-input{
+    
+}
 
+#message-input:focus{
 }
 
 .chatting-with-nav{
@@ -59,12 +63,49 @@
     color: #2a2e49;
 }
 
+.badgeMessage .MuiBadge-badge {
+    background-color: var(--selected-color);
+    color: white;
+  }
+
+  .search-list {
+    position: relative;
+  }
+
+  .chat-header {
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    box-shadow: 0px 0px 10px 0px #0000001f;
+    display: flex;
+  }
+
+  .back-to-users {
+    display: none !important;
+  }
+
 @media (max-width: 767px) {
     .chatting-with-nav {
+      display: none;
       position: absolute;
       max-width: none !important;
       z-index: 4;
       height: 84.8%; 
+      left: 0;
+    }
+
+    .chatting-with-nav.active {
+      display: block;
+    }
+
+    .chat-header {
+      display: flex;
+    }
+
+    .back-to-users {
+      display: block !important;
     }
   }
   
