@@ -255,7 +255,7 @@ export default function PostInput({ handlePostSubmit, posts }) {
           <div className="post-input-icon" onClick={togglePoll} data-cy='pollInputButton'>
             {showPoll ? <AiOutlineCloseCircle /> : <AiOutlineBarChart />}
           </div>
-          <div className="post-input-icon" onClick={toggleGifSearch}>
+          <div className="post-input-icon" onClick={toggleGifSearch} data-cy="gifInputButton">
             <AiOutlineGif />
           </div>
           <div className="post-input-icon">
