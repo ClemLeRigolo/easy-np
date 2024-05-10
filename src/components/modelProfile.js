@@ -82,7 +82,6 @@ function ModelProfile({
     }
     if (tagAlreadyExists(usernameModel)) {
       setTagError(true);
-      //set the focus on the input
       document.getElementById('username').focus();
       return;
     }

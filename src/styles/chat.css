@@ -1,5 +1,6 @@
 .chat-container{
     width: 100%;
+    height: 100%;
 }
 
 .chat-section{
@@ -9,7 +10,7 @@
 }
 
 .message-area{
-    height: 70vh;
+    height: 62.7vh;
     overflow-y: auto;
     margin-right: 10px;
     padding-bottom: 3.4% !important;
@@ -98,6 +99,10 @@
       height: 86%; 
       left: 0;
         animation: slideInFromLeft 0.3s ease-in-out;
+    }
+
+    .message-area {
+      height: 69vh;
     }
 
     @keyframes slideInFromLeft {

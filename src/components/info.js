@@ -113,9 +113,6 @@ const Info = ({userPostData,
   }
 
   const [openEdit,setOpenEdit] =useState(false)
-
-  const [countryName,setCountryName]= useState("")
-  const [jobName,setJobName]= useState("")
   
   const handleModel = (data) => {
     const { name, surname, username, school, year, major, bio } = data;

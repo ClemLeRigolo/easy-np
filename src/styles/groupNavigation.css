@@ -9,8 +9,7 @@
 }
 
 .group-navigation-ghost {
-    background-color: #3D415A;
-    width: 400px;
+    width: 385px;
     top: 84px;
     position:sticky;
 }
@@ -42,6 +41,7 @@
     margin: 0;
     padding: 10px;
     font-size: 1.5em;
+    border-bottom: 1px solid #3D415A;
     transition: background-color 0.3s ease;
 }
 
