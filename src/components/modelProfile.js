@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Modal, useMantineTheme } from '@mantine/core';
 import SchoolChoose from './schoolChoose';
@@ -6,6 +6,7 @@ import {changeColor} from "../components/schoolChoose";
 import "../styles/modelProfile.css";
 import Loader from './loader';
 import { replaceLinksAndTags, containsHtml, reverseLinksAndTags } from '../utils/helpers';
+import { getAllTags } from '../utils/firebase';
 
 function ModelProfile({
   openEdit,
@@ -31,6 +32,19 @@ function ModelProfile({
   const [loading, setLoading] = useState(false);
   const [warning, setWarning] = useState(false);
   const [error, setError] = useState(false);
+  const [tagError, setTagError] = useState(false);
+  const [tags, setTags] = useState([]);
+
+  const getAllTagsAsync = async () => {
+    const tags = await getAllTags();
+    return tags;
+  }
+
+  useEffect(() => {
+    getAllTagsAsync().then((tags) => {
+      setTags(tags);
+    });
+  }, []);
 
   const handleImageChange = (event) => {
     const selectedImage = event.target.value;
@@ -53,10 +67,23 @@ function ModelProfile({
     }, 1000);
   };
 
+  const tagAlreadyExists = (tag) => {
+    if (tag === userName) {
+      return false;
+    }
+    return tags.includes(tag);
+  }
+
   const handleUpdate = (e) => {
     e.preventDefault();
     if (containsHtml(bioModel)) {
       setError(true);
+      return;
+    }
+    if (tagAlreadyExists(usernameModel)) {
+      setTagError(true);
+      //set the focus on the input
+      document.getElementById('username').focus();
       return;
     }
     handleModel({
@@ -145,11 +172,16 @@ function ModelProfile({
               name="username"
               id="username"
               placeholder='Enter Username'
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value)
+                setTagError(false)
+              }}
               value={usernameModel}
               required
             />
           </div>
+          {tagError && <div className="error">Ce tag est déjà utilisé par un autre utilisateur</div>}
+
 
           <div className='inputBox2'>
             <label htmlFor="bio">Biographie:</label>

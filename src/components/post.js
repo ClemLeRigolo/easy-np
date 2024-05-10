@@ -125,6 +125,13 @@ class Post extends React.Component {
     this.setState({ commentInputValue: e.target.value });
   };
 
+  handleKeyDown = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      this.handleCommentSubmit();
+    }
+  }
+
   handleCommentSubmit = () => {
     // Logique de soumission du commentaire
     const { post } = this.props;
@@ -586,6 +593,7 @@ class Post extends React.Component {
               value={commentInputValue}
               onChange={this.handleCommentInputChange}
               className="comment-input-field"
+              onKeyDown={this.handleKeyDown}
             />
             <button className="comment-btn" onClick={this.handleCommentSubmit}>{fr.POSTS.PUBLISH}</button>
           </div>

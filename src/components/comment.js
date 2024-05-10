@@ -268,7 +268,7 @@ class Comment extends React.Component {
             )}
         </div>
         {isReplying && (
-              <div>
+              <div className="reply-container">
                 <input
                   type="text"
                   className="comment-reply-input"
@@ -276,6 +276,7 @@ class Comment extends React.Component {
                   onChange={this.handleInputChange}
                   data-cy="commentReply"
                   placeholder="Répondre..."
+                  onKeyDown={(e) => { if (e.key === 'Enter') this.handlePublishReply() }}
                 />
                 <button className="comment-publish-reply" onClick={this.handlePublishReply} data-cy="commentReplyPost">
                   {fr.POSTS.PUBLISH}

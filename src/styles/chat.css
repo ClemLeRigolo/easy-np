@@ -92,13 +92,47 @@
 
 @media (max-width: 767px) {
     .chatting-with-nav {
-      display: none;
       position: absolute;
       max-width: none !important;
       z-index: 4;
       height: 86%; 
       left: 0;
+        animation: slideInFromLeft 0.3s ease-in-out;
     }
+
+    @keyframes slideInFromLeft {
+        0% {
+          visibility: visible;
+          transform: translateX(-100%);
+        }
+        100% {
+          visibility: visible;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes slideOutToLeft {
+        0% {
+          visibility: visible;
+          transform: translateX(0);
+        }
+        100% {
+          visibility: hidden;
+          transform: translateX(-100%);
+        }
+      }
+      
+      .chatting-with-nav {
+        animation-name: slideOutToLeft;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;
+      }
+      
+      .chatting-with-nav.active {
+        animation-name: slideInFromLeft;
+        animation-duration: 0.5s;
+        animation-fill-mode: forwards;
+      }
 
     .chatting-nav-overlay {
       display: block;
@@ -107,10 +141,12 @@
       height: 100%;
       background-color: rgba(0, 0, 0, 0.5);
       z-index: 3;
+      transition: all 0.3s ease-in-out;
     }
 
     .chatting-with-nav.active {
       display: block;
+      width: auto;
     }
 
     .chat-header {
