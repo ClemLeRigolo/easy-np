@@ -135,7 +135,7 @@ class Courses extends React.Component {
       <div className="interface">
         <div className="course-list">
           {this.state.admin && (
-           <Link to="/createCourse" className="create-course-button">
+           <Link to="/createCourse" className="create-course-button" data-cy='createCourse'>
               <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_COURSE}
             </Link>
           )}

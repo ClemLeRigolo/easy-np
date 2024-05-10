@@ -351,11 +351,11 @@ class Course extends React.Component {
             />
         </div>
         <div className="course-navigation">
-          <button className={this.state.window === 'discussion' ? 'active' : ""} onClick={() => this.handleWindow('discussion')}>Discussion</button>
-          <button className={this.state.window === 'tds' ? 'active' : ""} onClick={() => this.handleWindow('tds')}>TDs</button>
-          <button className={this.state.window === 'tps' ? 'active' : ""} onClick={() => this.handleWindow('tps')}>TPs</button>
-          <button className={this.state.window === 'exams' ? 'active' : ""} onClick={() => this.handleWindow('exams')}>Exams</button>
-          <button className={this.state.window === 'fiches' ? 'active' : ""} onClick={() => this.handleWindow('fiches')}>Fiches</button>
+          <button className={this.state.window === 'discussion' ? 'active' : ""} onClick={() => this.handleWindow('discussion')} data-cy='discussion'>Discussion</button>
+          <button className={this.state.window === 'tds' ? 'active' : ""} onClick={() => this.handleWindow('tds')} data-cy='tds'>TDs</button>
+          <button className={this.state.window === 'tps' ? 'active' : ""} onClick={() => this.handleWindow('tps')} data-cy='tps'>TPs</button>
+          <button className={this.state.window === 'exams' ? 'active' : ""} onClick={() => this.handleWindow('exams')} data-cy='exams'>Exams</button>
+          <button className={this.state.window === 'fiches' ? 'active' : ""} onClick={() => this.handleWindow('fiches')} data-cy='fiches' >Fiches</button>
         </div>
         <div className="course-content">
         {this.state.window === 'discussion' && (
@@ -379,7 +379,7 @@ class Course extends React.Component {
         {this.state.window === 'tds' && (
           <div className="course-home">
             {this.state.admin && (
-              <Link to={`/course/${this.state.cid}/createRessource/td`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TD}</button></Link>
+              <Link to={`/course/${this.state.cid}/createRessource/td`}><button className="add-button" data-cy='addRessource'><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TD}</button></Link>
             )}
             <div className="ressource-container">
             {this.state.tds && this.state.tds.map((ressource, index) => (

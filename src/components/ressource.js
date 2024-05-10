@@ -58,7 +58,7 @@ class Ressource extends React.Component {
     const ressource = this.state.ressource;
 
     return (
-      <div className="post">
+      <div className="post" data-cy='ressource'>
         <div className="post-header">
           <div className="post-username">
             <div className="ressource-title">
@@ -71,8 +71,8 @@ class Ressource extends React.Component {
             <FaEllipsisH className="post-options" />
           </ContextMenuTrigger>
 
-          <ContextMenu id={ressource.id}>
-            <MenuItem onClick={this.handleDeletePost}>{fr.POSTS.DELETE}</MenuItem>
+          <ContextMenu id={ressource.id} data-cy='menu'>
+            <MenuItem onClick={this.handleDeletePost} data-cy='delete'>{fr.POSTS.DELETE}</MenuItem>
           </ContextMenu>
           </div>)}
         </div>

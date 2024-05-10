@@ -30,18 +30,28 @@ context('Check Courses', () => {
       cy.get('[data-cy="course"]').contains('BPI').click()
     })
     it('Checkinp Discussion', () => {
+      cy.get('[data-cy="discussion"]').click()
+      cy.contains('Examen bientôt !')
     })
 
     it('Checking TD', () => {
+      cy.get('[data-cy="tds"]').click()
+      cy.contains('TD1')
     })
 
     it('Checking TP', () => {
+      cy.get('[data-cy="tps"]').click()
+      cy.contains('TP1')
     })
 
-    it('Checking CM', () => {
+    it('Checking exams', () => {
+      cy.get('[data-cy="exams"]').click()
+      cy.contains('Examen')
     })
 
-    it('Checking Fiche', () => {
+    it('Checking fiches', () => {
+      cy.get('[data-cy="fiches"]').click()
+      cy.contains('Fiche')
     })
   })
 
