@@ -228,6 +228,7 @@ class Chat extends React.Component {
             console.log(data);
             this.setState({ messages: data.messages ? data.messages : []});
             listenForChatMessages(this.state.cid, (messages) => {
+              console.log("Messages");
               this.setState({ messages: messages });
               this.autoScrollMessages();
             });
@@ -374,7 +375,7 @@ class Chat extends React.Component {
               <FaArrowLeft />
             </IconButton>
             <ProfileImage uid={this.state.chattingWith.id}/>
-            <Typography variant="h5" align="center" style={{ width: '100%' }}>
+            <Typography variant="h5" align="center">
               {this.state.chattingWith.name + " " + this.state.chattingWith.surname}
             </Typography>
             </div>
@@ -430,7 +431,7 @@ class Chat extends React.Component {
             {this.state.menuOpen && (
             <div className="chatting-nav-overlay" onClick={() => this.setState({ menuOpen: false })}></div>
             )}
-            <Grid item xs={12} sm={9}>
+            <Grid item xs={12} sm={9} className={`real-message-area`}>
               <List
                 // ref={this.messagesListRef}
                 className={"message-area"}>
