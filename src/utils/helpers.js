@@ -96,59 +96,30 @@ export function formatPostTimestamp(timestamp) {
   }
 }
 
-export const compressImage = (img) => {
+export const compressImage = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-
-    reader.onload = (event) => {
-      const image = new Image();
-      image.src = event.target.result;
-
-      image.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-
-        const maxSize = 1024;
-
-        let width = image.width;
-        let height = image.height;
-
-        if (width > height) {
-          if (width > maxSize) {
-            height *= maxSize / width;
-            width = maxSize;
-          }
-        } else {
-          if (height > maxSize) {
-            width *= maxSize / height;
-            height = maxSize;
-          }
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        ctx.drawImage(image, 0, 0, width, height);
-
-        canvas.toBlob((blob) => {
-          const compressedFile = new File([blob], img.name, {
-            type: 'image/jpeg',
+    reader.readAsDataURL(file);
+    reader.onload = event => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const elem = document.createElement('canvas');
+        const scaleFactor = Math.min(1, 1024 / img.width);
+        elem.width = img.width * scaleFactor;
+        elem.height = img.height * scaleFactor;
+        const ctx = elem.getContext('2d');
+        ctx.drawImage(img, 0, 0, elem.width, elem.height);
+        ctx.canvas.toBlob((blob) => {
+          const newFile = new File([blob], file.name, {
+            type: file.type,
             lastModified: Date.now(),
           });
-          resolve(compressedFile);
-        }, 'image/jpeg', 0.9);
+          resolve(newFile);
+        }, file.type, 1);
       };
-
-      image.onerror = (error) => {
-        reject(error);
-      };
+      reader.onerror = error => reject(error);
     };
-
-    reader.onerror = (error) => {
-      reject(error);
-    };
-
-    reader.readAsDataURL(img);
   });
 }
 

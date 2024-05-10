@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 
 import { withAuth, authStates } from '../components/auth';
-import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, getMostRecentMessagedUser, getUserDataById, getUsersChattedWith, listenForNewUserMessages, getUnreadMessagesNumber, markAllMessagesAsRead} from '../utils/firebase';
+import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, getMostRecentMessagedUser, getUserDataById, getUsersChattedWith, listenForNewUserMessages, getUnreadMessagesNumber, markAllMessagesAsRead, sendMessageWithImages } from '../utils/firebase';
 import Loader from '../components/loader';
 import { changeColor } from '../components/schoolChoose';
 import Paper from '@material-ui/core/Paper';
@@ -26,9 +26,13 @@ import Badge from '@material-ui/core/Badge';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import { FaArrowLeft } from "react-icons/fa";
+import InputAdornment from '@material-ui/core/InputAdornment';
+import { AiOutlineCamera } from "react-icons/ai";
+import { IoMdArrowBack } from "react-icons/io";
+import PinchZoomPan from 'react-responsive-pinch-zoom-pan';
 
 import '../styles/chat.css';
-import { formatPostTimestamp } from '../utils/helpers';
+import { formatPostTimestamp, compressImage } from '../utils/helpers';
 import ProfileImage from '../components/profileImage';
 
 
@@ -36,6 +40,7 @@ import ProfileImage from '../components/profileImage';
 class Chat extends React.Component {
   constructor(props) {
     super(props);
+    this.fileInputRef = React.createRef();
     this.state = {
       user: null,
       userData: null,
@@ -56,6 +61,8 @@ class Chat extends React.Component {
       searchValue: "",
       showSearchResults: false,
       menuOpen: false,
+      images: [],
+      expandedImage: null,
     };
   }
 
@@ -225,10 +232,8 @@ class Chat extends React.Component {
         createChatChannel(user.uid, this.props.match.params.cid).then(cid => {
           this.setState({ cid: cid });
           getChat(cid).then(data => {
-            console.log(data);
             this.setState({ messages: data.messages ? data.messages : []});
             listenForChatMessages(this.state.cid, (messages) => {
-              console.log("Messages");
               this.setState({ messages: messages });
               this.autoScrollMessages();
             });
@@ -260,7 +265,7 @@ class Chat extends React.Component {
     }
   }
 
-  handleSendClick = () => {
+  handleSendClick = async () => {
     const message = document.getElementById('message-input').value;
 
     if (!message) {
@@ -270,8 +275,52 @@ class Chat extends React.Component {
     this.setState({ comment: message });
     // envoyer le message
     //this.sendMessage();
-    sendMessage(this.state.cid, message);
+    if (this.state.images.length > 0) {
+      const compressedImages = await Promise.all(
+        this.state.images.map((image) => compressImage(image.file))
+      );
+
+      sendMessageWithImages(this.state.cid, message, compressedImages);
+      this.setState({ images: [] });
+    } else {
+      sendMessage(this.state.cid, message);
+    }
     document.getElementById('message-input').value = '';
+  }
+
+  handleCameraClick = () => {
+    this.fileInputRef.current.click();
+  }
+
+  handleImageUpload = (event) => {
+    const files = event.target.files;
+    const selectedPhotos = [];
+  
+    if (files.length > 10) {
+      console.log("Trop d'images");
+      return;
+    }
+  
+    for (let i = 0; i < files.length && i < 4; i++) {
+      const file = files[i];
+      const reader = new FileReader();
+  
+      reader.onload = (e) => {
+        const photoData = {
+          name: file.name,
+          dataURL: e.target.result,
+          file: file,
+        };
+        selectedPhotos.push(photoData);
+  
+        if (selectedPhotos.length === files.length) {
+          this.setState({ images: selectedPhotos });
+          console.log(selectedPhotos);
+        }
+      };
+  
+      reader.readAsDataURL(file);
+    }
   }
 
   handleMessageClick = (index) => {
@@ -279,6 +328,30 @@ class Chat extends React.Component {
       this.setState({selectedMessageIndex: null});
     } else {
       this.setState({selectedMessageIndex: index})
+    }
+  }
+
+  handleImageClick = (images, index) => {
+    const image = images ? images[index] : null;
+    this.setState({ expandedImage: image });
+    if (image !== null) {
+      //bloquer le scroll
+      // Get the current page scroll position
+      let scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop;
+      let scrollLeft =
+        window.pageXOffset ||
+        document.documentElement.scrollLeft;
+
+        // if any scroll is attempted,
+        // set this to the previous value
+        window.onscroll = function () {
+            window.scrollTo(scrollLeft, scrollTop);
+        };
+    } else {
+      //débloquer le scroll
+      window.onscroll = function () { };
     }
   }
 
@@ -366,6 +439,39 @@ class Chat extends React.Component {
 
     return (
       <React.Fragment>
+        <div 
+          className={`overlay ${this.state.expandedImage ? 'visible' : ''}`}
+          onClick={() => this.handleImageClick(null)}
+          >
+            <div className="expanded-image-header">
+            <Link to={`/profile/${this.state.chattingWith.id}`} className="expanded-username">
+              <ProfileImage uid={this.state.chattingWith.id} post={true} />
+              <div>
+                <p>{this.state.chattingWith.name + ' ' + this.state.chattingWith.surname}</p>
+              </div>
+            </Link>
+            <img src={require(`../images/écoles/${this.state.chattingWith.school}.png`)} alt="School" className="post-school" />
+            </div>
+            <div className={`expanded-image-content ${this.state.expandedImage ? 'visible' : ''}`}>
+            <PinchZoomPan position={'center'} initialScale={'auto'} maxScale={4} >
+              <img 
+                src={this.state.expandedImage}
+                className={`expanded-image ${this.state.expandedImage ? 'visible' : ''}`}
+                alt="Expanded"
+              />
+          </PinchZoomPan>
+          </div>
+          <div 
+          className="back-arrow"
+          onClick={(e) => {
+            e.stopPropagation();
+            this.handleImageClick(null);
+          }}
+          data-cy="return"
+        >
+          <IoMdArrowBack />
+        </div>
+          </div>
   
         <div className='chat-container'>
           <Grid container component={Paper} className={'chat-section'}>
@@ -453,6 +559,15 @@ class Chat extends React.Component {
                           align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
                           primary={message.content}
                         ></ListItemText>
+                        {message.images && message.images.length > 0 && (
+                          <div className="message-images">
+                            <span className='image-message-container'>
+                            {message.images.map((image, index) => (
+                              <img key={index} src={image} alt="Preview" className="message-image" onClick={() => this.handleImageClick(Object.values(message.images),index)} />
+                            ))}
+                            </span>
+                          </div>
+                        )}
                       </Grid>
 
 
@@ -479,8 +594,39 @@ class Chat extends React.Component {
 
               {this.state.chattingWith && (
               <Grid container id="message-container" >
+                {this.state.images.length > 0 && (
+                  <div className='images-preview'>
+                    {this.state.images.map((image, index) => (
+                      <img className='image-imported' key={index} src={image.dataURL} alt="Preview" />
+                    ))}
+                  </div>
+                )}
                 <Grid item xs={9} align="center" >
-                  <TextField id="message-input" onKeyPress={this.handleKeyPress} label="Ecrire" fullWidth />
+                  <TextField 
+                    id="message-input" 
+                    onKeyPress={this.handleKeyPress} 
+                    label="Ecrire" fullWidth 
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            edge="end"
+                            onClick={this.handleCameraClick}
+                          >
+                            <AiOutlineCamera />
+                            <input
+                              type="file"
+                              multiple
+                              accept="image/*"
+                              style={{ display: 'none' }}
+                              onChange={this.handleImageUpload}
+                              ref={this.fileInputRef}
+                            />
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                    />
                 </Grid>
                 <Grid item xs={1} align="right">
                   <Fab id="send-message-button" onClick={this.handleSendClick} aria-label="add"><IoSend /></Fab>
