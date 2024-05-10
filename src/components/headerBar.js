@@ -189,7 +189,7 @@ class HeaderBar extends Component {
     }
 
     //garder uniquement les éléments de l'historique qui ont les mêmes premières lettres
-    const historyFromSearch = this.state.searchFromhist ? this.state.history : this.state.history.filter((item) => item.search.startsWith(search));
+    const historyFromSearch = this.state.searchFromhist ? this.state.history : this.state.history ? this.state.history.filter((item) => item.search.startsWith(search)) : [];
 
     const history = historyFromSearch
       .sort((a, b) => b.count - a.count)
