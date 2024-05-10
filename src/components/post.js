@@ -16,7 +16,7 @@ import Poll from 'react-polls';
 import { MdDelete } from "react-icons/md";
 import { FaShareAlt } from "react-icons/fa";
 import { FaFlag } from "react-icons/fa";
-import { IoMdArrowBack } from "react-icons/io";
+import { IoMdArrowBack, IoMdArrowForward } from "react-icons/io";
 import PinchZoomPan from 'react-responsive-pinch-zoom-pan';
 import { AiOutlineCamera, AiOutlineBarChart, AiOutlineGif, AiOutlineVideoCamera, AiOutlineCloseCircle } from "react-icons/ai";
 import { SearchExperience } from "./gif";
@@ -38,6 +38,8 @@ class Post extends React.Component {
       pollSetted: false,
       vote: null,
       expandedImage: null,
+      expandedImages: [],
+      imageIndex: 0,
       contextTrigger: null,
       photos: [],
       selectedGif: null,
@@ -204,7 +206,11 @@ class Post extends React.Component {
 
   handleImageClick = (images, index) => {
     const image = images ? images[index] : null;
-    this.setState({ expandedImage: image });
+    this.setState({ 
+      expandedImage: image,
+      expandedImages: images,
+      imageIndex: index,
+    });
     if (image !== null) {
       //bloquer le scroll
       // Get the current page scroll position
@@ -224,6 +230,13 @@ class Post extends React.Component {
       //débloquer le scroll
       window.onscroll = function () { };
     }
+  }
+
+  navigateToImage = (index) => {
+    this.setState({ 
+      expandedImage: this.state.expandedImages[index],
+      imageIndex: index,
+    });
   }
 
   componentDidMount() {
@@ -463,32 +476,40 @@ class Post extends React.Component {
           </PinchZoomPan>
           </div>
           <div 
-          className="back-arrow"
-          onClick={(e) => {
-            e.stopPropagation();
-            this.handleImageClick(null);
-          }}
-          data-cy="return"
-        >
-          <IoMdArrowBack />
-        </div>
+              className="back-arrow"
+              onClick={(e) => {
+                e.stopPropagation();
+                this.handleImageClick(null);
+              }}
+              data-cy="return"
+            >
+            <IoMdArrowBack />
           </div>
-        {/* <Modal
-            radius="8px"
-            zIndex="1001"
-            size="auto"
-            opened={this.state.expandedImage}
-            onClose={() => this.handleImageClick(null)}
-            withCloseButton={false}
-            centered
-            padding="0"
+          {this.state.expandedImages && this.state.expandedImages.length > 1 && this.state.imageIndex !== 0 && (
+          <div 
+            className="previous-arrow"
+            onClick={(e) => {
+              e.stopPropagation();
+              this.navigateToImage(this.state.imageIndex - 1);
+            }}
+            data-cy="return"
           >
-            <img 
-            src={this.state.expandedImage}
-            onClick={() => this.handleImageClick(null)}
-            alt=""
-          />
-          </Modal> */}
+            <IoMdArrowBack />
+          </div>
+          )}
+          {this.state.expandedImages && this.state.expandedImages.length > 1 && this.state.imageIndex !== this.state.expandedImages.length - 1 && (
+          <div 
+            className="next-arrow"
+            onClick={(e) => {
+              e.stopPropagation();
+              this.navigateToImage(this.state.imageIndex + 1);
+            }}
+            data-cy="return"
+          >
+            <IoMdArrowForward />
+          </div>
+          )}
+        </div>
         <div className="post-header">
           <Link to={`/profile/${post.user}`} className="post-username" data-cy='postHeader'>
           <ProfileImage uid={post.user} post={true} />

@@ -28,7 +28,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { FaArrowLeft } from "react-icons/fa";
 import InputAdornment from '@material-ui/core/InputAdornment';
 import { AiOutlineCamera } from "react-icons/ai";
-import { IoMdArrowBack } from "react-icons/io";
+import { IoMdArrowBack, IoMdArrowForward } from "react-icons/io";
 import PinchZoomPan from 'react-responsive-pinch-zoom-pan';
 
 import '../styles/chat.css';
@@ -63,6 +63,8 @@ class Chat extends React.Component {
       menuOpen: false,
       images: [],
       expandedImage: null,
+      expandedImages: [],
+      imageIndex: 0,
     };
   }
 
@@ -333,7 +335,11 @@ class Chat extends React.Component {
 
   handleImageClick = (images, index) => {
     const image = images ? images[index] : null;
-    this.setState({ expandedImage: image });
+    this.setState({ 
+      expandedImage: image,
+      imageIndex: index,
+      expandedImages: images,
+    });
     if (image !== null) {
       //bloquer le scroll
       // Get the current page scroll position
@@ -353,6 +359,13 @@ class Chat extends React.Component {
       //débloquer le scroll
       window.onscroll = function () { };
     }
+  }
+
+  navigateToImage = (index) => {
+    this.setState({ 
+      expandedImage: this.state.expandedImages[index],
+      imageIndex: index,
+    });
   }
 
   renderChattingWith() {
@@ -435,7 +448,7 @@ class Chat extends React.Component {
       .filter(user => user.name.includes(this.state.searchValue))
       .slice(0, 5);
 
-    console.log(filteredUsers)
+    console.log(this.state.images)
 
     return (
       <React.Fragment>
@@ -463,15 +476,39 @@ class Chat extends React.Component {
           </PinchZoomPan>
           </div>
           <div 
-          className="back-arrow"
-          onClick={(e) => {
-            e.stopPropagation();
-            this.handleImageClick(null);
-          }}
-          data-cy="return"
-        >
-          <IoMdArrowBack />
-        </div>
+            className="back-arrow"
+            onClick={(e) => {
+              e.stopPropagation();
+              this.handleImageClick(null);
+            }}
+            data-cy="return"
+          >
+            <IoMdArrowBack />
+          </div>
+          {this.state.expandedImages && this.state.expandedImages.length > 1 && this.state.imageIndex !== 0 && (
+          <div 
+            className="previous-arrow"
+            onClick={(e) => {
+              e.stopPropagation();
+              this.navigateToImage(this.state.imageIndex - 1);
+            }}
+            data-cy="return"
+          >
+            <IoMdArrowBack />
+          </div>
+          )}
+          {this.state.expandedImages && this.state.expandedImages.length > 1 && this.state.imageIndex !== this.state.expandedImages.length - 1 && (
+          <div 
+            className="next-arrow"
+            onClick={(e) => {
+              e.stopPropagation();
+              this.navigateToImage(this.state.imageIndex + 1);
+            }}
+            data-cy="return"
+          >
+            <IoMdArrowForward />
+          </div>
+          )}
           </div>
           )}
   
