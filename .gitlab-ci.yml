@@ -101,4 +101,4 @@ sonarqube-report:
     - sonar-scanner -X # Lance l'analyse distante du projet
   allow_failure: true
   only:
-    - main
+    - master
