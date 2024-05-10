@@ -439,6 +439,7 @@ class Chat extends React.Component {
 
     return (
       <React.Fragment>
+        {this.state.chattingWith && (
         <div 
           className={`overlay ${this.state.expandedImage ? 'visible' : ''}`}
           onClick={() => this.handleImageClick(null)}
@@ -472,6 +473,7 @@ class Chat extends React.Component {
           <IoMdArrowBack />
         </div>
           </div>
+          )}
   
         <div className='chat-container'>
           <Grid container component={Paper} className={'chat-section'}>
@@ -561,7 +563,7 @@ class Chat extends React.Component {
                         ></ListItemText>
                         {message.images && message.images.length > 0 && (
                           <div className="message-images">
-                            <span className='image-message-container'>
+                            <span className={`image-message-container ${message.images.length > 1 ? 'multiple-image' : ''}`}>
                             {message.images.map((image, index) => (
                               <img key={index} src={image} alt="Preview" className="message-image" onClick={() => this.handleImageClick(Object.values(message.images),index)} />
                             ))}
