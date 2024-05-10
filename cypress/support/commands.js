@@ -76,6 +76,18 @@ Cypress.Commands.add("fillGroupForm", (name, desc, rights, school) => {
   })
 })
 
+Cypress.Commands.add("fillEventForm", (title, desc, startDate, startHour, endDate, endHour, theme) => {
+  cy.get("[data-cy='createEventForm']").within(() => {
+    cy.get("#event-title").type(title);
+    cy.get("#event-description").type(desc);
+    cy.get("#event-start-date").type(startDate);
+    cy.get("#event-start-time").type(startHour);
+    cy.get("#event-end-date").type(endDate);
+    cy.get("#event-end-time").type(endHour);
+    cy.get("#event-theme").select(theme);
+  })
+})
+
 Cypress.Commands.add("goToSalon", (salonName) => {
   cy.get("[data-cy='navGroup'] [data-cy='salonLink']").contains(salonName).click()
 })

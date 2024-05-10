@@ -119,6 +119,7 @@ class eventCalendar extends React.Component {
         if (!this.state.eventsCollected) {
           getEvents().then((events) => {
             if (!events) {
+              this.setState({ eventsCollected: true });
               return;
             }
             const eventsArray = [];

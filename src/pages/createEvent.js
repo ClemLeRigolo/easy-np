@@ -74,7 +74,7 @@ class CreateEvent extends React.Component {
       <div className="interface">
         <div className="form-container">
           <h2>{fr.FORM_FIELDS.CREATE_EVENT}</h2>
-          <form onSubmit={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit} data-cy='createEventForm'>
             <div className="form-group">
               <label htmlFor="event-title">{fr.FORM_FIELDS.EVENT_TITLE}:</label>
               <input

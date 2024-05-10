@@ -115,8 +115,8 @@ class Chat extends React.Component {
     }
     let friends = [];
     let friendsData = [];
-    let followers = this.state.userData.followers;
-    let subscriptions = this.state.userData.subscriptions;
+    let followers = this.state.userData.followers ? this.state.userData.followers : [];
+    let subscriptions = this.state.userData.subscriptions ? this.state.userData.subscriptions : [];
     for (let i = 0; i < followers.length; i++) {
       for (let j = 0; j < subscriptions.length; j++) {
         if (followers[i] === subscriptions[j] && !friends.includes(subscriptions[j])) {

@@ -195,7 +195,7 @@ class GroupEvent extends React.Component {
         <h1>{fr.GROUPS.EVENTS_OF} {this.state.group.name}</h1>
         <p>{this.state.group.description}</p>
         {this.state.canModify && (
-          <Link to={`/group/${this.state.gid}/createEvent`} className="create-group-button">
+          <Link to={`/group/${this.state.gid}/createEvent`} className="create-group-button" data-cy='createEventButton'>
             <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EVENT}
           </Link>
         )}
