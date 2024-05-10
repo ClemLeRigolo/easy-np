@@ -3,7 +3,7 @@ import "../styles/ressource.css";
 import { getCurrentUser } from "../utils/firebase";
 import { formatPostTimestamp } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
-import { FaShareSquare } from "react-icons/fa";
+import { FaShareAlt } from "react-icons/fa";
 import { FaAngleDown, FaAngleUp, FaFileArchive, FaFileCode, FaFilePdf, FaFileImage } from "react-icons/fa";
 import Comment from "./comment";
 import { Link } from "react-router-dom";
@@ -63,7 +63,6 @@ class Ressource extends React.Component {
           <div className="post-username">
             <div className="ressource-title">
               {ressource.name}
-              {/* <div className="post-date">{formatPostTimestamp(ressource.date)}</div> */}
             </div>
           </div>
           {(getCurrentUser().uid === ressource.creator || this.props.canModify) && (
@@ -94,7 +93,7 @@ class Ressource extends React.Component {
         </div>
         <div className="post-footer">
           <button className="post-share-btn" data-cy="share" onClick={this.handleShareClick}>
-            <FaShareSquare /> {fr.POSTS.SHARE}
+            <FaShareAlt /> {fr.POSTS.SHARE}
           </button>
         </div>
       </div>

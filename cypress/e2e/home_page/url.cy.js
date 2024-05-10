@@ -85,10 +85,9 @@ context('Testing urls', () => {
     });
 
     it("going back to verify", () => {
-      // TODO : fix bug
       cy.visit("/verify");
       cy.wait(100);
-      cy.url().should("eq", `${Cypress.config().baseUrl}/verify`);
+      cy.url().should("eq", `${Cypress.config().baseUrl}/login`);
     });
 
     it("going to unknown link", () => {

@@ -6,6 +6,7 @@ import fr from "../utils/i18n";
 import Loader from "../components/loader";
 import { resetPassword } from "../utils/firebase";
 import { validateEmail } from "../utils/helpers";
+import { Redirect } from "react-router-dom";
 
 import "../styles/login.css";
 
@@ -73,6 +74,10 @@ class Login extends React.Component {
   render() {
     if (this.props.authState === authStates.INITIAL_VALUE) {
       return <Loader />;
+    }
+
+    if (this.props.user) {
+      return <Redirect to="/"></Redirect>;
     }
 
     const errorMsg = this.state.error;

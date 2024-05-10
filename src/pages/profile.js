@@ -175,18 +175,19 @@ class Profile extends React.Component {
       return <Loader />;
     }
 
+    const uid = this.props.match.params.uid ? this.props.match.params.uid : user.uid;
 
-    if ((authState === authStates.LOGGED_IN && !this.state.userData) || (this.props.match.params.uid !== this.state.uid)) {
+    if ((authState === authStates.LOGGED_IN && !this.state.userData) || (uid !== this.state.uid)) {
       if(user.emailVerified === false){
         return <Redirect to="/verify"></Redirect>;
       }
         //this.state.uid = uid;
         //this.setState({uid: this.props.match.params.uid});
-        getUserDataById(this.props.match.params.uid)
+        getUserDataById(uid)
         .then((userData) => {
           this.setState({
             userData: userData,
-            uid: this.props.match.params.uid,
+            uid: uid,
             subscribers: userData.followers ? userData.followers : [],
             subscribersData: [],
             subscriptions: userData.subscriptions ? userData.subscriptions : [],
@@ -205,7 +206,7 @@ class Profile extends React.Component {
             this.setCoverImg(Info3); // Utilisez l'image par défaut s'il n'y a pas d'URL de profil personnalisée
           }
           this.setProfileData(userData);
-          getPostByUser(this.props.match.params.uid).then(
+          getPostByUser(uid).then(
             (querySnapshot) => {
               const posts = [];
         
@@ -280,7 +281,7 @@ class Profile extends React.Component {
     }
 
     if (this.state.isSubscribed === undefined) {
-      if (this.state.currentUserData.subscriptions && this.state.currentUserData.subscriptions.includes(this.props.match.params.uid)) {
+      if (this.state.currentUserData.subscriptions && this.state.currentUserData.subscriptions.includes(uid)) {
         this.setState({ isSubscribed: true });
       } else {
         this.setState({ isSubscribed: false });
