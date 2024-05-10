@@ -38,10 +38,17 @@
 .message-images {
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
     align-items: center;
     max-width: 100%;
     margin-top: -4px;
+}
+
+.message-images.user-message {
+    justify-content: flex-end;
+}
+
+.message-images.other-message {
+    justify-content: flex-start;
 }
 
 .image-message-container {
@@ -53,7 +60,6 @@
     background-color: #f1f0f0;
     padding: 5px;
     border-radius: 10px;
-    border: 1px solid #ccc;
 }
 
 .multiple-image {

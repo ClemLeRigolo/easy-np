@@ -562,7 +562,7 @@ class Chat extends React.Component {
                           primary={message.content}
                         ></ListItemText>
                         {message.images && message.images.length > 0 && (
-                          <div className="message-images">
+                          <div className={`message-images ${message.user === user.uid ? 'user-message' : 'other-user-message'}`}>
                             <span className={`image-message-container ${message.images.length > 1 ? 'multiple-image' : ''}`}>
                             {message.images.map((image, index) => (
                               <img key={index} src={image} alt="Preview" className="message-image" onClick={() => this.handleImageClick(Object.values(message.images),index)} />
