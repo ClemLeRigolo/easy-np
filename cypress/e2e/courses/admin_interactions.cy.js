@@ -86,9 +86,23 @@ context('Admin interactions', () => {
       cy.get('[data-cy="addRessource"]').click()
       cy.get('input[name="ressourceName"]').type('New ressource')
       cy.get('textarea[name="ressourceDescription"]').type('Description')
-      cy.fixture('ressource.txt', null).as('myFixture')
-      cy.get('input[name="files"]').selectFile('@myFixture')
+      cy.fixture('java.png').as('image')
+      cy.get('input[name="files"]').selectFile("@image")
       cy.get('button[type="submit"]').click()
     })
+
+    it('Edit the profile', () => {
+      cy.get('[data-cy="edit"]').click()
+      cy.get('input[name="name"]').clear().type('BPI')
+      cy.get('textarea[name="bio"]').clear().type('Erreur dans le titre : pas BPI mais java !')
+      cy.get('button[data-cy="apply"]').click()
+    })
+
+    // it('Change the profile picture', () => {
+    //   cy.fixture('java.png').as('image')
+    //   cy.get('div[data-cy="coverImg"] svg').click()
+    //   cy.get('input[type="file"]').eq(1).selectFile('@image', {force: true})
+    //   cy.get('div[data-cy="coverImg"] svg').click()
+    // })
   })
 })

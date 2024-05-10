@@ -36,6 +36,7 @@ const Info = ({userPostData,
 
   const importProfile=useRef()
   const importCover =useRef()
+  console.log('info', importCover)
 
   
   const handleFile1 = async (e) => {
@@ -88,10 +89,10 @@ const Info = ({userPostData,
             <img src={coverImg} alt="" />
             <img src={profileImg} alt="" />
             {canModify && 
-            <div className='coverDiv'><IoCameraOutline className='coverSvg' onClick={()=>importCover.current.click()}/></div>
+            <div className='coverDiv' data-cy='coverImg'><IoCameraOutline className='coverSvg' onClick={()=>importCover.current.click()}/></div>
             }
             {canModify && 
-            <div className='profileDiv'><IoCameraOutline className='profileSvg' onClick={()=>importProfile.current.click()}/></div>
+            <div className='profileDiv' data-cy='profileImg'><IoCameraOutline className='profileSvg' onClick={()=>importProfile.current.click()}/></div>
             }
         </div>
       
@@ -115,7 +116,7 @@ const Info = ({userPostData,
         <div className="info-follow">
             <h1>{modelDetails.ModelName}</h1>
 
-            {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn'><LiaEdit />{fr.PROFILE.EDIT}</button>}
+            {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn' data-cy='edit'><LiaEdit />{fr.PROFILE.EDIT}</button>}
 
             <ModelCourse 
               name={course.name}
