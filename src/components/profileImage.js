@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCurrentUserData, getUserDataById, signOut } from '../utils/firebase';
+import { getCurrentUserData, getUserDataById, signOut, getGroupById } from '../utils/firebase';
 import '../styles/headerBar.css';
 import { Link } from 'react-router-dom';
 import { HoverCard, Avatar, Text, Group, Anchor, Stack } from '@mantine/core';
@@ -17,16 +17,31 @@ class ProfileImage extends React.Component {
 
   async componentDidMount() {
     try {
-        if (!this.props.uid) {
+      console.log(this.props.gid);
+    console.log(this.props.uid);
+        if (!this.props.uid && !this.props.gid) {
       const user = await getCurrentUserData();
       this.setState({
         user: user,
         loading: false
       });
-        } else {
+        } else if (this.props.uid) {
             const user = await getUserDataById(this.props.uid);
             this.setState({
               user: user,
+              loading: false
+            });
+        } else {
+            const group = await getGroupById(this.props.gid);
+            const groupDataAsUser = {
+              name: Object.values(group)[0].name,
+              surname: "",
+              profileImg: group.groupImg,
+              id: Object.values(group)[0].id,
+              school: Object.values(group)[0] !== "all" ? Object.values(group)[0].school : null,
+            };
+            this.setState({
+              user: groupDataAsUser,
               loading: false
             });
         }
@@ -52,6 +67,25 @@ class ProfileImage extends React.Component {
                   loading: false
                 });
             }
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données utilisateur :', error);
+        this.setState({ loading: false });
+      }
+    }
+    if (prevProps.gid !== this.props.gid) {
+      try {
+        const group = await getGroupById(this.props.gid);
+        const groupDataAsUser = {
+          name: Object.values(group)[0].name,
+          surname: "",
+          profileImg: group.groupImg,
+          id: Object.values(group)[0].id,
+          school: Object.values(group)[0] !== "all" ? Object.values(group)[0].school : null,
+        };
+        this.setState({
+          user: groupDataAsUser,
+          loading: false
+        });
       } catch (error) {
         console.error('Erreur lors de la récupération des données utilisateur :', error);
         this.setState({ loading: false });

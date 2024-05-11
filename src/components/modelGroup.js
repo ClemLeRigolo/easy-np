@@ -4,6 +4,7 @@ import { Modal, useMantineTheme } from '@mantine/core';
 import "../styles/modelProfile.css";
 import Loader from './loader';
 import { replaceLinksAndTags, containsHtml, reverseLinksAndTags } from '../utils/helpers';
+import { Button } from '@mantine/core';
 
 function ModelProfile({
   openEdit,
@@ -14,7 +15,8 @@ function ModelProfile({
   school,
   description,
   isMobile,
-  userSchool
+  userSchool,
+  deleteGroupHandler
 }) {
   const theme = useMantineTheme();
   const [nameModel, setName] = useState(name);
@@ -51,6 +53,16 @@ function ModelProfile({
       setLoading(false);
     }, 1000);
   };
+
+  const handleDelete = (e) => {
+    e.preventDefault();
+    deleteGroupHandler();
+    setLoading(true);
+    //delay to show the loader
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }
 
   if (loading) {
     return (
@@ -146,8 +158,9 @@ function ModelProfile({
           {error && <div className="error">Les balises HTML ne sont pas autorisés dans la description</div>}
 
           <div className='btn-container'>
-          <button className='modelBtn' onClick={handleUpdate} data-cy='apply'>Modifier</button>
-          <button className='cancelBtn' onClick={handleExit} data-cy='cancel'>Annuler</button>
+          <Button className='modelBtn' onClick={handleUpdate} data-cy='apply'>Modifier</Button>
+          <Button className='cancelBtn' onClick={handleExit} data-cy='cancel'>Annuler</Button>
+          <Button color="red" onClick={handleDelete}>Delete Group</Button>
           </div>
         </form>
       </Modal>
