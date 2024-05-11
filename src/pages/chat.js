@@ -34,6 +34,7 @@ import PinchZoomPan from 'react-responsive-pinch-zoom-pan';
 import '../styles/chat.css';
 import { formatPostTimestamp, compressImage } from '../utils/helpers';
 import ProfileImage from '../components/profileImage';
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 
 
@@ -176,6 +177,7 @@ class Chat extends React.Component {
       this.setState({ 
         cid: this.props.match.params.cid,
         menuOpen: false,
+        isGroupChat: false,
       });
       this.getChatData();
     }
@@ -191,19 +193,28 @@ class Chat extends React.Component {
       });
     } else {
       getGroupById(this.props.match.params.cid).then(data => {
-        const groupDataAsUser = {
-          name: Object.values(data)[0].name,
-          surname: "",
-          profileImg: data.groupImg,
-          id: Object.values(data)[0].id,
-          school: Object.values(data)[0] !== "all" ? Object.values(data)[0].school : null,
-        };
-        this.setState({ 
-          chattingWith: groupDataAsUser,
-          isGroupChat: true,
+        let members = {};
+        const memberIds = data.members;
+        const promises = memberIds.map(id => {
+          return getUserDataById(id).then(userData => {
+            members[id] = userData;
+          });
         });
-      }
-      );
+        Promise.all(promises).then(() => {
+          const groupDataAsUser = {
+            name: Object.values(data)[0].name,
+            surname: "",
+            profileImg: data.groupImg,
+            id: Object.values(data)[0].id,
+            school: Object.values(data)[0] !== "all" ? Object.values(data)[0].school : null,
+            members: members
+          };
+          this.setState({ 
+            chattingWith: groupDataAsUser,
+            isGroupChat: true,
+          });
+        });
+      });
     }
     //Retrieve the users we have chat with
     getUsersChattedWith().then(data => {
@@ -275,7 +286,7 @@ class Chat extends React.Component {
   handleSendClick = async () => {
     const message = document.getElementById('message-input').value;
 
-    if (!message) {
+    if (!message && this.state.images.length === 0) {
       return;
     }
     //Get text from input
@@ -326,6 +337,12 @@ class Chat extends React.Component {
   
       reader.readAsDataURL(file);
     }
+  }
+
+  handleRemoveImage = (index) => {
+    const images = this.state.images;
+    images.splice(index, 1);
+    this.setState({ images: images });
   }
 
   handleMessageClick = (index) => {
@@ -445,6 +462,8 @@ class Chat extends React.Component {
     const filteredUsers = this.state.friendsData
       .filter(user => user.name.includes(this.state.searchValue))
       .slice(0, 5);
+
+    console.log(this.state.chattingWith)
 
     return (
       <React.Fragment>
@@ -586,6 +605,12 @@ class Chat extends React.Component {
                   >
                     <Grid container>
                       <Grid item xs={12}>
+                        {this.state.isGroupChat && message.user !== user.uid && (
+                          <div className='author-name'>
+                            <ProfileImage uid={message.user} />
+                            {this.state.chattingWith.members[message.user].name}
+                          </div>
+                        )}
                         <ListItemText
                           className={`message ${message.user === 'system'
                               ? 'system-message'
@@ -634,7 +659,26 @@ class Chat extends React.Component {
                 {this.state.images.length > 0 && (
                   <div className='images-preview'>
                     {this.state.images.map((image, index) => (
-                      <img className='image-imported' key={index} src={image.dataURL} alt="Preview" />
+                      <div className='image-imported' key={index} style={{ position: 'relative' }}>
+                        <img className='image-imported' src={image.dataURL} alt="Preview" />
+                        <button
+                          style={{ 
+                            position: 'absolute', 
+                            top: 0, 
+                            right: 0,
+                            color: 'red',
+                            backgroundColor: 'inherit',
+                            fontSize: '20px',
+                            padding: '0',
+                            border: 'none',
+                            borderRadius: '100%',
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => this.handleRemoveImage(index)}
+                        >
+                          <IoMdCloseCircleOutline />
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}
