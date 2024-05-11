@@ -12,7 +12,8 @@ import { CiSearch } from 'react-icons/ci';
 class ProfileImage extends React.Component {
   state = {
     user: null,
-    loading: true
+    loading: true,
+    isGroup: false
   };
 
   async componentDidMount() {
@@ -42,7 +43,8 @@ class ProfileImage extends React.Component {
             };
             this.setState({
               user: groupDataAsUser,
-              loading: false
+              loading: false,
+              isGroup: true
             });
         }
     } catch (error) {
@@ -84,7 +86,8 @@ class ProfileImage extends React.Component {
         };
         this.setState({
           user: groupDataAsUser,
-          loading: false
+          loading: false,
+          isGroup: true
         });
       } catch (error) {
         console.error('Erreur lors de la récupération des données utilisateur :', error);
@@ -262,12 +265,12 @@ class ProfileImage extends React.Component {
                 } else {
                   if (user && user.profileImg) {
                     return (
-                      <Link to={`/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
+                      <Link to={this.state.isGroup ? `/group/${user.id}` : `/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
                         <img src={user.profileImg} alt="Profile" className='post-avatar' />
                             </Link>);
                     } else {
                         return (
-                            <Link to={`/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
+                            <Link to={this.state.isGroup ? `/group/${user.id}` : `/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
                             <img src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} alt="Profile" className='post-avatar' />
                                 </Link>);
                     }

@@ -65,6 +65,7 @@ class Chat extends React.Component {
       expandedImage: null,
       expandedImages: [],
       imageIndex: 0,
+      isGroupChat: false,
     };
   }
 
@@ -197,7 +198,10 @@ class Chat extends React.Component {
           id: Object.values(data)[0].id,
           school: Object.values(data)[0] !== "all" ? Object.values(data)[0].school : null,
         };
-        this.setState({ chattingWith: groupDataAsUser });
+        this.setState({ 
+          chattingWith: groupDataAsUser,
+          isGroupChat: true,
+        });
       }
       );
     }
@@ -450,7 +454,7 @@ class Chat extends React.Component {
           onClick={() => this.handleImageClick(null)}
           >
             <div className="expanded-image-header">
-            <Link to={`/profile/${this.state.chattingWith.id}`} className="expanded-username">
+            <Link to={this.state.isGroupChat ? `/group/${this.state.chattingWith.id}` : `/profile/${this.state.chattingWith.id}`} className="expanded-username">
               <ProfileImage uid={this.state.chattingWith.id.length > 13 ? this.state.chattingWith.id : null} gid={this.state.chattingWith.id.length > 13 ? null : this.state.chattingWith.id} />
               <div>
                 <p>{this.state.chattingWith.name + ' ' + this.state.chattingWith.surname}</p>
