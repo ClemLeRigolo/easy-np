@@ -244,6 +244,12 @@ class Chat extends React.Component {
             markAllMessagesAsRead(this.state.cid);
           } else {
             this.setState({ messages: [] });
+            listenForChatMessages(this.state.cid, (messages,chatId) => {
+              if (chatId === this.state.cid) {
+                this.setState({ messages: messages });
+                this.autoScrollMessages();
+              }
+            });
           }
         });
       } else {

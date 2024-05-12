@@ -265,12 +265,12 @@ class ProfileImage extends React.Component {
                 } else {
                   if (user && user.profileImg) {
                     return (
-                      <Link to={this.state.isGroup ? `/group/${user.id}` : `/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
+                      <Link to={this.state.isGroup ? `/group/${user.id}` : `/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }}>
                         <img src={user.profileImg} alt="Profile" className='post-avatar' />
                             </Link>);
                     } else {
                         return (
-                            <Link to={this.state.isGroup ? `/group/${user.id}` : `/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
+                            <Link to={this.state.isGroup ? `/group/${user.id}` : `/profile/${user.id}`} style={{ color: 'black', textDecoration: 'none' }}>
                             <img src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} alt="Profile" className='post-avatar' />
                                 </Link>);
                     }

@@ -20,5 +20,3 @@ context('Gif test', () => {
     cy.contains('New post with gif')
   })
 })
-
-    
