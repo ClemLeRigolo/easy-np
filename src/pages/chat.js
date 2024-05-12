@@ -396,7 +396,7 @@ class Chat extends React.Component {
           {this.state.chattingUsers.map((user) => (
             <>
             {!this.state.chattingWith || user.userId !== this.state.chattingWith.id ? (
-            <Link to={`/chat/${user.userId}`} key={user.userId}>
+            <Link to={`/chat/${user.userId}`} key={user.userId} data-cy='chatWith'>
               <ListItem button>
                 <ListItemIcon>
                   <Avatar alt={user.userData.name} src={user.userData.profileImg} />
@@ -536,6 +536,7 @@ class Chat extends React.Component {
                   onChange={this.handleSearchChange}
                   onFocus={this.handleFocus}
                   onBlur={this.handleBlur}
+                  data-cy="search"
                 />
                 {this.state.showSearchResults && (
                   <div className='search-list'>
@@ -544,7 +545,7 @@ class Chat extends React.Component {
                     {filteredUsers.map(user => (
                       <>
                       {!this.state.chattingWith || this.state.chattingWith.id !== user.id ? (
-                      <Link to={`/chat/${user.id}`} key={user.id}>
+                      <Link to={`/chat/${user.id}`} key={user.id} data-cy='resultSearch'>
                       <ListItem key={user.id} style={{ borderBottom: 'solid 1px #ccc', cursor: 'pointer' }}>
                         <ListItemIcon>
                          <ProfileImage uid={user.id}/>
@@ -643,6 +644,7 @@ class Chat extends React.Component {
                 <Grid item xs={9} align="center" >
                   <TextField 
                     id="message-input" 
+                    data-cy="messageInput"
                     onKeyPress={this.handleKeyPress} 
                     label="Ecrire" fullWidth 
                     InputProps={{
@@ -668,7 +670,7 @@ class Chat extends React.Component {
                     />
                 </Grid>
                 <Grid item xs={1} align="right">
-                  <Fab id="send-message-button" onClick={this.handleSendClick} aria-label="add"><IoSend /></Fab>
+                  <Fab id="send-message-button" onClick={this.handleSendClick} aria-label="add" data-cy='send'><IoSend /></Fab>
                 </Grid>
               </Grid>
               )}

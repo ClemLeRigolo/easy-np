@@ -275,7 +275,7 @@ class HeaderBar extends Component {
             <IoSchoolOutline className='nav-icons' />
           </Link>
 
-          <Link to="/chat" style={{ marginTop: "2px" }}>
+          <Link to="/chat" style={{ marginTop: "2px" }} data-cy='navChat'>
             <TbMessage className='nav-icons' style={{ marginTop: "8px" }} />
             {this.state.newMessages > 0 && (
               <span className="badge">{this.state.newMessages}</span>

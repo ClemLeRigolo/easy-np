@@ -128,8 +128,8 @@ class ChannelNavigation extends React.Component {
               {this.state.activeGroup === group.id && (
                 <>
                   {this.state.canModify && this.state.activeGroup == urlGroup && (
-                  <Link to={`/group/${group.id}/createSaloon`} activeClassName="active">
-                    <div className="group-nav-item" >
+                  <Link to={`/group/${group.id}/createSaloon`} activeClassName="active" data-cy='createSaloon'>
+                    <div className="group-nav-item">
                       <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_SALOON}
                     </div>
                   </Link>
