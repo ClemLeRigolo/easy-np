@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 
 import { withAuth, authStates } from '../components/auth';
-import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, getMostRecentMessagedUser, getUserDataById, getUsersChattedWith, listenForNewUserMessages, getUnreadMessagesNumber, markAllMessagesAsRead, sendMessageWithImages } from '../utils/firebase';
+import { getUserData, sendMessage, createChatChannel, getCurrentUser, getChatByUsers, getChat, listenForChatMessages, getMostRecentMessagedUser, getUserDataById, getUsersChattedWith, listenForNewUserMessages, getUnreadMessagesNumber, markAllMessagesAsRead, sendMessageWithImages, getGroupById } from '../utils/firebase';
 import Loader from '../components/loader';
 import { changeColor } from '../components/schoolChoose';
 import Paper from '@material-ui/core/Paper';
@@ -34,6 +34,7 @@ import PinchZoomPan from 'react-responsive-pinch-zoom-pan';
 import '../styles/chat.css';
 import { formatPostTimestamp, compressImage } from '../utils/helpers';
 import ProfileImage from '../components/profileImage';
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 
 
@@ -65,6 +66,7 @@ class Chat extends React.Component {
       expandedImage: null,
       expandedImages: [],
       imageIndex: 0,
+      isGroupChat: false,
     };
   }
 
@@ -154,17 +156,12 @@ class Chat extends React.Component {
 
 
     listenForNewUserMessages((chats) => {
-      console.log(chats)
-      console.log(chats.length+"NOUVEAU MESSAGE");
       // this.setState({ chattingUsers: chats });
       getUsersChattedWith().then(data => {
-        console.log(data);
-        console.log("Users chatted with")
         //On trie les utilisateurs pour avoir les plus récents en premier
         data.sort((a, b) => {
           return b.lastMessageDate - a.lastMessageDate;
         });
-        console.log(data);
         this.setState({ chattingUsers: data });
       });
     });
@@ -180,6 +177,7 @@ class Chat extends React.Component {
       this.setState({ 
         cid: this.props.match.params.cid,
         menuOpen: false,
+        isGroupChat: false,
       });
       this.getChatData();
     }
@@ -188,18 +186,42 @@ class Chat extends React.Component {
   async getChatData() {
     const { user } = this.props;
     //Retrieve the user data of the person we are chatting with
-    getUserDataById(this.props.match.params.cid).then(data => {
-      this.setState({ chattingWith: data });
-    });
+    // if cid is more than 13 characters, it is a user id, else it's a group id
+    if (!this.props.match.params.cid || this.props.match.params.cid.length > 13) {
+      getUserDataById(this.props.match.params.cid).then(data => {
+        this.setState({ chattingWith: data });
+      });
+    } else {
+      getGroupById(this.props.match.params.cid).then(data => {
+        let members = {};
+        const memberIds = data.members;
+        const promises = memberIds.map(id => {
+          return getUserDataById(id).then(userData => {
+            members[id] = userData;
+          });
+        });
+        Promise.all(promises).then(() => {
+          const groupDataAsUser = {
+            name: Object.values(data)[0].name,
+            surname: "",
+            profileImg: data.groupImg,
+            id: Object.values(data)[0].id,
+            school: Object.values(data)[0] !== "all" ? Object.values(data)[0].school : null,
+            members: members
+          };
+          this.setState({ 
+            chattingWith: groupDataAsUser,
+            isGroupChat: true,
+          });
+        });
+      });
+    }
     //Retrieve the users we have chat with
     getUsersChattedWith().then(data => {
-      console.log(data);
-      console.log("Users chatted with")
       //On trie les utilisateurs pour avoir les plus récents en premier
       data.sort((a, b) => {
         return b.lastMessageDate - a.lastMessageDate;
       });
-      console.log(data);
       this.setState({ chattingUsers: data });
     });
 
@@ -214,18 +236,12 @@ class Chat extends React.Component {
           if (data.messages) {
             this.setState({ messages: data.messages });
             listenForChatMessages(this.state.cid, (messages,chatId) => {
-              console.log("Messages",chatId);
-              console.log(this.state.cid);
               if (chatId === this.state.cid) {
                 this.setState({ messages: messages });
                 this.autoScrollMessages();
               }
             });
             markAllMessagesAsRead(this.state.cid);
-            getMostRecentMessagedUser().then(data => {
-              console.log("Most recent messaged user");
-              console.log(data);
-            });
           } else {
             this.setState({ messages: [] });
           }
@@ -270,7 +286,7 @@ class Chat extends React.Component {
   handleSendClick = async () => {
     const message = document.getElementById('message-input').value;
 
-    if (!message) {
+    if (!message && this.state.images.length === 0) {
       return;
     }
     //Get text from input
@@ -299,7 +315,6 @@ class Chat extends React.Component {
     const selectedPhotos = [];
   
     if (files.length > 10) {
-      console.log("Trop d'images");
       return;
     }
   
@@ -317,12 +332,17 @@ class Chat extends React.Component {
   
         if (selectedPhotos.length === files.length) {
           this.setState({ images: selectedPhotos });
-          console.log(selectedPhotos);
         }
       };
   
       reader.readAsDataURL(file);
     }
+  }
+
+  handleRemoveImage = (index) => {
+    const images = this.state.images;
+    images.splice(index, 1);
+    this.setState({ images: images });
   }
 
   handleMessageClick = (index) => {
@@ -386,9 +406,6 @@ class Chat extends React.Component {
   }
 
   renderChatList() {
-    console.log("LISTE DES BOUGS AVEC QUI ON CAUSE:");
-
-    console.log(this.state.chattingUsers);
     if(this.state.chattingUsers.length > 0) {
       return (
         <Paper style={{height:'58vh', overflow:'auto'}}> 
@@ -399,7 +416,7 @@ class Chat extends React.Component {
             <Link to={`/chat/${user.userId}`} key={user.userId} data-cy='chatWith'>
               <ListItem button>
                 <ListItemIcon>
-                  <Avatar alt={user.userData.name} src={user.userData.profileImg} />
+                  <ProfileImage uid={user.userId.length > 13 ? user.userId : null} gid={user.userId.length > 13 ? null : user.userId}/>
                 </ListItemIcon>
                 <ListItemText primary={user.userData.name}>{user.userData.name}</ListItemText>
                 {user.unReadedMessages > 0 && (
@@ -412,7 +429,7 @@ class Chat extends React.Component {
             ) : (
               <ListItem button onClick={() => this.setState({ menuOpen: false })}>
                 <ListItemIcon>
-                  <Avatar alt={user.userData.name} src={user.userData.profileImg} />
+                  <ProfileImage uid={user.userId.length > 13 ? user.userId : null} gid={user.userId.length > 13 ? null : user.userId}/>
                 </ListItemIcon>
                 <ListItemText primary={user.userData.name}>{user.userData.name}</ListItemText>
                 {user.unReadedMessages > 0 && (
@@ -442,13 +459,11 @@ class Chat extends React.Component {
       return <Loader />;
     }
 
-    console.log(this.state.friendsData);
-
     const filteredUsers = this.state.friendsData
       .filter(user => user.name.includes(this.state.searchValue))
       .slice(0, 5);
 
-    console.log(this.state.images)
+    console.log(this.state.chattingWith)
 
     return (
       <React.Fragment>
@@ -458,13 +473,15 @@ class Chat extends React.Component {
           onClick={() => this.handleImageClick(null)}
           >
             <div className="expanded-image-header">
-            <Link to={`/profile/${this.state.chattingWith.id}`} className="expanded-username">
-              <ProfileImage uid={this.state.chattingWith.id} post={true} />
+            <Link to={this.state.isGroupChat ? `/group/${this.state.chattingWith.id}` : `/profile/${this.state.chattingWith.id}`} className="expanded-username">
+              <ProfileImage uid={this.state.chattingWith.id.length > 13 ? this.state.chattingWith.id : null} gid={this.state.chattingWith.id.length > 13 ? null : this.state.chattingWith.id} />
               <div>
                 <p>{this.state.chattingWith.name + ' ' + this.state.chattingWith.surname}</p>
               </div>
             </Link>
-            <img src={require(`../images/écoles/${this.state.chattingWith.school}.png`)} alt="School" className="post-school" />
+            {this.state.chattingWith.school && (
+              <img src={require(`../images/écoles/${this.state.chattingWith.school}.png`)} alt="School" className="post-school" />
+            )}
             </div>
             <div className={`expanded-image-content ${this.state.expandedImage ? 'visible' : ''}`}>
             <PinchZoomPan position={'center'} initialScale={'auto'} maxScale={4} >
@@ -519,7 +536,7 @@ class Chat extends React.Component {
             <IconButton className='back-to-users' onClick={() => this.setState({ menuOpen: true })}>
               <FaArrowLeft />
             </IconButton>
-            <ProfileImage uid={this.state.chattingWith.id}/>
+            <ProfileImage uid={this.state.chattingWith.id.length > 13 ? this.state.chattingWith.id : null} gid={this.state.chattingWith.id.length > 13 ? null : this.state.chattingWith.id}/>
             <Typography variant="h5" align="center">
               {this.state.chattingWith.name + " " + this.state.chattingWith.surname}
             </Typography>
@@ -589,6 +606,12 @@ class Chat extends React.Component {
                   >
                     <Grid container>
                       <Grid item xs={12}>
+                        {this.state.isGroupChat && message.user !== user.uid && (
+                          <div className='author-name'>
+                            <ProfileImage uid={message.user} />
+                            {this.state.chattingWith.members[message.user].name}
+                          </div>
+                        )}
                         <ListItemText
                           className={`message ${message.user === 'system'
                               ? 'system-message'
@@ -637,7 +660,26 @@ class Chat extends React.Component {
                 {this.state.images.length > 0 && (
                   <div className='images-preview'>
                     {this.state.images.map((image, index) => (
-                      <img className='image-imported' key={index} src={image.dataURL} alt="Preview" />
+                      <div className='image-imported' key={index} style={{ position: 'relative' }}>
+                        <img className='image-imported' src={image.dataURL} alt="Preview" />
+                        <button
+                          style={{ 
+                            position: 'absolute', 
+                            top: 0, 
+                            right: 0,
+                            color: 'red',
+                            backgroundColor: 'inherit',
+                            fontSize: '20px',
+                            padding: '0',
+                            border: 'none',
+                            borderRadius: '100%',
+                            cursor: 'pointer',
+                          }}
+                          onClick={() => this.handleRemoveImage(index)}
+                        >
+                          <IoMdCloseCircleOutline />
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}

@@ -1,0 +1,41 @@
+[debug] [2024-05-12T09:38:00.013Z] ----------------------------------------------------------------------
+[debug] [2024-05-12T09:38:00.014Z] Command:       /home/ensimag/node-v20.11.0-linux-x64/bin/node /home/ensimag/easy-np/node_modules/.bin/firebase emulators:start --import bdd
+[debug] [2024-05-12T09:38:00.014Z] CLI Version:   13.4.0
+[debug] [2024-05-12T09:38:00.014Z] Platform:      linux
+[debug] [2024-05-12T09:38:00.015Z] Node Version:  v20.11.0
+[debug] [2024-05-12T09:38:00.015Z] Time:          Sun May 12 2024 11:38:00 GMT+0200 (Central European Summer Time)
+[debug] [2024-05-12T09:38:00.015Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-05-12T09:38:00.070Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-05-12T09:38:00.070Z] > authorizing via signed-in user (clement.correnoz@gmail.com)
+[debug] [2024-05-12T09:38:00.138Z] openjdk version "18.0.2-ea" 2022-07-19
+OpenJDK Runtime Environment (build 18.0.2-ea+9-Ubuntu-222.04)
+
+[debug] [2024-05-12T09:38:00.139Z] OpenJDK 64-Bit Server VM (build 18.0.2-ea+9-Ubuntu-222.04, mixed mode, sharing)
+
+[debug] [2024-05-12T09:38:00.142Z] Parsed Java major version: 18
+[info] i  emulators: Starting emulators: auth, database, hosting {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, database, hosting"}}
+[debug] [2024-05-12T09:38:00.145Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-05-12T09:38:00.145Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-05-12T09:38:00.145Z] [database] Database Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-05-12T09:38:00.145Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-05-12T09:38:00.145Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"database":[{"address":"127.0.0.1","family":"IPv4","port":9000}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-05-12T09:38:00.147Z] [hub] writing locator at /tmp/hub-easy-np.json
+[debug] [2024-05-12T09:38:00.151Z] > refreshing access token with scopes: []
+[debug] [2024-05-12T09:38:00.152Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-05-12T09:38:00.152Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-05-12T09:38:00.258Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-05-12T09:38:00.258Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-05-12T09:38:00.299Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/easy-np [none]
+[debug] [2024-05-12T09:38:00.542Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/easy-np 200
+[debug] [2024-05-12T09:38:00.543Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/easy-np {"projectId":"easy-np","projectNumber":"342036727192","displayName":"Easy-NP","name":"projects/easy-np","resources":{"hostingSite":"easy-np","realtimeDatabaseInstance":"easy-np-default-rtdb","storageBucket":"easy-np.appspot.com","locationId":"europe-west"},"state":"ACTIVE","etag":"1_ce95066d-e8ae-4781-bc5f-b0357a3a1203"}
+[debug] [2024-05-12T09:38:00.543Z] database rules config:  []
+[warn] ⚠  database: Did not find a Realtime Database rules file specified in a firebase.json config file. The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration. {"metadata":{"emulator":{"name":"database"},"message":"Did not find a Realtime Database rules file specified in a firebase.json config file. The emulator will default to allowing all reads and writes. Learn more about this option: https://firebase.google.com/docs/emulator-suite/install_and_configure#security_rules_configuration."}}
+[debug] [2024-05-12T09:38:00.552Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2024-05-12T09:38:00.552Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-05-12T09:38:00.552Z] Ignoring unsupported arg: rules {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: rules"}}
+[debug] [2024-05-12T09:38:00.553Z] Starting Database Emulator with command {"binary":"java","args":["-Duser.language=en","-jar","/home/ensimag/.cache/firebase/emulators/firebase-database-emulator-v4.11.2.jar","--host","127.0.0.1","--port",9000,"--single_project_mode","Warning"],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host","single_project_mode"],"joinArgs":false} {"metadata":{"emulator":{"name":"database"},"message":"Starting Database Emulator with command {\"binary\":\"java\",\"args\":[\"-Duser.language=en\",\"-jar\",\"/home/ensimag/.cache/firebase/emulators/firebase-database-emulator-v4.11.2.jar\",\"--host\",\"127.0.0.1\",\"--port\",9000,\"--single_project_mode\",\"Warning\"],\"optionalArgs\":[\"port\",\"host\",\"functions_emulator_port\",\"functions_emulator_host\",\"single_project_mode\"],\"joinArgs\":false}"}}
+[info] i  database: Database Emulator logging to database-debug.log {"metadata":{"emulator":{"name":"database"},"message":"Database Emulator logging to \u001b[1mdatabase-debug.log\u001b[22m"}}
+[debug] [2024-05-12T09:38:00.556Z] Error: EACCES: permission denied, open 'database-debug.log'
+[error] 
+[error] Error: An unexpected error has occurred.

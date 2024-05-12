@@ -5,7 +5,7 @@ import { MdOutlineManageAccounts } from 'react-icons/md';
 import {IoCameraOutline} from 'react-icons/io5'
 import { useRef } from 'react';
 //import ModelProfile from './modelProfile';
-import { postGroupImg, postCoverGroupImg, changeRole, removeMemberFromId, acceptMemberFromId, refuseMemberFromId, updateGroup } from '../utils/firebase'
+import { postGroupImg, postCoverGroupImg, changeRole, removeMemberFromId, acceptMemberFromId, refuseMemberFromId, updateGroup, deleteGroup } from '../utils/firebase'
 import fr from '../utils/i18n'
 import '../styles/infoGroup.css'
 import { Link } from 'react-router-dom';
@@ -18,6 +18,7 @@ import { Modal, useMantineTheme } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import UserList from './userList';
 import ModelGroup from './modelGroup';
+import { Redirect } from 'react-router-dom';
 
 const InfoGroup = ({
               following,
@@ -56,6 +57,7 @@ const InfoGroup = ({
   const [showManageWindow, setShowManageWindow] = useState(showManage);
   const [windowManageMember, setWindowManageMember] = useState('membres');
   const [showMembers, setShowMembers] = useState(false);
+  const [redirect, setRedirect] = useState(false);
 
   const importProfile=useRef()
   const importCover =useRef()
@@ -157,10 +159,23 @@ const InfoGroup = ({
     }
     );
 
-  }
+  };
+
+  const deleteGroupHandler = () => {
+    console.log('delete')
+    deleteGroup(groupId).then(() => {
+      setOpenEdit(false);
+      setRedirect(true);
+    }
+    );
+  };
 
   const isCreator = uid === group.creator;
   const isMobile = useMediaQuery('(max-width: 50em)');
+
+  if (redirect) {
+    return <Redirect to='/groups' />
+  }
 
   return (
 
@@ -215,6 +230,7 @@ const InfoGroup = ({
               openEdit={openEdit}
               setOpenEdit={setOpenEdit}
               isMobile={isMobile}
+              deleteGroupHandler={deleteGroupHandler}
             />
 
           {group.description && (

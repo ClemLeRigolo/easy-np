@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCurrentUserData, getUserDataById, signOut } from '../utils/firebase';
+import { getCurrentUserData, getUserDataById, signOut, getGroupById } from '../utils/firebase';
 import '../styles/headerBar.css';
 import { Link } from 'react-router-dom';
 import { HoverCard, Avatar, Text, Group, Anchor, Stack } from '@mantine/core';
@@ -12,22 +12,39 @@ import { CiSearch } from 'react-icons/ci';
 class ProfileImage extends React.Component {
   state = {
     user: null,
-    loading: true
+    loading: true,
+    isGroup: false
   };
 
   async componentDidMount() {
     try {
-        if (!this.props.uid) {
+      console.log(this.props.gid);
+    console.log(this.props.uid);
+        if (!this.props.uid && !this.props.gid) {
       const user = await getCurrentUserData();
       this.setState({
         user: user,
         loading: false
       });
-        } else {
+        } else if (this.props.uid) {
             const user = await getUserDataById(this.props.uid);
             this.setState({
               user: user,
               loading: false
+            });
+        } else {
+            const group = await getGroupById(this.props.gid);
+            const groupDataAsUser = {
+              name: Object.values(group)[0].name,
+              surname: "",
+              profileImg: group.groupImg,
+              id: Object.values(group)[0].id,
+              school: Object.values(group)[0] !== "all" ? Object.values(group)[0].school : null,
+            };
+            this.setState({
+              user: groupDataAsUser,
+              loading: false,
+              isGroup: true
             });
         }
     } catch (error) {
@@ -52,6 +69,26 @@ class ProfileImage extends React.Component {
                   loading: false
                 });
             }
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données utilisateur :', error);
+        this.setState({ loading: false });
+      }
+    }
+    if (prevProps.gid !== this.props.gid) {
+      try {
+        const group = await getGroupById(this.props.gid);
+        const groupDataAsUser = {
+          name: Object.values(group)[0].name,
+          surname: "",
+          profileImg: group.groupImg,
+          id: Object.values(group)[0].id,
+          school: Object.values(group)[0] !== "all" ? Object.values(group)[0].school : null,
+        };
+        this.setState({
+          user: groupDataAsUser,
+          loading: false,
+          isGroup: true
+        });
       } catch (error) {
         console.error('Erreur lors de la récupération des données utilisateur :', error);
         this.setState({ loading: false });
@@ -228,12 +265,12 @@ class ProfileImage extends React.Component {
                 } else {
                   if (user && user.profileImg) {
                     return (
-                      <Link to={`/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
+                      <Link to={this.state.isGroup ? `/group/${user.id}` : `/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
                         <img src={user.profileImg} alt="Profile" className='post-avatar' />
                             </Link>);
                     } else {
                         return (
-                            <Link to={`/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
+                            <Link to={this.state.isGroup ? `/group/${user.id}` : `/profile/${user.uid}`} style={{ color: 'black', textDecoration: 'none' }}>
                             <img src={require(`../images/Profile-pictures/${user.school}-default-profile-picture.png`)} alt="Profile" className='post-avatar' />
                                 </Link>);
                     }

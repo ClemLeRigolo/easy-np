@@ -154,7 +154,7 @@ class Group extends React.Component {
   };
 
   handlePostSubmit = (postContent, postImages, pool, gif) => {
-    
+    console.log("gid", this.state.gid)
     // Si l'utilisateur a téléchargé des images, enregistrez le post avec les images
     if (postImages.length > 0) {
       newPostWithImages(postContent, this.state.gid, postImages)
