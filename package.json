@@ -16,6 +16,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^1.6.8",
+    "clipboardy": "^2.3.0",
     "cypress": "^13.6.6",
     "cypress-firebase": "^4.0.0",
     "dompurify": "^3.0.9",

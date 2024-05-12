@@ -58,4 +58,33 @@ context("Events", () => {
         cy.contains("Event name")
     })
   })
+
+  describe("Go to the event on the homepage and interact with it", () => {
+    before(() => {
+      cy.logout()
+      cy.visit("/")
+      cy.fillLogin("user.username@grenoble-inp.org", "Password!")
+      cy.get("form").submit()
+    })
+
+    it("Go to the event and interact with it", () => {
+        cy.visit("/")
+        // click on the button in post-list-header who contains the text "Événements"
+        cy.get(".post-list-header").contains("Événements").click()
+
+        cy.wait(200)
+
+        //like the event who contains the text "Un évènement à ne pas louper"
+        cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".post-like-btn").click()
+        //check if the event is liked
+        cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".post-like-btn").should("have.class", "liked")
+        //add a comment to the event who contains the text "Un évènement à ne pas louper"
+        cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".post-comment-btn").click()
+        cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".comment-input-field").type("Je le louperai pas")
+        cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".comment-btn").click()
+        //check if the comment is here
+        cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".comments").click()
+        cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".comment").should("contain", "Je le louperai pas")
+    })
+    })
 })
