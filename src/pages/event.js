@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/group.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, newPostWithImages, newPostWithPool, newPostWithGif, isUserAdminOfGroup } from "../utils/firebase";
+import { likePost, getUserDataById, getPostByGroup, newPost, getGroupById, getEventById, newPostWithImages, newPostWithPool, newPostWithGif, deletePost } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -47,18 +47,16 @@ class Event extends React.Component {
       });
   };
 
-  handleCommentClick = (postIndex) => {
-    const { posts } = this.state;
-    const post = posts[postIndex];
-
-    // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le commentCount
-    post.commentCount += 1;
-  
-    // Mettez à jour l'état avec le post modifié
-    this.setState({
-      posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
-    });
-  };
+  handleDeletePost = (id) => {
+    // Supprimez le post de la base de données Firebase
+    deletePost(id)
+      .then(() => {
+        this.updatePosts();
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
+  }
 
   handlePostContentChange = event => {
     if (event === undefined) {
@@ -246,6 +244,7 @@ class Event extends React.Component {
                     post={post} 
                     handleLikeClick={() => this.handleLikeClick(index)}
                     handleCommentClick={() => this.handleCommentClick(index)} 
+                    handleDeletePost={() => this.handleDeletePost(post.id)}
                     likeCount={post.likeCount} 
                     commentCount={post.commentCount} 
                     />

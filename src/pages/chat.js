@@ -414,7 +414,7 @@ class Chat extends React.Component {
   renderChatList() {
     if(this.state.chattingUsers.length > 0) {
       return (
-        <Paper style={{height:'58vh', overflow:'auto'}}> 
+        <Paper style={{height:'62vh', overflow:'auto'}} className='chat-list-users'> 
         <List>
           {this.state.chattingUsers.map((user) => (
             <>

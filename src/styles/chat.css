@@ -171,6 +171,10 @@
   }
 
 @media (max-width: 767px) {
+    .chat-list-users {
+      height: 70vh !important;
+    }
+
     .chatting-with-nav {
       position: absolute;
       max-width: none !important;

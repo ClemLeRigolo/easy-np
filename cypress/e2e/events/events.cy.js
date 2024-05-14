@@ -83,8 +83,49 @@ context("Events", () => {
         cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".comment-input-field").type("Je le louperai pas")
         cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".comment-btn").click()
         //check if the comment is here
+        cy.wait(200)
         cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".comments").click()
         cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".comment").should("contain", "Je le louperai pas")
     })
+  })
+
+  describe("Go to an event, add a post, like it and comment it", () => {
+    before(() => {
+      cy.logout()
+      cy.visit("/")
+      cy.fillLogin("user.username@grenoble-inp.org", "Password!")
+      cy.get("form").submit()
     })
+
+    it("Go to the event and interact with it", () => {
+        cy.visit("/")
+        // click on the button in post-list-header who contains the text "Événements"
+        cy.get(".post-list-header").contains("Événements").click()
+
+        cy.wait(200)
+
+        //click on the event who contains the text "Un évènement à ne pas louper"
+        cy.get(".post").contains("Un évènement à ne pas louper").parents(".post").find(".post-title").click()
+        //add a post with the text "New post"
+        cy.addPost("New post")
+        //check if the post is here
+        cy.contains("New post")
+        cy.get(".post").contains("New post").parents(".post").find(".post-like-btn").click()
+        //check if the event is liked
+        cy.get(".post").contains("New post").parents(".post").find(".post-like-btn").should("have.class", "liked")
+        //add a comment to the event who contains the text "Un évènement à ne pas louper"
+        cy.get(".post").contains("New post").parents(".post").find(".post-comment-btn").click()
+        cy.get(".post").contains("New post").parents(".post").find(".comment-input-field").type("Pas mal")
+        cy.get(".post").contains("New post").parents(".post").find(".comment-btn").click()
+        //check if the comment is here
+        cy.wait(200)
+        cy.get(".post").contains("New post").parents(".post").find(".comments-toggle").first().click()
+        cy.get(".post").contains("New post").parents(".post").find(".comment").should("contain", "Pas mal")
+        //delete the post
+        cy.get(".post-options").click()
+        cy.get(".post").contains("New post").parents(".post").find(".menu-delete").click()
+        //check if the post is deleted
+        cy.contains("New post").should("not.exist")
+    })
+  })
 })
