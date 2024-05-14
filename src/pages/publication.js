@@ -39,18 +39,6 @@ class Publication extends React.Component {
       });
   };
 
-  handleCommentClick = () => {
-    const { post } = this.state;
-
-    // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le commentCount
-    post.commentCount += 1;
-  
-    // Mettez à jour l'état avec le post modifié
-    this.setState({
-      post: post
-    });
-  };
-
   render() {
     const { authState, user } = this.props;
 
@@ -113,7 +101,6 @@ class Publication extends React.Component {
             <Post 
                 post={this.state.post} 
                 handleLikeClick={() => this.handleLikeClick()}
-                handleCommentClick={() => this.handleCommentClick()} 
                 likeCount={this.state.post.likeCount} 
                 commentCount={this.state.post.commentCount} 
             />

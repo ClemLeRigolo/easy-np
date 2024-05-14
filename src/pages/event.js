@@ -243,7 +243,6 @@ class Event extends React.Component {
                     key={index} 
                     post={post} 
                     handleLikeClick={() => this.handleLikeClick(index)}
-                    handleCommentClick={() => this.handleCommentClick(index)} 
                     handleDeletePost={() => this.handleDeletePost(post.id)}
                     likeCount={post.likeCount} 
                     commentCount={post.commentCount} 

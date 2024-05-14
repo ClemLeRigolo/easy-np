@@ -135,32 +135,6 @@ class Home extends React.Component {
       });
   };
 
-  handleCommentClick = (postIndex) => {
-    const { posts } = this.state;
-    const post = posts[postIndex];
-
-    // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le commentCount
-    post.commentCount += 1;
-  
-    // Mettez à jour l'état avec le post modifié
-    this.setState({
-      posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
-    });
-  };
-
-  handleCommentClick = (postIndex) => {
-    const { posts } = this.state;
-    const post = posts[postIndex];
-
-    // Effectuez les actions nécessaires sur le post ici, par exemple, augmentez le commentCount
-    post.commentCount += 1;
-  
-    // Mettez à jour l'état avec le post modifié
-    this.setState({
-      posts: [...posts.slice(0, postIndex), post, ...posts.slice(postIndex + 1)]
-    });
-  };
-
   handleDeletePost = (id) => {
     // Supprimez le post de la base de données Firebase
     deletePost(id)
@@ -347,7 +321,6 @@ class Home extends React.Component {
               key={index} 
               post={post} 
               handleLikeClick={() => this.handleLikeClick(index)}
-              handleCommentClick={() => this.handleCommentClick(index)} 
               handleDeletePost={() => this.handleDeletePost(post.id)}
               likeCount={post.likeCount} 
               commentCount={post.commentCount} 
@@ -360,7 +333,6 @@ class Home extends React.Component {
                       key={index} 
                       post={event} 
                       handleLikeClick={() => this.handleEventLikeClick(index)}
-                      handleCommentClick={() => this.handleCommentClick(index)} 
                       handleDeletePost={() => this.handleDeleteEvent(event.id)}
                       likeCount={event.likeCount} 
                       commentCount={event.commentCount} 

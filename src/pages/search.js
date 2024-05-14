@@ -305,7 +305,6 @@ class Search extends React.Component {
                         key={post.id} 
                         post={post} 
                         handleLikeClick={() => this.handleLikeClick(index)}
-                        handleCommentClick={() => this.handleCommentClick(index)} 
                         handleDeletePost={() => this.handleDeletePost(post.id)}
                         likeCount={post.likeCount} 
                         commentCount={post.commentCount} 
@@ -330,7 +329,6 @@ class Search extends React.Component {
                         key={event.id} 
                         post={event} 
                         handleLikeClick={() => this.handleEventLikeClick(index)}
-                        handleCommentClick={() => this.handleCommentClick(index)} 
                         handleDeletePost={() => this.handleDeletePost(event.id)}
                         likeCount={event.likeCount} 
                         commentCount={event.commentCount}
