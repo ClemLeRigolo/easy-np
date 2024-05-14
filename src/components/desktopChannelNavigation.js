@@ -102,6 +102,7 @@ class ChannelNavigation extends React.Component {
 
     return (
       <>
+      <div className={`background ${open ? 'open' : ''}`} onClick={this.props.toggleMenu} />
       <div className={`group-navigation ${open ? 'open' : ''}`} data-cy="navGroup">
         <div className="group-header" style={{ animationDelay: `0.1s` }}>
           <h1 className="your-groups">

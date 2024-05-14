@@ -20,6 +20,8 @@ import { GiBackwardTime } from "react-icons/gi";
 
 import fr from "../utils/i18n";
 
+import "../utils/responsiveScript.js";
+
 class HeaderBar extends Component {
   constructor(props) {
     super(props);
@@ -108,6 +110,12 @@ class HeaderBar extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.location !== prevProps.location) {
       this.updateUrl();
+      if (this.props.isMenuOpen) {
+        this.props.toggleMenu();
+      }
+    }
+    if (this.props.isMenuOpen !== prevProps.isMenuOpen) {
+      this.setState({ searchBarPresent: false });
     }
   }
 
@@ -216,7 +224,7 @@ class HeaderBar extends Component {
     return (
       <nav>
         <div className="menu-icon" style={{ marginTop: "8px" }}>
-          <input className="checkbox nav-icons" type="checkbox" name="" id="" onClick={() => toggleMenu()} />
+          <input className="checkbox nav-icons" type="checkbox" name="" id="" checked={this.props.isMenuOpen} onClick={() => toggleMenu()} />
           <div className="hamburger-lines">
               <span className="line line1"></span>
               <span className="line line2"></span>
