@@ -98,7 +98,7 @@ function ModelProfile({
         }}
         fullScreen={isMobile}
       >
-        <h1 className='modelTitle'>Modifier le profil</h1>
+        <h1 className='modelTitle'>Modifier le groupe</h1>
         <form className='modelForm' onSubmit={handleModel} data-cy='profil'>
           <div className="inputBox1">
           <label htmlFor="name">Prénom:</label>
@@ -160,7 +160,7 @@ function ModelProfile({
           <div className='btn-container'>
           <Button className='modelBtn' onClick={handleUpdate} data-cy='apply'>Modifier</Button>
           <Button className='cancelBtn' onClick={handleExit} data-cy='cancel'>Annuler</Button>
-          <Button color="red" onClick={handleDelete}>Delete Group</Button>
+          <Button color="red" onClick={handleDelete}>Supprimer le groupe</Button>
           </div>
         </form>
       </Modal>

@@ -84,7 +84,7 @@ function ModelProfile({
         }}
         fullScreen={isMobile}
       >
-        <h1 className='modelTitle'>Modifier le profil</h1>
+        <h1 className='modelTitle'>Modifier le cours</h1>
         <form className='modelForm' onSubmit={handleModel} data-cy='profil'>
           <div className="inputBox1">
           <label htmlFor="name">Prénom:</label>

@@ -152,9 +152,10 @@ const InfoGroup = ({
   const handleModel = (data) => {
     const { name, description, school, isPublic } = data;
     group.description = description;
-    setModelDetails({ ...modelDetails, ModelName: name });
+    console.log(name)
 
     updateGroup(groupId, name, isPublic, school, description).then(() => {
+      setModelDetails({...modelDetails,ModelName:name});
       setOpenEdit(false);
     }
     );
@@ -175,6 +176,8 @@ const InfoGroup = ({
   if (redirect) {
     return <Redirect to='/groups' />
   }
+
+  console.log(modelDetails.ModelName)
 
   return (
 

@@ -37,7 +37,11 @@ class Group extends React.Component {
         showManage: false,
         firstMemberSet: true,
         firstWaitingSet: true,
-        userData: null
+        userData: null,
+        modelDetails: {
+          ModelName: "",
+          ModelUserName: "",
+        },
     };
   }
 
@@ -77,6 +81,7 @@ class Group extends React.Component {
   }
 
   setModelDetails = (value) => {
+    console.log(value);
     this.setState({ modelDetails: value });
   }
 
@@ -315,6 +320,7 @@ class Group extends React.Component {
         });
         getGroupById(this.props.match.params.gid).then((group) => {
             this.setState({ group: Object.values(group)[0] });
+            this.setModelDetails({ ModelName: Object.values(group)[0].name });
             if (group.coverImg) {
               this.setState({ groupBanner: group.coverImg });
             } else {
@@ -353,11 +359,6 @@ class Group extends React.Component {
     if (this.state.group === null) {
         return <Loader />;
     }
-
-    const modelDetails = {
-      ModelName: this.state.group.name,
-      ModelUserName: "@" + this.state.group.name,
-    };
 
     if (this.state.membersData.length !== this.state.membres.length && !this.state.membersSetted) {
       const promises = [];
@@ -409,7 +410,7 @@ class Group extends React.Component {
             setUserName={this.setUserName}
             profileImg={this.state.groupImg}
             setProfileImg={this.setProfileImg}
-            modelDetails={modelDetails}
+            modelDetails={this.state.modelDetails}
             setModelDetails={this.setModelDetails}
             canModify={this.state.canModify}
             uid={user.uid}

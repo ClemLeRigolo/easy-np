@@ -131,4 +131,100 @@ context("Groups", () => {
       })
     })
   })
+
+  describe("Interacting with groups", () => {
+    before(() => {
+      cy.logout()
+      cy.visit("/")
+      cy.fillLogin("user.username@grenoble-inp.org", "Password!")
+      cy.get("form").submit()
+    })
+
+    it("Go to the group Général and look at the members", () => {
+      cy.visit("/groups")
+      cy.contains("Général").click()
+      cy.goToSalon("Général")
+      cy.contains("Membres").click()
+      // subscribe to the first user
+      cy.contains("S'abonner").first().click()
+      cy.contains("Se désabonner").first().click()
+      cy.contains("Fermer").click()
+    })
+  })
+
+  describe("Create a group and modify it", () => {
+    before(() => {
+      cy.logout()
+      cy.visit("/")
+      cy.fillLogin("user.username@grenoble-inp.org", "Password!")
+      cy.get("form").submit()
+    })
+
+    it("Creating a public group", () => {
+      cy.visit("/groups")
+      cy.wait(200)
+      cy.contains("Groupe qu'on va modifier").should("not.exist")
+      cy.get("[data-cy='createGroupButton']").click()
+      cy.fillGroupForm("Groupe qu'on va modifier", "New group description", "Public", "ensimag")
+      cy.get("[data-cy='createGroupForm']").submit()
+      // checking group creation
+      cy.visit("/groups")
+      cy.contains("Groupe qu'on va modifier")
+    })
+
+    it("Modifying the group", () => {
+      cy.visit("/groups")
+      cy.wait(200)
+      cy.get(".group-list").contains("Groupe qu'on va modifier").click()
+      cy.contains("Groupe qu'on va modifier").should("exist")
+      cy.contains("Éditer").click()
+      cy.contains("Modifier le groupe").should("exist")
+      // modify the group name in the #name input
+      cy.get("#name").clear().type("Groupe modifié")
+      cy.get("#bio").clear().type("Description modifiée")
+      cy.get("#school").select("all")
+      cy.get("#isPublic").select("Privée")
+      cy.get("[data-cy='apply']").click()
+      cy.wait(200)
+      cy.contains("Groupe modifié").should("exist")
+      cy.contains("Éditer").click()
+      cy.contains("Modifier le groupe").should("exist")
+      cy.contains("Annuler").click()
+    })
+  })
+
+  describe("Create a group and delete it", () => {
+    before(() => {
+      cy.logout()
+      cy.visit("/")
+      cy.fillLogin("user.username@grenoble-inp.org", "Password!")
+      cy.get("form").submit()
+    })
+
+    it("Creating a public group", () => {
+      cy.visit("/groups")
+      cy.wait(200)
+      cy.contains("Groupe qu'on va supprimer").should("not.exist")
+      cy.get("[data-cy='createGroupButton']").click()
+      cy.fillGroupForm("Groupe qu'on va supprimer", "New group description", "Public", "ensimag")
+      cy.get("[data-cy='createGroupForm']").submit()
+      // checking group creation
+      cy.visit("/groups")
+      cy.contains("Groupe qu'on va supprimer")
+    })
+
+    it("delete the group", () => {
+      cy.visit("/groups")
+      cy.wait(200)
+      cy.get(".group-list").contains("Groupe qu'on va supprimer").click()
+      cy.contains("Groupe qu'on va supprimer").should("exist")
+      cy.contains("Éditer").click()
+      cy.contains("Modifier le groupe").should("exist")
+      // modify the group name in the #name input
+      cy.contains("Supprimer le groupe").click()
+      cy.wait(200)
+      //on vérifie l'url
+      cy.url().should('include', '/groups')
+    })
+  })
 })
