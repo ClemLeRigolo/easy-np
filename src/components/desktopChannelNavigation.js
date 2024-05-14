@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import fr from "../utils/i18n";
 import { AiOutlinePlusCircle  } from "react-icons/ai";
 import { MdKeyboardArrowRight, MdKeyboardArrowDown } from "react-icons/md";
-import { getSaloonByGroup, getGroupsByUser, isUserAdminOfGroup } from "../utils/firebase";
+import { getSaloonByGroup, getGroupsByUser, isUserAdminOfGroup, listenForGroupMembersChanges } from "../utils/firebase";
 import firebase from "firebase/app";
 // import "../styles/test.css";
 import { FaUserGroup } from "react-icons/fa6";
@@ -63,6 +63,28 @@ class ChannelNavigation extends React.Component {
       this.unlisten = history.listen((location) => {
         this.updateUrl(location);
       });
+
+      listenForGroupMembersChanges(() => {
+        console.log("Group members changed");
+        getGroupsByUser(user.uid)
+        .then((groups) => {
+          const saloonPromises = Object.values(groups).map((group) => {
+            return getSaloonByGroup(group.id)
+              .then((saloons) => {
+                group.saloons = saloons;
+                return group;
+              });
+          });
+          return Promise.all(saloonPromises);
+        })
+        .then((groups) => {
+          this.setState({ groups, saloonsCollected: true });
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+      }
+    );
   }
 
   componentWillUnmount() {
