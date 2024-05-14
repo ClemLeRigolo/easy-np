@@ -97,6 +97,7 @@ class CreateSaloon extends React.Component {
                 onChange={this.handleInputChange}
                 required
                 style={{ whiteSpace: "pre-wrap" }}
+                className="event-input"
               ></textarea>
               {this.state.hasHtmlError && <p className="error-message">{fr.FORM_FIELDS.NO_HTML}</p>}
             </div>

@@ -30,11 +30,13 @@ class SignUp extends React.Component {
         specialChar: false,
       },
       samePasswords: false,
+      acceptTerms: false,
     };
     document.documentElement.style.setProperty('--selected-color', this.state.selectedColor)
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleImageChange = handleImageChange.bind(this);
+    this.handleTermsChange = this.handleTermsChange.bind(this);
   }
 
   handleInputChange(event) {
@@ -123,6 +125,9 @@ class SignUp extends React.Component {
       });
   }
 
+  handleTermsChange(event) {
+    this.setState({ acceptTerms: event.target.checked });
+  }
 
   render() {
     if (this.props.authState === authStates.INITIAL_VALUE) {
@@ -174,6 +179,15 @@ class SignUp extends React.Component {
 
               <PasswordCheck props={this.state.passwordRules}/>
               <SchoolChoose selectedImage={this.state.selectedImage} handleImageChange={this.handleImageChange} />
+
+              {/* <label>
+                <input
+                  name="acceptTerms"
+                  type="checkbox"
+                  checked={this.state.acceptTerms}
+                  onChange={this.handleTermsChange} />
+                J'accepte les conditions d'utilisation
+              </label> */}
 
               {errorMsg && <p className="error">Erreur: {errorMsg}</p>}
               <button type="submit" className="log-button">S'inscrire</button>

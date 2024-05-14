@@ -1,7 +1,7 @@
 import React from "react";
-import "../styles/group.css"
+import "../styles/groupEvents.css"
 import { authStates, withAuth } from "../components/auth";
-import { likePost, getUserDataById, getGroupById, getEventsByGroup, deletePost, likeEvent } from "../utils/firebase";
+import { likePost, getUserDataById, getGroupById, getEventsByGroup, deleteEvent, likeEvent } from "../utils/firebase";
 //import { set } from "cypress/types/lodash";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
@@ -25,6 +25,8 @@ class GroupEvent extends React.Component {
         profileImg: null,
         dataCollected: false,
         canModify: false,
+        school: null,
+        members: [],
     };
   }
 
@@ -63,7 +65,7 @@ class GroupEvent extends React.Component {
 
   handleDeletePost = (id) => {
     // Supprimez le post de la base de données Firebase
-    deletePost(id)
+    deleteEvent(id)
       .then(() => {
         this.updatePosts();
       })
@@ -88,7 +90,7 @@ class GroupEvent extends React.Component {
         const promises = [];
 
         Object.values(querySnapshot).forEach((doc) => {
-          const promise = getUserDataById(doc.user).then((data) => {
+          const promise = getUserDataById(doc.creator).then((data) => {
             doc.username = data.name + " " + data.surname;
             doc.school = data.school;
             doc.profileImg = data.profileImg;
@@ -135,6 +137,7 @@ class GroupEvent extends React.Component {
         this.setState({
           profileImg: userData.profileImg,
           dataCollected: true,
+          school: userData.school,
         });
         if (!this.state.profileImg) {
           this.setState({ profileImg: require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`) });
@@ -150,35 +153,14 @@ class GroupEvent extends React.Component {
         return <Redirect to="/verify"></Redirect>;
       }
       //this.state.gid = this.props.match.params.gid;
-      this.setState({ gid: this.props.match.params.gid })
-      getEventsByGroup(this.props.match.params.gid).then(
-        (querySnapshot) => {
-          const posts = [];
-          const promises = [];
-
-          Object.values(querySnapshot).forEach((doc) => {
-            const promise = getUserDataById(doc.creator).then((data) => {
-                doc.username = data.name + " " + data.surname;
-                doc.school = data.school;
-                doc.profileImg = data.profileImg;
-                posts.push(doc);
-            });
-            promises.push(promise);
-          });
-
-          // Utilisation de Promise.all pour attendre la résolution de toutes les promesses
-            Promise.all(promises).then(() => {
-                // Inverser la liste pour avoir les derniers posts en premier
-                // Trie les posts selon leur ordre d'arrivée
-                posts.sort((a, b) => a.timestamp - b.timestamp);
-                posts.reverse();
-                this.setState({ posts });
-            });
-        });
+      this.setState({ gid: this.props.match.params.gid }, () => {
+        this.updatePosts();
+      });
         getGroupById(this.props.match.params.gid).then((group) => {
             this.setState({ 
               group: Object.values(group)[0],
               canModify: group.admins.includes(user.uid),
+              members: group.members,
             });
             }
         );
@@ -189,16 +171,33 @@ class GroupEvent extends React.Component {
         return <Loader />;
     }
 
+    if ((this.state.group.school !== "all" && this.state.group.school !== this.state.school) || (!this.state.group.isPublic && !this.state.members.includes(user.uid))) {
+      return (
+        <div className='interface'>
+        <div className="home">
+          <div className="events-header">
+            <h1>{fr.GROUPS.DONT_ACCESS} {this.state.group.name}</h1>
+            <Link to={`/group/${this.state.gid}`} className="create-group-button" data-cy='goToGroup'>
+              {fr.GROUPS.SEE_GROUP}
+            </Link>
+          </div>
+        </div>
+        </div>
+      )
+    }
+
     return (
       <div className='interface'>
         <div className="home">
-        <h1>{fr.GROUPS.EVENTS_OF} {this.state.group.name}</h1>
-        <p>{this.state.group.description}</p>
-        {this.state.canModify && (
-          <Link to={`/group/${this.state.gid}/createEvent`} className="create-group-button" data-cy='createEventButton'>
-            <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EVENT}
-          </Link>
-        )}
+          <div className="events-header">
+            <h1>{fr.GROUPS.EVENTS_OF} {this.state.group.name}</h1>
+            <p>{this.state.group.description}</p>
+            {this.state.canModify && (
+              <Link to={`/group/${this.state.gid}/createEvent`} className="create-group-button" data-cy='createEventButton'>
+                <AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EVENT}
+              </Link>
+            )}
+          </div>
           <div className="profile-post-list">
           
           {this.state.posts && this.state.posts.map((post, index) => (

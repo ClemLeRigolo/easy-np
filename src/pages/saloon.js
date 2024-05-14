@@ -8,6 +8,8 @@ import Post from "../components/post";
 import { withRouter } from 'react-router-dom';
 import PostInput from "../components/postInput";
 import { changeColor } from "../components/schoolChoose";
+import { Link } from "react-router-dom";
+import fr from "../utils/i18n";
 
 class Saloon extends React.Component {
 
@@ -22,6 +24,8 @@ class Saloon extends React.Component {
         profileImg: null,
         dataCollected: false,
         canWrite: false,
+        school: null,
+        members: []
     };
   }
 
@@ -179,6 +183,7 @@ class Saloon extends React.Component {
         this.setState({
           profileImg: userData.profileImg,
           dataCollected: true,
+          school: userData.school
         });
         if (!this.state.profileImg) {
           this.setState({ profileImg: require(`../images/Profile-pictures/${userData.school}-default-profile-picture.png`) });
@@ -228,7 +233,8 @@ class Saloon extends React.Component {
         getGroupById(this.props.match.params.gid).then((group) => {
             this.setState({ 
               group: Object.values(group)[0],
-              canWrite: group.admins.includes(user.uid)
+              canWrite: group.admins.includes(user.uid),
+              members: group.members
             });
             }
         );
@@ -237,6 +243,21 @@ class Saloon extends React.Component {
 
     if (this.state.group === null || this.state.saloon === null) {
         return <Loader />;
+    }
+
+    if ((this.state.group.school !== "all" && this.state.group.school !== this.state.school) || (!this.state.group.isPublic && !this.state.members.includes(user.uid))) {
+      return (
+        <div className='interface'>
+        <div className="home">
+          <div className="events-header">
+            <h1>{fr.GROUPS.DONT_ACCESS} {this.state.group.name}</h1>
+            <Link to={`/group/${this.state.gid}`} className="create-group-button" data-cy='goToGroup'>
+              {fr.GROUPS.SEE_GROUP}
+            </Link>
+          </div>
+        </div>
+        </div>
+      )
     }
 
     return (

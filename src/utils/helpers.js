@@ -280,3 +280,31 @@ export async function filterpost(posts,uid) {
 
   return filteredPosts.filter(Boolean);
 }
+
+export function getEventStatus(startTime, endTime) {
+  const now = new Date();
+
+  const getDiffText = (diff) => {
+    const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const diffHours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const diffMinutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+
+    if (diffDays > 0) {
+      return `${diffDays} jour(s)`;
+    } else if (diffHours > 0) {
+      return `${diffHours} heure(s)`;
+    } else {
+      return `${diffMinutes} minute(s)`;
+    }
+  };
+
+  if (now < startTime) {
+    const diff = startTime - now;
+    return `L'évènement commence dans ${getDiffText(diff)}`;
+  } else if (now < endTime) {
+    const diff = endTime - now;
+    return `L'évènement se termine dans ${getDiffText(diff)}`;
+  } else {
+    return "Évènement terminé";
+  }
+}

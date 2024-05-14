@@ -43,7 +43,7 @@ class CreateEvent extends React.Component {
     const gid = this.props.match.params.gid;
     const finalDescription = replaceLinksAndTags(description);
 
-    if (containsHtml(finalDescription)) {
+    if (containsHtml(description)) {
       this.setState({ hasHtmlError: true });
       return; // Arrêter le traitement si du HTML est détecté
     }

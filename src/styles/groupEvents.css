@@ -1,0 +1,11 @@
+.events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.events-header h1 {
+  margin-top: 0;
+}

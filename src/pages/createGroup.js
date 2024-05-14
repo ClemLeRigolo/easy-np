@@ -98,7 +98,7 @@ class CreateGroup extends React.Component {
                 value={description}
                 onChange={this.handleInputChange}
                 required
-                className="description-input"
+                className="event-input"
                 style={{ whiteSpace: "pre-wrap" }}
               ></textarea>
               {this.state.hasHtmlError && <p className="error-message">{fr.FORM_FIELDS.NO_HTML}</p>}

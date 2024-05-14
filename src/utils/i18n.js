@@ -121,6 +121,8 @@ export const fr = {
     EVENTS_OF: "Événements de",
     YOUR_GROUPS: "Vos groupes",
     NO_GROUPS: "Aucun groupe, rejoignez-en un !",
+    DONT_ACCESS: "Vous n'avez pas accès au groupe",
+    SEE_GROUP: "Voir le groupe",
   },
 
   PROFILE: {

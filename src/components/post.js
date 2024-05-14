@@ -54,12 +54,9 @@ class Post extends React.Component {
   }
 
   reportPost = () => {
-    console.log("Reporting post...");
     this.setState({ modalLoading: true })
-    console.log(this.state.post.id, this.state.reportReason, this.state.reportDetails);
     reportPost(this.state.post.id, this.state.reportReason, this.state.reportDetails)
       .then(() => {
-        console.log("Post reported successfully");
         NotificationManager.success("Post signalé avec succès !");
         this.setState({ isReportModalOpen: false, modalLoading: false });
       })
@@ -81,8 +78,7 @@ class Post extends React.Component {
     this.setState({ isReportModalOpen: true });
   }
 
-  closeReportModal = (event) => {
-    event.preventDefault();
+  closeReportModal = () => {
     this.setState({ modalLoading: false, reportReason: "spam", reportDetails: "" })
     this.setState({ isReportModalOpen: false });
   }
@@ -98,7 +94,6 @@ class Post extends React.Component {
   
     navigator.clipboard.writeText(finalUrle)
       .then(() => {
-        console.log("URL copiée avec succès :", finalUrle);
         NotificationManager.success("URL copiée avec succès !");
       })
       .catch((error) => {
@@ -544,7 +539,7 @@ class Post extends React.Component {
             >
               {this.state.modalLoading ? <Loader /> : 
               <>
-              <h2 className="modal-title">Report Post</h2>
+              <h2 className="modal-title">Signaler le post</h2>
               <form onSubmit={this.handleSubmitReport} className="modal-form">
                 <label className="modal-label">
                   Raison du signalement :
@@ -552,6 +547,7 @@ class Post extends React.Component {
                     <option value="spam">Spam</option>
                     <option value="harassment">Harcèlement</option>
                     <option value="inappropriate">Contenu inapproprié</option>
+                    <option value="vss">Violences sexuelles et sexistes</option>
                     <option value="other">Autre</option>
                   </select>
                 </label>

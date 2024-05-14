@@ -126,12 +126,10 @@ export default function PostInput({ handlePostSubmit, posts }) {
         }
 
         setLoading(true);
-        console.log(photos)
         const compressedImagesPromises = photos.map((photo) => compressImage(photo.file));
         
         Promise.all(compressedImagesPromises)
           .then((compressedImages) => {
-            console.log("Images compressées :", compressedImages);
             handlePostSubmit(finalContent, compressedImages, pollOptions, selectedGif ? selectedGif.images.original.url : null);
             setPhotos([]);
             setPostContent("");
@@ -260,9 +258,9 @@ export default function PostInput({ handlePostSubmit, posts }) {
           <div className="post-input-icon" onClick={toggleGifSearch} data-cy="gifInputButton">
             <AiOutlineGif />
           </div>
-          <div className="post-input-icon">
+          {/* <div className="post-input-icon">
             <AiOutlineVideoCamera />
-          </div>
+          </div> */}
         </div>
       </div>
       {!loading ? (

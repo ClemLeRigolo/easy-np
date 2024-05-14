@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/post.css";
 import { getCurrentUser, getUserDataById, addEventComment, getEventComments, reportEvent } from "../utils/firebase";
-import { formatPostTimestamp } from "../utils/helpers";
+import { formatPostTimestamp, getEventStatus } from "../utils/helpers";
 import { AiOutlineHeart, AiFillHeart, AiOutlineComment } from "react-icons/ai";
 import { FaShareAlt } from "react-icons/fa";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
@@ -17,6 +17,7 @@ import { NotificationManager } from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import { MdDelete } from "react-icons/md";
 import { FaFlag } from "react-icons/fa";
+import { MdOutlineDateRange } from "react-icons/md";
 
 class Event extends React.Component {
   constructor(props) {
@@ -35,12 +36,9 @@ class Event extends React.Component {
   }
 
   reportPost = () => {
-    console.log("Reporting post...");
     this.setState({ modalLoading: true })
-    console.log(this.state.post.id, this.state.reportReason, this.state.reportDetails);
     reportEvent(this.state.post.id, this.state.reportReason, this.state.reportDetails)
       .then(() => {
-        console.log("Post reported successfully");
         NotificationManager.success("Post signalé avec succès !");
         this.setState({ isReportModalOpen: false, modalLoading: false });
       })
@@ -62,8 +60,7 @@ class Event extends React.Component {
     this.setState({ isReportModalOpen: true });
   }
 
-  closeReportModal = (event) => {
-    event.preventDefault();
+  closeReportModal = () => {
     this.setState({ modalLoading: false, reportReason: "spam", reportDetails: "" })
     this.setState({ isReportModalOpen: false });
   }
@@ -85,7 +82,6 @@ class Event extends React.Component {
   
     navigator.clipboard.writeText(finalUrle)
       .then(() => {
-        console.log("URL copiée avec succès :", finalUrle);
         NotificationManager.success("URL copiée avec succès !");
       })
       .catch((error) => {
@@ -121,7 +117,6 @@ class Event extends React.Component {
   
     addEventComment(post.id, commentInputValue)
       .then(() => {
-        console.log("Commentaire ajouté avec succès");
         // Réinitialiser la zone de texte des commentaires
         this.setState({
           showCommentInput: false,
@@ -278,6 +273,7 @@ class Event extends React.Component {
     }
 
     const isMobile = window.innerWidth <= 768;
+    const status = getEventStatus(post.start, post.end);
 
     return (
       <div className="post">
@@ -290,6 +286,7 @@ class Event extends React.Component {
             </div>
           </Link>
           <img src={require(`../images/écoles/${post.school}.png`)} alt="School" className="post-school" />
+          <div className="post-status"><MdOutlineDateRange />{status}</div>
           <div className="post-menu">
           <ContextMenuTrigger
             id={post.id.toString()}
@@ -314,7 +311,7 @@ class Event extends React.Component {
             >
               {this.state.modalLoading ? <Loader /> : 
               <>
-              <h2 className="modal-title">Report Post</h2>
+              <h2 className="modal-title">Signaler l'évènement</h2>
               <form onSubmit={this.handleSubmitReport} className="modal-form">
                 <label className="modal-label">
                   Raison du signalement :
@@ -322,6 +319,7 @@ class Event extends React.Component {
                     <option value="spam">Spam</option>
                     <option value="harassment">Harcèlement</option>
                     <option value="inappropriate">Contenu inapproprié</option>
+                    <option value="vss">Violences sexuelles et sexistes</option>
                     <option value="other">Autre</option>
                   </select>
                 </label>
@@ -341,6 +339,7 @@ class Event extends React.Component {
           </div>
         </div>
         {post.title && <Link to={`/group/${post.groupId}/event/${post.id}`} className="post-title"><h1>{post.title}</h1></Link>}
+        <div className="post-status-mobile"><MdOutlineDateRange />{status}</div>
         <div className="post-body" dangerouslySetInnerHTML={{ __html: post.description }}></div>
         <div className="post-footer">
           <button className={`post-like-btn ${isLiked ? "liked" : ""}`} onClick={this.handleLikeClick}>

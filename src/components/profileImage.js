@@ -18,8 +18,6 @@ class ProfileImage extends React.Component {
 
   async componentDidMount() {
     try {
-      console.log(this.props.gid);
-    console.log(this.props.uid);
         if (!this.props.uid && !this.props.gid) {
       const user = await getCurrentUserData();
       this.setState({

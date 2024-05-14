@@ -162,7 +162,6 @@ const InfoGroup = ({
   };
 
   const deleteGroupHandler = () => {
-    console.log('delete')
     deleteGroup(groupId).then(() => {
       setOpenEdit(false);
       setRedirect(true);

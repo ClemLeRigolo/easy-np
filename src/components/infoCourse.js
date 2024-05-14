@@ -36,7 +36,6 @@ const Info = ({userPostData,
 
   const importProfile=useRef()
   const importCover =useRef()
-  console.log('info', importCover)
 
   
   const handleFile1 = async (e) => {

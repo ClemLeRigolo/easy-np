@@ -32,7 +32,7 @@ nav{
     margin: 0px 20px;
     color: #fff;
     padding: 5px;
-    border-radius: 25%
+    border-radius: 25%;
 }
 
 .checkbox{
@@ -305,6 +305,14 @@ nav{
         margin: 0px 20px;
         color: #fff;
         border-radius: 10%;
+    }
+
+    .social-icons .nav-icons:hover {
+        transform: none;
+        background-color: initial;
+        color: #fff;
+        padding: 5px;
+        border-radius: 25%;
     }
 
     .logo {
