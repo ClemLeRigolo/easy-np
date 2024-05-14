@@ -20,8 +20,6 @@ import { GiBackwardTime } from "react-icons/gi";
 
 import fr from "../utils/i18n";
 
-import "../utils/responsiveScript.js";
-
 class HeaderBar extends Component {
   constructor(props) {
     super(props);

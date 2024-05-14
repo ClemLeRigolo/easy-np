@@ -6,7 +6,6 @@ import { likePost, getUserDataById, getPostById } from "../utils/firebase";
 import { Redirect } from "react-router-dom";
 import Loader from "../components/loader";
 import Post from "../components/post";
-import GroupNavigation from "../components/groupNavigation";
 import { withRouter } from 'react-router-dom';
 import { changeColor } from "../components/schoolChoose";
 

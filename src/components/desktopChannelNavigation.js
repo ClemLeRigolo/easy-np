@@ -8,6 +8,7 @@ import firebase from "firebase/app";
 // import "../styles/test.css";
 import { FaUserGroup } from "react-icons/fa6";
 import { FaArrowRight } from "react-icons/fa";
+import "../styles/groupNavigation.css";
 
 class ChannelNavigation extends React.Component {
   constructor(props) {
