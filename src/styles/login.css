@@ -8,6 +8,11 @@
   box-sizing: border-box;
 }
 
+.checkbox-container {
+  display: flex;
+  /* justify-content: space-evenly; */
+}
+
 .name {
   width: 49% !important;
 }
@@ -26,6 +31,12 @@
   cursor: pointer;
   width: 100%;
   transition: opacity 0.3s ease;
+}
+
+.log-button:disabled {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
 }
 
 /* Add a hover effect for buttons */

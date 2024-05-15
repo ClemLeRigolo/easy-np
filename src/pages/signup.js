@@ -190,7 +190,14 @@ class SignUp extends React.Component {
               </label> */}
 
               {errorMsg && <p className="error">Erreur: {errorMsg}</p>}
-              <button type="submit" className="log-button">S'inscrire</button>
+              <div className="log-button-container">
+                {/* Checkbox */}
+                <div className="checkbox-container">
+                  <input type="checkbox" id="acceptTerms" name="acceptTerms" onChange={this.handleTermsChange} required/>
+                  <label htmlFor="acceptTerms">J'accepte les <Link to="/terms">conditions d'utilisation</Link></label>
+                </div>
+                <button type="submit" disabled={!this.state.acceptTerms} className="log-button">S'inscrire</button>
+              </div>
 
               <p>Vous avez déjà un compte ?</p>
               <Link to="/login">Se connecter</Link>
