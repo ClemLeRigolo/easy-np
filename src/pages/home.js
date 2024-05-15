@@ -200,11 +200,12 @@ class Home extends React.Component {
       }
   
       const promises = Object.values(events).map((event) => {
-        return getUserDataById(Object.values(event)[0].creator).then((data) => {
-          Object.values(event)[0].username = data.name + " " + data.surname;
-          Object.values(event)[0].school = data.school;
-          Object.values(event)[0].profileImg = data.profileImg;
-          return Object.values(event)[0];
+        console.log(event)
+        return getUserDataById(event.creator).then((data) => {
+          event.username = data.name + " " + data.surname;
+          event.school = data.school;
+          event.profileImg = data.profileImg;
+          return event;
         });
       });
   

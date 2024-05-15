@@ -364,9 +364,7 @@ class Course extends React.Component {
         </div>)}
         {this.state.window === 'tds' && (
           <div className="course-home">
-            {this.state.admin && (
-              <Link to={`/course/${this.state.cid}/createRessource/td`}><button className="add-button" data-cy='addRessource'><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TD}</button></Link>
-            )}
+            <Link to={`/course/${this.state.cid}/createRessource/td`}><button className="add-button" data-cy='addRessource'><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TD}</button></Link>
             <div className="ressource-container">
             {this.state.tds && this.state.tds.map((ressource, index) => (
               <Ressource key={index} ressource={ressource} canModify={this.state.admin} />
@@ -376,9 +374,7 @@ class Course extends React.Component {
         )}
         {this.state.window === 'tps' && (
           <div className="course-home">
-            {this.state.admin && (
-              <Link to={`/course/${this.state.cid}/createRessource/tp`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TP}</button></Link>
-            )}
+            <Link to={`/course/${this.state.cid}/createRessource/tp`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_TP}</button></Link>
             <div className="ressource-container">
             {this.state.tps && this.state.tps.map((ressource, index) => (
               <Ressource key={index} ressource={ressource} canModify={this.state.admin} />
@@ -388,9 +384,7 @@ class Course extends React.Component {
         )}
         {this.state.window === 'exams' && (
           <div className="course-home">
-            {this.state.admin && (
-              <Link to={`/course/${this.state.cid}/createRessource/exam`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EXAM}</button></Link>
-            )}
+            <Link to={`/course/${this.state.cid}/createRessource/exam`}><button className="add-button"><AiOutlinePlusCircle /> {fr.FORM_FIELDS.CREATE_EXAM}</button></Link>
             <div className="ressource-container">
             {this.state.exams && this.state.exams.map((ressource, index) => (
               <Ressource key={index} ressource={ressource} canModify={this.state.admin} />

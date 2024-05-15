@@ -124,9 +124,9 @@ class eventCalendar extends React.Component {
             }
             const eventsArray = [];
             for (let i = 0; i < Object.values(events).length; i++) {
-              Object.values(Object.values(events)[i])[0].start = new Date(Object.values(Object.values(events)[i])[0].start);
-              Object.values(Object.values(events)[i])[0].end = new Date(Object.values(Object.values(events)[i])[0].end);
-              eventsArray.push(Object.values(Object.values(events)[i])[0]);
+              Object.values(events)[i].start = new Date(Object.values(events)[i].start);
+              Object.values(events)[i].end = new Date(Object.values(events)[i].end);
+              eventsArray.push(Object.values(events)[i]);
             }
 
             this.setState({ events: eventsArray, eventsCollected: true });
