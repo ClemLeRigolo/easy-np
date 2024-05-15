@@ -12,6 +12,7 @@ import GroupMembership from '../components/groupMembership';
 import { Link } from 'react-router-dom';
 import ProfileImage from '../components/profileImage';
 import '../styles/search.css';
+import { reverseLinksAndTags } from '../utils/helpers';
 
 class Search extends React.Component {
   constructor(props) {
@@ -360,7 +361,7 @@ class Search extends React.Component {
                           />
                         ) : null}
                       </h3>
-                      <p>{group.description}</p>
+                      <p>{reverseLinksAndTags(group.description)}</p>
                       </Link>
                       <GroupMembership group={group} userSchool={null} fromGroup={false} />
                     </div>
@@ -382,7 +383,7 @@ class Search extends React.Component {
                     this.state.courses.map((course) => (
                       <Link to={`/course/${course.id}`} className="course" key={course.id}>
                         <h3>{course.name}</h3>
-                        <p>{course.description}</p>
+                        <p>{reverseLinksAndTags(course.description)}</p>
                       </Link>
                     ))
                   ) : (

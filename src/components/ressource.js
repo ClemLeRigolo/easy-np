@@ -36,7 +36,7 @@ class Ressource extends React.Component {
 
   handleShareClick = () => {
     const { ressource: post } = this.state;
-    const postUrl = `/group/${post.groupId}/event/${post.id}`; // Remplacez par l'URL réelle vers le post
+    const postUrl = `/course/${post.groupId}/ressource/${post.type}/${post.id}`; // Remplacez par l'URL réelle vers le post
     //On récupère l'url de base
     const baseUrl = window.location.origin;
     //On enlève tout ce qu'il y a après le premier /

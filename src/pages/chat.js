@@ -618,6 +618,7 @@ class Chat extends React.Component {
                             {this.state.chattingWith.members[message.user].name}
                           </div>
                         )}
+                        {message.content && (
                         <ListItemText
                           className={`message ${message.user === 'system'
                               ? 'system-message'
@@ -628,6 +629,7 @@ class Chat extends React.Component {
                           align={message.user === 'system' ? "center" : (message.user === user.uid ? "right" : "left")}
                           primary={message.content}
                         ></ListItemText>
+                        )}
                         {message.images && message.images.length > 0 && (
                           <div className={`message-images ${message.user === user.uid ? 'user-message' : 'other-user-message'}`}>
                             <span className={`image-message-container ${message.images.length > 1 ? 'multiple-image' : ''}`}>

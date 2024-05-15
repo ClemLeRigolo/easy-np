@@ -7,6 +7,7 @@ import fr from "../utils/i18n";
 import "../styles/courses.css";
 import { changeColor } from "../components/schoolChoose";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import { reverseLinksAndTags } from "../utils/helpers";
 
 class Courses extends React.Component {
   constructor(props) {
@@ -155,7 +156,7 @@ class Courses extends React.Component {
               this.state.firstYearCourses.map((course) => (
                 <Link to={`/course/${course.id}`} className="course" key={course.id}>
                   <h3>{course.name}</h3>
-                  <p>{course.description}</p>
+                  <p>{reverseLinksAndTags(course.description)}</p>
                 </Link>
               ))}
             {this.state.showFirstYearCourses && this.state.firstYearCourses.length === 0 && (
@@ -184,7 +185,7 @@ class Courses extends React.Component {
                 {this.state.showSecondYearCommonCourses && this.state.secondYearCommonCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
                     <h3>{course.name}</h3>
-                    <p>{course.description}</p>
+                    <p>{reverseLinksAndTags(course.description)}</p>
                   </Link>
                 ))}
                 {this.state.showSecondYearCommonCourses && this.state.secondYearCommonCourses.length === 0 && (
@@ -196,7 +197,7 @@ class Courses extends React.Component {
                 {this.state.showSecondYearISICourses && this.state.secondYearISICourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id} data-cy='course'>
                     <h3>{course.name}</h3>
-                    <p>{course.description}</p>
+                    <p>{reverseLinksAndTags(course.description)}</p>
                   </Link>
                 ))}
                 {this.state.showSecondYearISICourses && this.state.secondYearISICourses.length === 0 && (
@@ -208,7 +209,7 @@ class Courses extends React.Component {
                 {this.state.showSecondYearIFCourses && this.state.secondYearIFCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
                     <h3>{course.name}</h3>
-                    <p>{course.description}</p>
+                    <p>{reverseLinksAndTags(course.description)}</p>
                   </Link>
                 ))}
                 {this.state.showSecondYearIFCourses && this.state.secondYearIFCourses.length === 0 && (
@@ -220,7 +221,7 @@ class Courses extends React.Component {
                 {this.state.showSecondYearMMISCourses && this.state.secondYearMMISCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
                     <h3>{course.name}</h3>
-                    <p>{course.description}</p>
+                    <p>{reverseLinksAndTags(course.description)}</p>
                   </Link>
                 ))}
                 {this.state.showSecondYearMMISCourses && this.state.secondYearMMISCourses.length === 0 && (
@@ -252,7 +253,7 @@ class Courses extends React.Component {
                 {this.state.showThirdYearCommonCourses && this.state.thirdYearCommonCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
                     <h3>{course.name}</h3>
-                    <p>{course.description}</p>
+                    <p>{reverseLinksAndTags(course.description)}</p>
                   </Link>
                 ))}
                 {this.state.showThirdYearCommonCourses && this.state.thirdYearCommonCourses.length === 0 && (
@@ -264,7 +265,7 @@ class Courses extends React.Component {
                 {this.state.showThirdYearISICourses && this.state.thirdYearISICourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
                     <h3>{course.name}</h3>
-                    <p>{course.description}</p>
+                    <p>{reverseLinksAndTags(course.description)}</p>
                   </Link>
                 ))}
                 {this.state.showThirdYearISICourses && this.state.thirdYearISICourses.length === 0 && (
@@ -276,7 +277,7 @@ class Courses extends React.Component {
                 {this.state.showThirdYearIFCourses && this.state.thirdYearIFCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
                     <h3>{course.name}</h3>
-                    <p>{course.description}</p>
+                    <p>{reverseLinksAndTags(course.description)}</p>
                   </Link>
                 ))}
                 {this.state.showThirdYearIFCourses && this.state.thirdYearIFCourses.length === 0 && (
@@ -288,7 +289,7 @@ class Courses extends React.Component {
                 {this.state.showThirdYearMMISCourses && this.state.thirdYearMMISCourses.map((course) => (
                   <Link to={`/course/${course.id}`} className="course" key={course.id}>
                     <h3>{course.name}</h3>
-                    <p>{course.description}</p>
+                    <p>{reverseLinksAndTags(course.description)}</p>
                   </Link>
                 ))}
                 {this.state.showThirdYearMMISCourses && this.state.thirdYearMMISCourses.length === 0 && (

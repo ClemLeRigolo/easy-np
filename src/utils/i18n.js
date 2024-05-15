@@ -148,6 +148,7 @@ export const fr = {
     COMMON: "Tronc Commun",
     NO_COURSES: "Aucun cours pour l'instant",
     NO_COURSES_ATM: "Aucun cours pour le moment",
+    EDIT: "Éditer le cours",
   },
 
   HOME: {

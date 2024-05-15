@@ -115,7 +115,7 @@ const Info = ({userPostData,
         <div className="info-follow">
             <h1>{modelDetails.ModelName}</h1>
 
-            {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn' data-cy='edit'><LiaEdit />{fr.PROFILE.EDIT}</button>}
+            {canModify && <button onClick={()=>setOpenEdit(true)} className='edit-btn' data-cy='edit'><LiaEdit />{fr.COURSES.EDIT}</button>}
 
             <ModelCourse 
               name={course.name}
