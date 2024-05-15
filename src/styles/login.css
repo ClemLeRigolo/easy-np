@@ -21,7 +21,6 @@
   margin-left: 2% !important;
 }
 
-/* Set a style for all buttons */
 .log-button {
   background-color: var(--selected-color);
   color: white;
@@ -42,6 +41,17 @@
 /* Add a hover effect for buttons */
 button:hover {
   opacity: 0.8;
+}
+
+.aknowledge-button {
+  background-color: var(--selected-color);
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 20%;
+  transition: opacity 0.3s ease;
 }
 
 .error {

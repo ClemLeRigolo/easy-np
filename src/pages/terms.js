@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Terms() {
     return (
@@ -15,6 +16,9 @@ function Terms() {
             </ol>
             <p>En cas de non-respect de ces conditions, nous nous réservons le droit de suspendre ou de supprimer votre compte.</p>
             <p>Si vous avez des questions ou des préoccupations concernant nos conditions d'utilisation, veuillez nous contacter à l'adresse suivante : contact@easy-np.fr</p>
+            <Link to="/signup">
+                <button type="button" className="aknowledge-button">Compris</button>
+            </Link>
         </div>
     );
 }
