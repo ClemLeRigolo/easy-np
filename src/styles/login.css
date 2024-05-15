@@ -8,6 +8,11 @@
   box-sizing: border-box;
 }
 
+.checkbox-container {
+  display: flex;
+  /* justify-content: space-evenly; */
+}
+
 .name {
   width: 49% !important;
 }
@@ -16,7 +21,6 @@
   margin-left: 2% !important;
 }
 
-/* Set a style for all buttons */
 .log-button {
   background-color: var(--selected-color);
   color: white;
@@ -28,9 +32,26 @@
   transition: opacity 0.3s ease;
 }
 
+.log-button:disabled {
+  background-color: #cccccc;
+  color: #888888;
+  cursor: not-allowed;
+}
+
 /* Add a hover effect for buttons */
 button:hover {
   opacity: 0.8;
+}
+
+.aknowledge-button {
+  background-color: var(--selected-color);
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 20%;
+  transition: opacity 0.3s ease;
 }
 
 .error {
