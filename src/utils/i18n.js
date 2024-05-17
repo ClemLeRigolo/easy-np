@@ -70,6 +70,7 @@ export const fr = {
     RESSOURCE_FILES: "Fichiers",
     CREATE_RESSOURCE: "Créer une ressource",
     SELECT_THEME: "Sélectionnez un thème",
+    FILE_TOO_BIG: "Fichier trop volumineux, essayez de le compresser",
   },
 
   ERRORS: {

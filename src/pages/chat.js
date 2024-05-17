@@ -67,6 +67,7 @@ class Chat extends React.Component {
       expandedImages: [],
       imageIndex: 0,
       isGroupChat: false,
+      errorMessage: ""
     };
   }
 
@@ -296,7 +297,10 @@ class Chat extends React.Component {
       return;
     }
     //Get text from input
-    this.setState({ comment: message });
+    this.setState({ 
+      comment: message,
+      errorMessage: ""
+    });
     // envoyer le message
     //this.sendMessage();
     if (this.state.images.length > 0) {
@@ -321,10 +325,13 @@ class Chat extends React.Component {
     const selectedPhotos = [];
   
     if (files.length > 10) {
+      this.setState({ errorMessage: "Vous ne pouvez pas envoyer plus de 10 images à la fois." })
       return;
     }
+
+    this.setState({ errorMessage: "" });
   
-    for (let i = 0; i < files.length && i < 4; i++) {
+    for (let i = 0; i < files.length && i < 10; i++) {
       const file = files[i];
       const reader = new FileReader();
   
@@ -689,6 +696,13 @@ class Chat extends React.Component {
                         </button>
                       </div>
                     ))}
+                  </div>
+                )}
+                {this.state.errorMessage !== "" && (
+                  <div className='images-preview'>
+                    <span style={{ color: 'red' }}>
+                      {this.state.errorMessage}
+                    </span>
                   </div>
                 )}
                 <Grid item xs={9} align="center" >

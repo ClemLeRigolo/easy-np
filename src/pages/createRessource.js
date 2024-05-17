@@ -3,6 +3,9 @@ import { Redirect } from "react-router-dom";
 import { authStates, withAuth } from "../components/auth";
 import Loader from "../components/loader";
 import { createRessource, getUserDataById } from "../utils/firebase";
+import Dropzone from 'react-dropzone';
+import { FaFileArchive, FaFileCode, FaFilePdf, FaFileImage } from "react-icons/fa";
+import { MdFileUpload } from "react-icons/md";
 
 import fr from "../utils/i18n";
 import "../styles/createRessource.css";
@@ -20,6 +23,8 @@ class CreateRessource extends React.Component {
       admin: false,
       cid: "",
       school: "",
+      errorMessage: "",
+      preview: [],
     };
   }
 
@@ -28,9 +33,22 @@ class CreateRessource extends React.Component {
     this.setState({ [name]: value });
   };
 
-  handleFileInputChange = (event) => {
-    const files = Array.from(event.target.files);
-    this.setState({ files });
+  handleFileInputChange = (files) => {
+    const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+  
+    for (let i = 0; i < files.length; i++) {
+      if (files[i].size > maxSize) {
+        this.setState({ errorMessage: fr.FORM_FIELDS.FILE_TOO_BIG });
+        return;
+      }
+    }
+  
+    this.setState({ 
+      files: files,
+      preview: files.map(file => Object.assign(file, {
+        preview: URL.createObjectURL(file)
+      }))
+    });
   };
 
   handleSubmit = (event) => {
@@ -129,15 +147,42 @@ class CreateRessource extends React.Component {
             </div>
             <div className="form-group">
               <label htmlFor="ressource-files">{fr.FORM_FIELDS.RESSOURCE_FILES}:</label>
-              <input
-                type="file"
-                id="ressource-files"
-                name="files"
-                multiple
-                onChange={this.handleFileInputChange}
-                required
-              />
+              <Dropzone onDrop={this.handleFileInputChange}>
+                {({ getRootProps, getInputProps }) => (
+                  <section className="dropzone-section">
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      {this.state.preview.length === 0 && (
+                        <>
+                        <MdFileUpload />
+                        <p>Glissez et déposez des fichiers ici, ou cliquez pour sélectionner des fichiers</p>
+                        </>
+                      )}
+                      <div className="ressource-list">
+                        {this.state.preview.map((file, index) => {
+                          let fileName = file.name;
+                          let fileExtension = fileName.split('.').pop();
+                          let truncatedName = fileName.substring(0, 10);
+
+                          if (fileName.length > 10) {
+                            truncatedName = `${truncatedName}...${fileExtension}`;
+                          }
+
+                          let fileUrl = file.preview;
+                          return (
+                            <a href={fileUrl} key={index} className="ressource" target="_blank" rel="noopener noreferrer">
+                              {fileName.includes(".pdf") ? <FaFilePdf /> : fileName.includes(".zip") || fileName.includes(".tar") || fileName.includes(".gz") ? <FaFileArchive /> : fileName.includes(".jpg") || fileName.includes(".png") || fileName.includes(".jpeg") ? <FaFileImage /> : <FaFileCode />}
+                              <p className="ressource-name">{truncatedName}</p>
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
             </div>
+            {this.state.errorMessage && <p className="error-message">{this.state.errorMessage}</p>}
             {this.state.type === "td" && <button type="submit">{fr.FORM_FIELDS.CREATE_TD}</button>}
             {this.state.type === "tp" && <button type="submit">{fr.FORM_FIELDS.CREATE_TP}</button>}
             {this.state.type === "fiche" && <button type="submit">{fr.FORM_FIELDS.CREATE_FICHE}</button>}
