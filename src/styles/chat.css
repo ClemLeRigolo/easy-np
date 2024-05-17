@@ -73,9 +73,12 @@
     border-radius: 10px;
 }
 
+.message span {
+  word-break: break-word;
+}
+
 .other-user-message span{
     background-color: #f1f0f0;
-
 }
 
 .user-message span{
